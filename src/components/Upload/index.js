@@ -28,6 +28,8 @@ const Upload = ({
     if (onChange) onChange(fileList, name)
   }, [fileList])
 
+  console.log(uploadProps, 'restt')
+
   return (
     <AntdUpload {...rest} name={name} listType={listType} {...uploadProps}>
       {children}

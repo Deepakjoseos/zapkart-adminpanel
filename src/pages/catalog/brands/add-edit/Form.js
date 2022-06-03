@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-underscore-dangle */
 import React, { useEffect, useState } from 'react'
-import { Input, Button, Icon, Radio, InputNumber, notification } from 'antd'
+import { Input, Button, Icon, Radio, InputNumber, notification, Upload } from 'antd'
 import { brandSchema } from 'utils/Schema'
 // import { getBaseName } from 'utils'
 import { withRouter, Redirect } from 'react-router-dom'
@@ -9,6 +9,10 @@ import { addBrand, editBrand } from 'services/brands'
 import { STRINGS } from '_constants'
 // import Upload from 'components/Upload'
 import Form from 'components/Form'
+import SingleImageUpload from 'components/ImageUpload/SingleUpload'
+import { getBaseName } from 'utils'
+import useUpload from 'hooks/useUpload'
+import { singleImageUploader } from 'utils/s3ImageUploader'
 
 const FormA = ({ data }) => {
   const initialValues = {
@@ -17,8 +21,30 @@ const FormA = ({ data }) => {
 
   const [values, setValues] = useState(initialValues)
 
+  const {
+    fileList: fileListImages,
+    beforeUpload: beforeUploadImages,
+    onChange: onChangeImages,
+    onRemove: onRemoveImages,
+    setFileList: setFileListImages,
+  } = useUpload(1)
+
   useEffect(() => {
     if (data) {
+      let himg = []
+      if (data.image) {
+        // himg = data.images.map((item) => {
+        himg = [
+          {
+            uid: Math.random() * 1000,
+            name: getBaseName(data.image),
+            url: data.image,
+            thumbUrl: data.image,
+          },
+        ]
+        // })
+      }
+
       // let himg = []
       // if (data.image.length > 0) {
       //   himg = data.image.map(item => {
@@ -32,21 +58,42 @@ const FormA = ({ data }) => {
       // }
       setValues({
         ...data,
-        // name: data.name,
-        // image: himg,
+        image: himg,
+        // parent: data.parent,
         // metaTitle: data.seo.metaTitle,
         // metaKeywords: data.seo.metaKeywords,
         // metaDescription: data.seo.metaDescription,
       })
+      setFileListImages(himg)
       console.log(initialValues)
     }
   }, [data])
+
+  const propsImages = {
+    multiple: true,
+    beforeUpload: beforeUploadImages,
+    onRemove: onRemoveImages,
+    onChange: onChangeImages,
+    fileList: fileListImages,
+  }
+
+  useEffect(() => {
+    setValues((a) => ({ ...a, image: fileListImages }))
+  }, [fileListImages])
 
   const [success, setSuccess] = useState(false)
 
   // eslint-disable-next-line no-unused-vars
   const fetchSubmit = async (formValues) => {
     console.log('formValues', formValues)
+
+    const imgValue = await singleImageUploader(
+      values.image[0].originFileObj,
+      values.image,
+      values.image[0].url,
+    )
+    values.image = imgValue
+
     // const modImgs = formValues?.image?.map((i) => i.originFileObj)
     const a = data
       ? await editBrand(data.id, formValues, data)
@@ -108,10 +155,25 @@ const FormA = ({ data }) => {
       label: 'Priority ',
     },
 
+    // {
+    //   type: <Input name="image" />,
+    //   key: 'image',
+    //   label: 'Image Url',
+    // },
     {
-      type: <Input name="image" />,
+      label: 'Image',
       key: 'image',
-      label: 'Image Url',
+      name: 'image',
+      type: (
+        <>
+          <Upload listType="picture-card" name="image" {...propsImages}>
+            {/* <Button onBlur={(e) => onBlur(e, 'image')}> */}
+            <Button>
+              <Icon type="upload" /> Select File
+            </Button>
+          </Upload>
+        </>
+      ),
     },
     // {
     //   label: 'Images',

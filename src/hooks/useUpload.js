@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const useUpload = maxCount => {
+const useUpload = (maxCount) => {
   // console.log(maxCount)
   const [fileList, setFileList] = useState([])
   const [touched, setTouched] = useState(false)
@@ -8,8 +8,8 @@ const useUpload = maxCount => {
   // const className = cls || 'upload-list-inline'
   // const listType = lt || 'picture'
 
-  const onRemove = file => {
-    setFileList(state => {
+  const onRemove = (file) => {
+    setFileList((state) => {
       const index = state.indexOf(file)
       const newFileList = state.slice()
       newFileList.splice(index, 1)
@@ -29,11 +29,11 @@ const useUpload = maxCount => {
     else setFileList([...a])
   }
 
-  const beforeUpload = file => {
+  const beforeUpload = (file) => {
     console.log('in before upload file Image', file)
     // console.log('in before upload fileList Image', fileList)
     setTouched(true)
-    setFileList(state => {
+    setFileList((state) => {
       console.log(state)
       return [state, file]
     })

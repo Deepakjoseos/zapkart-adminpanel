@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable react/jsx-boolean-value */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-underscore-dangle */
@@ -11,6 +12,10 @@ import { STRINGS } from '_constants'
 // import Upload from 'components/Upload'
 import Form from 'components/Form'
 import shortid from 'shortid'
+import Upload from 'components/Upload'
+// import ReactS3Client from 'utils/s3Bucket'
+import { multipleImageUpload } from 'utils/s3ImageUploader'
+// import AWS from 'aws-sdk'
 
 const FormA = ({ data, categories, brands }) => {
   const initialValues = {
@@ -45,7 +50,12 @@ const FormA = ({ data, categories, brands }) => {
         ...data,
         brandId: data.brand.id,
         categoryId: data.category.id,
-        images: data.images[0],
+        images: data.images.map((cur, i) => {
+          return {
+            uid: i + Math.random() * 10,
+            url: cur,
+          }
+        }),
         lengthClass: data.shippingDetail.lengthClass,
         weightClass: data.shippingDetail.weightClass,
         height: data.shippingDetail.height,
@@ -66,13 +76,140 @@ const FormA = ({ data, categories, brands }) => {
 
   // eslint-disable-next-line no-unused-vars
   const fetchSubmit = async (formValues) => {
+    console.log(formValues.images, 'show-image-pls')
+
+    const uploadedImages = await multipleImageUpload(formValues.images)
+
+    // const imagesArray = await formValues.images.reduce(async (result, el) => {
+    //   if (el.originFileObj) {
+    //     try {
+    //       const asyncResult = await ReactS3Client.uploadFile(
+    //         el.originFileObj,
+    //         // formValues.images[1].originFileObj.name,
+    //       )
+    //       if (asyncResult) {
+    //         ;(await result).push(asyncResult.location)
+    //       }
+    //     } catch (err) {
+    //       // (await result).push(result.location);
+    //       notification.error({
+    //         message: 'Cannot upload Newly added Images',
+    //       })
+
+    //       console.log(err.message, 'pls')
+    //     }
+    //   } else {
+    //     ;(await result).push(el.url)
+    //   }
+
+    //   return result
+    // }, [])
+
+    // const asyncResult = await someAsyncTask(el)
+    // if (asyncResult) {
+    //   ;(await result).push(newSavedFile)
+    // }
+    // return result
+
+    // eslint-disable-next-line func-names
+    // const sendableImages = formValues.images.reduce(function (pV, cV, cI) {
+    //   if (cV.originFileObj) {
+    //     ReactS3Client.uploadFile(
+    //       cV.originFileObj,
+    //       // formValues.images[1].originFileObj.name,
+    //     )
+    //       .then((imgData) => {
+    //         console.log('the-loxc', imgData.location)
+    //         pV.push(imgData.location)
+    //         // return imgData.location
+    //         // window.images.push(imgData.location)
+    //         // window.uploadedStatus = true
+    //       })
+    //       .catch((err) => {
+    //         // window.uploadedStatus = false
+    //         pV = []
+    //         console.log(err.message, 'errrrror-img')
+    //       })
+    //     // return res
+    //   }
+
+    //   return pV // *********  Important ******
+    // }, [])
+
+    // const uploadedImages = formValues.images.map(async (cur) => {
+    //   if (cur.originFileObj) {
+    //     const res = await ReactS3Client.uploadFile(
+    //       cur.originFileObj,
+    //       // formValues.images[1].originFileObj.name,
+    //     )
+    //       .then((imgData) => {
+    //         return imgData.location
+    //         // window.images.push(imgData.location)
+    //         // window.uploadedStatus = true
+    //       })
+    //       .catch((err) => {
+    //         // window.uploadedStatus = false
+    //         console.log(err.message, 'errrrror-img')
+    //       })
+    //     return res
+    //   }
+    //   return cur
+    // })
+    // let datas = []
+
+    // Promise.all(uploadedImages).then(function (results) {
+    //   datas = results
+    // })
+
+    // console.log(imagesArray, 'hlooo')
+
+    // AWS.config.update({
+    //   accessKeyId: 'AKIA2MGENPR2BQUY3Y4Q',
+    //   secretAccessKey: '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',
+    // })
+
+    // const myBucket = new AWS.S3({
+    //   params: { Bucket: S3_BUCKET },
+    //   region: REGION,
+    // })
+
+    // const uploadFile = (file) => {
+    //   const params = {
+    //     ACL: 'public-read',
+    //     Body: formValues.images[1].originFileObj,
+    //     Bucket: S3_BUCKET,
+    //     Key: formValues.images[1].name,
+    //   }
+
+    //   myBucket
+    //     .upload(params)
+    //     .then((dataImg) => console.log('Data:', dataImg))
+    //     .catch((err) => {
+    //       console.log('err => ', err.message)
+    //     })
+
+    // .putObject(params)
+    // // .on('httpUploadProgress', (evt) => {
+    // //     setProgress(Math.round((evt.loaded / evt.total) * 100))
+    // // })
+    // .send((err, dataImg) => {
+    //   if (err) {
+    //     console.log(err.code, 'poi-code')
+    //     console.log(err.message, 'poi-message')
+    //   }
+    //   if (dataImg) console.log(dataImg.response, 'kitti')
+    // })
+    // }
+
+    // uploadFile()
+
     console.log('formValues', formValues)
     const sendingData = {
       brandId: formValues.brandId,
       categoryId: formValues.categoryId,
       name: formValues.name,
       description: formValues.description,
-      images: [formValues.images],
+      images: uploadedImages,
       productType: formValues.productType,
       allowedPaymentTypes: formValues.allowedPaymentTypes,
       returnable: formValues.returnable,
@@ -112,7 +249,15 @@ const FormA = ({ data, categories, brands }) => {
     }
   }
 
-  // const onFilelistChange = (name, value) => setValues(a => ({ ...a, [name]: value }))
+  // const onFilelistChange = (name, value) => setValues((a) => ({ ...a, [name]: value }))
+
+  const onFilelistChange = (value, name, current) => {
+    console.log(value, name, current, 'show-the-right')
+
+    // return setValues((a) => ({ ...a, [name]: value }))
+    setValues((a) => ({ ...a, [name]: value }))
+    // console.log(name, value, 'heyyyy')
+  }
 
   const submitForm = (val) => {
     try {
@@ -126,7 +271,7 @@ const FormA = ({ data, categories, brands }) => {
 
   console.log(initialValues)
 
-  console.log(values)
+  console.log(values, 'show mee')
 
   const formItems = [
     { heading: 'General', key: 'general' },
@@ -232,10 +377,26 @@ const FormA = ({ data, categories, brands }) => {
     //   label: 'Status',
     // },
 
+    // {
+    //   type: <Input name="images" />,
+    //   key: 'images',
+    //   label: 'Image Url',
+    // },
     {
-      type: <Input name="images" />,
+      label: 'Images',
       key: 'images',
-      label: 'Image Url',
+      name: 'images',
+      // dependency: 'linktoBase',
+      type: (
+        <>
+          <Upload name="images" defaultFileList={values.images} onChange={onFilelistChange}>
+            {/* <Button onBlur={(e) => onBlur(e, 'image')}> */}
+            <Button>
+              <Icon type="upload" /> Select File
+            </Button>
+          </Upload>
+        </>
+      ),
     },
     {
       type: (

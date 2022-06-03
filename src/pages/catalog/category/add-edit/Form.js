@@ -11,6 +11,8 @@ import {
   notification,
   // eslint-disable-next-line no-unused-vars
   Select,
+  Upload,
+  Icon,
 } from 'antd'
 import { categorySchema } from 'utils/Schema'
 // eslint-disable-next-line no-unused-vars
@@ -20,6 +22,9 @@ import useFormValidation from 'hooks/useFormValidation'
 // import Upload from 'components/Upload'
 import { addCategory, editCategory } from 'services/categories'
 import { STRINGS } from '_constants'
+import useUpload from 'hooks/useUpload'
+// import ReactS3Client from 'utils/s3Bucket'
+import { singleImageUploader } from 'utils/s3ImageUploader'
 
 // const dropdownStyle = { maxHeight: 400, overflow: 'auto' }
 
@@ -34,34 +39,84 @@ const FormA = ({ categories, data, disclaimer, customOffer }) => {
     status: 'Hold',
   }
 
+  const {
+    fileList: fileListImages,
+    beforeUpload: beforeUploadImages,
+    onChange: onChangeImages,
+    onRemove: onRemoveImages,
+    setFileList: setFileListImages,
+  } = useUpload(1)
+
   useEffect(() => {
     if (data) {
-      // let himg = []
-      // if (data.images.length > 0) {
-      //   himg = data.images.map((item) => {
-      //     return {
-      //       uid: item._id,
-      //       name: getBaseName(item.url),
-      //       url: item.url,
-      //       thumbUrl: item.thumbnail,
-      //     }
-      //   })
-      // }
+      let himg = []
+      if (data.image) {
+        // himg = data.images.map((item) => {
+        himg = [
+          {
+            uid: Math.random() * 1000,
+            name: getBaseName(data.image),
+            url: data.image,
+            thumbUrl: data.image,
+          },
+        ]
+        // })
+      }
       setValues({
         ...data,
-        // image: himg,
+        image: himg,
         // parent: data.parent,
         // metaTitle: data.seo.metaTitle,
         // metaKeywords: data.seo.metaKeywords,
         // metaDescription: data.seo.metaDescription,
       })
       console.log(initialValues)
+      setFileListImages(himg)
     }
   }, [data])
+
+  useEffect(() => {
+    setValues((a) => ({ ...a, image: fileListImages }))
+  }, [fileListImages])
+
+  const propsImages = {
+    multiple: true,
+    beforeUpload: beforeUploadImages,
+    onRemove: onRemoveImages,
+    onChange: onChangeImages,
+    fileList: fileListImages,
+  }
 
   const [success, setSuccess] = useState(false)
 
   const fetchSubmit = async () => {
+    console.log(values.image, 'show-mee')
+    // setImgValue, defaultValueUrl
+    const imgValue = await singleImageUploader(
+      values.image[0].originFileObj,
+      values.image,
+      values.image[0].url,
+    )
+    values.image = imgValue
+    // if (values.image[0].originFileObj) {
+    //   try {
+    //     const asyncResult = await ReactS3Client.uploadFile(
+    //       values.image[0].originFileObj,
+    //       // formValues.images[1].originFileObj.name,
+    //     )
+    //     values.image = asyncResult.location
+    //   } catch (err) {
+    //     // (await result).push(result.location);
+    //     notification.error({
+    //       message: 'Cannot upload Newly added Images',
+    //     })
+
+    //     console.log(err.message, 'pls')
+    //   }
+    // } else {
+    //   values.image = values.image[0].url
+    // }
+
     // const modImgs = values.image.map((i) => i.originFileObj)
     const a = data ? await editCategory(data.id, values, data) : await addCategory({ ...values }) // image: modImgs
     setSubmitting(false)
@@ -110,11 +165,27 @@ const FormA = ({ categories, data, disclaimer, customOffer }) => {
       error: errors.name,
     },
     {
-      type: <Input value={values.image} name="image" />,
-      key: 'image',
       label: 'Image',
       error: errors.image,
+      key: 'image',
+      name: 'image',
+      type: (
+        <>
+          <Upload listType="picture-card" name="image" {...propsImages}>
+            {/* <Button onBlur={(e) => onBlur(e, 'image')}> */}
+            <Button>
+              <Icon type="upload" /> Select File
+            </Button>
+          </Upload>
+        </>
+      ),
     },
+    // {
+    //   type: <Input value={values.image} name="image" />,
+    //   key: 'image',
+    //   label: 'Image',
+    //   error: errors.image,
+    // },
     {
       type: (
         <Radio.Group name="status" defaultValue="Hold" buttonStyle="solid">
