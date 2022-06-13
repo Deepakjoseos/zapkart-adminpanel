@@ -1,25 +1,26 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-underscore-dangle */
 import React, { useEffect, useState } from 'react'
-import { Input, Button, Icon, Radio, InputNumber, notification, Upload } from 'antd'
+import { Input, Button, Icon, Radio, InputNumber, notification, Upload, Form } from 'antd'
 import { brandSchema } from 'utils/Schema'
 // import { getBaseName } from 'utils'
 import { withRouter, Redirect } from 'react-router-dom'
 import { addBrand, editBrand } from 'services/brands'
 import { STRINGS } from '_constants'
 // import Upload from 'components/Upload'
-import Form from 'components/Form'
-import SingleImageUpload from 'components/ImageUpload/SingleUpload'
-import { getBaseName } from 'utils'
+// import Form from 'components/Form'
+// import SingleImageUpload from 'components/ImageUpload/SingleUpload'
+import { formItemLayout, getBaseName, tailFormItemLayout } from 'utils'
 import useUpload from 'hooks/useUpload'
 import { singleImageUploader } from 'utils/s3ImageUploader'
+import useFormValidation from 'hooks/useFormValidation'
 
 const FormA = ({ data }) => {
   const initialValues = {
     status: 'Hold',
   }
 
-  const [values, setValues] = useState(initialValues)
+  // const [values, setValues] = useState(initialValues)
 
   const {
     fileList: fileListImages,
@@ -78,6 +79,7 @@ const FormA = ({ data }) => {
   }
 
   useEffect(() => {
+    console.log(values, 'hey-me')
     setValues((a) => ({ ...a, image: fileListImages }))
   }, [fileListImages])
 
@@ -96,9 +98,9 @@ const FormA = ({ data }) => {
 
     // const modImgs = formValues?.image?.map((i) => i.originFileObj)
     const a = data
-      ? await editBrand(data.id, formValues, data)
+      ? await editBrand(data.id, values, data)
       : // : await addBrand({ ...formValues, image: modImgs })
-        await addBrand({ ...formValues })
+        await addBrand({ ...values })
 
     if (a) {
       notification.success({
@@ -125,12 +127,28 @@ const FormA = ({ data }) => {
 
   console.log(values)
 
+  const {
+    onChange,
+    values,
+    setValues,
+    onSubmit,
+    onBlur,
+    errors,
+    setSubmitting,
+    isSubmitting,
+    // validateForm,
+    // touched,
+    // setTouched,
+  } = useFormValidation(initialValues, brandSchema, submitForm) // file as object {fileInputName:'icon', maxCount:1}
+  console.log(values.image)
+
   const formItems = [
     { heading: 'General', key: 'general' },
     {
-      type: <Input name="name" />,
+      type: <Input value={values.name} name="name" />,
       key: 'name',
       label: 'Name',
+      error: errors.name,
     },
     {
       type: (
@@ -147,12 +165,13 @@ const FormA = ({ data }) => {
         <InputNumber
           // onChange={e => setValues(a => ({ ...a, priorityOrder: e }))}
           name="priority"
-          // value={values.priorityOrder}
+          value={values.priority}
           min={0}
         />
       ),
       key: 'priority',
       label: 'Priority ',
+      error: errors.name,
     },
 
     // {
@@ -164,6 +183,7 @@ const FormA = ({ data }) => {
       label: 'Image',
       key: 'image',
       name: 'image',
+      error: errors.image,
       type: (
         <>
           <Upload listType="picture-card" name="image" {...propsImages}>
@@ -217,7 +237,38 @@ const FormA = ({ data }) => {
   if (success) return <Redirect to="/catalog/brands" />
 
   return (
-    <Form onSubmit={submitForm} schema={brandSchema} initialValues={values} formItems={formItems} />
+    // <Form onSubmit={submitForm} schema={brandSchema} initialValues={values} formItems={formItems} />
+    <Form
+      onChange={onChange}
+      onBlur={onBlur}
+      onSubmit={onSubmit}
+      labelAlign="right"
+      {...formItemLayout}
+    >
+      {formItems.map((item) => {
+        if (item.heading)
+          return (
+            <h4 key={item.heading} className="text-black mb-3">
+              <strong>{item.heading}</strong>
+            </h4>
+          )
+        return (
+          <Form.Item
+            key={item.key}
+            label={item.label}
+            validateStatus={item.error && 'error'}
+            help={item.error}
+          >
+            {item.type}
+          </Form.Item>
+        )
+      })}
+      <Form.Item {...tailFormItemLayout}>
+        <Button disabled={isSubmitting} type="primary" htmlType="submit">
+          Submit
+        </Button>
+      </Form.Item>
+    </Form>
   )
 }
 

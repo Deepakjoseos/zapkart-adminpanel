@@ -95,7 +95,7 @@ class ProductTemplate extends React.Component {
       returnable: selectedData.returnable,
       returnPeriod: selectedData.returnPeriod,
       allowedQuantityPerOrder: selectedData.allowedQuantityPerOrder,
-      presriptionRequired: selectedData.presriptionRequired,
+      prescriptionRequired: selectedData.prescriptionRequired,
       shippingDetail: selectedData.shippingDetail,
       priority: selectedData.priority,
       status: e.key,
@@ -320,10 +320,10 @@ class ProductTemplate extends React.Component {
       },
 
       {
-        title: 'PresriptionRequired',
-        dataIndex: 'presriptionRequired',
-        key: 'presriptionRequired',
-        render: (_, record) => <p>{record.presriptionRequired ? 'Yes' : 'No'}</p>,
+        title: 'prescriptionRequired',
+        dataIndex: 'prescriptionRequired',
+        key: 'prescriptionRequired',
+        render: (_, record) => <p>{record.prescriptionRequired ? 'Yes' : 'No'}</p>,
       },
 
       {

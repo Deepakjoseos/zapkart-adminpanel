@@ -122,9 +122,9 @@ class BrandsList extends React.Component {
       loading: true,
     })
     const res = await getBrands('')
-    const availableData = res.data.filter((cur) => cur.status !== 'Deleted')
+    const availableData = res?.data?.filter((cur) => cur.status !== 'Deleted')
 
-    if (res && res.data) {
+    if (res && res?.data) {
       this.setState({
         loading: false,
         tableData: availableData,

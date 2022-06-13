@@ -833,7 +833,7 @@ export const productTemplateSchema = Yup.object().shape({
   returnable: Yup.boolean().required('Required'),
   returnPeriod: Yup.number().required('Required'),
   allowedQuantityPerOrder: Yup.number().required('Required'),
-  presriptionRequired: Yup.boolean().required('Required'),
+  prescriptionRequired: Yup.boolean().required('Required'),
   lengthClass: Yup.string().required('Required'),
   weightClass: Yup.string().required('Required'),
   height: Yup.number().required('Required'),

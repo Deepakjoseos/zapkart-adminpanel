@@ -33,6 +33,7 @@ const multipleImageUpload = async (images) => {
 
 const singleImageUploader = async (file, imgValue, defaultValueUrl) => {
   if (file) {
+    console.log(file, 'show-correct')
     try {
       const asyncResult = await ReactS3Client.uploadFile(
         file,

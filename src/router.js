@@ -797,16 +797,16 @@ class Router extends React.Component {
                   // return <Redirect to="/dash" />
                   console.log('fffffffffffff', user.role)
                   // TODO: Change with auth
-                  // switch (user.role) {
-                  //   case ROLES.admin:
-                  //     console.log('444')
-                  return <Redirect to="/dashboard" />
-                  //   case ROLES.merchant:
-                  //     console.log('888')
-                  //     return <Redirect to="/dashboard/seller" />
-                  //   default:
-                  //     return <Redirect to="/user/login" />
-                  // }
+                  switch (user.role) {
+                    case ROLES.admin:
+                      console.log('444')
+                      return <Redirect to="/dashboard" />
+                    case ROLES.merchant:
+                      console.log('888')
+                      return <Redirect to="/dashboard/seller" />
+                    default:
+                      return <Redirect to="/user/login" />
+                  }
                 }}
               />
               <Suspense fallback={<Loader />}>

@@ -80,129 +80,6 @@ const FormA = ({ data, categories, brands }) => {
 
     const uploadedImages = await multipleImageUpload(formValues.images)
 
-    // const imagesArray = await formValues.images.reduce(async (result, el) => {
-    //   if (el.originFileObj) {
-    //     try {
-    //       const asyncResult = await ReactS3Client.uploadFile(
-    //         el.originFileObj,
-    //         // formValues.images[1].originFileObj.name,
-    //       )
-    //       if (asyncResult) {
-    //         ;(await result).push(asyncResult.location)
-    //       }
-    //     } catch (err) {
-    //       // (await result).push(result.location);
-    //       notification.error({
-    //         message: 'Cannot upload Newly added Images',
-    //       })
-
-    //       console.log(err.message, 'pls')
-    //     }
-    //   } else {
-    //     ;(await result).push(el.url)
-    //   }
-
-    //   return result
-    // }, [])
-
-    // const asyncResult = await someAsyncTask(el)
-    // if (asyncResult) {
-    //   ;(await result).push(newSavedFile)
-    // }
-    // return result
-
-    // eslint-disable-next-line func-names
-    // const sendableImages = formValues.images.reduce(function (pV, cV, cI) {
-    //   if (cV.originFileObj) {
-    //     ReactS3Client.uploadFile(
-    //       cV.originFileObj,
-    //       // formValues.images[1].originFileObj.name,
-    //     )
-    //       .then((imgData) => {
-    //         console.log('the-loxc', imgData.location)
-    //         pV.push(imgData.location)
-    //         // return imgData.location
-    //         // window.images.push(imgData.location)
-    //         // window.uploadedStatus = true
-    //       })
-    //       .catch((err) => {
-    //         // window.uploadedStatus = false
-    //         pV = []
-    //         console.log(err.message, 'errrrror-img')
-    //       })
-    //     // return res
-    //   }
-
-    //   return pV // *********  Important ******
-    // }, [])
-
-    // const uploadedImages = formValues.images.map(async (cur) => {
-    //   if (cur.originFileObj) {
-    //     const res = await ReactS3Client.uploadFile(
-    //       cur.originFileObj,
-    //       // formValues.images[1].originFileObj.name,
-    //     )
-    //       .then((imgData) => {
-    //         return imgData.location
-    //         // window.images.push(imgData.location)
-    //         // window.uploadedStatus = true
-    //       })
-    //       .catch((err) => {
-    //         // window.uploadedStatus = false
-    //         console.log(err.message, 'errrrror-img')
-    //       })
-    //     return res
-    //   }
-    //   return cur
-    // })
-    // let datas = []
-
-    // Promise.all(uploadedImages).then(function (results) {
-    //   datas = results
-    // })
-
-    // console.log(imagesArray, 'hlooo')
-
-    // AWS.config.update({
-    //   accessKeyId: 'AKIA2MGENPR2BQUY3Y4Q',
-    //   secretAccessKey: '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',
-    // })
-
-    // const myBucket = new AWS.S3({
-    //   params: { Bucket: S3_BUCKET },
-    //   region: REGION,
-    // })
-
-    // const uploadFile = (file) => {
-    //   const params = {
-    //     ACL: 'public-read',
-    //     Body: formValues.images[1].originFileObj,
-    //     Bucket: S3_BUCKET,
-    //     Key: formValues.images[1].name,
-    //   }
-
-    //   myBucket
-    //     .upload(params)
-    //     .then((dataImg) => console.log('Data:', dataImg))
-    //     .catch((err) => {
-    //       console.log('err => ', err.message)
-    //     })
-
-    // .putObject(params)
-    // // .on('httpUploadProgress', (evt) => {
-    // //     setProgress(Math.round((evt.loaded / evt.total) * 100))
-    // // })
-    // .send((err, dataImg) => {
-    //   if (err) {
-    //     console.log(err.code, 'poi-code')
-    //     console.log(err.message, 'poi-message')
-    //   }
-    //   if (dataImg) console.log(dataImg.response, 'kitti')
-    // })
-    // }
-
-    // uploadFile()
-
     console.log('formValues', formValues)
     const sendingData = {
       brandId: formValues.brandId,
@@ -215,7 +92,7 @@ const FormA = ({ data, categories, brands }) => {
       returnable: formValues.returnable,
       returnPeriod: formValues.returnPeriod,
       allowedQuantityPerOrder: formValues.allowedQuantityPerOrder,
-      presriptionRequired: formValues.presriptionRequired,
+      prescriptionRequired: formValues.prescriptionRequired,
       priority: formValues.priority,
       // status: formValues.status,
       shippingDetail: {
@@ -349,10 +226,10 @@ const FormA = ({ data, categories, brands }) => {
     {
       type: (
         <Select
-          value={values.presriptionRequired}
-          name="presriptionRequired"
-          placeholder="Select PresriptionRequired"
-          onChange={(e) => setValues((a) => ({ ...a, presriptionRequired: e }))}
+          value={values.prescriptionRequired}
+          name="prescriptionRequired"
+          placeholder="Select prescriptionRequired"
+          onChange={(e) => setValues((a) => ({ ...a, prescriptionRequired: e }))}
         >
           <Select.Option key={true} value={true}>
             Yes
@@ -362,8 +239,8 @@ const FormA = ({ data, categories, brands }) => {
           </Select.Option>
         </Select>
       ),
-      key: 'presriptionRequired',
-      label: 'PresriptionRequired',
+      key: 'prescriptionRequired',
+      label: 'prescriptionRequired',
     },
 
     // {

@@ -5,6 +5,7 @@ import { notification } from 'antd'
 import * as constants from '_constants'
 import callApi from 'utils/callApi'
 import { getFormData } from 'utils'
+import { authentication } from 'firebaseconfig'
 // import 'firebase/database'
 // import 'firebase/storage'
 
@@ -230,13 +231,15 @@ export async function deleteUser(userId) {
 
 export async function currentAccountJwt() {
   const token = getToken()
-  console.log('dsfg', token)
+  // console.log('dsfg', user)
+  // const realToken = await user.getIdTokenResult(true)
+
   if (typeof token !== 'undefined') {
     try {
-      const loginResponse = await fetch('/api/backend/v1/users', {
+      const loginResponse = await fetch('/api/v1/admin', {
         method: 'GET',
         headers: {
-          Authorization: token,
+          Authorization: `Bearer ${token}`,
         },
       })
       console.log(loginResponse.status)
@@ -250,7 +253,7 @@ export async function currentAccountJwt() {
       const resJSON = await loginResponse.json()
       console.log(resJSON)
       if (loginResponse.status === 200) {
-        return resJSON
+        return resJSON.data
       }
       // removeToken(token)
       notification.warning({
@@ -264,6 +267,40 @@ export async function currentAccountJwt() {
     }
   }
   return null
+
+  // if (typeof token !== 'undefined') {
+  //   try {
+  //     const loginResponse = await fetch('/api/backend/v1/users', {
+  //       method: 'GET',
+  //       headers: {
+  //         Authorization: token,
+  //       },
+  //     })
+  //     console.log(loginResponse.status)
+  //     if (!loginResponse.ok) {
+  //       notification.warning({
+  //         message: constants.STRINGS.error,
+  //         description: 'Invalid user credentials!',
+  //       })
+  //       return null
+  //     }
+  //     const resJSON = await loginResponse.json()
+  //     console.log(resJSON)
+  //     if (loginResponse.status === 200) {
+  //       return resJSON
+  //     }
+  //     // removeToken(token)
+  //     notification.warning({
+  //       message: constants.SESSION_EXPIRED_MESSAGE,
+  //       description: constants.SESSION_EXPIRED_MESSAGE_DESC,
+  //     })
+
+  //     return null
+  //   } catch (error) {
+  //     return null
+  //   }
+  // }
+  // return null
 }
 
 // export async function currentAccount() {
@@ -290,6 +327,7 @@ export async function currentAccountJwt() {
 // }
 
 export async function logoutJwt() {
+  authentication.signOut()
   removeToken()
   return true
 }

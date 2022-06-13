@@ -1,18 +1,17 @@
 import actions from './actions'
 
 const initialState = {
-  token:'',
+  token: '',
   id: '',
   name: '',
   role: '',
   email: '',
   avatar: '',
   authorized: false,
-  loading: false,
+  loading: true,
 }
 
 export default function userReducer(state = initialState, action) {
-
   switch (action.type) {
     case actions.SET_STATE:
       return { ...state, ...action.payload }

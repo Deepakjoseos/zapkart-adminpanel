@@ -12,9 +12,9 @@ export default async function callApi(url, options = {}) {
       if (typeof options.headers === 'undefined') options = { ...options, headers: {} }
       // apiUrl = baseURL + url
       apiUrl = url
-      options.headers.Authorization = `${localStorage.getItem('token')}`
+      options.headers.Authorization = `Bearer ${localStorage.getItem('token')}`
     }
-    console.log('yoyoing', options);
+    console.log('yoyoing', options)
     const response = await fetch(apiUrl, options)
     if (response.status === 401) {
       store.dispatch({

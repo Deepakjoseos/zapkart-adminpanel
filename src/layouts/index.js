@@ -66,24 +66,26 @@ class IndexLayout extends React.PureComponent {
     const isLoginLayout = getLayout() === 'login'
 
     const BootstrappedLayout = () => {
+      // alert(isUserLoading)
       // TODO: Change with auth
       // show loader when user in check authorization process, not authorized yet and not on login pages
-      // if (isUserLoading && !isUserAuthorized && !isLoginLayout) {
-      //   return <Loader />
-      // }
-      // // redirect to login page if current is not login page and user not authorized
-      // if (!isLoginLayout && !isUserAuthorized) {
-      //   return <Redirect to="/user/login" />
-      // }
-      // // redirect to main dashboard when user on login page and authorized
-      // if (isLoginLayout && isUserAuthorized && user.role === ROLES.admin) {
-      //   console.log('redirecting to alpha dash')
-      //   return <Redirect to="/dashboard" />
-      // }
-      // if (isLoginLayout && isUserAuthorized && user.role === ROLES.merchant) {
-      //   console.log('redirecting to seller dash')
-      //   return <Redirect to="/dashboard/seller" />
-      // }
+      // && !isUserAuthorized && !isLoginLayout
+      if (isUserLoading && !isUserAuthorized && !isLoginLayout) {
+        return <Loader />
+      }
+      // redirect to login page if current is not login page and user not authorized
+      if (!isLoginLayout && !isUserAuthorized) {
+        return <Redirect to="/user/login" />
+      }
+      // redirect to main dashboard when user on login page and authorized
+      if (isLoginLayout && isUserAuthorized && user.role === ROLES.admin) {
+        console.log('redirecting to alpha dash')
+        return <Redirect to="/dashboard" />
+      }
+      if (isLoginLayout && isUserAuthorized && user.role === ROLES.merchant) {
+        console.log('redirecting to seller dash')
+        return <Redirect to="/dashboard/seller" />
+      }
       // in other case render previously set layout
       return <Container>{children}</Container>
     }

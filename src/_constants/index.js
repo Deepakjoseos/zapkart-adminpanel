@@ -245,10 +245,10 @@ export const FAILED = 'FAILED'
 export const ERROR_TRY_LATER = "'Something went wrong. Please try again later!'"
 
 export const ROLES = {
-  admin: 'admin',
+  admin: 'Admin',
   seller: 'seller',
   merchant: 'merchant',
-  enduser: 'enduser',
+  // enduser: 'enduser',
 }
 
 export const PATH_CUSTOM_ATTRIBUTES = {
