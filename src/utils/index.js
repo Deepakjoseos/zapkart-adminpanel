@@ -1,235 +1,244 @@
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable no-global-assign */
-/* eslint-disable func-names */
-import moment from 'moment'
-import convertUnits from 'convert-units'
+class Utils {
+  /**
+   * Get first character from first & last sentences of a username
+   * @param {String} name - Username
+   * @return {String} 2 characters string
+   */
+  static getNameInitial(name) {
+    let initials = name.match(/\b\w/g) || []
+    return ((initials.shift() || '') + (initials.pop() || '')).toUpperCase()
+  }
 
-export const GlobalDebug = (function() {
-  const savedConsole = console
-  return function(debugOn = true, suppressAll) {
-    const suppress = suppressAll || false
-
-    if (debugOn === false) {
-      console = {}
-      console.log = function() {}
-      if (suppress) {
-        console.info = function() {}
-        console.warn = function() {}
-        console.error = function() {}
-      } else {
-        console.info = savedConsole.info
-        console.warn = savedConsole.warn
-        console.error = savedConsole.error
+  /**
+   * Get current path related object from Navigation Tree
+   * @param {Array} navTree - Navigation Tree from directory 'configs/NavigationConfig'
+   * @param {String} path - Location path you looking for e.g '/app/dashboards/analytic'
+   * @return {Object} object that contained the path string
+   */
+  static getRouteInfo(navTree, path) {
+    if (navTree.path === path) {
+      return navTree
+    }
+    let route
+    for (let p in navTree) {
+      if (navTree.hasOwnProperty(p) && typeof navTree[p] === 'object') {
+        route = this.getRouteInfo(navTree[p], path)
+        if (route) {
+          return route
+        }
       }
+    }
+    return route
+  }
+
+  /**
+   * Get accessible color contrast
+   * @param {String} hex - Hex color code e.g '#3e82f7'
+   * @return {String} 'dark' or 'light'
+   */
+  static getColorContrast(hex) {
+    if (!hex) {
+      return 'dark'
+    }
+    const threshold = 130
+    const hRed = hexToR(hex)
+    const hGreen = hexToG(hex)
+    const hBlue = hexToB(hex)
+    function hexToR(h) {
+      return parseInt(cutHex(h).substring(0, 2), 16)
+    }
+    function hexToG(h) {
+      return parseInt(cutHex(h).substring(2, 4), 16)
+    }
+    function hexToB(h) {
+      return parseInt(cutHex(h).substring(4, 6), 16)
+    }
+    function cutHex(h) {
+      return h.charAt(0) === '#' ? h.substring(1, 7) : h
+    }
+    const cBrightness = (hRed * 299 + hGreen * 587 + hBlue * 114) / 1000
+    if (cBrightness > threshold) {
+      return 'dark'
     } else {
-      console = savedConsole
+      return 'light'
     }
   }
-})()
 
-export function disabledDate(current) {
-  // Can not select days before today and today
-  return current && current < moment().endOf('day')
-}
+  /**
+   * Darken or lighten a hex color
+   * @param {String} color - Hex color code e.g '#3e82f7'
+   * @param {Number} percent - Percentage -100 to 100, positive for lighten, negative for darken
+   * @return {String} Darken or lighten color
+   */
+  static shadeColor(color, percent) {
+    let R = parseInt(color.substring(1, 3), 16)
+    let G = parseInt(color.substring(3, 5), 16)
+    let B = parseInt(color.substring(5, 7), 16)
+    R = parseInt((R * (100 + percent)) / 100)
+    G = parseInt((G * (100 + percent)) / 100)
+    B = parseInt((B * (100 + percent)) / 100)
+    R = R < 255 ? R : 255
+    G = G < 255 ? G : 255
+    B = B < 255 ? B : 255
+    const RR =
+      R.toString(16).length === 1 ? `0${R.toString(16)}` : R.toString(16)
+    const GG =
+      G.toString(16).length === 1 ? `0${G.toString(16)}` : G.toString(16)
+    const BB =
+      B.toString(16).length === 1 ? `0${B.toString(16)}` : B.toString(16)
+    return `#${RR}${GG}${BB}`
+  }
 
-export function getFormattedDate(dateJSON) {
-  const date = new Date(dateJSON)
-  const DD = (date.getDate() < 10 ? '0' : '') + date.getDate()
-  const MM = (date.getMonth() + 1 < 10 ? '0' : '') + (date.getMonth() + 1)
-  const YYYY = date.getFullYear()
+  /**
+   * Convert RGBA to HEX
+   * @param {String} rgba - RGBA color code e.g 'rgba(197, 200, 198, .2)')'
+   * @return {String} HEX color
+   */
+  static rgbaToHex(rgba) {
+    const trim = (str) => str.replace(/^\s+|\s+$/gm, '')
+    const inParts = rgba.substring(rgba.indexOf('(')).split(','),
+      r = parseInt(trim(inParts[0].substring(1)), 10),
+      g = parseInt(trim(inParts[1]), 10),
+      b = parseInt(trim(inParts[2]), 10),
+      a = parseFloat(
+        trim(inParts[3].substring(0, inParts[3].length - 1))
+      ).toFixed(2)
+    const outParts = [
+      r.toString(16),
+      g.toString(16),
+      b.toString(16),
+      Math.round(a * 255)
+        .toString(16)
+        .substring(0, 2),
+    ]
 
-  return `${DD}-${MM}-${YYYY}`
-}
-
-export function getFormattedTime(dateJSON) {
-  const date = new Date(dateJSON)
-  const HH = (date.getHours() < 10 ? '0' : '') + date.getHours()
-  const mm = (date.getMinutes() < 10 ? '0' : '') + date.getMinutes()
-  const ss = (date.getSeconds() < 10 ? '0' : '') + date.getSeconds()
-
-  return `${HH}:${mm}:${ss}`
-}
-
-export const unflatten = (array, parent, tree) => {
-  tree = typeof tree !== 'undefined' ? tree : []
-  parent = typeof parent !== 'undefined' ? parent : { id: 0 }
-  // console.log('unflatten', array)
-  const children = array.filter(child => {
-    return child.parent === parent.id
-  })
-  // console.log("children",children.length)
-  if (children.length !== 0) {
-    if (parent.id === 0) {
-      tree = children
-    } else {
-      parent.children = children
-    }
-    children.forEach(child => {
-      unflatten(array, child)
+    outParts.forEach(function (part, i) {
+      if (part.length === 1) {
+        outParts[i] = '0' + part
+      }
     })
+    return `#${outParts.join('')}`
   }
 
-  return tree
-}
-
-export const unflattenOrig = (array, parent, tree) => {
-  tree = typeof tree !== 'undefined' ? tree : []
-  parent = typeof parent !== 'undefined' ? parent : { id: 0 }
-  // console.log('unflatten', array)
-  const children = array.filter(child => {
-    return child.parent === parent.id
-  })
-  console.log(children.length)
-  if (children.length !== 0) {
-    if (parent.id === 0) {
-      tree = children
-    } else {
-      parent.children = children
+  /**
+   * Returns either a positive or negative
+   * @param {Number} number - number value
+   * @param {any} positive - value that return when positive
+   * @param {any} negative - value that return when negative
+   * @return {any} positive or negative value based on param
+   */
+  static getSignNum(number, positive, negative) {
+    if (number > 0) {
+      return positive
     }
-    children.forEach(child => {
-      unflatten(array, child)
-    })
+    if (number < 0) {
+      return negative
+    }
+    return null
   }
 
-  return tree
-}
+  /**
+   * Returns either ascending or descending value
+   * @param {Object} a - antd Table sorter param a
+   * @param {Object} b - antd Table sorter param b
+   * @param {String} key - object key for compare
+   * @return {any} a value minus b value
+   */
+  static antdTableSorter(a, b, key) {
+    if (typeof a[key] === 'number' && typeof b[key] === 'number') {
+      return a[key] - b[key]
+    }
 
-export const validateQty = (rule, value, callback) => {
-  const reg = /^-?(0|[1-9][0-9]*)?$/
-  console.log(value)
-  // console.log((Number(value) % 1 === 0))
-  // if (Number(value) === value && value % 1 === 0) {
-  if ((!Number.isNaN(value) && reg.test(value)) || value === '' || value === '-') {
-    //     // props.onChange(changedFields);
-    callback()
+    if (typeof a[key] === 'string' && typeof b[key] === 'string') {
+      a = a[key].toLowerCase()
+      b = b[key].toLowerCase()
+      return a > b ? -1 : b > a ? 1 : 0
+    }
     return
   }
-  callback('Not a valid quantity!')
-}
 
-export const validateEndDate = (rule, value, callback, startDate) => {
-  console.log(value, startDate)
-  callback()
-}
-
-export const getBaseName = path => {
-  // console.log(path)
-  if (path) {
-    const parsed = path.split('/')
-    return parsed[parsed.length - 1]
+  /**
+   * Filter array of object
+   * @param {Array} list - array of objects that need to filter
+   * @param {String} key - object key target
+   * @param {any} value  - value that excluded from filter
+   * @return {Array} a value minus b value
+   */
+  static filterArray(list, key, value) {
+    let data = list
+    if (list) {
+      data = list.filter((item) => item[key] === value)
+    }
+    return data
   }
-  return ''
-}
 
-export const formItemLayout = {
-  labelCol: {
-    xs: { span: 24 },
-    sm: { span: 5 },
-    lg: { span: 5 },
-  },
-  wrapperCol: {
-    xs: { span: 24 },
-    sm: { span: 18 },
-    lg: { span: 12 },
-    // lg: { span: 18 },
-  },
-}
+  /**
+   * Remove object from array by value
+   * @param {Array} list - array of objects
+   * @param {String} key - object key target
+   * @param {any} value  - target value
+   * @return {Array} Array that removed target object
+   */
+  static deleteArrayRow(list, key, value) {
+    let data = list
+    if (list) {
+      data = list.filter((item) => item[key] !== value)
+    }
+    return data
+  }
 
-export const tailFormItemLayout = {
-  wrapperCol: {
-    xs: {
-      span: 24,
-      offset: 0,
-    },
-    sm: {
-      // span: 16,
-      // offset: 8,
-      span: 16,
-      offset: 4,
-    },
-  },
-}
-
-export const generateCategoryTree = (categories, id) => {
-  const categoriesFormatted = categories.map(item => {
-    if ((id && id !== item._id) || !id) {
-      const parent =
-        typeof item.parent === 'object' && item.parent !== null ? item.parent._id : item.parent
-      return {
-        title: item.name,
-        value: item._id,
-        key: item._id,
-        id: item._id,
-        parent: item.parent === null ? 0 : parent,
+  /**
+   * Wild card search on all property of the object
+   * @param {Number | String} input - any value to search
+   * @param {Array} list - array for search
+   * @return {Array} array of object contained keyword
+   */
+  static wildCardSearch(list, input) {
+    const searchText = (item) => {
+      for (let key in item) {
+        if (item[key] == null) {
+          continue
+        }
+        if (
+          item[key]
+            .toString()
+            .toUpperCase()
+            .indexOf(input.toString().toUpperCase()) !== -1
+        ) {
+          return true
+        }
       }
     }
-    return {}
-  })
-  const tree = unflatten(categoriesFormatted)
-  return tree
-}
+    list = list.filter((value) => searchText(value))
+    return list
+  }
 
-export const generateKey = pre => {
-  return `${pre}_${new Date().getTime()}`
-}
-
-export const getFormData = (data, fields = []) => {
-  const formData = new FormData()
-  Object.entries(data).forEach(([key, value]) => {
-    if (value && (value.constructor === Array || value.constructor === Object))
-      value = JSON.stringify(value)
-    if (fields.length === 0) formData.append(key, value)
-    else if (fields.includes(key)) {
-      if (value) formData.append(key, value)
+  /**
+   * Get Breakpoint
+   * @param {Object} screens - Grid.useBreakpoint() from antd
+   * @return {Array} array of breakpoint size
+   */
+  static getBreakPoint(screens) {
+    let breakpoints = []
+    for (const key in screens) {
+      if (screens.hasOwnProperty(key)) {
+        const element = screens[key]
+        if (element) {
+          breakpoints.push(key)
+        }
+      }
     }
-  })
-  return formData
-}
+    return breakpoints
+  }
 
-/**
- *
- * @param {array} items
- * @param {number} items.weight
- * @param {number} items.unit
- * @param {number} items.quantity
- */
-export const calculateWeight = (items, toUnit = 'lb') => {
-  console.log('CONVERT UNIT', 'items', items, toUnit)
-  try {
-    let totalWeight = 0
-    items.forEach(i => {
-      const weight = parseInt(i.weight, 10)
-      const unit = getUnit(i.unit)
-      const quantity = parseInt(i.quantity, 10)
-
-      console.log('CONVERT UNIT', weight, unit, quantity)
-
-      const convertedUnit = convertUnits(weight)
-        .from(unit)
-        .to(toUnit)
-        .toFixed(3)
-      totalWeight += convertedUnit * quantity
-    })
-    return totalWeight
-  } catch (error) {
-    console.error(error)
-    return 0
+  static getBaseName(path) {
+    // console.log(path)
+    if (path) {
+      const parsed = path.split('/')
+      return parsed[parsed.length - 1]
+    }
+    return ''
   }
 }
 
-const getUnit = i => {
-  switch (i) {
-    case 'gm':
-      return 'g'
-    case 'pound':
-      return 'lb'
-    case 'ounce':
-      return 'oz'
-    default:
-      return i
-  }
-}
-
-export const getFileExtension = (str = '') => {
-  return str.split('.').pop()
-}
+export default Utils
