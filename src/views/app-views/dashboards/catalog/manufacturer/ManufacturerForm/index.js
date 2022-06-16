@@ -5,7 +5,7 @@ import Flex from 'components/shared-components/Flex'
 import GeneralField from './GeneralField'
 import useUpload from 'hooks/useUpload'
 import { singleImageUploader } from 'utils/s3/s3ImageUploader'
-import brandService from 'services/brand'
+import manufacturerService from 'services/manufacturer'
 import Utils from 'utils'
 import { useHistory } from 'react-router-dom'
 
@@ -33,33 +33,36 @@ const ProductForm = (props) => {
 
   useEffect(() => {
     if (mode === EDIT) {
-      const fetchBrandById = async () => {
+      const fetchManufacturerById = async () => {
         const { id } = param
-        const data = await brandService.getBrandById(id)
+        const data = await manufacturerService.getManufacturerById(id)
+        if (data) {
+          let himg = []
+          if (data.image) {
+            himg = [
+              {
+                uid: Math.random() * 1000,
+                name: Utils.getBaseName(data.image),
+                url: data.image,
+                thumbUrl: data.image,
+              },
+            ]
 
-        let himg = []
-        if (data.image) {
-          himg = [
-            {
-              uid: Math.random() * 1000,
-              name: Utils.getBaseName(data.image),
-              url: data.image,
-              thumbUrl: data.image,
-            },
-          ]
+            setImage(himg)
+            setFileListImages(himg)
+          }
 
-          setImage(himg)
-          setFileListImages(himg)
+          form.setFieldsValue({
+            name: data.name,
+            status: data.status,
+            priority: data.priority,
+          })
+        } else {
+          history.replace('/app/dashboards/manufacturer/manufacturer-list')
         }
-
-        form.setFieldsValue({
-          name: data.name,
-          status: data.status,
-          priority: data.priority,
-        })
       }
 
-      fetchBrandById()
+      fetchManufacturerById()
     }
   }, [form, mode, param, props])
 
@@ -90,11 +93,11 @@ const ProductForm = (props) => {
               uploadedImg[0].originFileObj,
               uploadedImg,
               uploadedImg[0].url,
-              'brand'
+              'manufacturer'
             )
             values.image = imgValue
 
-            const created = await brandService.createBrand(values)
+            const created = await manufacturerService.createManufacturer(values)
             if (created) {
               message.success(`Created ${values.name} to product list`)
               history.goBack()
@@ -111,11 +114,14 @@ const ProductForm = (props) => {
               uploadedImg[0].originFileObj,
               uploadedImg,
               uploadedImg[0].url,
-              'brand'
+              'manufacturer'
             )
             values.image = imgValue
 
-            const edited = await brandService.editBrand(param.id, values)
+            const edited = await manufacturerService.editManufacturer(
+              param.id,
+              values
+            )
             if (edited) {
               message.success(`Edited ${values.name} to product list`)
               history.goBack()
@@ -152,10 +158,19 @@ const ProductForm = (props) => {
               alignItems="center"
             >
               <h2 className="mb-3">
-                {mode === 'ADD' ? 'Add New Product' : `Edit Product`}{' '}
+                {mode === 'ADD' ? 'Add New Manufacturer' : `Edit Manufacturer`}{' '}
               </h2>
               <div className="mb-3">
-                <Button className="mr-2">Discard</Button>
+                <Button
+                  className="mr-2"
+                  onClick={() =>
+                    history.push(
+                      '/app/dashboards/catalog/manufacturer/manufacturer-list'
+                    )
+                  }
+                >
+                  Discard
+                </Button>
                 <Button
                   type="primary"
                   onClick={() => onFinish()}

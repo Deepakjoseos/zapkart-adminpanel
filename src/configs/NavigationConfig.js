@@ -21,10 +21,15 @@ import {
   RobotOutlined,
   PlusCircleOutlined,
   FundOutlined,
+  VerifiedOutlined,
   ShoppingCartOutlined,
   BookOutlined,
   FileUnknownOutlined,
   ProfileOutlined,
+  FundProjectionScreenOutlined,
+  UsergroupAddOutlined,
+  FormatPainterOutlined,
+  UserOutlined,
 } from '@ant-design/icons'
 import { APP_PREFIX_PATH, AUTH_PREFIX_PATH } from 'configs/AppConfig'
 
@@ -197,10 +202,62 @@ const dashBoardNavTree = [
       },
 
       {
-        key: 'dashboards-brands',
-        path: `${APP_PREFIX_PATH}/dashboards/brands/brands-list`,
-        title: 'Brands',
-        icon: FundOutlined,
+        key: 'dashboards-catalog',
+        path: `${APP_PREFIX_PATH}/dashboards/catalog`,
+        title: 'Catalog',
+        icon: AppstoreOutlined,
+        breadcrumb: false,
+        submenu: [
+          {
+            key: 'dashboards-catalog-brands',
+            path: `${APP_PREFIX_PATH}/dashboards/catalog/brand/brands-list`,
+            title: 'Brands',
+            icon: VerifiedOutlined,
+            breadcrumb: false,
+            submenu: [],
+          },
+          {
+            key: 'dashboards-catalog-attribute',
+            path: `${APP_PREFIX_PATH}/dashboards/catalog/attribute/attribute-list`,
+            title: 'Attribute',
+            icon: FundProjectionScreenOutlined,
+            breadcrumb: false,
+            submenu: [],
+          },
+          {
+            key: 'dashboards-catalog-manufacturer',
+            path: `${APP_PREFIX_PATH}/dashboards/catalog/manufacturer/manufacturer-list`,
+            title: 'Manufacturer',
+            icon: FormatPainterOutlined,
+            breadcrumb: false,
+            submenu: [],
+          },
+        ],
+      },
+
+      {
+        key: 'dashboards-users',
+        path: `${APP_PREFIX_PATH}/dashboards/users`,
+        title: 'Users',
+        icon: UsergroupAddOutlined,
+        breadcrumb: false,
+        submenu: [
+          {
+            key: 'dashboards-users-usergroup',
+            path: `${APP_PREFIX_PATH}/dashboards/users/usergroup/usergroup-list`,
+            title: 'User Group',
+            icon: UserOutlined,
+            breadcrumb: false,
+            submenu: [],
+          },
+        ],
+      },
+
+      {
+        key: 'dashboards-information',
+        path: `${APP_PREFIX_PATH}/dashboards/information/information-list`,
+        title: 'Information',
+        icon: DotChartOutlined,
         breadcrumb: false,
         submenu: [],
       },

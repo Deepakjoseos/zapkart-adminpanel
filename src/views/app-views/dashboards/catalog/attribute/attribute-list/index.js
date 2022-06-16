@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Card, Table, Select, Input, Button, Badge, Menu } from 'antd'
+import { Card, Table, Select, Input, Button, Menu, Tag } from 'antd'
 // import ProductListData from 'assets/data/product-list.data.json'
 import {
   EyeOutlined,
@@ -7,13 +7,11 @@ import {
   SearchOutlined,
   PlusCircleOutlined,
 } from '@ant-design/icons'
-import AvatarStatus from 'components/shared-components/AvatarStatus'
 import EllipsisDropdown from 'components/shared-components/EllipsisDropdown'
 import Flex from 'components/shared-components/Flex'
-import NumberFormat from 'react-number-format'
 import { useHistory } from 'react-router-dom'
 import utils from 'utils'
-import brandService from 'services/brand'
+import attributeService from 'services/attribute'
 
 const { Option } = Select
 
@@ -21,16 +19,14 @@ const getStockStatus = (status) => {
   if (status === 'Active') {
     return (
       <>
-        <Badge status="success" />
-        <span>Active</span>
+        <Tag color="green">Active</Tag>
       </>
     )
   }
   if (status === 'Hold') {
     return (
       <>
-        <Badge status="error" />
-        <span>Hold</span>
+        <Tag color="red">Hold</Tag>
       </>
     )
   }
@@ -41,20 +37,20 @@ const ProductList = () => {
   let history = useHistory()
 
   const [list, setList] = useState([])
-  const [searchBackupList, setSearchBackupList] = useState([])
+  const [filterBackupList, setFilterBackupList] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
 
   useEffect(() => {
-    const getBrands = async () => {
-      const data = await brandService.getBrands()
+    const getAttributes = async () => {
+      const data = await attributeService.getAttributes()
       if (data) {
         setList(data)
-        setSearchBackupList(data)
+        setFilterBackupList(data)
         console.log(data, 'show-data')
       }
     }
-    getBrands()
+    getAttributes()
   }, [])
 
   const dropdownMenu = (row) => (
@@ -79,15 +75,15 @@ const ProductList = () => {
   )
 
   const addProduct = () => {
-    history.push(`/app/dashboards/brand/add-brand`)
+    history.push(`/app/dashboards/catalog/attribute/add-attribute`)
   }
 
   const viewDetails = (row) => {
-    history.push(`/app/dashboards/brand/edit-brand/${row.id}`)
+    history.push(`/app/dashboards/catalog/attribute/edit-attribute/${row.id}`)
   }
 
   const deleteRow = async (row) => {
-    const resp = await brandService.deleteBrand(row.id)
+    const resp = await attributeService.deleteAttribute(row.id)
 
     if (resp) {
       const objKey = 'id'
@@ -107,24 +103,10 @@ const ProductList = () => {
 
   const tableColumns = [
     {
-      title: 'Brand',
+      title: 'Attribute',
       dataIndex: 'name',
-      render: (_, record) => (
-        <div className="d-flex">
-          <AvatarStatus
-            size={60}
-            type="square"
-            src={record.image}
-            name={record.name}
-          />
-        </div>
-      ),
+      key: 'name',
       sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
-    },
-    {
-      title: 'Priority',
-      dataIndex: 'priority',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'priority'),
     },
     {
       title: 'Status',
@@ -147,7 +129,7 @@ const ProductList = () => {
 
   const onSearch = (e) => {
     const value = e.currentTarget.value
-    const searchArray = e.currentTarget.value ? list : searchBackupList
+    const searchArray = e.currentTarget.value ? list : filterBackupList
     const data = utils.wildCardSearch(searchArray, value)
     setList(data)
     setSelectedRowKeys([])
@@ -156,10 +138,10 @@ const ProductList = () => {
   const handleShowStatus = (value) => {
     if (value !== 'All') {
       const key = 'status'
-      const data = utils.filterArray(searchBackupList, key, value)
+      const data = utils.filterArray(filterBackupList, key, value)
       setList(data)
     } else {
-      setList(searchBackupList)
+      setList(filterBackupList)
     }
   }
 
@@ -199,7 +181,7 @@ const ProductList = () => {
             icon={<PlusCircleOutlined />}
             block
           >
-            Add product
+            Add Attribute
           </Button>
         </div>
       </Flex>

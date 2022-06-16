@@ -231,6 +231,10 @@ class Utils {
     return breakpoints
   }
 
+  /**
+   * Get BaseName of the file
+   */
+
   static getBaseName(path) {
     // console.log(path)
     if (path) {

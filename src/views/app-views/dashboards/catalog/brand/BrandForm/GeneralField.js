@@ -10,25 +10,25 @@ const rules = {
   name: [
     {
       required: true,
-      message: 'Please enter Brand name',
+      message: 'Required',
     },
   ],
   image: [
     {
       required: true,
-      message: 'required',
+      message: 'Required',
     },
   ],
   status: [
     {
       required: true,
-      message: 'Please enter status',
+      message: 'Required',
     },
   ],
   priority: [
     {
       required: true,
-      message: 'Please enter brand priority',
+      message: 'Required',
     },
   ],
 }
@@ -37,8 +37,8 @@ const GeneralField = (props) => (
   <Row gutter={16}>
     <Col xs={24} sm={24} md={17}>
       <Card title="Basic Info">
-        <Form.Item name="name" label="Brand name" rules={rules.name}>
-          <Input placeholder="Brand Name" />
+        <Form.Item name="name" label="Name" rules={rules.name}>
+          <Input placeholder="Name" />
         </Form.Item>
         <Form.Item name="priority" label="Priority" rules={rules.priority}>
           <InputNumber
