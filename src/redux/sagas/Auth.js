@@ -32,7 +32,7 @@ export function* signInWithFBEmail() {
       //   yield put(showAuthMessage('Success'))
       // }
       if (user.message) {
-        yield put(showAuthMessage(user.message))
+        yield put(showAuthMessage('Email or password is incorrect'))
       } else {
         user.user
           .getIdTokenResult(true)
