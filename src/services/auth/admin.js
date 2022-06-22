@@ -16,6 +16,20 @@ authAdminService.getProfile = async function () {
   }
 }
 
+authAdminService.editProfile = async function (data) {
+  try {
+    const res = await fetch({
+      url: '/admin',
+      method: 'put',
+      data,
+    })
+
+    return res
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
+
 // authAdminService.setPost = function (data) {
 //   return fetch({
 //     url: '/posts',

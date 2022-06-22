@@ -54,7 +54,7 @@ service.interceptors.response.use(
     if (error.response.status === 401 || error.response.status === 403) {
       notificationParam.message = 'Authentication Fail'
       notificationParam.description = 'Please login again'
-      FirebaseService.signOut()
+      FirebaseService.signOutRequest()
       localStorage.removeItem(AUTH_TOKEN)
       history.push(ENTRY_ROUTE)
       window.location.reload()

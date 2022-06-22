@@ -3,6 +3,9 @@ import { Route, Switch, Redirect } from 'react-router-dom'
 import Brand from './brand/index'
 import Attribute from './attribute/index'
 import Manufacturer from './manufacturer/index'
+import Category from './category/index'
+import ProductTemplate from './productTemplate/index'
+import Banner from './banner/index'
 
 const Catalog = ({ match }) => {
   return (
@@ -15,6 +18,12 @@ const Catalog = ({ match }) => {
       <Route path={`${match.url}/brand`} component={Brand} />
       <Route path={`${match.url}/attribute`} component={Attribute} />
       <Route path={`${match.url}/manufacturer`} component={Manufacturer} />
+      <Route path={`${match.url}/category`} component={Category} />
+      <Route
+        path={`${match.url}/producttemplate`}
+        component={ProductTemplate}
+      />
+      <Route path={`${match.url}/banner`} component={Banner} />
     </Switch>
   )
 }

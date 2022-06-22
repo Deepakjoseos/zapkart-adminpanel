@@ -3,6 +3,7 @@ import {
   AppstoreOutlined,
   FileTextOutlined,
   PieChartOutlined,
+  BorderOutlined,
   EnvironmentOutlined,
   AntDesignOutlined,
   SafetyOutlined,
@@ -30,6 +31,7 @@ import {
   UsergroupAddOutlined,
   FormatPainterOutlined,
   UserOutlined,
+  ApartmentOutlined,
 } from '@ant-design/icons'
 import { APP_PREFIX_PATH, AUTH_PREFIX_PATH } from 'configs/AppConfig'
 
@@ -187,19 +189,19 @@ const dashBoardNavTree = [
       {
         key: 'dashboards-default',
         path: `${APP_PREFIX_PATH}/dashboards/default`,
-        title: 'sidenav.dashboard.default',
+        title: 'Dashboard',
         icon: DashboardOutlined,
         breadcrumb: false,
         submenu: [],
       },
-      {
-        key: 'dashboards-analytic',
-        path: `${APP_PREFIX_PATH}/dashboards/analytic`,
-        title: 'sidenav.dashboard.analytic',
-        icon: DotChartOutlined,
-        breadcrumb: false,
-        submenu: [],
-      },
+      // {
+      //   key: 'dashboards-analytic',
+      //   path: `${APP_PREFIX_PATH}/dashboards/analytic`,
+      //   title: 'sidenav.dashboard.analytic',
+      //   icon: DotChartOutlined,
+      //   breadcrumb: false,
+      //   submenu: [],
+      // },
 
       {
         key: 'dashboards-catalog',
@@ -216,6 +218,31 @@ const dashBoardNavTree = [
             breadcrumb: false,
             submenu: [],
           },
+          {
+            key: 'dashboards-catalog-banner',
+            path: `${APP_PREFIX_PATH}/dashboards/catalog/banner/banner-list`,
+            title: 'Banner',
+            icon: BorderOutlined,
+            breadcrumb: false,
+            submenu: [],
+          },
+          {
+            key: 'dashboards-catalog-category',
+            path: `${APP_PREFIX_PATH}/dashboards/catalog/category/category-list`,
+            title: 'Category',
+            icon: ApartmentOutlined,
+            breadcrumb: false,
+            submenu: [],
+          },
+          {
+            key: 'dashboards-catalog-producttemplate',
+            path: `${APP_PREFIX_PATH}/dashboards/catalog/producttemplate/producttemplate-list`,
+            title: 'Product Template',
+            icon: BookOutlined,
+            breadcrumb: false,
+            submenu: [],
+          },
+
           {
             key: 'dashboards-catalog-attribute',
             path: `${APP_PREFIX_PATH}/dashboards/catalog/attribute/attribute-list`,
@@ -246,6 +273,14 @@ const dashBoardNavTree = [
             key: 'dashboards-users-usergroup',
             path: `${APP_PREFIX_PATH}/dashboards/users/usergroup/usergroup-list`,
             title: 'User Group',
+            icon: UsergroupAddOutlined,
+            breadcrumb: false,
+            submenu: [],
+          },
+          {
+            key: 'dashboards-users-customers',
+            path: `${APP_PREFIX_PATH}/dashboards/users/customer/customer-list`,
+            title: 'Customer',
             icon: UserOutlined,
             breadcrumb: false,
             submenu: [],
@@ -257,6 +292,14 @@ const dashBoardNavTree = [
         key: 'dashboards-information',
         path: `${APP_PREFIX_PATH}/dashboards/information/information-list`,
         title: 'Information',
+        icon: DotChartOutlined,
+        breadcrumb: false,
+        submenu: [],
+      },
+      {
+        key: 'dashboards-deliverylocation',
+        path: `${APP_PREFIX_PATH}/dashboards/deliverylocation/deliverylocation-list`,
+        title: 'Delivery Location',
         icon: DotChartOutlined,
         breadcrumb: false,
         submenu: [],
@@ -1010,10 +1053,10 @@ const docsNavTree = [
 
 const navigationConfig = [
   ...dashBoardNavTree,
-  ...appsNavTree,
-  ...componentsNavTree,
-  ...extraNavTree,
-  ...docsNavTree,
+  // ...appsNavTree,
+  // ...componentsNavTree,
+  // ...extraNavTree,
+  // ...docsNavTree,
 ]
 
 export default navigationConfig

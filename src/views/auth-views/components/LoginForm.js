@@ -36,10 +36,11 @@ export const LoginForm = (props) => {
     message,
     allowRedirect,
   } = props
-
+  // admin@riolabz.com
+  // Qwerty!2#4%
   const initialCredential = {
-    email: 'admin@riolabz.com',
-    password: 'Qwerty!2#4%',
+    email: '',
+    password: '',
   }
   //   email: 'user1@themenate.net',
   // password: '2005ipo',

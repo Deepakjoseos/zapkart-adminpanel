@@ -243,6 +243,31 @@ class Utils {
     }
     return ''
   }
+
+  /**
+   * Create Categories based on the list of items including children
+   */
+  static createCategoryList(categories, parentId = null) {
+    const categoryList = []
+    let category
+    if (parentId == null) {
+      category = categories.filter((cat) => !cat?.parentId)
+    } else {
+      category = categories.filter((cat) => cat?.parentId === parentId)
+    }
+    // eslint-disable-next-line prefer-const
+    for (let cate of category) {
+      categoryList.push({
+        id: cate.id,
+        title: cate.name,
+        value: cate.id,
+        key: cate.id,
+        children: this.createCategoryList(categories, cate.id),
+      })
+    }
+
+    return categoryList
+  }
 }
 
 export default Utils

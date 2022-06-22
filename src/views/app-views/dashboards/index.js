@@ -7,6 +7,10 @@ const Dashboards = ({ match }) => {
     <Suspense fallback={<Loading cover="content" />}>
       <Switch>
         <Route
+          path={`${match.url}/profile`}
+          component={lazy(() => import(`./profile`))}
+        />
+        <Route
           path={`${match.url}/default`}
           component={lazy(() => import(`./default`))}
         />
@@ -30,6 +34,10 @@ const Dashboards = ({ match }) => {
           path={`${match.url}/information`}
           component={lazy(() => import(`./information`))}
         />
+        <Route
+          path={`${match.url}/deliverylocation`}
+          component={lazy(() => import(`./deliveryLocation`))}
+        />
 
         {/* <Route
           path={`${match.url}/brand`}
@@ -39,7 +47,7 @@ const Dashboards = ({ match }) => {
           path={`${match.url}/attribute`}
           component={lazy(() => import(`./attribute`))}
         /> */}
-        <Redirect from={`${match.url}`} to={`${match.url}/catalog`} />
+        <Redirect from={`${match.url}`} to={`${match.url}/default`} />
       </Switch>
     </Suspense>
   )

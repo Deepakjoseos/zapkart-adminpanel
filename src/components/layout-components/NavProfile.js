@@ -1,6 +1,6 @@
 import React from 'react'
 import { Menu, Dropdown, Avatar } from 'antd'
-import { connect } from 'react-redux'
+import { connect, useSelector } from 'react-redux'
 import {
   EditOutlined,
   SettingOutlined,
@@ -15,36 +15,22 @@ const menuItem = [
   {
     title: 'Edit Profile',
     icon: EditOutlined,
-    path: '/',
-  },
-
-  {
-    title: 'Account Setting',
-    icon: SettingOutlined,
-    path: '/',
-  },
-  {
-    title: 'Billing',
-    icon: ShopOutlined,
-    path: '/',
-  },
-  {
-    title: 'Help Center',
-    icon: QuestionCircleOutlined,
-    path: '/',
+    path: '/app/dashboards/profile',
   },
 ]
 
 export const NavProfile = ({ signOut }) => {
+  const { user } = useSelector((state) => state.auth)
+
   const profileImg = '/img/avatars/thumb-1.jpg'
   const profileMenu = (
     <div className="nav-profile nav-dropdown">
       <div className="nav-profile-header">
         <div className="d-flex">
-          <Avatar size={45} src={profileImg} />
+          <Avatar size={45} src={user.displayImage} />
           <div className="pl-3">
-            <h4 className="mb-0">Charlie Howard</h4>
-            <span className="text-muted">Frontend Developer</span>
+            <h4 className="mb-0">{user.firstName}</h4>
+            <span className="text-muted">{user.userType}</span>
           </div>
         </div>
       </div>
@@ -74,7 +60,7 @@ export const NavProfile = ({ signOut }) => {
     <Dropdown placement="bottomRight" overlay={profileMenu} trigger={['click']}>
       <Menu className="d-flex align-item-center" mode="horizontal">
         <Menu.Item key="profile">
-          <Avatar src={profileImg} />
+          <Avatar src={user.displayImage} />
         </Menu.Item>
       </Menu>
     </Dropdown>

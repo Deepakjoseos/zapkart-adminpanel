@@ -67,7 +67,7 @@ const ProductForm = (props) => {
   }, [form, mode, param, props])
 
   const propsImages = {
-    multiple: true,
+    multiple: false,
     beforeUpload: beforeUploadImages,
     onRemove: onRemoveImages,
     onChange: onChangeImages,

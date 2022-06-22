@@ -45,6 +45,7 @@ function App() {
             )
             dispatch(showLoading(false))
           }
+          dispatch(showLoading(false))
         } else {
           dispatch(signOut())
           dispatch(showLoading(false))
