@@ -70,16 +70,16 @@ const AttributeForm = (props) => {
         const { id } = param
         const data = await attributeService.getAttributeById(id)
         if (data) {
-          const optionsArr = data.options.map((cur) => {
-            const newId = shortid.generate()
-            const item = {
-              value: cur,
-              id: newId,
-            }
-            return item
-          })
+          // const optionsArr = data.options.map((cur) => {
+          //   const newId = shortid.generate()
+          //   const item = {
+          //     value: cur,
+          //     id: newId,
+          //   }
+          //   return item
+          // })
 
-          setAttributeOptions(optionsArr)
+          // setAttributeOptions(optionsArr)
           form.setFieldsValue({
             name: data.name,
             status: data.status,

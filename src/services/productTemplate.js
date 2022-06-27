@@ -5,7 +5,7 @@ const productTemplate = {}
 productTemplate.getProductTemplates = async function () {
   try {
     const res = await fetch({
-      url: '/productTemplate',
+      url: '/productTemplates',
       method: 'get',
     })
     const data = res.data.filter((cur) => cur.status !== 'Deleted')
@@ -18,7 +18,7 @@ productTemplate.getProductTemplates = async function () {
 productTemplate.deleteProductTemplate = async function (id) {
   try {
     const res = await fetch({
-      url: `/productTemplate/${id}`,
+      url: `/productTemplates/${id}`,
       method: 'delete',
     })
     //   const data = res.data.filter((cur) => cur.status !== 'Deleted')
@@ -31,7 +31,7 @@ productTemplate.deleteProductTemplate = async function (id) {
 productTemplate.getProductTemplateById = async function (id) {
   try {
     const res = await fetch({
-      url: `/productTemplate/${id}`,
+      url: `/productTemplates/${id}`,
       method: 'get',
     })
     return res.data
@@ -43,7 +43,7 @@ productTemplate.getProductTemplateById = async function (id) {
 productTemplate.createProductTemplate = async function (data) {
   try {
     const res = await fetch({
-      url: `/productTemplate`,
+      url: `/productTemplates`,
       method: 'post',
       data: data,
     })
@@ -56,7 +56,7 @@ productTemplate.createProductTemplate = async function (data) {
 productTemplate.editProductTemplate = async function (id, data) {
   try {
     const res = await fetch({
-      url: `/productTemplate/${id}`,
+      url: `/productTemplates/${id}`,
       method: 'put',
       data: data,
     })
@@ -73,7 +73,7 @@ productTemplate.createProductTemplateVariant = async function (
 ) {
   try {
     const res = await fetch({
-      url: `/productTemplate/${productTemplateId}/variant`,
+      url: `/productTemplates/${productTemplateId}/variant`,
       method: 'post',
       data: data,
     })
@@ -90,7 +90,7 @@ productTemplate.editProductTemplateVariant = async function (
 ) {
   try {
     const res = await fetch({
-      url: `/productTemplate/${productTemplateId}/variant/${productTemplateVariantId}`,
+      url: `/productTemplates/${productTemplateId}/variant/${productTemplateVariantId}`,
       method: 'put',
       data: data,
     })
@@ -106,7 +106,7 @@ productTemplate.deleteProductTemplateVariant = async function (
 ) {
   try {
     const res = await fetch({
-      url: `/productTemplate/${productTemplateId}/variant/${productTemplateVariantId}`,
+      url: `/productTemplates/${productTemplateId}/variant/${productTemplateVariantId}`,
       method: 'delete',
     })
     return res

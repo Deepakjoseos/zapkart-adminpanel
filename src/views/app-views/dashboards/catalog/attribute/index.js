@@ -2,6 +2,7 @@ import React from 'react'
 import { Route, Switch, Redirect } from 'react-router-dom'
 import AttributeList from './attribute-list'
 import AddAttribute from './add-attribute'
+import AddAttributeValue from './add-attributevalue'
 import EditAttribute from './edit-attribute'
 // import Orders from './orders'
 
@@ -15,6 +16,11 @@ const Ecommerce = (props) => {
         component={EditAttribute}
       />
       <Route path={`${match.url}/attribute-list`} component={AttributeList} />
+      <Route
+        path={`${match.url}/add-attributevalue/:id`}
+        component={AddAttributeValue}
+      />
+
       <Redirect
         exact
         from={`${match.url}`}

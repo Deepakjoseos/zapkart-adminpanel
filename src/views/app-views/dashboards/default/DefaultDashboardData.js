@@ -27,14 +27,14 @@ export const VisitorChartData = {
 
 export const AnnualStatisticData = [
   {
-    title: 'total transaction',
+    title: 'Total Transaction',
     value: '₹2,454',
     status: -11.4,
     subtitle: `Compare to last year (2021)`,
   },
   {
     title: 'Total Sales',
-    value: '₹6,982',
+    value: '6,982',
     status: 8.2,
     subtitle: `Compare to last year (2021)`,
   },
@@ -56,27 +56,27 @@ export const ActiveMembersData = [
 export const NewMembersData = [
   {
     img: '/img/avatars/thumb-2.jpg',
-    title: 'Software Engineer',
+    title: 'morino@gmail.com',
     name: 'Terrance Moreno',
   },
   {
     img: '/img/avatars/thumb-3.jpg',
-    title: 'UI/UX Designer',
+    title: 'ron@gmail.com',
     name: 'Ron Vargas',
   },
   {
     img: '/img/avatars/thumb-4.jpg',
-    title: 'HR Executive',
+    title: 'luke@gmail.com',
     name: 'Luke Cook',
   },
   {
     img: '/img/avatars/thumb-5.jpg',
-    title: 'Frontend Developer',
+    title: 'joyce@gmail.com',
     name: 'Joyce Freeman',
   },
   {
     img: '/img/avatars/thumb-6.jpg',
-    title: 'Compliance Manager',
+    title: 'samantha@gmail.com',
     name: 'Samantha Phillips',
   },
 ]
@@ -87,7 +87,7 @@ export const RecentTransactionData = [
     name: 'Clayton Bates',
     date: '8 May 2020',
     amount: '₹137.00',
-    status: 'Approved',
+    status: 'Delivered',
     avatarColor: '#04d182',
   },
   {
@@ -95,7 +95,7 @@ export const RecentTransactionData = [
     name: 'Gabriel Frazier',
     date: '6 May 2020',
     amount: '₹322.00',
-    status: 'Approved',
+    status: 'Delivered',
     avatarColor: '#fa8c16',
   },
   {
@@ -111,7 +111,7 @@ export const RecentTransactionData = [
     name: 'Stacey Ward',
     date: '28 April 2020',
     amount: '₹876.00',
-    status: 'Rejected',
+    status: 'Pending',
     avatarColor: '#ffc542',
   },
   {
@@ -119,7 +119,7 @@ export const RecentTransactionData = [
     name: 'Troy Alexander',
     date: '28 April 2020',
     amount: '₹241.00',
-    status: 'Approved',
+    status: 'Delivered',
     avatarColor: '#ff6b72',
   },
 ]

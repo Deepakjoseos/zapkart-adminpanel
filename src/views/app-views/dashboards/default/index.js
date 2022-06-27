@@ -31,6 +31,7 @@ import {
   EllipsisOutlined,
   StopOutlined,
   ReloadOutlined,
+  UserOutlined,
 } from '@ant-design/icons'
 import utils from 'utils'
 import { withRouter } from 'react-router-dom'
@@ -81,7 +82,7 @@ const latestTransactionOption = (
         </div>
       </span>
     </Menu.Item>
-    <Menu.Item key="1">
+    {/* <Menu.Item key="1">
       <span>
         <div className="d-flex align-items-center">
           <PrinterOutlined />
@@ -96,7 +97,7 @@ const latestTransactionOption = (
           <span className="ml-2">Export</span>
         </div>
       </span>
-    </Menu.Item>
+    </Menu.Item> */}
   </Menu>
 )
 
@@ -122,9 +123,10 @@ const tableColumns = [
         <Avatar
           size={30}
           className="font-size-sm"
-          style={{ backgroundColor: record.avatarColor }}
+          icon={<UserOutlined />}
+          // style={{ backgroundColor: record.avatarColor }}
         >
-          {utils.getNameInitial(text)}
+          {/* {utils.getNameInitial(text)} */}
         </Avatar>
         <span className="ml-2">{text}</span>
       </div>
@@ -215,13 +217,13 @@ export const DefaultDashboard = () => {
             }
             value="17,329"
             status={3.7}
-            subtitle="Active members"
+            subtitle="Total Vendors"
           />
         </Col>
       </Row>
       <Row gutter={16}>
         <Col xs={24} sm={24} md={24} lg={7}>
-          <Card title="New Customers" extra={cardDropdown(newJoinMemberOption)}>
+          <Card title="New Customers">
             <div className="mt-3">
               {newMembersData.map((elm, i) => (
                 <div
@@ -234,7 +236,7 @@ export const DefaultDashboard = () => {
                     name={elm.name}
                     subTitle={elm.title}
                   />
-                  <div>
+                  {/* <div>
                     <Button
                       icon={<UserAddOutlined />}
                       type="default"
@@ -242,7 +244,7 @@ export const DefaultDashboard = () => {
                     >
                       Add
                     </Button>
-                  </div>
+                  </div> */}
                 </div>
               ))}
             </div>

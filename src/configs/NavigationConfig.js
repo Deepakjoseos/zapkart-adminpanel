@@ -9,6 +9,7 @@ import {
   SafetyOutlined,
   StopOutlined,
   DotChartOutlined,
+  NodeExpandOutlined,
   MailOutlined,
   MessageOutlined,
   CalendarOutlined,
@@ -285,6 +286,15 @@ const dashBoardNavTree = [
             breadcrumb: false,
             submenu: [],
           },
+
+          {
+            key: 'dashboards-users-vendors',
+            path: `${APP_PREFIX_PATH}/dashboards/users/vendor/vendor-list`,
+            title: 'Vendor',
+            icon: UserOutlined,
+            breadcrumb: false,
+            submenu: [],
+          },
         ],
       },
 
@@ -300,7 +310,7 @@ const dashBoardNavTree = [
         key: 'dashboards-deliverylocation',
         path: `${APP_PREFIX_PATH}/dashboards/deliverylocation/deliverylocation-list`,
         title: 'Delivery Location',
-        icon: DotChartOutlined,
+        icon: NodeExpandOutlined,
         breadcrumb: false,
         submenu: [],
       },

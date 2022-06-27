@@ -5,7 +5,7 @@ import {
   EyeOutlined,
   DeleteOutlined,
   SearchOutlined,
-  PlusCircleOutlined,
+  EditOutlined,
 } from '@ant-design/icons'
 import EllipsisDropdown from 'components/shared-components/EllipsisDropdown'
 import Flex from 'components/shared-components/Flex'
@@ -13,6 +13,7 @@ import { useHistory } from 'react-router-dom'
 import utils from 'utils'
 import customerService from 'services/customer'
 import AvatarStatus from 'components/shared-components/AvatarStatus'
+import ViewAddresses from './ViewAddresses'
 
 const { Option } = Select
 
@@ -38,11 +39,12 @@ const ProductList = () => {
 
   const [list, setList] = useState([])
   const [searchBackupList, setSearchBackupList] = useState([])
+  const [selectedViewAddress, setSelectedViewAddress] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
 
   useEffect(() => {
-    const getUserGroup = async () => {
+    const getCustomers = async () => {
       const data = await customerService.getCustomers()
       if (data) {
         setList(data)
@@ -50,12 +52,18 @@ const ProductList = () => {
         console.log(data, 'show-data')
       }
     }
-    getUserGroup()
+    getCustomers()
   }, [])
 
   const dropdownMenu = (row) => (
     <Menu>
-      <Menu.Item>
+      <Menu.Item onClick={() => editUserRedirect(row.id)}>
+        <Flex alignItems="center">
+          <EditOutlined />
+          <span className="ml-2">Edit User</span>
+        </Flex>
+      </Menu.Item>
+      <Menu.Item onClick={() => setSelectedViewAddress(row.address)}>
         <Flex alignItems="center">
           <EyeOutlined />
           <span className="ml-2">View Address</span>
@@ -78,9 +86,9 @@ const ProductList = () => {
   //   history.push(`/app/dashboards/users/usergroup/add-usergroup`)
   // }
 
-  // const viewDetails = (row) => {
-  //   history.push(`/app/dashboards/users/usergroup/edit-usergroup/${row.id}`)
-  // }
+  const editUserRedirect = (id) => {
+    history.push(`/app/dashboards/users/customer/edit-customer/${id}`)
+  }
 
   // const deleteRow = async (row) => {
   //   const resp = await customerService.deleteUserGroup(row.id)
@@ -210,6 +218,11 @@ const ProductList = () => {
       </Flex>
       <div className="table-responsive">
         <Table columns={tableColumns} dataSource={list} rowKey="id" />
+
+        <ViewAddresses
+          selectedViewAddress={selectedViewAddress}
+          setSelectedViewAddress={setSelectedViewAddress}
+        />
       </div>
     </Card>
   )

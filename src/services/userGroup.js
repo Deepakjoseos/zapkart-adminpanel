@@ -1,7 +1,7 @@
 import fetch from 'auth/FetchInterceptor'
 
 const userGroupService = {}
-const apiRoute = '/userGroup'
+const apiRoute = '/userGroups'
 
 userGroupService.getUserGroups = async function () {
   try {

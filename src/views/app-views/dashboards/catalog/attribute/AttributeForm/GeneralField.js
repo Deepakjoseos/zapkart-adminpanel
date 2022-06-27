@@ -54,8 +54,7 @@ const GeneralField = ({
           </Select>
         </Form.Item>
 
-        <Form.Item label="Attribute group options">
-          {/* {form.getFieldDecorator('parentCategory')( */}
+        {/* <Form.Item label="Attribute group options">
           <div style={{ display: 'flex', flexWrap: 'wrap', width: '100%' }}>
             {attributeOptions.map((item, index) => {
               const key = item.id
@@ -90,7 +89,7 @@ const GeneralField = ({
               icon={<PlusCircleOutlined />}
             />
           </div>
-        </Form.Item>
+        </Form.Item> */}
       </Card>
     </Col>
   </Row>

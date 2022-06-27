@@ -1,7 +1,7 @@
 import fetch from 'auth/FetchInterceptor'
 
 const customerService = {}
-const apiRoute = '/customer'
+const apiRoute = '/customers'
 
 customerService.getCustomers = async function () {
   try {
@@ -11,6 +11,31 @@ customerService.getCustomers = async function () {
     })
     const data = res.data.filter((cur) => cur.status !== 'Deleted')
     return data
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
+
+customerService.getCustomerById = async function (id) {
+  try {
+    const res = await fetch({
+      url: `${apiRoute}/${id}`,
+      method: 'get',
+    })
+    return res.data
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
+
+customerService.editCustomer = async function (id, data) {
+  try {
+    const res = await fetch({
+      url: `${apiRoute}/${id}`,
+      method: 'put',
+      data,
+    })
+    return res
   } catch (err) {
     console.log(err, 'show-err')
   }

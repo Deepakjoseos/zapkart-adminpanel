@@ -5,7 +5,7 @@ const manufacturerService = {}
 manufacturerService.getManufacturer = async function () {
   try {
     const res = await fetch({
-      url: '/manufacturer',
+      url: '/manufacturers',
       method: 'get',
     })
     const data = res.data.filter((cur) => cur.status !== 'Deleted')
@@ -18,7 +18,7 @@ manufacturerService.getManufacturer = async function () {
 manufacturerService.deleteManufacturer = async function (id) {
   try {
     const res = await fetch({
-      url: `/manufacturer/${id}`,
+      url: `/manufacturers/${id}`,
       method: 'delete',
     })
     //   const data = res.data.filter((cur) => cur.status !== 'Deleted')
@@ -31,7 +31,7 @@ manufacturerService.deleteManufacturer = async function (id) {
 manufacturerService.getManufacturerById = async function (id) {
   try {
     const res = await fetch({
-      url: `/manufacturer/${id}`,
+      url: `/manufacturers/${id}`,
       method: 'get',
     })
     return res.data
@@ -43,7 +43,7 @@ manufacturerService.getManufacturerById = async function (id) {
 manufacturerService.createManufacturer = async function (data) {
   try {
     const res = await fetch({
-      url: `/manufacturer`,
+      url: `/manufacturers`,
       method: 'post',
       data: data,
     })
@@ -56,7 +56,7 @@ manufacturerService.createManufacturer = async function (data) {
 manufacturerService.editManufacturer = async function (id, data) {
   try {
     const res = await fetch({
-      url: `/manufacturer/${id}`,
+      url: `/manufacturers/${id}`,
       method: 'put',
       data: data,
     })

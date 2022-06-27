@@ -5,7 +5,7 @@ const brandService = {}
 brandService.getBrands = async function () {
   try {
     const res = await fetch({
-      url: '/brand',
+      url: '/brands',
       method: 'get',
     })
     const data = res.data.filter((cur) => cur.status !== 'Deleted')
@@ -18,7 +18,7 @@ brandService.getBrands = async function () {
 brandService.deleteBrand = async function (id) {
   try {
     const res = await fetch({
-      url: `/brand/${id}`,
+      url: `/brands/${id}`,
       method: 'delete',
     })
     //   const data = res.data.filter((cur) => cur.status !== 'Deleted')
@@ -31,7 +31,7 @@ brandService.deleteBrand = async function (id) {
 brandService.getBrandById = async function (id) {
   try {
     const res = await fetch({
-      url: `/brand/${id}`,
+      url: `/brands/${id}`,
       method: 'get',
     })
     return res.data
@@ -43,7 +43,7 @@ brandService.getBrandById = async function (id) {
 brandService.createBrand = async function (data) {
   try {
     const res = await fetch({
-      url: `/brand`,
+      url: `/brands`,
       method: 'post',
       data: data,
     })
@@ -56,7 +56,7 @@ brandService.createBrand = async function (data) {
 brandService.editBrand = async function (id, data) {
   try {
     const res = await fetch({
-      url: `/brand/${id}`,
+      url: `/brands/${id}`,
       method: 'put',
       data: data,
     })

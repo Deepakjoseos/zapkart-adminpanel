@@ -1,18 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { Card, Table, Select, Input, Button, Menu, Tag } from 'antd'
+import { Card, Table, Select, Input, Menu, Tag } from 'antd'
 // import ProductListData from 'assets/data/product-list.data.json'
-import {
-  EyeOutlined,
-  DeleteOutlined,
-  SearchOutlined,
-  PlusCircleOutlined,
-  PlusOutlined,
-} from '@ant-design/icons'
+import { EyeOutlined, SearchOutlined } from '@ant-design/icons'
 import EllipsisDropdown from 'components/shared-components/EllipsisDropdown'
 import Flex from 'components/shared-components/Flex'
 import { useHistory } from 'react-router-dom'
 import utils from 'utils'
-import attributeService from 'services/attribute'
+import vendorService from 'services/vendor'
+import AvatarStatus from 'components/shared-components/AvatarStatus'
 
 const { Option } = Select
 
@@ -33,42 +28,34 @@ const getStockStatus = (status) => {
   }
   return null
 }
-
 const ProductList = () => {
   let history = useHistory()
 
   const [list, setList] = useState([])
-  const [filterBackupList, setFilterBackupList] = useState([])
-  const [selectedRows, setSelectedRows] = useState([])
+  const [searchBackupList, setSearchBackupList] = useState([])
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
 
   useEffect(() => {
-    const getAttributes = async () => {
-      const data = await attributeService.getAttributes()
+    const getVendors = async () => {
+      const data = await vendorService.getVendors()
       if (data) {
         setList(data)
-        setFilterBackupList(data)
+        setSearchBackupList(data)
         console.log(data, 'show-data')
       }
     }
-    getAttributes()
+    getVendors()
   }, [])
 
   const dropdownMenu = (row) => (
     <Menu>
-      <Menu.Item onClick={() => viewDetails(row)}>
+      {/* <Menu.Item onClick={() => setSelectedViewAddress(row.address)}>
         <Flex alignItems="center">
           <EyeOutlined />
-          <span className="ml-2">View Details</span>
+          <span className="ml-2">View Address</span>
         </Flex>
-      </Menu.Item>
-      <Menu.Item onClick={() => addAttributeValue(row)}>
-        <Flex alignItems="center">
-          <PlusOutlined />
-          <span className="ml-2">Add Attribute Value</span>
-        </Flex>
-      </Menu.Item>
-      <Menu.Item onClick={() => deleteRow(row)}>
+      </Menu.Item> */}
+      {/* <Menu.Item onClick={() => deleteRow(row)}>
         <Flex alignItems="center">
           <DeleteOutlined />
           <span className="ml-2">
@@ -77,48 +64,66 @@ const ProductList = () => {
               : 'Delete'}
           </span>
         </Flex>
-      </Menu.Item>
+      </Menu.Item> */}
     </Menu>
   )
 
-  const addProduct = () => {
-    history.push(`/app/dashboards/catalog/attribute/add-attribute`)
-  }
+  // const addProduct = () => {
+  //   history.push(`/app/dashboards/users/usergroup/add-usergroup`)
+  // }
 
-  const viewDetails = (row) => {
-    history.push(`/app/dashboards/catalog/attribute/edit-attribute/${row.id}`)
-  }
+  // const viewDetails = (row) => {
+  //   history.push(`/app/dashboards/users/usergroup/edit-usergroup/${row.id}`)
+  // }
 
-  const addAttributeValue = (row) => {
-    history.push(
-      `/app/dashboards/catalog/attribute/add-attributevalue/${row.id}`
-    )
-  }
-  const deleteRow = async (row) => {
-    const resp = await attributeService.deleteAttribute(row.id)
+  // const deleteRow = async (row) => {
+  //   const resp = await vendorService.deleteUserGroup(row.id)
 
-    if (resp) {
-      const objKey = 'id'
-      let data = list
-      if (selectedRows.length > 1) {
-        selectedRows.forEach((elm) => {
-          data = utils.deleteArrayRow(data, objKey, elm.id)
-          setList(data)
-          setSelectedRows([])
-        })
-      } else {
-        data = utils.deleteArrayRow(data, objKey, row.id)
-        setList(data)
-      }
-    }
-  }
+  //   if (resp) {
+  //     const objKey = 'id'
+  //     let data = list
+  //     if (selectedRows.length > 1) {
+  //       selectedRows.forEach((elm) => {
+  //         data = utils.deleteArrayRow(data, objKey, elm.id)
+  //         setList(data)
+  //         setSelectedRows([])
+  //       })
+  //     } else {
+  //       data = utils.deleteArrayRow(data, objKey, row.id)
+  //       setList(data)
+  //     }
+  //   }
+  // }
 
   const tableColumns = [
     {
-      title: 'Attribute',
-      dataIndex: 'name',
-      key: 'name',
+      title: 'Vendor',
+      dataIndex: 'firstName',
+      render: (_, record) => (
+        <div className="d-flex">
+          <AvatarStatus
+            size={60}
+            type="square"
+            src={record.displayImage}
+            name={record.firstName}
+          />
+        </div>
+      ),
       sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
+    },
+    {
+      title: 'Last Name',
+      dataIndex: 'lastName',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'lastname'),
+    },
+    {
+      title: 'Email',
+      dataIndex: 'email',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'email'),
+    },
+    {
+      title: 'Phone',
+      dataIndex: 'phone',
     },
     {
       title: 'Status',
@@ -128,20 +133,20 @@ const ProductList = () => {
       ),
       sorter: (a, b) => utils.antdTableSorter(a, b, 'status'),
     },
-    {
-      title: '',
-      dataIndex: 'actions',
-      render: (_, elm) => (
-        <div className="text-right">
-          <EllipsisDropdown menu={dropdownMenu(elm)} />
-        </div>
-      ),
-    },
+    // {
+    //   title: '',
+    //   dataIndex: 'actions',
+    //   render: (_, elm) => (
+    //     <div className="text-right">
+    //       <EllipsisDropdown menu={dropdownMenu(elm)} />
+    //     </div>
+    //   ),
+    // },
   ]
 
   const onSearch = (e) => {
     const value = e.currentTarget.value
-    const searchArray = e.currentTarget.value ? list : filterBackupList
+    const searchArray = e.currentTarget.value ? list : searchBackupList
     const data = utils.wildCardSearch(searchArray, value)
     setList(data)
     setSelectedRowKeys([])
@@ -150,10 +155,10 @@ const ProductList = () => {
   const handleShowStatus = (value) => {
     if (value !== 'All') {
       const key = 'status'
-      const data = utils.filterArray(filterBackupList, key, value)
+      const data = utils.filterArray(searchBackupList, key, value)
       setList(data)
     } else {
-      setList(filterBackupList)
+      setList(searchBackupList)
     }
   }
 
@@ -186,19 +191,24 @@ const ProductList = () => {
     <Card>
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
         {filters()}
-        <div>
+        {/* <div>
           <Button
             onClick={addProduct}
             type="primary"
             icon={<PlusCircleOutlined />}
             block
           >
-            Add Attribute
+            Add UserGroup
           </Button>
-        </div>
+        </div> */}
       </Flex>
       <div className="table-responsive">
         <Table columns={tableColumns} dataSource={list} rowKey="id" />
+
+        {/* <ViewAddresses
+          selectedViewAddress={selectedViewAddress}
+          setSelectedViewAddress={setSelectedViewAddress}
+        /> */}
       </div>
     </Card>
   )

@@ -5,7 +5,7 @@ const bannerService = {}
 bannerService.getBanners = async function () {
   try {
     const res = await fetch({
-      url: '/banner',
+      url: '/banners',
       method: 'get',
     })
     const data = res.data.filter((cur) => cur.status !== 'Deleted')
@@ -18,7 +18,7 @@ bannerService.getBanners = async function () {
 bannerService.deleteBanner = async function (id) {
   try {
     const res = await fetch({
-      url: `/banner/${id}`,
+      url: `/banners/${id}`,
       method: 'delete',
     })
     //   const data = res.data.filter((cur) => cur.status !== 'Deleted')
@@ -31,7 +31,7 @@ bannerService.deleteBanner = async function (id) {
 bannerService.getBannerById = async function (id) {
   try {
     const res = await fetch({
-      url: `/banner/${id}`,
+      url: `/banners/${id}`,
       method: 'get',
     })
     return res.data
@@ -43,7 +43,7 @@ bannerService.getBannerById = async function (id) {
 bannerService.createBanner = async function (data) {
   try {
     const res = await fetch({
-      url: `/banner`,
+      url: `/banners`,
       method: 'post',
       data: data,
     })
@@ -56,7 +56,7 @@ bannerService.createBanner = async function (data) {
 bannerService.editBanner = async function (id, data) {
   try {
     const res = await fetch({
-      url: `/banner/${id}`,
+      url: `/banners/${id}`,
       method: 'put',
       data: data,
     })

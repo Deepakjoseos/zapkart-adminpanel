@@ -5,7 +5,7 @@ const categoryService = {}
 categoryService.getCategories = async function () {
   try {
     const res = await fetch({
-      url: '/category',
+      url: '/categories',
       method: 'get',
     })
     const data = res.data.filter((cur) => cur.status !== 'Deleted')
@@ -18,7 +18,7 @@ categoryService.getCategories = async function () {
 categoryService.deleteCategory = async function (id) {
   try {
     const res = await fetch({
-      url: `/category/${id}`,
+      url: `/categories/${id}`,
       method: 'delete',
     })
     //   const data = res.data.filter((cur) => cur.status !== 'Deleted')
@@ -31,7 +31,7 @@ categoryService.deleteCategory = async function (id) {
 categoryService.getCategoryById = async function (id) {
   try {
     const res = await fetch({
-      url: `/category/${id}`,
+      url: `/categories/${id}`,
       method: 'get',
     })
     return res.data
@@ -43,7 +43,7 @@ categoryService.getCategoryById = async function (id) {
 categoryService.createCategory = async function (data) {
   try {
     const res = await fetch({
-      url: `/category`,
+      url: `/categories`,
       method: 'post',
       data: data,
     })
@@ -56,7 +56,7 @@ categoryService.createCategory = async function (data) {
 categoryService.editCategory = async function (id, data) {
   try {
     const res = await fetch({
-      url: `/category/${id}`,
+      url: `/categories/${id}`,
       method: 'put',
       data: data,
     })
