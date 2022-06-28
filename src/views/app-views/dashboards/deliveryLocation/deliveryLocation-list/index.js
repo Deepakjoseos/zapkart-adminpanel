@@ -103,15 +103,16 @@ const ProductList = () => {
     }
   }
 
+  const getParentName = (parentId) => {
+    const parentName = searchBackupList.find((cur) => cur.id === parentId)
+    return parentName ? parentName.name : ''
+  }
+
   const tableColumns = [
     {
       title: 'Deliverylocation',
       dataIndex: 'name',
       sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
-    },
-    {
-      title: 'parentId',
-      dataIndex: 'parentId',
     },
     {
       title: 'isFinal',
@@ -129,6 +130,14 @@ const ProductList = () => {
       ),
       sorter: (a, b) => utils.antdTableSorter(a, b, 'status'),
     },
+    {
+      title: 'Parent',
+      dataIndex: 'parentId',
+      render: (parentId) => (
+        <Flex alignItems="center">{getParentName(parentId)}</Flex>
+      ),
+    },
+
     {
       title: '',
       dataIndex: 'actions',

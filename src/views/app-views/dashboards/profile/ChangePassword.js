@@ -1,11 +1,32 @@
 import React, { Component } from 'react'
 import { Form, Button, Input, Row, Col, message } from 'antd'
+import firebase from 'firebase/app'
+import { signOut } from 'redux/actions/Auth'
+import { connect } from 'react-redux'
 
 export class ChangePassword extends Component {
   changePasswordFormRef = React.createRef()
 
-  onFinish = () => {
-    message.success({ content: 'Password Changed!', duration: 2 })
+  onFinish = (values) => {
+    console.log('val', values)
+
+    firebase
+      .auth()
+      .currentUser.updatePassword(values.newPassword)
+      .then(() => {
+        // Update successful.
+        message.success({ content: 'Password Changed!', duration: 2 })
+      })
+      .catch((err) => {
+        // An error ocurred
+        message.error({ content: err.message, duration: 2 })
+        if (err.code === 'auth/requires-recent-login') {
+          firebase.auth().signOut()
+          this.props.signOut()
+        }
+        // ...
+      })
+
     this.onReset()
   }
 
@@ -25,7 +46,7 @@ export class ChangePassword extends Component {
               ref={this.changePasswordFormRef}
               onFinish={this.onFinish}
             >
-              <Form.Item
+              {/* <Form.Item
                 label="Current Password"
                 name="currentPassword"
                 rules={[
@@ -36,7 +57,7 @@ export class ChangePassword extends Component {
                 ]}
               >
                 <Input.Password />
-              </Form.Item>
+              </Form.Item> */}
               <Form.Item
                 label="New Password"
                 name="newPassword"
@@ -80,4 +101,8 @@ export class ChangePassword extends Component {
   }
 }
 
-export default ChangePassword
+const mapDispatchToProps = {
+  signOut,
+}
+
+export default connect(null, mapDispatchToProps)(ChangePassword)

@@ -5,6 +5,8 @@ import Attribute from './attribute/index'
 import Manufacturer from './manufacturer/index'
 import Category from './category/index'
 import ProductTemplate from './productTemplate/index'
+import Product from './product/index'
+
 import Banner from './banner/index'
 
 const Catalog = ({ match }) => {
@@ -23,6 +25,7 @@ const Catalog = ({ match }) => {
         path={`${match.url}/producttemplate`}
         component={ProductTemplate}
       />
+      <Route path={`${match.url}/product`} component={Product} />
       <Route path={`${match.url}/banner`} component={Banner} />
     </Switch>
   )

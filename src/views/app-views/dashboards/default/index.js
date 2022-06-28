@@ -175,10 +175,10 @@ export const DefaultDashboard = () => {
   return (
     <>
       <Row gutter={16}>
-        <Col xs={24} sm={24} md={24} lg={18}>
+        <Col xs={24} sm={24} md={24} lg={24}>
           <Row gutter={16}>
             {annualStatisticData.map((elm, i) => (
-              <Col xs={24} sm={24} md={24} lg={24} xl={8} key={i}>
+              <Col xs={24} sm={24} md={24} lg={24} xl={6} key={i}>
                 <StatisticWidget
                   title={elm.title}
                   value={elm.value}
@@ -200,13 +200,13 @@ export const DefaultDashboard = () => {
             </Col>
           </Row> */}
         </Col>
-        <Col xs={24} sm={24} md={24} lg={6}>
-          {/* <GoalWidget 
+        {/* <Col xs={24} sm={24} md={24} lg={6}>
+          <GoalWidget 
             title="Monthly Target" 
             value={87}
             subtitle="You need abit more effort to hit monthly target"
             extra={<Button type="primary">Learn More</Button>}
-          /> */}
+          />
           <StatisticWidget
             title={
               <MembersChart
@@ -219,7 +219,7 @@ export const DefaultDashboard = () => {
             status={3.7}
             subtitle="Total Vendors"
           />
-        </Col>
+        </Col> */}
       </Row>
       <Row gutter={16}>
         <Col xs={24} sm={24} md={24} lg={7}>

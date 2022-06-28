@@ -243,6 +243,14 @@ const dashBoardNavTree = [
             breadcrumb: false,
             submenu: [],
           },
+          {
+            key: 'dashboards-catalog-product',
+            path: `${APP_PREFIX_PATH}/dashboards/catalog/product/product-list`,
+            title: 'Product',
+            icon: BookOutlined,
+            breadcrumb: false,
+            submenu: [],
+          },
 
           {
             key: 'dashboards-catalog-attribute',

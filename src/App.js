@@ -25,6 +25,7 @@ function App() {
         const idTokenResult = await user.getIdTokenResult(true)
         const userType = idTokenResult.claims.userType
         window.localStorage.setItem(AUTH_TOKEN, idTokenResult.token)
+        console.log(userType, 'userType')
         if (userType === 'Admin') {
           const data = await authAdminService.getProfile()
           if (data) {

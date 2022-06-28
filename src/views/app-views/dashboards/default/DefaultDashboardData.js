@@ -44,6 +44,12 @@ export const AnnualStatisticData = [
     status: 0.7,
     subtitle: `Compare to last year (2021)`,
   },
+  {
+    title: 'Total Vendors',
+    value: '520',
+    status: 0.7,
+    subtitle: `Compare to last year (2021)`,
+  },
 ]
 
 export const ActiveMembersData = [

@@ -229,7 +229,9 @@ const ProductForm = (props) => {
               alignItems="center"
             >
               <h2 className="mb-3">
-                {mode === 'ADD' ? 'Add New Brand' : `Edit Brand`}{' '}
+                {mode === 'ADD'
+                  ? 'Add New Product Template'
+                  : `Edit Product Template`}
               </h2>
               <div className="mb-3">
                 <Button
