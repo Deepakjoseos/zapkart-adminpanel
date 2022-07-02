@@ -80,21 +80,34 @@ const WidgetForm = (props) => {
     onListingTypesChange(form.getFieldValue('listingType'))
   }, [listItems])
 
+  const getRestListTypesItemsForDisplaying = (listingTypeItems) => {
+    const restListTypesItems = listingTypeItems.filter(
+      ({ id: id1 }) => !listItems?.some(({ id: id2 }) => id2 === id1)
+    )
+
+    return restListTypesItems
+  }
+
+  const addKeyIndexFieldToItems = (items) => {
+    console.log(items, 'ss')
+    const addKeyFieldToArray = items.map((cur, i) => {
+      return { ...cur, key: cur.id, index: cur.id }
+    })
+
+    return addKeyFieldToArray
+  }
+
   const fetchBrands = async () => {
     const brands = await brandService.getBrands()
 
     if (brands) {
       // Removes same list values brands
-      const results = brands.filter(
-        ({ id: id1 }) => !listItems?.some(({ id: id2 }) => id2 === id1)
-      )
+      const restListTypesItems = getRestListTypesItemsForDisplaying(brands)
 
-      console.log('resultsss', results)
+      // Add key and index field to items
+      const listTypeProvider = addKeyIndexFieldToItems(restListTypesItems)
 
-      const addKeyFieldToArray = results.map((cur, i) => {
-        return { ...cur, key: cur.id, index: cur.id }
-      })
-      setListItemsProvider(addKeyFieldToArray)
+      setListItemsProvider(listTypeProvider)
       setIsStaticProviderSelected(false)
     }
   }
@@ -103,14 +116,13 @@ const WidgetForm = (props) => {
     const banners = await bannerService.getBanners()
 
     if (banners) {
-      // Removes same list values from banners
-      const results = banners?.filter(
-        ({ id: id1 }) => !listItems?.some(({ id: id2 }) => id2 === id1)
-      )
-      const addKeyFieldToArray = results.map((cur, i) => {
-        return { ...cur, key: cur.id, index: cur.id }
-      })
-      setListItemsProvider(addKeyFieldToArray)
+      // Removes same list values brands
+      const restListTypesItems = getRestListTypesItemsForDisplaying(banners)
+
+      // Add key and index field to items
+      const listTypeProvider = addKeyIndexFieldToItems(restListTypesItems)
+
+      setListItemsProvider(listTypeProvider)
       setIsStaticProviderSelected(false)
     }
   }
@@ -119,14 +131,13 @@ const WidgetForm = (props) => {
     const categories = await categoryService.getCategories()
 
     if (categories) {
-      // Removes same list values from categories
-      const results = categories.filter(
-        ({ id: id1 }) => !listItems?.some(({ id: id2 }) => id2 === id1)
-      )
-      const addKeyFieldToArray = results.map((cur, i) => {
-        return { ...cur, key: cur.id, index: cur.id }
-      })
-      setListItemsProvider(addKeyFieldToArray)
+      // Removes same list values brands
+      const restListTypesItems = getRestListTypesItemsForDisplaying(categories)
+
+      // Add key and index field to items
+      const listTypeProvider = addKeyIndexFieldToItems(restListTypesItems)
+
+      setListItemsProvider(listTypeProvider)
       setIsStaticProviderSelected(false)
     }
   }
@@ -135,14 +146,14 @@ const WidgetForm = (props) => {
     const productTemplates = await productTemplate.getProductTemplates()
 
     if (productTemplates) {
-      // Removes Same list values from product templates
-      const results = productTemplates.filter(
-        ({ id: id1 }) => !listItems?.some(({ id: id2 }) => id2 === id1)
-      )
-      const addKeyFieldToArray = results.map((cur, i) => {
-        return { ...cur, key: cur.id, index: cur.id }
-      })
-      setListItemsProvider(addKeyFieldToArray)
+      // Removes same list values brands
+      const restListTypesItems =
+        getRestListTypesItemsForDisplaying(productTemplates)
+
+      // Add key and index field to items
+      const listTypeProvider = addKeyIndexFieldToItems(restListTypesItems)
+
+      setListItemsProvider(listTypeProvider)
       setIsStaticProviderSelected(false)
     }
   }
@@ -182,11 +193,8 @@ const WidgetForm = (props) => {
           sendingValues.listingItems = listItems?.map((item) => item.id)
         }
 
-        // Check if static content is not selected and listingType is not empty
-        if (
-          values.listingType !== 'Static' &&
-          listItemsProvider?.length === 0
-        ) {
+        // Check if static content is not selected and listingItems is not empty
+        if (values.listingType !== 'Static' && listItems?.length === 0) {
           setSubmitLoading(false)
           return message.error('Please select at least one item')
         }
@@ -207,14 +215,14 @@ const WidgetForm = (props) => {
         if (mode === ADD) {
           const created = await widgetService.createWidget(sendingValues)
           if (created) {
-            message.success(`Created ${values.name} to Widget list`)
+            message.success(`Created ${values.tabTitle} to Widget list`)
             history.goBack()
           }
         }
         if (mode === EDIT) {
           const edited = await widgetService.editWidget(param.id, sendingValues)
           if (edited) {
-            message.success(`Edited ${values.name} to Widget list`)
+            message.success(`Edited ${values.tabTitle} to Widget list`)
             history.goBack()
           }
         }
