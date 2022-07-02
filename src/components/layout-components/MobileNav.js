@@ -1,13 +1,13 @@
-import React from "react";
-import { Drawer } from "antd";
-import { connect } from "react-redux";
-import { NAV_TYPE_SIDE } from "constants/ThemeConstant";
-import { Scrollbars } from "react-custom-scrollbars";
-import MenuContent from "./MenuContent";
-import { onMobileNavToggle } from "redux/actions/Theme";
-import Logo from "./Logo";
-import Flex from "components/shared-components/Flex";
-import { ArrowLeftOutlined } from "@ant-design/icons";
+import React from 'react'
+import { Drawer } from 'antd'
+import { connect } from 'react-redux'
+import { NAV_TYPE_SIDE } from 'constants/ThemeConstant'
+import { Scrollbars } from 'react-custom-scrollbars'
+import MenuContent from './MenuContent'
+import { onMobileNavToggle } from 'redux/actions/Theme'
+import Logo from './Logo'
+import Flex from 'components/shared-components/Flex'
+import { ArrowLeftOutlined } from '@ant-design/icons'
 
 export const MobileNav = ({
   sideNavTheme,
@@ -17,11 +17,11 @@ export const MobileNav = ({
   hideGroupTitle,
   localization = true,
 }) => {
-  const props = { sideNavTheme, routeInfo, hideGroupTitle, localization };
+  const props = { sideNavTheme, routeInfo, hideGroupTitle, localization }
 
   const onClose = () => {
-    onMobileNavToggle(false);
-  };
+    onMobileNavToggle(false)
+  }
 
   return (
     <Drawer
@@ -33,7 +33,7 @@ export const MobileNav = ({
     >
       <Flex flexDirection="column" className="h-100">
         <Flex justifyContent="between" alignItems="center">
-          <Logo mobileLogo={true} />
+          {/* <Logo mobileLogo={true} /> */}
           <div className="nav-close" onClick={() => onClose()}>
             <ArrowLeftOutlined />
           </div>
@@ -45,12 +45,12 @@ export const MobileNav = ({
         </div>
       </Flex>
     </Drawer>
-  );
-};
+  )
+}
 
 const mapStateToProps = ({ theme }) => {
-  const { navCollapsed, sideNavTheme, mobileNav } = theme;
-  return { navCollapsed, sideNavTheme, mobileNav };
-};
+  const { navCollapsed, sideNavTheme, mobileNav } = theme
+  return { navCollapsed, sideNavTheme, mobileNav }
+}
 
-export default connect(mapStateToProps, { onMobileNavToggle })(MobileNav);
+export default connect(mapStateToProps, { onMobileNavToggle })(MobileNav)

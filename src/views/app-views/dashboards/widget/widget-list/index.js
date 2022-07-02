@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Card, Table, Select, Input, Button, Menu, Tag } from 'antd'
-// import ProductListData from 'assets/data/product-list.data.json'
+// import WidegetListData from 'assets/data/product-list.data.json'
 import {
   EyeOutlined,
   DeleteOutlined,
@@ -12,7 +12,7 @@ import EllipsisDropdown from 'components/shared-components/EllipsisDropdown'
 import Flex from 'components/shared-components/Flex'
 import { useHistory } from 'react-router-dom'
 import utils from 'utils'
-import informationService from 'services/information'
+import widgetService from 'services/widget'
 
 const { Option } = Select
 
@@ -33,7 +33,7 @@ const getStockStatus = (status) => {
   }
   return null
 }
-const ProductList = () => {
+const WidegetList = () => {
   let history = useHistory()
 
   const [list, setList] = useState([])
@@ -42,15 +42,15 @@ const ProductList = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
 
   useEffect(() => {
-    const getInformations = async () => {
-      const data = await informationService.getInformations()
+    const getWidgets = async () => {
+      const data = await widgetService.getWidgets()
       if (data) {
         setList(data)
         setSearchBackupList(data)
         console.log(data, 'show-data')
       }
     }
-    getInformations()
+    getWidgets()
   }, [])
 
   const dropdownMenu = (row) => (
@@ -75,15 +75,15 @@ const ProductList = () => {
   )
 
   const addProduct = () => {
-    history.push(`/app/dashboards/information/add-information`)
+    history.push(`/app/dashboards/widget/add-widget`)
   }
 
   const viewDetails = (row) => {
-    history.push(`/app/dashboards/information/edit-information/${row.id}`)
+    history.push(`/app/dashboards/widget/edit-widget/${row.id}`)
   }
 
   const deleteRow = async (row) => {
-    const resp = await informationService.deleteInformation(row.id)
+    const resp = await widgetService.deleteWidget(row.id)
 
     if (resp) {
       const objKey = 'id'
@@ -103,28 +103,41 @@ const ProductList = () => {
 
   const tableColumns = [
     {
-      title: 'Information',
-      dataIndex: 'name',
-      render: (_, record) => (
-        <div className="d-flex">
-          <AvatarStatus
-            size={60}
-            type="square"
-            src={record.image}
-            name={record.name}
-          />
-        </div>
-      ),
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
+      title: 'Widget',
+      dataIndex: 'tabTitle',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'tabTitle'),
     },
     {
-      title: 'Description',
-      dataIndex: 'description',
+      title: 'isTitleShow',
+      dataIndex: 'isTitleShow',
+      render: (text) => (
+        <Flex justifyContent="center">{text ? 'Yes' : 'No'}</Flex>
+      ),
     },
     {
       title: 'Priority',
       dataIndex: 'priority',
       sorter: (a, b) => utils.antdTableSorter(a, b, 'priority'),
+    },
+    {
+      title: 'numberOfItems',
+      dataIndex: 'numberOfItems',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'numberOfItems'),
+    },
+    {
+      title: 'listingType',
+      dataIndex: 'listingType',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'listingType'),
+    },
+    {
+      title: 'startDate',
+      dataIndex: 'startDate',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'startDate'),
+    },
+    {
+      title: 'endDate',
+      dataIndex: 'endDate',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'endDate'),
     },
     {
       title: 'Status',
@@ -199,7 +212,7 @@ const ProductList = () => {
             icon={<PlusCircleOutlined />}
             block
           >
-            Add Information
+            Add Widget
           </Button>
         </div>
       </Flex>
@@ -210,4 +223,4 @@ const ProductList = () => {
   )
 }
 
-export default ProductList
+export default WidegetList

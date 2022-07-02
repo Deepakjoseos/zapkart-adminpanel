@@ -322,6 +322,14 @@ const dashBoardNavTree = [
         breadcrumb: false,
         submenu: [],
       },
+      {
+        key: 'dashboards-widget',
+        path: `${APP_PREFIX_PATH}/dashboards/widget/widget-list`,
+        title: 'Widget',
+        icon: DotChartOutlined,
+        breadcrumb: false,
+        submenu: [],
+      },
     ],
   },
 ]
