@@ -40,6 +40,12 @@ const VariantsForm = ({
   } = useUpload(1, 'multiple')
 
   const rules = {
+    name: [
+      {
+        required: true,
+        message: 'Required',
+      },
+    ],
     description: [
       {
         required: true,
@@ -188,6 +194,9 @@ const VariantsForm = ({
         hideRequiredMark
       >
         <Card title="Variant Info">
+          <Form.Item name="name" label="Name" rules={rules.name}>
+            <Input placeholder="Name" />
+          </Form.Item>
           <Form.Item
             name="description"
             label="Description"

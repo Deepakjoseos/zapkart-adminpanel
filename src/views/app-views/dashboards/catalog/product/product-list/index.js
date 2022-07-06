@@ -1,5 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import { Card, Table, Select, Input, Button, Menu, Tag } from 'antd'
+import {
+  Card,
+  Table,
+  Select,
+  Input,
+  Button,
+  Menu,
+  Tag,
+  notification,
+} from 'antd'
 import {
   // EyeOutlined,
   // DeleteOutlined,
@@ -105,6 +114,28 @@ const ProductList = () => {
   //   }
   // }
 
+  const handleApprovalChange = async (value, selectedRow) => {
+    const updatedProductApproval = await productService.approvalProduct(
+      selectedRow.id,
+      value
+    )
+
+    if (updatedProductApproval) {
+      notification.success({ message: 'Product Approval Updated' })
+
+      // const objKey = 'id'
+      // let data = list
+      // data = utils.updateArrayRow(
+      //   data,
+      //   objKey,
+      //   selectedRow.id,
+      //   'approval',
+      //   value
+      // )
+      // setList(data)
+    }
+  }
+
   const tableColumns = [
     {
       title: 'Product',
@@ -168,7 +199,7 @@ const ProductList = () => {
       title: 'Variant',
       dataIndex: 'variant',
       render: (variant) => {
-        return <Flex>{variant.description}</Flex>
+        return <Flex>{variant.name}</Flex>
       },
       sorter: (a, b) => utils.antdTableSorter(a, b, 'deliveryZoneId'),
     },
@@ -180,8 +211,31 @@ const ProductList = () => {
     {
       title: 'approval',
       dataIndex: 'approval',
+      render: (approval, row) => {
+        return (
+          <Select
+            defaultValue={approval.charAt(0).toUpperCase() + approval.slice(1)}
+            // style={{ width: 120 }}
+            onChange={(e) => handleApprovalChange(e, row)}
+          >
+            <Option value="Pending">
+              <Tag color="blue">Pending</Tag>
+              {/* Pending */}
+            </Option>
+            <Option value="Approved">
+              <Tag color="green">Approved</Tag>
+            </Option>
+            <Option value="On Hold">
+              <Tag color="orange">On Hold</Tag>
+            </Option>
+            <Option value="Rejected">
+              <Tag color="red">Rejected</Tag>
+            </Option>
+          </Select>
+        )
+      },
       // render: (isUnlimited) => <Flex>{isUnlimited ? 'Yes' : 'No'}</Flex>,
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'approval'),
+      // sorter: (a, b) => utils.antdTableSorter(a, b, 'approval'),
     },
     {
       title: 'Status',

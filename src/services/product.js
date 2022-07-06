@@ -66,6 +66,18 @@ productService.editProduct = async function (id, data) {
   }
 }
 
+productService.approvalProduct = async function (id, approvalValue) {
+  try {
+    const res = await fetch({
+      url: `/products/${id}/${approvalValue}`,
+      method: 'put',
+    })
+    return res
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
+
 // productService.setPost = function (data) {
 //   return fetch({
 //     url: '/posts',
