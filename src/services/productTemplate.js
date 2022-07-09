@@ -115,4 +115,39 @@ productTemplate.deleteProductTemplateVariant = async function (
   }
 }
 
+// Product template variant attributes
+productTemplate.createProductTemplateVariantAttributeValue = async function (
+  productTemplateId,
+  productTemplateVariantId,
+  attributeId,
+  data
+) {
+  try {
+    const res = await fetch({
+      url: `/productTemplates/${productTemplateId}/variant/${productTemplateVariantId}/attribute/${attributeId}`,
+      method: 'post',
+      data: data,
+    })
+    return res
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
+
+productTemplate.deleteProductTemplateVariantAttribute = async function (
+  productTemplateId,
+  productTemplateVariantId,
+  attributeId
+) {
+  try {
+    const res = await fetch({
+      url: `/productTemplates/${productTemplateId}/variant/${productTemplateVariantId}/attribute/${attributeId}`,
+      method: 'delete',
+    })
+    return res
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
+
 export default productTemplate

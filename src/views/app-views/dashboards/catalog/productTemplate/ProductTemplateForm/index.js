@@ -14,6 +14,7 @@ import brandService from 'services/brand'
 import Utils from 'utils'
 import { useHistory } from 'react-router-dom'
 import categoryService from 'services/category'
+import medicineTypeService from 'services/medicineType'
 
 const { TabPane } = Tabs
 
@@ -133,7 +134,7 @@ const ProductForm = (props) => {
       .validateFields()
       .then(async (values) => {
         console.log(values, 'values')
-        setSubmitLoading(false)
+
         const sendingValues = {
           brandId: values.brandId,
           categoryId: values.categoryId,
@@ -201,6 +202,7 @@ const ProductForm = (props) => {
             message.error('Please upload image')
           }
         }
+        setSubmitLoading(false)
       })
       .catch((info) => {
         setSubmitLoading(false)

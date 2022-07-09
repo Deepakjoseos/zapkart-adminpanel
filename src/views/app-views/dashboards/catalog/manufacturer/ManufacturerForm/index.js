@@ -130,6 +130,7 @@ const ProductForm = (props) => {
             message.error('Please upload image')
           }
         }
+        setSubmitLoading(false)
       })
       .catch((info) => {
         setSubmitLoading(false)

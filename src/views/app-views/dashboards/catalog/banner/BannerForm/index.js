@@ -121,7 +121,6 @@ const ProductForm = (props) => {
     form
       .validateFields()
       .then(async (values) => {
-        setSubmitLoading(false)
         if (mode === ADD) {
           // Checking if image exists
           if (
@@ -186,6 +185,7 @@ const ProductForm = (props) => {
               message.success(`Edited ${values.name} to Banner list`)
               history.goBack()
             }
+            setSubmitLoading(false)
           } else {
             message.error('Please upload image')
           }

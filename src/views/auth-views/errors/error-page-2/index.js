@@ -29,7 +29,7 @@ const ErrorTwo = () => {
             Copyright &copy; {`${new Date().getFullYear()}`}{' '}
             <span className="font-weight-semibold">{`${APP_NAME}`}</span>
           </span>
-          <div>
+          {/* <div>
             <a
               className="text-gray"
               href="/#"
@@ -45,7 +45,7 @@ const ErrorTwo = () => {
             >
               Privacy & Policy
             </a>
-          </div>
+          </div> */}
         </Flex>
       </div>
     </div>

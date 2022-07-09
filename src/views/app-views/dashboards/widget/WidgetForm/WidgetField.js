@@ -42,6 +42,7 @@ const listingType = [
   'Banner',
   'Categories',
   'ProductTemplates',
+  'MainBanner',
   'Static',
 ]
 

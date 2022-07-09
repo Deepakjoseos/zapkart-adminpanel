@@ -65,6 +65,7 @@ const VariantsForm = ({
       console.log(selectedVariant.description, 'desc')
       form.setFieldsValue({
         description: selectedVariant.description,
+        name: selectedVariant.name,
       })
 
       const images = selectedVariant.images.map((cur, i) => {
@@ -162,7 +163,7 @@ const VariantsForm = ({
 
   return (
     <Drawer
-      title="Variant Form"
+      title={selectedVariant ? 'Edit Variant' : 'Create Variant'}
       width={720}
       onClose={() => setOpenVariantsForm(false)}
       visible={openVariantsForm}

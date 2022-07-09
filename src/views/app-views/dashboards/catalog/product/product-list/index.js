@@ -209,6 +209,10 @@ const ProductList = () => {
       sorter: (a, b) => utils.antdTableSorter(a, b, 'qty'),
     },
     {
+      title: 'Vendor',
+      dataIndex: 'username',
+    },
+    {
       title: 'approval',
       dataIndex: 'approval',
       render: (approval, row) => {

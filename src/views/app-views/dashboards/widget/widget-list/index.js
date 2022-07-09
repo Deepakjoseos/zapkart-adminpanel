@@ -13,6 +13,7 @@ import Flex from 'components/shared-components/Flex'
 import { useHistory } from 'react-router-dom'
 import utils from 'utils'
 import widgetService from 'services/widget'
+import moment from 'moment'
 
 const { Option } = Select
 
@@ -108,7 +109,7 @@ const WidegetList = () => {
       sorter: (a, b) => utils.antdTableSorter(a, b, 'tabTitle'),
     },
     {
-      title: 'isTitleShow',
+      title: 'Show Title',
       dataIndex: 'isTitleShow',
       render: (text) => (
         <Flex justifyContent="center">{text ? 'Yes' : 'No'}</Flex>
@@ -120,23 +121,25 @@ const WidegetList = () => {
       sorter: (a, b) => utils.antdTableSorter(a, b, 'priority'),
     },
     {
-      title: 'numberOfItems',
+      title: 'Number of Items',
       dataIndex: 'numberOfItems',
       sorter: (a, b) => utils.antdTableSorter(a, b, 'numberOfItems'),
     },
     {
-      title: 'listingType',
+      title: 'Listing Type',
       dataIndex: 'listingType',
       sorter: (a, b) => utils.antdTableSorter(a, b, 'listingType'),
     },
     {
-      title: 'startDate',
+      title: 'Start Date',
       dataIndex: 'startDate',
+      render: (startDate) => moment(startDate).format('MMMM Do YYYY'),
       sorter: (a, b) => utils.antdTableSorter(a, b, 'startDate'),
     },
     {
-      title: 'endDate',
+      title: 'End Date',
       dataIndex: 'endDate',
+      render: (endDate) => moment(endDate).format('MMMM Do YYYY'),
       sorter: (a, b) => utils.antdTableSorter(a, b, 'endDate'),
     },
     {
@@ -148,7 +151,7 @@ const WidegetList = () => {
       sorter: (a, b) => utils.antdTableSorter(a, b, 'status'),
     },
     {
-      title: '',
+      title: 'Actions',
       dataIndex: 'actions',
       render: (_, elm) => (
         <div className="text-right">

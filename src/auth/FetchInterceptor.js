@@ -4,6 +4,7 @@ import history from '../history'
 import { AUTH_TOKEN } from 'redux/constants/Auth'
 import { notification } from 'antd'
 import FirebaseService from 'services/FirebaseService'
+import Utils from 'utils'
 
 const service = axios.create({
   baseURL: API_BASE_URL,
@@ -72,7 +73,8 @@ service.interceptors.response.use(
       notificationParam.message = 'Time Out'
     }
 
-    notification.error(notificationParam)
+    // notification.error(notificationParam)
+    Utils.errorValidator(error.response.data)
 
     return Promise.reject(error)
   }

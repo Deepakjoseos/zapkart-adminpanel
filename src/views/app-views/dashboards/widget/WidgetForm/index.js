@@ -164,6 +164,8 @@ const WidgetForm = (props) => {
         return fetchBrands()
       case 'Banner':
         return fetchBanner()
+      case 'MainBanner':
+        return fetchBanner()
       case 'Categories':
         return fetchCategories()
       case 'ProductTemplates':
@@ -178,13 +180,17 @@ const WidgetForm = (props) => {
     setSubmitLoading(true)
     form
       .validateFields()
-      .then(async (values) => {
+      .then(async (values, then) => {
         const sendingValues = {
           tabTitle: values.tabTitle,
           status: values.status,
           priority: values.priority,
-          numberOfItems: values.numberOfItems,
-          listingType: values.listingType,
+          numberOfItems: values?.numberOfItems
+            ? values?.numberOfItems
+            : form.getFieldValue('numberOfItems'),
+          listingType: values?.listingType
+            ? values?.listingType
+            : form.getFieldValue('listingType'),
           isTitleShow: values.isTitleShow,
         }
 
@@ -211,7 +217,6 @@ const WidgetForm = (props) => {
           )
         }
 
-        setSubmitLoading(false)
         if (mode === ADD) {
           const created = await widgetService.createWidget(sendingValues)
           if (created) {
@@ -226,6 +231,7 @@ const WidgetForm = (props) => {
             history.goBack()
           }
         }
+        setSubmitLoading(false)
       })
       .catch((info) => {
         setSubmitLoading(false)

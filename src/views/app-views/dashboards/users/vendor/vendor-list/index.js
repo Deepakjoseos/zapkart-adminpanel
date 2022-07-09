@@ -47,14 +47,18 @@ const ProductList = () => {
     getVendors()
   }, [])
 
+  const viewDetails = (row) => {
+    history.push(`/app/dashboards/users/vendor/edit-vendor/${row.id}`)
+  }
+
   const dropdownMenu = (row) => (
     <Menu>
-      {/* <Menu.Item onClick={() => setSelectedViewAddress(row.address)}>
+      <Menu.Item onClick={() => viewDetails(row)}>
         <Flex alignItems="center">
           <EyeOutlined />
-          <span className="ml-2">View Address</span>
+          <span className="ml-2">View Details</span>
         </Flex>
-      </Menu.Item> */}
+      </Menu.Item>
       {/* <Menu.Item onClick={() => deleteRow(row)}>
         <Flex alignItems="center">
           <DeleteOutlined />
@@ -126,6 +130,11 @@ const ProductList = () => {
       dataIndex: 'phone',
     },
     {
+      title: 'Commission',
+      dataIndex: 'commission',
+      render: (commission) => `${commission}%`,
+    },
+    {
       title: 'Status',
       dataIndex: 'status',
       render: (status) => (
@@ -133,15 +142,15 @@ const ProductList = () => {
       ),
       sorter: (a, b) => utils.antdTableSorter(a, b, 'status'),
     },
-    // {
-    //   title: '',
-    //   dataIndex: 'actions',
-    //   render: (_, elm) => (
-    //     <div className="text-right">
-    //       <EllipsisDropdown menu={dropdownMenu(elm)} />
-    //     </div>
-    //   ),
-    // },
+    {
+      title: '',
+      dataIndex: 'actions',
+      render: (_, elm) => (
+        <div className="text-right">
+          <EllipsisDropdown menu={dropdownMenu(elm)} />
+        </div>
+      ),
+    },
   ]
 
   const onSearch = (e) => {

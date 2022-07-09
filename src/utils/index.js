@@ -1,3 +1,5 @@
+import { notification } from 'antd'
+
 class Utils {
   /**
    * Get first character from first & last sentences of a username
@@ -267,6 +269,34 @@ class Utils {
     }
 
     return categoryList
+  }
+
+  static errorValidator(res) {
+    console.log('my-res', res)
+    if (res) {
+      if (res?.errors) {
+        for (const [key, value] of Object.entries(res?.errors)) {
+          value.forEach((cur) => {
+            notification.error({
+              description: key,
+              message: cur,
+            })
+          })
+        }
+      } else {
+        // toast.error(res.title)
+        notification.error({
+          // description: res.title,
+          message: res.title,
+        })
+      }
+    }
+    //  else {
+    //   notification.error({
+    //     description: 'Something Went Wrong',
+    //     message: 'Error',
+    //   });
+    // }
   }
 }
 

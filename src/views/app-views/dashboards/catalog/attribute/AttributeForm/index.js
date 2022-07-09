@@ -6,6 +6,7 @@ import Flex from 'components/shared-components/Flex'
 import GeneralField from './GeneralField'
 import attributeService from 'services/attribute'
 import { useHistory } from 'react-router-dom'
+import AddAttributeValue from './add-attributevalue'
 
 const { TabPane } = Tabs
 
@@ -168,6 +169,7 @@ const AttributeForm = (props) => {
                   onClick={() => onFinish()}
                   htmlType="submit"
                   loading={submitLoading}
+                  disabled={submitLoading}
                 >
                   {mode === 'ADD' ? 'Add' : `Save`}
                 </Button>
@@ -187,6 +189,11 @@ const AttributeForm = (props) => {
                 attributeOptions={attributeOptions}
               />
             </TabPane>
+            {mode === EDIT && (
+              <TabPane tab="Attributes" key="2">
+                <AddAttributeValue />
+              </TabPane>
+            )}
           </Tabs>
         </div>
       </Form>

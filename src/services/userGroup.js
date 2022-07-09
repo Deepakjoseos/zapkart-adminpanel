@@ -6,10 +6,10 @@ const apiRoute = '/userGroups'
 userGroupService.getUserGroups = async function () {
   try {
     const res = await fetch({
-      url: `${apiRoute}?page=1&limit=10`,
+      url: `${apiRoute}`,
       method: 'get',
     })
-    const data = res.filter((cur) => cur.status !== 'Deleted')
+    const data = res.data.filter((cur) => cur.status !== 'Deleted')
     return data
   } catch (err) {
     console.log(err, 'show-err')
@@ -35,7 +35,7 @@ userGroupService.getUserGroupById = async function (id) {
       url: `${apiRoute}/${id}`,
       method: 'get',
     })
-    return res
+    return res.data
   } catch (err) {
     console.log(err, 'show-err')
   }

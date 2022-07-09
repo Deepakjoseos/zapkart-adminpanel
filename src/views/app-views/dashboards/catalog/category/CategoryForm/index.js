@@ -130,7 +130,6 @@ const ProductForm = (props) => {
     form
       .validateFields()
       .then(async (values) => {
-        setSubmitLoading(false)
         if (mode === ADD) {
           // Checking if image exists
           if (uploadedImg.length !== 0 && uploadedImg !== null) {
@@ -173,6 +172,7 @@ const ProductForm = (props) => {
             message.error('Please upload image')
           }
         }
+        setSubmitLoading(false)
       })
       .catch((info) => {
         setSubmitLoading(false)

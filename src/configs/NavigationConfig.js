@@ -261,6 +261,14 @@ const dashBoardNavTree = [
             submenu: [],
           },
           {
+            key: 'dashboards-catalog-medicinetype',
+            path: `${APP_PREFIX_PATH}/dashboards/catalog/medicinetype/medicinetype-list`,
+            title: 'Medicine Type',
+            icon: FormatPainterOutlined,
+            breadcrumb: false,
+            submenu: [],
+          },
+          {
             key: 'dashboards-catalog-manufacturer',
             path: `${APP_PREFIX_PATH}/dashboards/catalog/manufacturer/manufacturer-list`,
             title: 'Manufacturer',

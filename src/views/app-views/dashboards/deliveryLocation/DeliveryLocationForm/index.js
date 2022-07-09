@@ -76,7 +76,6 @@ const ProductForm = (props) => {
     form
       .validateFields()
       .then(async (values) => {
-        setSubmitLoading(false)
         if (mode === ADD) {
           const created = await deliveryLocationService.createDeliveryLocation(
             values
@@ -96,6 +95,7 @@ const ProductForm = (props) => {
             history.goBack()
           }
         }
+        setSubmitLoading(false)
       })
       .catch((info) => {
         setSubmitLoading(false)

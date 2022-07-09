@@ -23,17 +23,8 @@ const ProductForm = (props) => {
   const history = useHistory()
 
   const [form] = Form.useForm()
-  const [prescriptions, setPrescriptions] = useState([])
   const [displayImage, setDisplayImage] = useState(null)
   const [submitLoading, setSubmitLoading] = useState(false)
-
-  const {
-    fileList: fileListPrescriptions,
-    beforeUpload: beforeUploadPrescriptions,
-    onChange: onChangePrescriptions,
-    onRemove: onRemovePrescriptions,
-    setFileList: setFileListPrescriptions,
-  } = useUpload(1, 'multiple')
 
   const {
     fileList: fileListDisplayImages,
@@ -47,17 +38,6 @@ const ProductForm = (props) => {
     const { id } = param
     const data = await customerService.getCustomerById(id)
     if (data) {
-      const prescriptions = data.prescriptions.map((cur, i) => {
-        return {
-          uid: i + Math.random() * 10,
-          url: cur,
-        }
-      })
-
-      setPrescriptions(prescriptions)
-
-      setFileListPrescriptions(prescriptions)
-
       let himg = []
       if (data.displayImage) {
         himg = [
@@ -90,14 +70,6 @@ const ProductForm = (props) => {
     }
   }, [form, mode, param, props])
 
-  const propsPrescriptions = {
-    multiple: true,
-    beforeUpload: beforeUploadPrescriptions,
-    onRemove: onRemovePrescriptions,
-    onChange: onChangePrescriptions,
-    fileList: fileListPrescriptions,
-  }
-
   const propsDisplayImages = {
     multiple: false,
     beforeUpload: beforeUploadDisplayImages,
@@ -105,10 +77,6 @@ const ProductForm = (props) => {
     onChange: onChangeDisplayImages,
     fileList: fileListDisplayImages,
   }
-
-  useEffect(() => {
-    setPrescriptions(fileListPrescriptions)
-  }, [fileListPrescriptions])
 
   useEffect(() => {
     setDisplayImage(fileListDisplayImages)
@@ -120,7 +88,7 @@ const ProductForm = (props) => {
       .validateFields()
       .then(async (values) => {
         console.log(values, 'values')
-        setSubmitLoading(false)
+
         const sendingValues = {
           firstName: values.firstName,
           lastName: values.lastName,
@@ -131,17 +99,6 @@ const ProductForm = (props) => {
         }
         if (mode === EDIT) {
           // Checking if image exists
-          console.log('prescriptions', prescriptions)
-          if (prescriptions.length !== 0 && prescriptions !== null) {
-            const prescriptionsValue = await multipleImageUpload(
-              prescriptions,
-              'prescriptions'
-            )
-            sendingValues.prescriptions = prescriptionsValue
-          } else {
-            sendingValues.prescriptions = []
-          }
-
           if (displayImage.length !== 0 && displayImage !== null) {
             const displayImageValue = await singleImageUploader(
               displayImage[0].originFileObj,
@@ -159,10 +116,11 @@ const ProductForm = (props) => {
             sendingValues
           )
           if (edited) {
-            message.success(`Edited ${values.name} to Customers list`)
+            message.success(`Edited ${values.firstName} to Customers list`)
             history.goBack()
           }
         }
+        setSubmitLoading(false)
       })
       .catch((info) => {
         setSubmitLoading(false)
@@ -217,10 +175,7 @@ const ProductForm = (props) => {
         <div className="container">
           <Tabs defaultActiveKey="1" style={{ marginTop: 30 }}>
             <TabPane tab="General" key="1">
-              <GeneralField
-                propsPrescriptions={propsPrescriptions}
-                propsDisplayImages={propsDisplayImages}
-              />
+              <GeneralField propsDisplayImages={propsDisplayImages} />
             </TabPane>
           </Tabs>
         </div>
