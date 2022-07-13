@@ -2,6 +2,7 @@ import React from 'react'
 import { Input, Row, Col, Card, Form, Upload, InputNumber, Select } from 'antd'
 import { ImageSvg } from 'assets/svg/icon'
 import CustomIcon from 'components/util-components/CustomIcon'
+import Editor from 'components/shared-components/Editor'
 
 // const { Dragger } = Upload
 const { Option } = Select
@@ -51,7 +52,12 @@ const GeneralField = (props) => (
           label="Description"
           rules={rules.description}
         >
-          <Input placeholder="Description" />
+          <Editor
+            placeholder="Write something..."
+            editorHtml={props.form.getFieldValue('description') || ''}
+            onChange={(e) => props.form.setFieldsValue({ description: e })}
+            name="description"
+          />
         </Form.Item>
         <Form.Item name="priority" label="Priority" rules={rules.priority}>
           <InputNumber

@@ -15,6 +15,8 @@ import Utils from 'utils'
 import { useHistory } from 'react-router-dom'
 import categoryService from 'services/category'
 import medicineTypeService from 'services/medicineType'
+import manufacturerService from 'services/manufacturer'
+import compositionService from 'services/composition'
 
 const { TabPane } = Tabs
 
@@ -30,7 +32,13 @@ const ProductForm = (props) => {
   const [submitLoading, setSubmitLoading] = useState(false)
   const [brands, setBrands] = useState([])
   const [categories, setCategories] = useState([])
+  const [medicineTypes, setMedicineTypes] = useState([])
+  const [manufacturers, setManufacturers] = useState([])
+  const [compositions, setCompositions] = useState([])
   const [variantsList, setVariantsList] = useState([])
+
+  const [productType, setProductType] = useState('')
+  const [returnable, setReturnable] = useState(false)
 
   const {
     fileList: fileListImages,
@@ -52,9 +60,32 @@ const ProductForm = (props) => {
     const activeBrands = data.filter((item) => item.status === 'Active')
     setBrands(activeBrands)
   }
+
+  const getMedicineTypes = async () => {
+    const data = await medicineTypeService.getMedicineTypes()
+    const activeMedicineTypes = data.filter((item) => item.status === 'Active')
+    setMedicineTypes(activeMedicineTypes)
+  }
+
+  const getManufacturers = async () => {
+    const data = await manufacturerService.getManufacturer()
+    const activeManufacturers = data.filter((item) => item.status === 'Active')
+    setManufacturers(activeManufacturers)
+  }
+
+  const getCompositions = async () => {
+    const data = await compositionService.getCompositions()
+    const activeCompositions = data.filter((item) => item.status === 'Active')
+    setCompositions(activeCompositions)
+    return activeCompositions
+  }
+
   useEffect(() => {
     getCategories()
     getBrands()
+    getMedicineTypes()
+    getManufacturers()
+    getCompositions()
   }, [])
 
   const fetchProductTemplateById = async () => {
@@ -75,15 +106,29 @@ const ProductForm = (props) => {
       form.setFieldsValue({
         name: data.name,
         status: data.status,
-        categoryId: data.category.id,
+        categoryId: data?.category?.id,
         productType: data.productType,
         allowedPaymentTypes: data.allowedPaymentTypes,
         returnable: data.returnable,
-        brandId: data.brand.id,
+        brandId: data?.brand?.id,
         description: data.description,
         returnPeriod: data.returnPeriod,
         allowedQuantityPerOrder: data.allowedQuantityPerOrder,
         prescriptionRequired: data.prescriptionRequired,
+        medicineTypeId: data.medicineTypeId,
+        medicinePackaging: data.medicinePackaging,
+        manufacturer: data.manufacturer,
+        minQty: data.minQty,
+        composition: data.composition,
+
+        // productType =============> 'Medicine'
+        pregnancyInteraction: data.pregnancyInteraction,
+        expertAdvice: data.expertAdvice,
+        sideEffects: data.sideEffects,
+        howToUse: data.howToUse,
+        faq: data.faq,
+        uses: data.uses,
+        storageTemperature: data.storageTemperature,
 
         lengthClass: data.shippingDetail.lengthClass,
         weightClass: data.shippingDetail.weightClass,
@@ -100,6 +145,11 @@ const ProductForm = (props) => {
         //   weight: data.shippingDetail.weight,
         // },
       })
+
+      onCompositionChange()
+
+      setProductType(data.productType)
+      setReturnable(data.returnable)
 
       setVariantsList(data.variants)
     } else {
@@ -147,6 +197,14 @@ const ProductForm = (props) => {
           allowedQuantityPerOrder: values.allowedQuantityPerOrder,
           prescriptionRequired: values.prescriptionRequired,
           priority: values.priority,
+          medicineTypeId: values.medicineTypeId,
+          medicinePackaging: values.medicinePackaging,
+          manufacturer: values.manufacturer,
+          minQty: values.minQty,
+          composition: values.composition.map((comp) => {
+            return { id: comp.id, qty: comp.qty }
+          }),
+
           // status: values.status,
           shippingDetail: {
             lengthClass: values.lengthClass,
@@ -156,6 +214,16 @@ const ProductForm = (props) => {
             width: values.width,
             weight: values.weight,
           },
+        }
+
+        if (sendingValues.productType === 'Medicine') {
+          sendingValues.pregnancyInteraction = values.pregnancyInteraction
+          sendingValues.expertAdvice = values.expertAdvice
+          sendingValues.sideEffects = values.sideEffects
+          sendingValues.howToUse = values.howToUse
+          sendingValues.faq = values.faq
+          sendingValues.uses = values.uses
+          sendingValues.storageTemperature = values.storageTemperature
         }
 
         if (mode === ADD) {
@@ -211,6 +279,20 @@ const ProductForm = (props) => {
       })
   }
 
+  // Cut off already selected values from the list of compositions
+  const onCompositionChange = async () => {
+    const compositions = await getCompositions()
+
+    const restListTypesItems = compositions.filter(
+      ({ id: id1 }) =>
+        !form.getFieldValue('composition')?.some(({ id: id2 }) => id2 === id1)
+    )
+
+    console.log(restListTypesItems, 'sssssd')
+
+    setCompositions(restListTypesItems)
+  }
+
   return (
     <>
       <Form
@@ -264,9 +346,16 @@ const ProductForm = (props) => {
               <GeneralField
                 categories={categories}
                 brands={brands}
-                // uploadLoading={uploadLoading}
-                // handleUploadChange={handleUploadChange}
+                medicineTypes={medicineTypes}
                 propsImages={propsImages}
+                form={form}
+                setProductType={setProductType}
+                productType={productType}
+                manufacturers={manufacturers}
+                compositions={compositions}
+                onCompositionChange={onCompositionChange}
+                setReturnable={setReturnable}
+                returnable={returnable}
               />
             </TabPane>
             {mode === EDIT && (

@@ -22,6 +22,7 @@ const ProductForm = (props) => {
   const [uploadedImg, setImage] = useState(null)
   //   const [uploadLoading, setUploadLoading] = useState(false)
   const [submitLoading, setSubmitLoading] = useState(false)
+  const [editorRender, setEditorRender] = useState(false)
 
   const {
     fileList: fileListImages,
@@ -58,6 +59,8 @@ const ProductForm = (props) => {
             priority: data.priority,
             description: data.description,
           })
+
+          setEditorRender(true)
         } else {
           history.replace('/app/dashboards/information/information-list')
         }
@@ -96,14 +99,14 @@ const ProductForm = (props) => {
               'information'
             )
             values.image = imgValue
-
-            const created = await informationService.createInformation(values)
-            if (created) {
-              message.success(`Created ${values.name} to Information list`)
-              history.goBack()
-            }
           } else {
-            message.error('Please upload image')
+            values.image = null
+          }
+
+          const created = await informationService.createInformation(values)
+          if (created) {
+            message.success(`Created ${values.name} to Information list`)
+            history.goBack()
           }
         }
         if (mode === EDIT) {
@@ -117,17 +120,17 @@ const ProductForm = (props) => {
               'information'
             )
             values.image = imgValue
-
-            const edited = await informationService.editInformation(
-              param.id,
-              values
-            )
-            if (edited) {
-              message.success(`Edited ${values.name} to Information list`)
-              history.goBack()
-            }
           } else {
-            message.error('Please upload image')
+            values.image = null
+          }
+
+          const edited = await informationService.editInformation(
+            param.id,
+            values
+          )
+          if (edited) {
+            message.success(`Edited ${values.name} to Information list`)
+            history.goBack()
           }
         }
         setSubmitLoading(false)
@@ -191,6 +194,7 @@ const ProductForm = (props) => {
                 // uploadLoading={uploadLoading}
                 // handleUploadChange={handleUploadChange}
                 propsImages={propsImages}
+                form={form}
               />
             </TabPane>
           </Tabs>

@@ -123,7 +123,7 @@ const ProductForm = (props) => {
               values
             )
             if (edited) {
-              message.success(`Edited ${values.name} to product list`)
+              message.success(`Edited ${values.name} to Manufacturer list`)
               history.goBack()
             }
           } else {

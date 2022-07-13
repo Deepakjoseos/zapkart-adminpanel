@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Input,
   Row,
@@ -26,6 +26,9 @@ const VariantsField = ({ variantsList, refreshData }) => {
   const propsVariantImages = []
   const [openVariantsForm, setOpenVariantsForm] = useState(false)
   const [selectedVariant, setSelectedVariant] = useState(null)
+  const [selectedAttributeValues, setSelectedAttributeValues] = useState([])
+
+  const [attributes, setAttributes] = useState([])
   const { id } = useParams()
 
   const [form] = Form.useForm()
@@ -36,8 +39,8 @@ const VariantsField = ({ variantsList, refreshData }) => {
     setSelectedVariant(variant)
     setOpenVariantsForm(true)
   }
-  const onDeleteVariant = (productTemplateVariantId) => {
-    const deleted = productTemplateService.deleteProductTemplateVariant(
+  const onDeleteVariant = async (productTemplateVariantId) => {
+    const deleted = await productTemplateService.deleteProductTemplateVariant(
       id,
       productTemplateVariantId
     )
@@ -100,6 +103,9 @@ const VariantsField = ({ variantsList, refreshData }) => {
           selectedVariant={selectedVariant}
           setSelectedVariant={setSelectedVariant}
           refreshData={refreshData}
+          attributes={attributes}
+          selectedAttributeValues={selectedAttributeValues}
+          form={form}
         />
       </Row>
     </>

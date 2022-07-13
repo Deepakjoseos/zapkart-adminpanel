@@ -276,6 +276,14 @@ const dashBoardNavTree = [
             breadcrumb: false,
             submenu: [],
           },
+          {
+            key: 'dashboards-catalog-composition',
+            path: `${APP_PREFIX_PATH}/dashboards/catalog/composition/composition-list`,
+            title: 'Composition',
+            icon: FormatPainterOutlined,
+            breadcrumb: false,
+            submenu: [],
+          },
         ],
       },
 
@@ -322,6 +330,15 @@ const dashBoardNavTree = [
         breadcrumb: false,
         submenu: [],
       },
+      {
+        key: 'dashboards-template',
+        path: `${APP_PREFIX_PATH}/dashboards/template/template-list`,
+        title: 'Template',
+        icon: DotChartOutlined,
+        breadcrumb: false,
+        submenu: [],
+      },
+
       {
         key: 'dashboards-deliverylocation',
         path: `${APP_PREFIX_PATH}/dashboards/deliverylocation/deliverylocation-list`,

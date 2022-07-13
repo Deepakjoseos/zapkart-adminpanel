@@ -127,13 +127,13 @@ const ProductList = () => {
     {
       title: 'Brand',
       dataIndex: 'brand',
-      render: (brand) => <Flex alignItems="center">{brand.name}</Flex>,
+      render: (brand) => <Flex alignItems="center">{brand?.name}</Flex>,
       sorter: (a, b) => utils.antdTableSorter(a, b, 'brand.name'),
     },
     {
       title: 'Category',
       dataIndex: 'category',
-      render: (category) => <Flex alignItems="center">{category.name}</Flex>,
+      render: (category) => <Flex alignItems="center">{category?.name}</Flex>,
       sorter: (a, b) => utils.antdTableSorter(a, b, 'category.name'),
     },
 

@@ -1,0 +1,297 @@
+import React, { useEffect } from 'react'
+import {
+  Input,
+  Row,
+  Col,
+  Card,
+  Form,
+  Upload,
+  InputNumber,
+  Select,
+  List,
+  Button,
+  notification,
+} from 'antd'
+import { ImageSvg } from 'assets/svg/icon'
+import CustomIcon from 'components/util-components/CustomIcon'
+import Editor from 'components/shared-components/Editor'
+import CopyToClipboard from 'react-copy-to-clipboard'
+
+// const { Dragger } = Upload
+const { Option } = Select
+
+const rules = {
+  name: [
+    {
+      required: true,
+      message: 'Required',
+    },
+  ],
+
+  listingType: [
+    {
+      required: true,
+      message: 'Required',
+    },
+  ],
+  status: [
+    {
+      required: true,
+      message: 'Required',
+    },
+  ],
+
+  emailSubject: [
+    {
+      required: true,
+      message: 'Required',
+    },
+  ],
+
+  emailContent: [
+    {
+      required: true,
+      message: 'Required',
+    },
+  ],
+
+  smsTemplateId: [
+    {
+      required: true,
+      message: 'Required',
+    },
+  ],
+
+  smsContent: [
+    {
+      required: true,
+      message: 'Required',
+    },
+  ],
+}
+
+const GeneralField = ({ form, tempConstants }) => {
+  return (
+    <Row gutter={16}>
+      <Col xs={24} sm={24} md={24}>
+        <Card title="Basic Info">
+          <Form.Item name="name" label="Name" rules={rules.name}>
+            <Input placeholder="Name" />
+          </Form.Item>
+
+          <Form.Item
+            name="listingType"
+            label="Listing Type"
+            rules={rules.listingType}
+          >
+            <Select placeholder="Listing Type">
+              {tempConstants?.LISTING_TYPES &&
+                Object.values(tempConstants['LISTING_TYPES']).map(
+                  (listtype) => <Option value={listtype}>{listtype}</Option>
+                )}
+            </Select>
+          </Form.Item>
+
+          <Form.Item name="status" label="Status" rules={rules.status}>
+            <Select placeholder="Status">
+              <Option value="Active">Active</Option>
+              <Option value="Hold">Hold</Option>
+            </Select>
+          </Form.Item>
+        </Card>
+
+        <Card title="Email">
+          <Row gutter={16}>
+            <Col xs={24} sm={24} md={16}>
+              <Form.Item
+                name="emailSubject"
+                label="Email Subject"
+                rules={rules.emailSubject}
+              >
+                <Input placeholder="Email Subject" />
+              </Form.Item>
+
+              <Form.Item
+                name="emailContent"
+                label="Email Content"
+                rules={rules.emailContent}
+              >
+                <Editor
+                  placeholder="Write something..."
+                  editorHtml={form.getFieldValue('emailContent') || ''}
+                  onChange={(e) => form.setFieldsValue({ emailContent: e })}
+                  name="emailContent"
+                />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={24} md={8}>
+              <h5>Copy Keys</h5>
+              <div
+                style={{
+                  height: '445px',
+                  overflow: 'auto',
+                  padding: '0 16px',
+                  border: '1px solid rgba(140, 140, 140, 0.35)',
+                }}
+              >
+                <List
+                  dataSource={
+                    tempConstants?.KEYS
+                      ? Object.values(tempConstants['LISTING_TYPES'])
+                      : []
+                  }
+                  renderItem={(item) => (
+                    <List.Item key={item}>
+                      <List.Item.Meta title={item} />
+
+                      <CopyToClipboard
+                        text={item}
+                        onCopy={() =>
+                          notification.success({
+                            message: 'Copied To Clipboard',
+                          })
+                        }
+                      >
+                        <Button type="primary">Copy</Button>
+                      </CopyToClipboard>
+                    </List.Item>
+                  )}
+                />
+              </div>
+            </Col>
+          </Row>
+        </Card>
+
+        {/* SMS */}
+
+        <Card title="SMS">
+          <Row gutter={16}>
+            <Col xs={24} sm={24} md={16}>
+              <Form.Item
+                name="smsTemplateId"
+                label="SMS Template Id"
+                rules={rules.smsTemplateId}
+              >
+                <Input placeholder="SMS Template Id" />
+              </Form.Item>
+
+              <Form.Item
+                name="smsContent"
+                label="SMS Content"
+                rules={rules.smsContent}
+              >
+                <Editor
+                  placeholder="Write something..."
+                  editorHtml={form.getFieldValue('smsContent') || ''}
+                  onChange={(e) => form.setFieldsValue({ smsContent: e })}
+                  name="smsContent"
+                />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={24} md={8}>
+              <h5>Copy Keys</h5>
+              <div
+                style={{
+                  height: '445px',
+                  overflow: 'auto',
+                  padding: '0 16px',
+                  border: '1px solid rgba(140, 140, 140, 0.35)',
+                }}
+              >
+                <List
+                  dataSource={
+                    tempConstants?.KEYS
+                      ? Object.values(tempConstants['LISTING_TYPES'])
+                      : []
+                  }
+                  renderItem={(item) => (
+                    <List.Item key={item}>
+                      <List.Item.Meta title={item} />
+
+                      <CopyToClipboard
+                        text={item}
+                        onCopy={() =>
+                          notification.success({
+                            message: 'Copied To Clipboard',
+                          })
+                        }
+                      >
+                        <Button type="primary">Copy</Button>
+                      </CopyToClipboard>
+                    </List.Item>
+                  )}
+                />
+              </div>
+            </Col>
+          </Row>
+        </Card>
+
+        {/* FCM */}
+
+        <Card title="FCM">
+          <Row gutter={16}>
+            <Col xs={24} sm={24} md={16}>
+              <Form.Item
+                name="fcmTitle"
+                label="FCM Title"
+                rules={rules.fcmTitle}
+              >
+                <Input placeholder="FCM Title" />
+              </Form.Item>
+
+              <Form.Item
+                name="fcmDescription"
+                label="FCM Description"
+                rules={rules.fcmDescription}
+              >
+                <Editor
+                  placeholder="Write something..."
+                  editorHtml={form.getFieldValue('fcmDescription') || ''}
+                  onChange={(e) => form.setFieldsValue({ fcmDescription: e })}
+                  name="fcmDescription"
+                />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={24} md={8}>
+              <h5>Copy Keys</h5>
+              <div
+                style={{
+                  height: '445px',
+                  overflow: 'auto',
+                  padding: '0 16px',
+                  border: '1px solid rgba(140, 140, 140, 0.35)',
+                }}
+              >
+                <List
+                  dataSource={
+                    tempConstants?.KEYS
+                      ? Object.values(tempConstants['LISTING_TYPES'])
+                      : []
+                  }
+                  renderItem={(item) => (
+                    <List.Item key={item}>
+                      <List.Item.Meta title={item} />
+
+                      <CopyToClipboard
+                        text={item}
+                        onCopy={() =>
+                          notification.success({
+                            message: 'Copied To Clipboard',
+                          })
+                        }
+                      >
+                        <Button type="primary">Copy</Button>
+                      </CopyToClipboard>
+                    </List.Item>
+                  )}
+                />
+              </div>
+            </Col>
+          </Row>
+        </Card>
+      </Col>
+    </Row>
+  )
+}
+
+export default GeneralField
