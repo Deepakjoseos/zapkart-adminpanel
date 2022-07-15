@@ -251,6 +251,14 @@ const dashBoardNavTree = [
             breadcrumb: false,
             submenu: [],
           },
+          {
+            key: 'dashboards-catalog-coupon',
+            path: `${APP_PREFIX_PATH}/dashboards/catalog/coupon/coupon-list`,
+            title: 'Coupon',
+            icon: BookOutlined,
+            breadcrumb: false,
+            submenu: [],
+          },
 
           {
             key: 'dashboards-catalog-attribute',

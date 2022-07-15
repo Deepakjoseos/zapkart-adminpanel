@@ -1,8 +1,8 @@
 import React from 'react'
 import { Route, Switch, Redirect } from 'react-router-dom'
-import informationList from './information-list'
-import AddInformation from './add-information'
-import EditInformation from './edit-information'
+import SettingList from './setting-list'
+import AddSetting from './add-setting'
+import EditInformation from './edit-setting'
 // import Orders from './orders'
 
 const Setting = (props) => {
@@ -14,15 +14,12 @@ const Setting = (props) => {
         from={`${match.url}`}
         to={`${match.url}/information-list`}
       />
-      <Route path={`${match.url}/add-information`} component={AddInformation} />
+      <Route path={`${match.url}/add-information`} component={AddSetting} />
       <Route
         path={`${match.url}/edit-information/:id`}
         component={EditInformation}
       />
-      <Route
-        path={`${match.url}/information-list`}
-        component={informationList}
-      />
+      <Route path={`${match.url}/information-list`} component={SettingList} />
     </Switch>
   )
 }

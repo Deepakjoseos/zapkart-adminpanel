@@ -141,14 +141,13 @@ const ProductForm = (props) => {
               'category'
             )
             values.image = imgValue
-
-            const created = await categoryService.createCategory(values)
-            if (created) {
-              message.success(`Created ${values.name} to product list`)
-              history.goBack()
-            }
           } else {
-            message.error('Please upload image')
+            values.image = null
+          }
+          const created = await categoryService.createCategory(values)
+          if (created) {
+            message.success(`Created ${values.name} to product list`)
+            history.goBack()
           }
         }
         if (mode === EDIT) {
@@ -162,14 +161,13 @@ const ProductForm = (props) => {
               'category'
             )
             values.image = imgValue
-
-            const edited = await categoryService.editCategory(param.id, values)
-            if (edited) {
-              message.success(`Edited ${values.name} to product list`)
-              history.goBack()
-            }
           } else {
-            message.error('Please upload image')
+            values.image = null
+          }
+          const edited = await categoryService.editCategory(param.id, values)
+          if (edited) {
+            message.success(`Edited ${values.name} to product list`)
+            history.goBack()
           }
         }
         setSubmitLoading(false)

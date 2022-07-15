@@ -129,6 +129,7 @@ const ProductForm = (props) => {
         faq: data.faq,
         uses: data.uses,
         storageTemperature: data.storageTemperature,
+        saltComposition: data.saltComposition,
 
         lengthClass: data.shippingDetail.lengthClass,
         weightClass: data.shippingDetail.weightClass,
@@ -224,6 +225,7 @@ const ProductForm = (props) => {
           sendingValues.faq = values.faq
           sendingValues.uses = values.uses
           sendingValues.storageTemperature = values.storageTemperature
+          sendingValues.saltComposition = values.saltComposition
         }
 
         if (mode === ADD) {
@@ -236,16 +238,15 @@ const ProductForm = (props) => {
             )
 
             sendingValues.images = imgValues
-
-            const created = await productTemplateService.createProductTemplate(
-              sendingValues
-            )
-            if (created) {
-              message.success(`Created ${values.name} to Product Template List`)
-              history.goBack()
-            }
           } else {
-            message.error('Please upload image')
+            sendingValues.images = []
+          }
+          const created = await productTemplateService.createProductTemplate(
+            sendingValues
+          )
+          if (created) {
+            message.success(`Created ${values.name} to Product Template List`)
+            history.goBack()
           }
         }
         if (mode === EDIT) {
@@ -257,17 +258,17 @@ const ProductForm = (props) => {
               'productTemplate'
             )
             sendingValues.images = imgValues
-
-            const edited = await productTemplateService.editProductTemplate(
-              param.id,
-              sendingValues
-            )
-            if (edited) {
-              message.success(`Edited ${values.name} to Product Template list`)
-              history.goBack()
-            }
           } else {
-            message.error('Please upload image')
+            sendingValues.images = []
+          }
+
+          const edited = await productTemplateService.editProductTemplate(
+            param.id,
+            sendingValues
+          )
+          if (edited) {
+            message.success(`Edited ${values.name} to Product Template list`)
+            history.goBack()
           }
         }
         setSubmitLoading(false)

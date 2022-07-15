@@ -45,12 +45,7 @@ const rules = {
       message: 'Required',
     },
   ],
-  brandId: [
-    {
-      required: true,
-      message: 'Required',
-    },
-  ],
+
   categoryId: [
     {
       required: true,
@@ -196,7 +191,7 @@ const GeneralField = ({
             <Option value="Hold">Hold</Option>
           </Select>
         </Form.Item>
-        <Form.Item name="brandId" label="Brand" rules={rules.brandId}>
+        <Form.Item name="brandId" label="Brand">
           <Select placeholder="Brand">
             {brands.map((brand) => (
               <Option key={brand.id} value={brand.id}>
@@ -485,6 +480,14 @@ const GeneralField = ({
           >
             <Input placeholder="Storage Temperature" />
           </Form.Item>
+
+          <Form.Item
+            name="saltComposition"
+            label="Salt Composition"
+            rules={rules.saltComposition}
+          >
+            <Input placeholder="Salt Composition" />
+          </Form.Item>
         </Card>
       )}
 
@@ -496,7 +499,8 @@ const GeneralField = ({
           rules={rules.lengthClass}
         >
           <Select placeholder="Length Class">
-            <Option value="centimeter">centimeter</Option>
+            <Option value="centimeter">Centimeter</Option>
+            <Option value="meter">Meter</Option>
           </Select>
         </Form.Item>
 
@@ -505,8 +509,12 @@ const GeneralField = ({
           label="Weight Class"
           rules={rules.weightClass}
         >
-          <Select placeholder="Length Class">
+          <Select placeholder="Weight Class">
             <Option value="kilograms">Kilograms</Option>
+            <Option value="grams">Grams</Option>
+            <Option value="pound">Pound</Option>
+            <Option value="litre">Litre</Option>
+            <Option value="millilitre">Millilitre</Option>
           </Select>
         </Form.Item>
 

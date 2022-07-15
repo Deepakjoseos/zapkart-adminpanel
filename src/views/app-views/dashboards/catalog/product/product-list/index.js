@@ -172,7 +172,7 @@ const ProductList = () => {
       render: (brand) => {
         return (
           <Flex flexDirection="column" justifyContent="center">
-            {brand.name}
+            {brand?.name}
           </Flex>
         )
       },
@@ -183,7 +183,7 @@ const ProductList = () => {
       render: (category) => {
         return (
           <Flex flexDirection="column" justifyContent="center">
-            {category.name}
+            {category?.name}
           </Flex>
         )
       },
@@ -199,7 +199,7 @@ const ProductList = () => {
       title: 'Variant',
       dataIndex: 'variant',
       render: (variant) => {
-        return <Flex>{variant.name}</Flex>
+        return <Flex>{variant?.name}</Flex>
       },
       sorter: (a, b) => utils.antdTableSorter(a, b, 'deliveryZoneId'),
     },
