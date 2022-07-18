@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Card, Table, Select, Input, Button, Menu, Tag } from 'antd'
-// import ProductListData from 'assets/data/product-list.data.json'
+// import BrandListData from 'assets/data/product-list.data.json'
 import {
   EyeOutlined,
   DeleteOutlined,
@@ -34,7 +34,7 @@ const getStockStatus = (status) => {
   }
   return null
 }
-const ProductList = () => {
+const BrandList = () => {
   let history = useHistory()
 
   const [list, setList] = useState([])
@@ -207,4 +207,4 @@ const ProductList = () => {
   )
 }
 
-export default ProductList
+export default BrandList

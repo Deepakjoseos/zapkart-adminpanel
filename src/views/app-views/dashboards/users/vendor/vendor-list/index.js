@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { Card, Table, Select, Input, Menu, Tag } from 'antd'
-// import ProductListData from 'assets/data/product-list.data.json'
 import { EyeOutlined, SearchOutlined } from '@ant-design/icons'
 import EllipsisDropdown from 'components/shared-components/EllipsisDropdown'
 import Flex from 'components/shared-components/Flex'
@@ -28,7 +27,7 @@ const getStockStatus = (status) => {
   }
   return null
 }
-const ProductList = () => {
+const VendorList = () => {
   let history = useHistory()
 
   const [list, setList] = useState([])
@@ -223,4 +222,4 @@ const ProductList = () => {
   )
 }
 
-export default ProductList
+export default VendorList
