@@ -5,7 +5,7 @@ import AddInformation from './add-information'
 import EditInformation from './edit-information'
 // import Orders from './orders'
 
-const Ecommerce = (props) => {
+const Information = (props) => {
   const { match } = props
   return (
     <Switch>
@@ -27,4 +27,4 @@ const Ecommerce = (props) => {
   )
 }
 
-export default Ecommerce
+export default Information

@@ -4,7 +4,7 @@ import CustomerList from './customer-list/index'
 import EditCustomer from './edit-customer/index'
 // import Orders from './orders'
 
-const Ecommerce = (props) => {
+const Customer = (props) => {
   const { match } = props
   return (
     <Switch>
@@ -16,4 +16,4 @@ const Ecommerce = (props) => {
   )
 }
 
-export default Ecommerce
+export default Customer

@@ -5,7 +5,7 @@ import AddCategory from './add-category'
 import EditCategory from './edit-category'
 // import Orders from './orders'
 
-const Ecommerce = (props) => {
+const Category = (props) => {
   const { match } = props
   return (
     <Switch>
@@ -18,4 +18,4 @@ const Ecommerce = (props) => {
   )
 }
 
-export default Ecommerce
+export default Category

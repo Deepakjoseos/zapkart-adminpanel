@@ -12,8 +12,7 @@ import {
   Button,
   notification,
 } from 'antd'
-import { ImageSvg } from 'assets/svg/icon'
-import CustomIcon from 'components/util-components/CustomIcon'
+
 import Editor from 'components/shared-components/Editor'
 import CopyToClipboard from 'react-copy-to-clipboard'
 

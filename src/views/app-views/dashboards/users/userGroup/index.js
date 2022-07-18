@@ -5,7 +5,7 @@ import AddUserGroup from './add-userGroup'
 import EditUserGroup from './edit-userGroup'
 // import Orders from './orders'
 
-const Ecommerce = (props) => {
+const UserGroup = (props) => {
   const { match } = props
   return (
     <Switch>
@@ -25,4 +25,4 @@ const Ecommerce = (props) => {
   )
 }
 
-export default Ecommerce
+export default UserGroup

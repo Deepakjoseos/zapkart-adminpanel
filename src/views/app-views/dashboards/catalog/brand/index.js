@@ -5,7 +5,7 @@ import AddBrand from './add-brand'
 import EditBrand from './edit-brand'
 // import Orders from './orders'
 
-const Ecommerce = (props) => {
+const Brand = (props) => {
   const { match } = props
   return (
     <Switch>
@@ -18,4 +18,4 @@ const Ecommerce = (props) => {
   )
 }
 
-export default Ecommerce
+export default Brand

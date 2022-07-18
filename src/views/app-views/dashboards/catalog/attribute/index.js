@@ -6,7 +6,7 @@ import AddAttributeValue from './add-attributevalue'
 import EditAttribute from './edit-attribute'
 // import Orders from './orders'
 
-const Ecommerce = (props) => {
+const Attribute = (props) => {
   const { match } = props
   return (
     <Switch>
@@ -31,4 +31,4 @@ const Ecommerce = (props) => {
   )
 }
 
-export default Ecommerce
+export default Attribute

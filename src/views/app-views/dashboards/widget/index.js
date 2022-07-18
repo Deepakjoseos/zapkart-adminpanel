@@ -3,7 +3,6 @@ import { Route, Switch, Redirect } from 'react-router-dom'
 import WidgetList from './widget-list'
 import AddWidget from './add-widget'
 import EditWidget from './edit-widget'
-// import Orders from './orders'
 
 const Widget = (props) => {
   const { match } = props

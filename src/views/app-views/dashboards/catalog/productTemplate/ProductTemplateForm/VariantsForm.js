@@ -216,12 +216,9 @@ const VariantsForm = ({
     getAttributes()
   }, [selectedVariant])
 
-  // Cut off already selected values from the list of compositions
+  // Cut off already selected values from the list of attributes
   const onAttributeChange = async () => {
     const attributes = await getAttributes()
-
-    console.log(attributes, 'attributes')
-    console.log(form.getFieldValue('attributes'), 'selectedAttributeValues')
 
     const restAttributesListItems = attributes.filter(
       ({ id: id1 }) =>
@@ -229,12 +226,6 @@ const VariantsForm = ({
           .getFieldValue('attributes')
           ?.some(({ attributeId: id2 }) => id2 === id1)
     )
-
-    console.log(form.getFieldValue('attributes'), 'restAttributesListItems')
-
-    // setSelectedAttributeValues(restAttributesListItems)
-
-    console.log(restAttributesListItems, 'sssssd')
 
     setAttributes(restAttributesListItems)
   }

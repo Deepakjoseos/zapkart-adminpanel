@@ -2,9 +2,8 @@ import React from 'react'
 import { Route, Switch, Redirect } from 'react-router-dom'
 import VendorList from './vendor-list/index'
 import EditVendor from './edit-vendor'
-// import Orders from './orders'
 
-const Ecommerce = (props) => {
+const Vendor = (props) => {
   const { match } = props
   return (
     <Switch>
@@ -16,4 +15,4 @@ const Ecommerce = (props) => {
   )
 }
 
-export default Ecommerce
+export default Vendor
