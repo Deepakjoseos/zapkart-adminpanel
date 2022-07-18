@@ -20,6 +20,8 @@ function App() {
   const dispatch = useDispatch()
   useEffect(() => {
     // dispatch(showLoading(false))
+
+    // Firebase auth
     auth.onAuthStateChanged(async (user) => {
       if (user) {
         const idTokenResult = await user.getIdTokenResult(true)

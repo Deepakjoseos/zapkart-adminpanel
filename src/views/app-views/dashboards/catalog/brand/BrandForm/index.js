@@ -19,17 +19,19 @@ const ProductForm = (props) => {
   const history = useHistory()
 
   const [form] = Form.useForm()
+
+  // For Image Upload
   const [uploadedImg, setImage] = useState(null)
-  //   const [uploadLoading, setUploadLoading] = useState(false)
   const [submitLoading, setSubmitLoading] = useState(false)
 
+  // For Image upload
   const {
     fileList: fileListImages,
     beforeUpload: beforeUploadImages,
     onChange: onChangeImages,
     onRemove: onRemoveImages,
     setFileList: setFileListImages,
-  } = useUpload(1)
+  } = useUpload(1) // useUpload(1, 'multiple') or useUpload(1)
 
   useEffect(() => {
     if (mode === EDIT) {
@@ -37,6 +39,7 @@ const ProductForm = (props) => {
         const { id } = param
         const data = await brandService.getBrandById(id)
         if (data) {
+          // For Image upload
           let himg = []
           if (data.image) {
             himg = [
@@ -51,7 +54,7 @@ const ProductForm = (props) => {
             setImage(himg)
             setFileListImages(himg)
           }
-
+          // For setting form values when Load if it is in EDIT mode
           form.setFieldsValue({
             name: data.name,
             status: data.status,
@@ -66,6 +69,7 @@ const ProductForm = (props) => {
     }
   }, [form, mode, param, props])
 
+  // Image Upload
   const propsImages = {
     multiple: false,
     beforeUpload: beforeUploadImages,
@@ -74,11 +78,12 @@ const ProductForm = (props) => {
     fileList: fileListImages,
   }
 
+  // Image Upload
   useEffect(() => {
-    console.log(fileListImages, 'hey-me')
     setImage(fileListImages)
   }, [fileListImages])
 
+  // Trigger When Submit Button pressed
   const onFinish = async () => {
     setSubmitLoading(true)
     form
@@ -88,12 +93,15 @@ const ProductForm = (props) => {
           // Checking if image exists
           if (uploadedImg.length !== 0 && uploadedImg !== null) {
             console.log('uploadedImg', uploadedImg)
+            // We will upload image to S3 and get the image url
             const imgValue = await singleImageUploader(
               uploadedImg[0].originFileObj,
               uploadedImg,
               uploadedImg[0].url,
               'brand'
             )
+
+            //  append image url to values object
             values.image = imgValue
 
             const created = await brandService.createBrand(values)
@@ -109,12 +117,15 @@ const ProductForm = (props) => {
           // Checking if image exists
           if (uploadedImg.length !== 0 && uploadedImg !== null) {
             console.log('uploadedImg', uploadedImg)
+            // We will upload image to S3 and get the image url
             const imgValue = await singleImageUploader(
               uploadedImg[0].originFileObj,
               uploadedImg,
               uploadedImg[0].url,
               'brand'
             )
+
+            //  append image url to values object
             values.image = imgValue
 
             const edited = await brandService.editBrand(param.id, values)

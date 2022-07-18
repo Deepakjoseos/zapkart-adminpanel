@@ -219,6 +219,7 @@ const dashBoardNavTree = [
             breadcrumb: false,
             submenu: [],
           },
+
           {
             key: 'dashboards-catalog-banner',
             path: `${APP_PREFIX_PATH}/dashboards/catalog/banner/banner-list`,

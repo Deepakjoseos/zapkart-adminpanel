@@ -43,6 +43,7 @@ const BrandList = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
 
   useEffect(() => {
+    // Getting Brands List to display in the table
     const getBrands = async () => {
       const data = await brandService.getBrands()
       if (data) {
@@ -54,6 +55,7 @@ const BrandList = () => {
     getBrands()
   }, [])
 
+  // Dropdown menu for each row
   const dropdownMenu = (row) => (
     <Menu>
       <Menu.Item onClick={() => viewDetails(row)}>
@@ -83,6 +85,7 @@ const BrandList = () => {
     history.push(`/app/dashboards/catalog/brand/edit-brand/${row.id}`)
   }
 
+  // For deleting a row
   const deleteRow = async (row) => {
     const resp = await brandService.deleteBrand(row.id)
 
@@ -102,6 +105,7 @@ const BrandList = () => {
     }
   }
 
+  // Antd Table Columns
   const tableColumns = [
     {
       title: 'Brand',
@@ -142,6 +146,7 @@ const BrandList = () => {
     },
   ]
 
+  // When Search is used
   const onSearch = (e) => {
     const value = e.currentTarget.value
     const searchArray = e.currentTarget.value ? list : searchBackupList
@@ -150,6 +155,7 @@ const BrandList = () => {
     setSelectedRowKeys([])
   }
 
+  // Filter Status Handler
   const handleShowStatus = (value) => {
     if (value !== 'All') {
       const key = 'status'
@@ -160,6 +166,7 @@ const BrandList = () => {
     }
   }
 
+  // Table Filters JSX Elements
   const filters = () => (
     <Flex className="mb-1" mobileFlex={false}>
       <div className="mr-md-3 mb-3">

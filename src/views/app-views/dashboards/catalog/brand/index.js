@@ -5,6 +5,7 @@ import AddBrand from './add-brand'
 import EditBrand from './edit-brand'
 // import Orders from './orders'
 
+// In here we will define all our routes
 const Brand = (props) => {
   const { match } = props
   return (
