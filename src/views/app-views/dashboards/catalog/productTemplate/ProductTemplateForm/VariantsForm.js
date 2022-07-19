@@ -147,6 +147,7 @@ const VariantsForm = ({
               setOpenVariantsForm(false)
               setSelectedVariant(null)
               refreshData()
+              onFormModalClose()
             }
           } else {
             message.error('Please upload image')
@@ -173,6 +174,7 @@ const VariantsForm = ({
               setOpenVariantsForm(false)
               setSelectedVariant(null)
               refreshData()
+              onFormModalClose()
             }
           } else {
             message.error('Please upload image')

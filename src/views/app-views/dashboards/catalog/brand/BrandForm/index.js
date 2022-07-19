@@ -106,7 +106,7 @@ const ProductForm = (props) => {
 
             const created = await brandService.createBrand(values)
             if (created) {
-              message.success(`Created ${values.name} to product list`)
+              message.success(`Created ${values.name} to Brand list`)
               history.goBack()
             }
           } else {
@@ -130,7 +130,7 @@ const ProductForm = (props) => {
 
             const edited = await brandService.editBrand(param.id, values)
             if (edited) {
-              message.success(`Edited ${values.name} to product list`)
+              message.success(`Edited ${values.name} to Brand list`)
               history.goBack()
             }
           } else {

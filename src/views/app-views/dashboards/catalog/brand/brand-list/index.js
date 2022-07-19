@@ -32,6 +32,14 @@ const getStockStatus = (status) => {
       </>
     )
   }
+
+  if (status === 'Deleted') {
+    return (
+      <>
+        <Tag color="red">Deleted</Tag>
+      </>
+    )
+  }
   return null
 }
 const BrandList = () => {

@@ -41,4 +41,17 @@ customerService.editCustomer = async function (id, data) {
   }
 }
 
+customerService.ediCustomerStatus = async function (id, data) {
+  try {
+    const res = await fetch({
+      url: `${apiRoute}/${id}/status`,
+      method: 'put',
+      data,
+    })
+    return res
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
+
 export default customerService

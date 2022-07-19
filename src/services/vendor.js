@@ -41,4 +41,17 @@ vendorService.editVendor = async function (id, data) {
   }
 }
 
+vendorService.editVendorStatus = async function (id, data) {
+  try {
+    const res = await fetch({
+      url: `${apiRoute}/${id}/status`,
+      method: 'put',
+      data,
+    })
+    return res
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
+
 export default vendorService

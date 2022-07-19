@@ -99,7 +99,7 @@ const ProductForm = (props) => {
 
             const created = await manufacturerService.createManufacturer(values)
             if (created) {
-              message.success(`Created ${values.name} to product list`)
+              message.success(`Created ${values.name} to Manufacturer list`)
               history.goBack()
             }
           } else {

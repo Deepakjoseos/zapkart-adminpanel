@@ -64,12 +64,12 @@ const rules = {
       message: 'Required',
     },
   ],
-  returnPeriod: [
-    {
-      required: true,
-      message: 'Required',
-    },
-  ],
+  // returnPeriod: [
+  //   {
+  //     required: true,
+  //     message: 'Required',
+  //   },
+  // ],
   allowedQuantityPerOrder: [
     {
       required: true,
@@ -293,7 +293,7 @@ const GeneralField = ({
           <Form.Item
             name="returnPeriod"
             label="ReturnPeriod"
-            rules={rules.returnPeriod}
+            // rules={rules.returnPeriod}
           >
             <InputNumber type="number" min={0} max={100000} />
           </Form.Item>

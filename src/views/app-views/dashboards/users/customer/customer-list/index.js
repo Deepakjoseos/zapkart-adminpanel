@@ -1,5 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import { Card, Table, Select, Input, Button, Menu, Tag } from 'antd'
+import {
+  Card,
+  Table,
+  Select,
+  Input,
+  Button,
+  Menu,
+  Tag,
+  notification,
+} from 'antd'
 // import CustomerListData from 'assets/data/product-list.data.json'
 import {
   EyeOutlined,
@@ -109,6 +118,28 @@ const CustomerList = () => {
   //   }
   // }
 
+  const handleStatusChange = async (value, selectedRow) => {
+    const updatedProductApproval = await customerService.ediCustomerStatus(
+      selectedRow.id,
+      { status: value }
+    )
+
+    if (updatedProductApproval) {
+      notification.success({ message: 'Customer Status Updated' })
+
+      // const objKey = 'id'
+      // let data = list
+      // data = utils.updateArrayRow(
+      //   data,
+      //   objKey,
+      //   selectedRow.id,
+      //   'approval',
+      //   value
+      // )
+      // setList(data)
+    }
+  }
+
   const tableColumns = [
     {
       title: 'Customer',
@@ -142,10 +173,24 @@ const CustomerList = () => {
     {
       title: 'Status',
       dataIndex: 'status',
-      render: (status) => (
-        <Flex alignItems="center">{getStockStatus(status)}</Flex>
-      ),
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'status'),
+      render: (status, row) => {
+        return (
+          <Select
+            defaultValue={status.charAt(0).toUpperCase() + status.slice(1)}
+            // style={{ width: 120 }}
+            onChange={(e) => handleStatusChange(e, row)}
+          >
+            <Option value="Active">
+              <Tag color="green">Active</Tag>
+            </Option>
+            <Option value="Hold">
+              <Tag color="red">Hold</Tag>
+            </Option>
+          </Select>
+        )
+      },
+      // render: (isUnlimited) => <Flex>{isUnlimited ? 'Yes' : 'No'}</Flex>,
+      // sorter: (a, b) => utils.antdTableSorter(a, b, 'approval'),
     },
     {
       title: '',

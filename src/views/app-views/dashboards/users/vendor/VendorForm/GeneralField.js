@@ -31,6 +31,15 @@ const GeneralField = ({ propsDisplayImages, form }) => (
         <Form.Item name="lastName" label="Last Name" rules={rules.lastName}>
           <Input placeholder="Last Name" />
         </Form.Item>
+
+        <Form.Item name="gst" label="GST" rules={rules.gst}>
+          <Input placeholder="GST" />
+        </Form.Item>
+
+        <Form.Item name="tanNumber" label="Tan Number" rules={rules.tanNumber}>
+          <Input placeholder="Tan Number" />
+        </Form.Item>
+
         <Form.Item name="email" label="Email">
           <Input disabled />
         </Form.Item>

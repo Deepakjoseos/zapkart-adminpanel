@@ -8,8 +8,8 @@ brandService.getBrands = async function () {
       url: '/brands',
       method: 'get',
     })
-    const data = res.data.filter((cur) => cur.status !== 'Deleted')
-    return data
+    // const data = res.data.filter((cur) => cur.status !== 'Deleted')
+    return res.data
   } catch (err) {
     console.log(err, 'show-err')
   }

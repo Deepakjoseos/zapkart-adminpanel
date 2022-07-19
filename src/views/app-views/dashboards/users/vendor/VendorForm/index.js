@@ -55,6 +55,8 @@ const ProductForm = (props) => {
         lastName: data.lastName,
         email: data?.email,
         phone: data?.phone,
+        gst: data?.gst,
+        tanNumber: data?.tanNumber,
 
         // address:
         'address.line1': data?.address?.line1,
@@ -106,6 +108,8 @@ const ProductForm = (props) => {
         const sendingValues = {
           firstName: values.firstName,
           lastName: values.lastName,
+          tanNumber: values.tanNumber,
+          gst: values.gst,
           address: {
             line1: values['address.line1'],
             city: values['address.city'],

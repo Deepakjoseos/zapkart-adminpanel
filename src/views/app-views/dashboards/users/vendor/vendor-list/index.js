@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Card, Table, Select, Input, Menu, Tag } from 'antd'
+import { Card, Table, Select, Input, Menu, Tag, notification } from 'antd'
 import { EyeOutlined, SearchOutlined } from '@ant-design/icons'
 import EllipsisDropdown from 'components/shared-components/EllipsisDropdown'
 import Flex from 'components/shared-components/Flex'
@@ -98,6 +98,28 @@ const VendorList = () => {
   //   }
   // }
 
+  const handleStatusChange = async (value, selectedRow) => {
+    const updatedProductApproval = await vendorService.editVendorStatus(
+      selectedRow.id,
+      { status: value }
+    )
+
+    if (updatedProductApproval) {
+      notification.success({ message: 'Vendor Status Updated' })
+
+      // const objKey = 'id'
+      // let data = list
+      // data = utils.updateArrayRow(
+      //   data,
+      //   objKey,
+      //   selectedRow.id,
+      //   'approval',
+      //   value
+      // )
+      // setList(data)
+    }
+  }
+
   const tableColumns = [
     {
       title: 'Vendor',
@@ -133,13 +155,28 @@ const VendorList = () => {
       dataIndex: 'commission',
       render: (commission) => `${commission}%`,
     },
+
     {
       title: 'Status',
       dataIndex: 'status',
-      render: (status) => (
-        <Flex alignItems="center">{getStockStatus(status)}</Flex>
-      ),
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'status'),
+      render: (status, row) => {
+        return (
+          <Select
+            defaultValue={status.charAt(0).toUpperCase() + status.slice(1)}
+            // style={{ width: 120 }}
+            onChange={(e) => handleStatusChange(e, row)}
+          >
+            <Option value="Active">
+              <Tag color="green">Active</Tag>
+            </Option>
+            <Option value="Hold">
+              <Tag color="red">Hold</Tag>
+            </Option>
+          </Select>
+        )
+      },
+      // render: (isUnlimited) => <Flex>{isUnlimited ? 'Yes' : 'No'}</Flex>,
+      // sorter: (a, b) => utils.antdTableSorter(a, b, 'approval'),
     },
     {
       title: '',

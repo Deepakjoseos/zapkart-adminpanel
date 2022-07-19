@@ -153,7 +153,11 @@ const ProductTemplateList = () => {
       ),
       // sorter: (a, b) => utils.antdTableSorter(a, b, 'category.name'),
     },
-
+    {
+      title: 'Vendor',
+      dataIndex: 'username',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'username'),
+    },
     {
       title: 'Status',
       dataIndex: 'status',
