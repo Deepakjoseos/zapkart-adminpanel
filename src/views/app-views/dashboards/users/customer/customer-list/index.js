@@ -183,8 +183,8 @@ const CustomerList = () => {
             <Option value="Active">
               <Tag color="green">Active</Tag>
             </Option>
-            <Option value="Hold">
-              <Tag color="red">Hold</Tag>
+            <Option value="Blocked">
+              <Tag color="red">Blocked</Tag>
             </Option>
           </Select>
         )

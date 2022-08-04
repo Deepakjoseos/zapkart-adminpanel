@@ -23,6 +23,7 @@ service.interceptors.request.use(
 
     if (jwtToken) {
       config.headers[TOKEN_PAYLOAD_KEY] = `Bearer ${jwtToken}`
+      config.headers.deviceToken = window.localStorage.getItem('deviceToken')
     }
 
     // if (!jwtToken && !config.headers[PUBLIC_REQUEST_KEY]) {

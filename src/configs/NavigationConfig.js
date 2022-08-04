@@ -349,6 +349,15 @@ const dashBoardNavTree = [
       },
 
       {
+        key: 'dashboards-orders',
+        path: `${APP_PREFIX_PATH}/dashboards/orders/orders-list`,
+        title: 'Orders',
+        icon: DotChartOutlined,
+        breadcrumb: false,
+        submenu: [],
+      },
+
+      {
         key: 'dashboards-deliverylocation',
         path: `${APP_PREFIX_PATH}/dashboards/deliverylocation/deliverylocation-list`,
         title: 'Delivery Location',

@@ -28,7 +28,7 @@ const getStockStatus = (status) => {
   if (status === 'Hold') {
     return (
       <>
-        <Tag color="red">Hold</Tag>
+        <Tag color="orange">Hold</Tag>
       </>
     )
   }

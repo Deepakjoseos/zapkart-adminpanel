@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Row,
   Col,
@@ -36,6 +36,8 @@ import {
 import utils from 'utils'
 import { withRouter } from 'react-router-dom'
 import { useSelector } from 'react-redux'
+import customerService from 'services/customer'
+import orderService from 'services/orders'
 
 const MembersChart = (props) => <ApexChart {...props} />
 
@@ -115,62 +117,89 @@ const cardDropdown = (menu) => (
 
 const tableColumns = [
   {
-    title: 'Customer',
-    dataIndex: 'name',
-    key: 'name',
-    render: (text, record) => (
-      <div className="d-flex align-items-center">
-        <Avatar
-          size={30}
-          className="font-size-sm"
-          icon={<UserOutlined />}
-          // style={{ backgroundColor: record.avatarColor }}
-        >
-          {/* {utils.getNameInitial(text)} */}
-        </Avatar>
-        <span className="ml-2">{text}</span>
-      </div>
-    ),
+    title: 'OrderNo',
+    dataIndex: 'orderNo',
+    key: 'orderNo',
+    // render: (text, record) => (
+    //   <div className="d-flex align-items-center">
+    //     <Avatar
+    //       size={30}
+    //       className="font-size-sm"
+    //       icon={<UserOutlined />}
+    //       // style={{ backgroundColor: record.avatarColor }}
+    //     >
+    //       {/* {utils.getNameInitial(text)} */}
+    //     </Avatar>
+    //     <span className="ml-2">{text}</span>
+    //   </div>
+    // ),
   },
   {
-    title: 'Date',
-    dataIndex: 'date',
-    key: 'date',
+    title: 'User Name',
+    dataIndex: 'userName',
+    // sorter: (a, b) => utils.antdTableSorter(a, b, 'totalAmount'),
+
+    // render: (items, record) => <div>{items?.length}</div>,
+  },
+  // {
+  //   title: 'Date',
+  //   dataIndex: 'date',
+  //   key: 'date',
+  // },
+  {
+    title: 'Total Amount',
+    dataIndex: 'totalAmount',
+    key: 'totalAmount',
   },
   {
-    title: 'Amount',
-    dataIndex: 'amount',
-    key: 'amount',
-  },
-  {
-    title: () => <div className="text-right">Status</div>,
+    title: 'Status',
+    dataIndex: 'status',
     key: 'status',
-    render: (_, record) => (
-      <div className="text-right">
-        <Tag
-          className="mr-0"
-          color={
-            record.status === 'Approved'
-              ? 'cyan'
-              : record.status === 'Pending'
-              ? 'blue'
-              : 'volcano'
-          }
-        >
-          {record.status}
-        </Tag>
-      </div>
-    ),
   },
+  // {
+  //   title: () => <div className="text-right">Status</div>,
+  //   key: 'status',
+  //   // render: (_, record) => (
+  //   //   <div className="text-right">
+  //   //     <Tag
+  //   //       className="mr-0"
+  //   //       color={
+  //   //         record.status === 'Approved'
+  //   //           ? 'cyan'
+  //   //           : record.status === 'Pending'
+  //   //           ? 'blue'
+  //   //           : 'volcano'
+  //   //       }
+  //   //     >
+  //   //       {record.status}
+  //   //     </Tag>
+  //   //   </div>
+  //   // ),
+  // },
 ]
 
 export const DefaultDashboard = () => {
   const [visitorChartData] = useState(VisitorChartData)
   const [annualStatisticData] = useState(AnnualStatisticData)
   const [activeMembersData] = useState(ActiveMembersData)
-  const [newMembersData] = useState(NewMembersData)
-  const [recentTransactionData] = useState(RecentTransactionData)
+  const [newMembersData, setNewMembersData] = useState([])
+  const [recentTransactionData, setRecentTransactionData] = useState([])
   const { direction } = useSelector((state) => state.theme)
+
+  const getCustomers = async () => {
+    const customers = await customerService.getCustomers()
+    setNewMembersData(customers?.slice(0, 5))
+  }
+
+  const getOrders = async () => {
+    const orders = await orderService.getOrders()
+    setRecentTransactionData(orders?.slice(0, 5))
+  }
+
+  useEffect(() => {
+    getCustomers()
+    getOrders()
+  }, [])
 
   return (
     <>
@@ -225,16 +254,16 @@ export const DefaultDashboard = () => {
         <Col xs={24} sm={24} md={24} lg={7}>
           <Card title="New Customers">
             <div className="mt-3">
-              {newMembersData.map((elm, i) => (
+              {newMembersData?.map((elm, i) => (
                 <div
                   key={i}
                   className={`d-flex align-items-center justify-content-between mb-4`}
                 >
                   <AvatarStatus
                     id={i}
-                    src={elm.img}
-                    name={elm.name}
-                    subTitle={elm.title}
+                    src={elm.displayImage}
+                    name={`${elm.firstName} ${elm.lastName}`}
+                    subTitle={elm?.email}
                   />
                   {/* <div>
                     <Button

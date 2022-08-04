@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Provider, useDispatch } from 'react-redux'
 import store from './redux/store'
 import { BrowserRouter as Router } from 'react-router-dom'
@@ -6,7 +6,7 @@ import Views from './views'
 import { Route, Switch } from 'react-router-dom'
 import { ThemeSwitcherProvider } from 'react-css-theme-switcher'
 import { THEME_CONFIG } from './configs/AppConfig'
-import { auth } from 'auth/FirebaseAuth'
+import { auth, getDeviceToken } from 'auth/FirebaseAuth'
 import authAdminService from 'services/auth/admin'
 import { authenticated, showLoading, signOut } from 'redux/actions/Auth'
 import { AUTH_TOKEN } from 'redux/constants/Auth'
@@ -17,6 +17,7 @@ const themes = {
 }
 
 function App() {
+  const [deviceToken, setDeviceToken] = useState('')
   const dispatch = useDispatch()
   useEffect(() => {
     // dispatch(showLoading(false))
@@ -57,7 +58,18 @@ function App() {
         dispatch(showLoading(false))
       }
     })
+
+    // Notification setup Firebase
+    const fcmToken = getDeviceToken(setDeviceToken)
+
+    console.log(fcmToken, 'fcmToken')
   }, [])
+
+  useEffect(() => {
+    if (deviceToken) {
+      window.localStorage.setItem('deviceToken', deviceToken)
+    }
+  }, [deviceToken])
   return (
     <div className="App">
       {/* <Provider store={store}> */}

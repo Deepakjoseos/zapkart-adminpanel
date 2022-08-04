@@ -13,6 +13,7 @@ import {
 } from 'antd'
 import ListingItemsTable from './listingItemsTable'
 import AddListingItemsTable from './AddListingItemsTable'
+import Editor from 'components/shared-components/Editor'
 // const { Dragger } = Upload
 const { Option } = Select
 
@@ -104,12 +105,24 @@ const WidgetField = ({
           </Form.Item>
 
           {isStaticProviderSelected && (
+            // <Form.Item
+            //   name="staticContent"
+            //   label="Static Content"
+            //   rules={rules.staticContent}
+            // >
+            //   <Input placeholder="Static Content" />
+            // </Form.Item>
             <Form.Item
               name="staticContent"
               label="Static Content"
               rules={rules.staticContent}
             >
-              <Input placeholder="Static Content" />
+              <Editor
+                placeholder="Write something..."
+                editorHtml={form.getFieldValue('staticContent') || ''}
+                onChange={(e) => form.setFieldsValue({ staticContent: e })}
+                name="staticContent"
+              />
             </Form.Item>
           )}
 

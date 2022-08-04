@@ -357,6 +357,7 @@ const ProductForm = (props) => {
                 onCompositionChange={onCompositionChange}
                 setReturnable={setReturnable}
                 returnable={returnable}
+                fileListImages={fileListImages}
               />
             </TabPane>
             {mode === EDIT && (
