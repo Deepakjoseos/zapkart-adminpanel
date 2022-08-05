@@ -54,4 +54,16 @@ customerService.ediCustomerStatus = async function (id, data) {
   }
 }
 
+customerService.getCustomerPrescription = async function (id) {
+  try {
+    const res = await fetch({
+      url: `${apiRoute}/prescriptions/${id}`,
+      method: 'get',
+    })
+    return res.data
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
+
 export default customerService

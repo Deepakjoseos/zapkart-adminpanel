@@ -57,7 +57,9 @@ export const Logo = (props) => {
       className={getLogoDisplay(isMobile, props.mobileLogo)}
       style={{ width: `${getLogoWidthGutter(props, isMobile)}` }}
     >
-      <img src={getLogo(props)} alt={`${APP_NAME} logo`} />
+      {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+        <img src={getLogo(props)} alt={`${APP_NAME} logo`} />
+      )}
     </div>
   )
 }

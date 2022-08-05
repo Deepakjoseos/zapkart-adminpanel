@@ -625,11 +625,16 @@ const Orders = () => {
             </Select>
           </div> */}
         </Flex>
-        {/* <div>
-          <Button type="primary" icon={<FileExcelOutlined />} block>
-            Export All
+        <div>
+          <Button
+            onClick={() => history.push('/app/dashboards/orders/create-order')}
+            type="primary"
+            icon={<PlusCircleOutlined />}
+            block
+          >
+            Create Order
           </Button>
-        </div> */}
+        </div>
       </Flex>
       <div className="table-responsive">
         <Table

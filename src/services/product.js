@@ -5,11 +5,10 @@ const productService = {}
 productService.getProducts = async function () {
   try {
     const res = await fetch({
-      url: '/products',
+      url: '/products?status=Active',
       method: 'get',
     })
-    const data = res.data.filter((cur) => cur.status !== 'Deleted')
-    return data
+    return res.data
   } catch (err) {
     console.log(err, 'show-err')
   }

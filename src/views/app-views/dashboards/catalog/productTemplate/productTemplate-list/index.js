@@ -119,11 +119,7 @@ const ProductTemplateList = () => {
       ),
       sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
     },
-    {
-      title: 'Product Type',
-      dataIndex: 'productType',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'productType'),
-    },
+
     {
       title: 'Brand',
       dataIndex: 'brand',
@@ -145,14 +141,7 @@ const ProductTemplateList = () => {
       ),
       // sorter: (a, b) => utils.antdTableSorter(a, b, 'category.name'),
     },
-    {
-      title: 'Pres Required',
-      dataIndex: 'prescriptionRequired',
-      render: (prescriptionRequired) => (
-        <Flex alignItems="center">{prescriptionRequired ? 'Yes' : 'No'}</Flex>
-      ),
-      // sorter: (a, b) => utils.antdTableSorter(a, b, 'category.name'),
-    },
+
     {
       title: 'Vendor',
       dataIndex: 'username',
@@ -176,6 +165,26 @@ const ProductTemplateList = () => {
       ),
     },
   ]
+
+  // Only for Zapkart
+  if (process.env.REACT_APP_SITE_NAME === 'zapkart') {
+    tableColumns.splice(
+      tableColumns?.length - 4,
+      0,
+      {
+        title: 'Product Type',
+        dataIndex: 'productType',
+        sorter: (a, b) => utils.antdTableSorter(a, b, 'productType'),
+      },
+      {
+        title: 'Pres Required',
+        dataIndex: 'prescriptionRequired',
+        render: (prescriptionRequired) => (
+          <Flex alignItems="center">{prescriptionRequired ? 'Yes' : 'No'}</Flex>
+        ),
+      }
+    )
+  }
 
   const onSearch = (e) => {
     const value = e.currentTarget.value

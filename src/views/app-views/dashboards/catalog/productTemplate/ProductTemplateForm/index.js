@@ -83,9 +83,12 @@ const ProductForm = (props) => {
   useEffect(() => {
     getCategories()
     getBrands()
-    getMedicineTypes()
-    getManufacturers()
-    getCompositions()
+
+    if (process.env.REACT_APP_SITE_NAME === 'zapkart') {
+      getMedicineTypes()
+      getManufacturers()
+      getCompositions()
+    }
   }, [])
 
   const fetchProductTemplateById = async () => {
@@ -103,49 +106,128 @@ const ProductForm = (props) => {
 
       setFileListImages(images)
 
-      form.setFieldsValue({
-        name: data.name,
-        status: data.status,
-        categoryId: data?.category?.id,
-        productType: data.productType,
-        allowedPaymentTypes: data.allowedPaymentTypes,
-        returnable: data.returnable,
-        brandId: data?.brand?.id,
-        description: data.description,
-        returnPeriod: data.returnPeriod,
-        allowedQuantityPerOrder: data.allowedQuantityPerOrder,
-        prescriptionRequired: data.prescriptionRequired,
-        medicineTypeId: data.medicineTypeId,
-        medicinePackaging: data.medicinePackaging,
-        manufacturer: data.manufacturer,
-        minQty: data.minQty,
-        composition: data.composition,
+      // form.setFieldsValue({
+      //   name: data.name,
+      //   status: data.status,
+      //   categoryId: data?.category?.id,
+      //   allowedPaymentTypes: data.allowedPaymentTypes,
+      //   returnable: data.returnable,
+      //   brandId: data?.brand?.id,
+      //   description: data.description,
+      //   returnPeriod: data.returnPeriod,
+      //   allowedQuantityPerOrder: data.allowedQuantityPerOrder,
+      //   minQty: data.minQty,
 
-        // productType =============> 'Medicine'
-        pregnancyInteraction: data.pregnancyInteraction,
-        expertAdvice: data.expertAdvice,
-        sideEffects: data.sideEffects,
-        howToUse: data.howToUse,
-        faq: data.faq,
-        uses: data.uses,
-        storageTemperature: data.storageTemperature,
-        saltComposition: data.saltComposition,
+      //   lengthClass: data.shippingDetail.lengthClass,
+      //   weightClass: data.shippingDetail.weightClass,
+      //   height: data.shippingDetail.height,
+      //   weight: data.shippingDetail.weight,
+      //   length: data.shippingDetail.length,
+      //   width: data.shippingDetail.width,
+      //   // shippingDetail: {
+      //   //   lengthClass: data.shippingDetail.lengthClass,
+      //   //   weightClass: data.shippingDetail.weightClass,
+      //   //   height: data.shippingDetail.height,
+      //   //   length: data.shippingDetail.length,
+      //   //   width: data.shippingDetail.width,
+      //   //   weight: data.shippingDetail.weight,
+      //   // },
+      //   prescriptionRequired: data.prescriptionRequired,
+      //   productType: data.productType,
+      //   medicineTypeId: data.medicineTypeId,
+      //   medicinePackaging: data.medicinePackaging,
+      //   manufacturer: data.manufacturer,
+      //   composition: data.composition,
 
-        lengthClass: data.shippingDetail.lengthClass,
-        weightClass: data.shippingDetail.weightClass,
-        height: data.shippingDetail.height,
-        weight: data.shippingDetail.weight,
-        length: data.shippingDetail.length,
-        width: data.shippingDetail.width,
-        // shippingDetail: {
-        //   lengthClass: data.shippingDetail.lengthClass,
-        //   weightClass: data.shippingDetail.weightClass,
-        //   height: data.shippingDetail.height,
-        //   length: data.shippingDetail.length,
-        //   width: data.shippingDetail.width,
-        //   weight: data.shippingDetail.weight,
-        // },
-      })
+      //   // productType =============> 'Medicine'
+      //   pregnancyInteraction: data.pregnancyInteraction,
+      //   expertAdvice: data.expertAdvice,
+      //   sideEffects: data.sideEffects,
+      //   howToUse: data.howToUse,
+      //   faq: data.faq,
+      //   uses: data.uses,
+      //   storageTemperature: data.storageTemperature,
+      //   saltComposition: data.saltComposition,
+      // })
+
+      if (process.env.REACT_APP_SITE_NAME === 'zapkart') {
+        form.setFieldsValue({
+          name: data.name,
+          status: data.status,
+          categoryId: data?.category?.id,
+          allowedPaymentTypes: data.allowedPaymentTypes,
+          returnable: data.returnable,
+          brandId: data?.brand?.id,
+          description: data.description,
+          returnPeriod: data.returnPeriod,
+          allowedQuantityPerOrder: data.allowedQuantityPerOrder,
+          minQty: data.minQty,
+          slug: 'hi',
+
+          lengthClass: data.shippingDetail.lengthClass,
+          weightClass: data.shippingDetail.weightClass,
+          height: data.shippingDetail.height,
+          weight: data.shippingDetail.weight,
+          length: data.shippingDetail.length,
+          width: data.shippingDetail.width,
+          // shippingDetail: {
+          //   lengthClass: data.shippingDetail.lengthClass,
+          //   weightClass: data.shippingDetail.weightClass,
+          //   height: data.shippingDetail.height,
+          //   length: data.shippingDetail.length,
+          //   width: data.shippingDetail.width,
+          //   weight: data.shippingDetail.weight,
+          // },
+          prescriptionRequired: data.prescriptionRequired,
+          productType: data.productType,
+          medicineTypeId: data.medicineTypeId,
+          medicinePackaging: data.medicinePackaging,
+          manufacturer: data.manufacturer,
+          composition: data.composition,
+
+          // productType =============> 'Medicine'
+          pregnancyInteraction: data.pregnancyInteraction,
+          expertAdvice: data.expertAdvice,
+          sideEffects: data.sideEffects,
+          howToUse: data.howToUse,
+          faq: data.faq,
+          uses: data.uses,
+          storageTemperature: data.storageTemperature,
+          saltComposition: data.saltComposition,
+        })
+      } else if (
+        process.env.REACT_APP_SITE_NAME === 'athathy' ||
+        process.env.REACT_APP_SITE_NAME === 'awen'
+      ) {
+        form.setFieldsValue({
+          name: data.name,
+          status: data.status,
+          categoryId: data?.category?.id,
+          allowedPaymentTypes: data.allowedPaymentTypes,
+          returnable: data.returnable,
+          brandId: data?.brand?.id,
+          description: data.description,
+          returnPeriod: data.returnPeriod,
+          allowedQuantityPerOrder: data.allowedQuantityPerOrder,
+          minQty: data.minQty,
+          productType: 'nonMedicine',
+
+          lengthClass: data.shippingDetail.lengthClass,
+          weightClass: data.shippingDetail.weightClass,
+          height: data.shippingDetail.height,
+          weight: data.shippingDetail.weight,
+          length: data.shippingDetail.length,
+          width: data.shippingDetail.width,
+          // shippingDetail: {
+          //   lengthClass: data.shippingDetail.lengthClass,
+          //   weightClass: data.shippingDetail.weightClass,
+          //   height: data.shippingDetail.height,
+          //   length: data.shippingDetail.length,
+          //   width: data.shippingDetail.width,
+          //   weight: data.shippingDetail.weight,
+          // },
+        })
+      }
 
       onCompositionChange()
 
@@ -185,47 +267,81 @@ const ProductForm = (props) => {
       .validateFields()
       .then(async (values) => {
         console.log(values, 'values')
+        let sendingValues = {}
 
-        const sendingValues = {
-          brandId: values.brandId,
-          categoryId: values.categoryId,
-          name: values.name,
-          description: values.description,
-          productType: values.productType,
-          allowedPaymentTypes: values.allowedPaymentTypes,
-          returnable: values.returnable,
-          returnPeriod: values.returnPeriod,
-          allowedQuantityPerOrder: values.allowedQuantityPerOrder,
-          prescriptionRequired: values.prescriptionRequired,
-          priority: values.priority,
-          medicineTypeId: values.medicineTypeId,
-          medicinePackaging: values.medicinePackaging,
-          manufacturer: values.manufacturer,
-          minQty: values.minQty,
-          composition: values?.composition?.map((comp) => {
-            return { id: comp.id, qty: comp.qty }
-          }),
+        if (process.env.REACT_APP_SITE_NAME === 'zapkart') {
+          sendingValues = {
+            brandId: values.brandId,
+            categoryId: values.categoryId,
+            name: values.name,
+            description: values.description,
+            productType: values.productType,
+            allowedPaymentTypes: values.allowedPaymentTypes,
+            returnable: values.returnable,
+            returnPeriod: values.returnPeriod,
+            allowedQuantityPerOrder: values.allowedQuantityPerOrder,
+            prescriptionRequired: values.prescriptionRequired,
+            priority: values.priority,
+            medicineTypeId: values.medicineTypeId,
+            medicinePackaging: values.medicinePackaging,
+            manufacturer: values.manufacturer,
+            minQty: values.minQty,
+            slug: 'hi',
+            composition: values?.composition?.map((comp) => {
+              return { id: comp.id, qty: comp.qty }
+            }),
 
-          // status: values.status,
-          shippingDetail: {
-            lengthClass: values.lengthClass,
-            weightClass: values.weightClass,
-            height: values.height,
-            length: values.length,
-            width: values.width,
-            weight: values.weight,
-          },
-        }
+            // status: values.status,
+            shippingDetail: {
+              lengthClass: values.lengthClass,
+              weightClass: values.weightClass,
+              height: values.height,
+              length: values.length,
+              width: values.width,
+              weight: values.weight,
+            },
+          }
 
-        if (sendingValues.productType === 'Medicine') {
-          sendingValues.pregnancyInteraction = values.pregnancyInteraction
-          sendingValues.expertAdvice = values.expertAdvice
-          sendingValues.sideEffects = values.sideEffects
-          sendingValues.howToUse = values.howToUse
-          sendingValues.faq = values.faq
-          sendingValues.uses = values.uses
-          sendingValues.storageTemperature = values.storageTemperature
-          sendingValues.saltComposition = values.saltComposition
+          if (sendingValues.productType === 'Medicine') {
+            sendingValues.pregnancyInteraction = values.pregnancyInteraction
+            sendingValues.expertAdvice = values.expertAdvice
+            sendingValues.sideEffects = values.sideEffects
+            sendingValues.howToUse = values.howToUse
+            sendingValues.faq = values.faq
+            sendingValues.uses = values.uses
+            sendingValues.storageTemperature = values.storageTemperature
+            sendingValues.saltComposition = values.saltComposition
+          }
+        } else if (
+          process.env.REACT_APP_SITE_NAME === 'athathy' ||
+          process.env.REACT_APP_SITE_NAME === 'awen'
+        ) {
+          sendingValues = {
+            brandId: values.brandId,
+            categoryId: values.categoryId,
+            name: values.name,
+            description: values.description,
+            // productType: values.productType,
+            allowedPaymentTypes: values.allowedPaymentTypes,
+            returnable: values.returnable,
+            returnPeriod: values.returnPeriod,
+            allowedQuantityPerOrder: values.allowedQuantityPerOrder,
+            prescriptionRequired: false,
+            priority: values.priority,
+            productType: 'NonMedicine',
+            medicinePackaging: 'no',
+            minQty: values.minQty,
+
+            // status: values.status,
+            shippingDetail: {
+              lengthClass: values.lengthClass,
+              weightClass: values.weightClass,
+              height: values.height,
+              length: values.length,
+              width: values.width,
+              weight: values.weight,
+            },
+          }
         }
 
         if (mode === ADD) {

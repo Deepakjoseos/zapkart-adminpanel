@@ -128,12 +128,15 @@ const OrderView = () => {
             <Column title="Product" dataIndex="name" key="name" />
             <Column title="Quantity" dataIndex="quantity" key="quantity" />
             <Column title="Price" dataIndex="price" key="price" />
-            <Column
-              title="Prescription Required"
-              dataIndex="prescriptionRequired"
-              key="prescriptionRequired"
-              render={(presc) => <>{presc ? 'Yes' : 'No'}</>}
-            />
+            {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+              <Column
+                title="Prescription Required"
+                dataIndex="prescriptionRequired"
+                key="prescriptionRequired"
+                render={(presc) => <>{presc ? 'Yes' : 'No'}</>}
+              />
+            )}
+
             <Column
               title="Status"
               dataIndex="status"
