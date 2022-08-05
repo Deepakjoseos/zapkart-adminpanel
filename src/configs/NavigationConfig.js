@@ -373,6 +373,14 @@ const dashBoardNavTree = [
         breadcrumb: false,
         submenu: [],
       },
+      {
+        key: 'dashboards-settings',
+        path: `${APP_PREFIX_PATH}/dashboards/settings`,
+        title: 'Settings',
+        icon: DotChartOutlined,
+        breadcrumb: false,
+        submenu: [],
+      },
     ],
   },
 ]

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect ,useRef} from 'react'
 import PageHeaderAlt from 'components/layout-components/PageHeaderAlt'
 import { Tabs, Form, Button, message } from 'antd'
 import Flex from 'components/shared-components/Flex'
@@ -8,6 +8,9 @@ import { singleImageUploader } from 'utils/s3/s3ImageUploader'
 import Utils from 'utils'
 import { useHistory } from 'react-router-dom'
 import categoryService from 'services/category'
+import { PlusOutlined } from '@ant-design/icons';
+import { Input, Tag } from 'antd';
+import { TweenOneGroup } from 'rc-tween-one';
 
 const { TabPane } = Tabs
 
@@ -23,6 +26,10 @@ const ProductForm = (props) => {
   //   const [uploadLoading, setUploadLoading] = useState(false)
   const [submitLoading, setSubmitLoading] = useState(false)
   const [categories, setCategories] = useState([])
+  const [tags, setTags] = useState([]);
+  const [inputVisible, setInputVisible] = useState(false);
+  const [inputValue, setInputValue] = useState('');
+  const inputRef = useRef(null);
 
   const {
     fileList: fileListImages,
@@ -31,6 +38,30 @@ const ProductForm = (props) => {
     onRemove: onRemoveImages,
     setFileList: setFileListImages,
   } = useUpload(1)
+  useEffect(() => {
+    if (inputVisible) {
+      inputRef.current?.focus();
+    }
+  }, []);
+  const handleClose = (removedTag) => {
+    const newTags = tags.filter((tag) => tag !== removedTag);
+    console.log(newTags);
+    setTags(newTags);
+  };
+  const showInput = () => {
+    setInputVisible(true);
+  };
+  const handleInputChange = (e) => {
+    setInputValue(e.target.value);
+  };
+  const handleInputConfirm = () => {
+    if (inputValue && tags.indexOf(inputValue) === -1) {
+      setTags([...tags, inputValue]);
+    }
+
+    setInputVisible(false);
+    setInputValue('');
+  };
 
   // const createCategoryList = (categories, parentId = null) => {
   //   const categoryList = []
@@ -53,7 +84,31 @@ const ProductForm = (props) => {
 
   //   return categoryList
   // }
-
+  const forMap = (tag) => {
+    const tagElem = (
+      <Tag
+        closable
+        onClose={(e) => {
+          e.preventDefault();
+          handleClose(tag);
+        }}
+      >
+        {tag}
+      </Tag>
+    );
+    return (
+      <span
+        key={tag}
+        style={{
+          display: 'inline-block',
+        }}
+      >
+        {tagElem}
+      </span>
+    );
+  };
+  
+  const tagChild = tags.map(forMap);
   const getCategories = async (mode) => {
     const data = await categoryService.getCategories()
     if (data) {
@@ -71,6 +126,7 @@ const ProductForm = (props) => {
 
   useEffect(() => {
     if (mode === EDIT) {
+      
       getCategories(EDIT)
       const fetchCategoryById = async () => {
         const { id } = param
@@ -94,6 +150,13 @@ const ProductForm = (props) => {
           form.setFieldsValue({
             name: data.name,
             status: data.status,
+            priority:data.priority,
+            metaTitle:data.metaTitle,
+            metaDescription:data.metaDescription,
+            keywords:data.keywords,
+            slug:data.slug,
+            // tags:data.tags
+
           })
 
           if (data.parentId) {
@@ -101,6 +164,7 @@ const ProductForm = (props) => {
               parentId: data.parentId,
             })
           }
+          setTags(data.tags)
         } else {
           history.replace('/app/dashboards/catalog/category/category-list')
         }
@@ -130,6 +194,7 @@ const ProductForm = (props) => {
     form
       .validateFields()
       .then(async (values) => {
+        values.tags=tags
         if (mode === ADD) {
           // Checking if image exists
           if (uploadedImg.length !== 0 && uploadedImg !== null) {
@@ -233,7 +298,10 @@ const ProductForm = (props) => {
                 categories={categories}
                 // uploadLoading={uploadLoading}
                 // handleUploadChange={handleUploadChange}
-                propsImages={propsImages}
+                propsImages={propsImages} tagChild={tagChild}  inputVisible={inputVisible}
+                handleInputChange={handleInputChange} handleInputConfirm={handleInputConfirm}
+
+              inputRef={inputRef} showInput={showInput} inputValue={inputValue}
               />
             </TabPane>
           </Tabs>

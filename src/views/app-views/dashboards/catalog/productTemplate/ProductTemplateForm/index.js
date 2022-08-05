@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect,useRef } from 'react'
 import PageHeaderAlt from 'components/layout-components/PageHeaderAlt'
-import { Tabs, Form, Button, message } from 'antd'
+import { Tabs, Form, Button, message,Tag } from 'antd'
 import Flex from 'components/shared-components/Flex'
 import GeneralField from './GeneralField'
 import VariantsField from './variantsField'
@@ -39,6 +39,11 @@ const ProductForm = (props) => {
 
   const [productType, setProductType] = useState('')
   const [returnable, setReturnable] = useState(false)
+  const [tags, setTags] = useState([]);
+  const [inputVisible, setInputVisible] = useState(false);
+  const [inputValue, setInputValue] = useState('');
+  const inputRef = useRef(null);
+
 
   const {
     fileList: fileListImages,
@@ -47,7 +52,54 @@ const ProductForm = (props) => {
     onRemove: onRemoveImages,
     setFileList: setFileListImages,
   } = useUpload(1, 'multiple')
+  useEffect(() => {
+    if (inputVisible) {
+      inputRef.current?.focus();
+    }
+  }, []);
+  const handleClose = (removedTag) => {
+    const newTags = tags.filter((tag) => tag !== removedTag);
+    console.log(newTags);
+    setTags(newTags);
+  };
+  const showInput = () => {
+    setInputVisible(true);
+  };
+  const handleInputChange = (e) => {
+    setInputValue(e.target.value);
+  };
+  const handleInputConfirm = () => {
+    if (inputValue && tags.indexOf(inputValue) === -1) {
+      setTags([...tags, inputValue]);
+    }
 
+    setInputVisible(false);
+    setInputValue('');
+  };
+  const forMap = (tag) => {
+    const tagElem = (
+      <Tag
+        closable
+        onClose={(e) => {
+          e.preventDefault();
+          handleClose(tag);
+        }}
+      >
+        {tag}
+      </Tag>
+    );
+    return (
+      <span
+        key={tag}
+        style={{
+          display: 'inline-block',
+        }}
+      >
+        {tagElem}
+      </span>
+    );
+  };
+  const tagChild = tags.map(forMap);
   const getCategories = async () => {
     const data = await categoryService.getCategories()
     const activeCategories = data.filter((item) => item.status === 'Active')
@@ -121,6 +173,7 @@ const ProductForm = (props) => {
         minQty: data.minQty,
         composition: data.composition,
 
+
         // productType =============> 'Medicine'
         pregnancyInteraction: data.pregnancyInteraction,
         expertAdvice: data.expertAdvice,
@@ -145,6 +198,12 @@ const ProductForm = (props) => {
         //   width: data.shippingDetail.width,
         //   weight: data.shippingDetail.weight,
         // },
+        //SEO
+        metTitle:data.metaTitle,
+        metaDescription:data.metaDescription,
+        keywords:data.keywords,
+        slug:data.slug,
+        // tags:data.tags
       })
 
       onCompositionChange()
@@ -153,6 +212,7 @@ const ProductForm = (props) => {
       setReturnable(data.returnable)
 
       setVariantsList(data.variants)
+      setTags(data.tags)
     } else {
       history.replace(
         '/app/dashboards/catalog/producttemplate/producttemplate-list'
@@ -202,6 +262,11 @@ const ProductForm = (props) => {
           medicinePackaging: values.medicinePackaging,
           manufacturer: values.manufacturer,
           minQty: values.minQty,
+          slug:values.slug,
+          metaTitle:values.metaTitle,
+          metaDescription:values.metaDescription,
+          keywords:values.keywords,
+          tags:tags,
           composition: values?.composition?.map((comp) => {
             return { id: comp.id, qty: comp.qty }
           }),
@@ -358,6 +423,10 @@ const ProductForm = (props) => {
                 setReturnable={setReturnable}
                 returnable={returnable}
                 fileListImages={fileListImages}
+                tagChild={tagChild}  inputVisible={inputVisible}
+                handleInputChange={handleInputChange} handleInputConfirm={handleInputConfirm}
+
+              inputRef={inputRef} showInput={showInput} inputValue={inputValue}
               />
             </TabPane>
             {mode === EDIT && (
