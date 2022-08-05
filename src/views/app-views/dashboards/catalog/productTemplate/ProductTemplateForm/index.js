@@ -92,7 +92,7 @@ const ProductForm = (props) => {
     const { id } = param
     const data = await productTemplateService.getProductTemplateById(id)
     if (data) {
-      const images = data.images.map((cur, i) => {
+      const images = data?.images?.map((cur, i) => {
         return {
           uid: i + Math.random() * 10,
           url: cur,
@@ -202,7 +202,7 @@ const ProductForm = (props) => {
           medicinePackaging: values.medicinePackaging,
           manufacturer: values.manufacturer,
           minQty: values.minQty,
-          composition: values.composition.map((comp) => {
+          composition: values?.composition?.map((comp) => {
             return { id: comp.id, qty: comp.qty }
           }),
 

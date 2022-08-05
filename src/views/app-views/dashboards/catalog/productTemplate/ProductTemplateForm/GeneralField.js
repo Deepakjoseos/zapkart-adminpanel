@@ -17,7 +17,6 @@ import { ImageSvg } from 'assets/svg/icon'
 import CustomIcon from 'components/util-components/CustomIcon'
 import Editor from 'components/shared-components/Editor'
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
-import ImageDescription from './ImageDescription'
 
 // const { Dragger } = Upload
 const { Option } = Select
@@ -556,20 +555,6 @@ const GeneralField = ({
           <Upload listType="picture-card" name="image" {...propsImages}>
             <CustomIcon className="display-3" svg={ImageSvg} />
           </Upload>
-          <h3>Add Description Note </h3>
-          {fileListImages?.map((cur) => (
-            <>
-              {cur?.url ? (
-                <>
-                  <ImageDescription url={cur?.url} file={null} />
-                </>
-              ) : (
-                <>
-                  <ImageDescription url={null} file={cur?.originFileObj} />
-                </>
-              )}
-            </>
-          ))}
         </Card>
       </Col>
     </Row>

@@ -157,7 +157,9 @@ const BrandList = () => {
   // When Search is used
   const onSearch = (e) => {
     const value = e.currentTarget.value
-    const searchArray = e.currentTarget.value ? list : searchBackupList
+    console.log(value, 'value')
+    const searchArray = searchBackupList
+    // e.currentTarget.value?.length > 0 ? searchBackupList : searchBackupList
     const data = utils.wildCardSearch(searchArray, value)
     setList(data)
     setSelectedRowKeys([])

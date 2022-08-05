@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Card, Table, Select, Input, Button, Menu, Tag } from 'antd'
-// import ProductListData from 'assets/data/product-list.data.json'
+// import ShipmentListData from 'assets/data/product-list.data.json'
 import {
   EyeOutlined,
   DeleteOutlined,
@@ -10,9 +10,10 @@ import {
 import AvatarStatus from 'components/shared-components/AvatarStatus'
 import EllipsisDropdown from 'components/shared-components/EllipsisDropdown'
 import Flex from 'components/shared-components/Flex'
+import NumberFormat from 'react-number-format'
 import { useHistory } from 'react-router-dom'
 import utils from 'utils'
-import informationService from 'services/information'
+import shipmentService from 'services/shipment'
 
 const { Option } = Select
 
@@ -27,32 +28,41 @@ const getStockStatus = (status) => {
   if (status === 'Hold') {
     return (
       <>
-        <Tag color="red">Hold</Tag>
+        <Tag color="orange">Hold</Tag>
+      </>
+    )
+  }
+
+  if (status === 'Deleted') {
+    return (
+      <>
+        <Tag color="red">Deleted</Tag>
       </>
     )
   }
   return null
 }
-const ProductList = () => {
+const ShipmentList = () => {
   let history = useHistory()
 
   const [list, setList] = useState([])
   const [searchBackupList, setSearchBackupList] = useState([])
-  const [selectedRows, setSelectedRows] = useState([])
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
 
   useEffect(() => {
-    const getInformations = async () => {
-      const data = await informationService.getInformations()
+    // Getting Brands List to display in the table
+    const getShipments = async () => {
+      const data = await shipmentService.getShipments()
       if (data) {
         setList(data)
         setSearchBackupList(data)
         console.log(data, 'show-data')
       }
     }
-    getInformations()
+    getShipments()
   }, [])
 
+  // Dropdown menu for each row
   const dropdownMenu = (row) => (
     <Menu>
       <Menu.Item onClick={() => viewDetails(row)}>
@@ -61,7 +71,7 @@ const ProductList = () => {
           <span className="ml-2">View Details</span>
         </Flex>
       </Menu.Item>
-      <Menu.Item onClick={() => deleteRow(row)}>
+      {/* <Menu.Item onClick={() => deleteRow(row)}>
         <Flex alignItems="center">
           <DeleteOutlined />
           <span className="ml-2">
@@ -70,40 +80,42 @@ const ProductList = () => {
               : 'Delete'}
           </span>
         </Flex>
-      </Menu.Item>
+      </Menu.Item> */}
     </Menu>
   )
 
   const addProduct = () => {
-    history.push(`/app/dashboards/information/add-information`)
+    history.push(`/app/dashboards/shipments/shipment/add-shipment`)
   }
 
   const viewDetails = (row) => {
-    history.push(`/app/dashboards/information/edit-information/${row.id}`)
+    history.push(`/app/dashboards/shipments/shipment/edit-shipment/${row.id}`)
   }
 
-  const deleteRow = async (row) => {
-    const resp = await informationService.deleteInformation(row.id)
+  // For deleting a row
+  // const deleteRow = async (row) => {
+  //   const resp = await shipmentService.dele(row.id)
 
-    if (resp) {
-      const objKey = 'id'
-      let data = list
-      if (selectedRows.length > 1) {
-        selectedRows.forEach((elm) => {
-          data = utils.deleteArrayRow(data, objKey, elm.id)
-          setList(data)
-          setSelectedRows([])
-        })
-      } else {
-        data = utils.deleteArrayRow(data, objKey, row.id)
-        setList(data)
-      }
-    }
-  }
+  //   if (resp) {
+  //     const objKey = 'id'
+  //     let data = list
+  //     if (selectedRows.length > 1) {
+  //       selectedRows.forEach((elm) => {
+  //         data = utils.deleteArrayRow(data, objKey, elm.id)
+  //         setList(data)
+  //         setSelectedRows([])
+  //       })
+  //     } else {
+  //       data = utils.deleteArrayRow(data, objKey, row.id)
+  //       setList(data)
+  //     }
+  //   }
+  // }
 
+  // Antd Table Columns
   const tableColumns = [
     {
-      title: 'Information',
+      title: 'Brand',
       dataIndex: 'name',
       render: (_, record) => (
         <div className="d-flex">
@@ -116,10 +128,6 @@ const ProductList = () => {
         </div>
       ),
       sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
-    },
-    {
-      title: 'Description',
-      dataIndex: 'description',
     },
     {
       title: 'Priority',
@@ -145,6 +153,7 @@ const ProductList = () => {
     },
   ]
 
+  // When Search is used
   const onSearch = (e) => {
     const value = e.currentTarget.value
     const searchArray = e.currentTarget.value ? list : searchBackupList
@@ -153,6 +162,7 @@ const ProductList = () => {
     setSelectedRowKeys([])
   }
 
+  // Filter Status Handler
   const handleShowStatus = (value) => {
     if (value !== 'All') {
       const key = 'status'
@@ -163,6 +173,7 @@ const ProductList = () => {
     }
   }
 
+  // Table Filters JSX Elements
   const filters = () => (
     <Flex className="mb-1" mobileFlex={false}>
       <div className="mr-md-3 mb-3">
@@ -199,7 +210,7 @@ const ProductList = () => {
             icon={<PlusCircleOutlined />}
             block
           >
-            Add Information
+            Add Brand
           </Button>
         </div>
       </Flex>
@@ -210,4 +221,4 @@ const ProductList = () => {
   )
 }
 
-export default ProductList
+export default ShipmentList
