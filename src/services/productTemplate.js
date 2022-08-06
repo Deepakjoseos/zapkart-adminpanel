@@ -5,7 +5,7 @@ const productTemplate = {}
 productTemplate.getProductTemplates = async function () {
   try {
     const res = await fetch({
-      url: '/productTemplates',
+      url: '/producttemplates',
       method: 'get',
     })
     const data = res.data.filter((cur) => cur.status !== 'Deleted')

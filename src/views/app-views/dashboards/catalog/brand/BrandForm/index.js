@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect,useRef } from 'react'
 import PageHeaderAlt from 'components/layout-components/PageHeaderAlt'
-import { Tabs, Form, Button, message } from 'antd'
+import { Tabs, Form, Button, message,Tag } from 'antd'
 import Flex from 'components/shared-components/Flex'
 import GeneralField from './GeneralField'
 import useUpload from 'hooks/useUpload'
@@ -23,6 +23,59 @@ const ProductForm = (props) => {
   // For Image Upload
   const [uploadedImg, setImage] = useState(null)
   const [submitLoading, setSubmitLoading] = useState(false)
+  const [tags, setTags] = useState([]);
+  const [inputVisible, setInputVisible] = useState(false);
+  const [inputValue, setInputValue] = useState('');
+  const inputRef = useRef(null);
+  useEffect(() => {
+    if (inputVisible) {
+      inputRef.current?.focus();
+    }
+  }, []);
+  const handleClose = (removedTag) => {
+    const newTags = tags.filter((tag) => tag !== removedTag);
+    console.log(newTags);
+    setTags(newTags);
+  };
+  const showInput = () => {
+    setInputVisible(true);
+  };
+  const handleInputChange = (e) => {
+    setInputValue(e.target.value);
+  };
+  const handleInputConfirm = () => {
+    if (inputValue && tags.indexOf(inputValue) === -1) {
+      setTags([...tags, inputValue]);
+    }
+
+    setInputVisible(false);
+    setInputValue('');
+  };
+  const forMap = (tag) => {
+    const tagElem = (
+      <Tag
+        closable
+        onClose={(e) => {
+          e.preventDefault();
+          handleClose(tag);
+        }}
+      >
+        {tag}
+      </Tag>
+    );
+    return (
+      <span
+        key={tag}
+        style={{
+          display: 'inline-block',
+        }}
+      >
+        {tagElem}
+      </span>
+    );
+  };
+  
+  const tagChild = tags.map(forMap);
 
   // For Image upload
   const {
@@ -59,7 +112,13 @@ const ProductForm = (props) => {
             name: data.name,
             status: data.status,
             priority: data.priority,
+            metaTitle:data.metaTitle,
+            metaDescription:data.metaDescription,
+            keywords:data.keywords,
+            slug:data.slug,
+            tags:data.tags
           })
+          setTags(data.tags)
         } else {
           history.replace('/app/dashboards/catalog/brand/brands-list')
         }
@@ -89,6 +148,7 @@ const ProductForm = (props) => {
     form
       .validateFields()
       .then(async (values) => {
+        values.tags=tags
         if (mode === ADD) {
           // Checking if image exists
           if (uploadedImg.length !== 0 && uploadedImg !== null) {
@@ -197,6 +257,10 @@ const ProductForm = (props) => {
                 // uploadLoading={uploadLoading}
                 // handleUploadChange={handleUploadChange}
                 propsImages={propsImages}
+                tagChild={tagChild}  inputVisible={inputVisible}
+                handleInputChange={handleInputChange} handleInputConfirm={handleInputConfirm}
+
+              inputRef={inputRef} showInput={showInput} inputValue={inputValue}
               />
             </TabPane>
           </Tabs>

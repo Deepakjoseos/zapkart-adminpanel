@@ -11,12 +11,13 @@ import {
   TreeSelect,
   Space,
   Button,
-  Image,
+  Image,Tag
 } from 'antd'
 import { ImageSvg } from 'assets/svg/icon'
 import CustomIcon from 'components/util-components/CustomIcon'
 import Editor from 'components/shared-components/Editor'
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
+import { TweenOneGroup } from 'rc-tween-one';
 
 // const { Dragger } = Upload
 const { Option } = Select
@@ -147,6 +148,16 @@ const rules = {
       message: 'Required',
     },
   ],
+
+ 
+
+  slug: [
+    {
+      required: true,
+      message: 'Required',
+    },
+  ],
+ 
 }
 
 const GeneralField = ({
@@ -163,6 +174,8 @@ const GeneralField = ({
   returnable,
   onCompositionChange,
   fileListImages,
+  tagChild,inputVisible,handleInputChange,handleInputConfirm,inputRef,
+inputValue,showInput
 }) => {
   const [image, setImage] = useState(false)
 
@@ -566,6 +579,77 @@ const GeneralField = ({
           <Form.Item name="weight" label="Weight" rules={rules.weight}>
             <InputNumber type="number" min={0} max={100000} />
           </Form.Item>
+        </Card>
+        <Card title="SEO">
+        <Form.Item
+              name="metaTitle"
+              label="Meta Title"
+            >
+              <Input placeholder="Meta Title" />
+            </Form.Item>
+            <Form.Item
+              name="metaDescription"
+              label="Meta Description"
+            >
+              <Input placeholder="Meta Description" />
+            </Form.Item>
+            <Form.Item
+              name="keywords"
+              label="Keywords"
+            >
+              <Input placeholder="Keywords" />
+            </Form.Item>
+            <Form.Item
+              name="slug"
+              label="Slug"
+              rules={rules.slug}
+            >
+              <Input placeholder="Slug" />
+            </Form.Item>
+            <Form.Item name="tags" label="Tags" >
+        <TweenOneGroup
+          enter={{
+            scale: 0.8,
+            opacity: 0,
+            type: 'from',
+            duration: 100,
+          }}
+          // onEnd={(e) => {
+          //   if (e.type === 'appear' || e.type === 'enter') {
+          //     e.target.style = 'display: inline-block';
+          //   }
+          // }}
+          leave={{
+            opacity: 0,
+            width: 0,
+            scale: 0,
+            duration: 200,
+          }}
+          appear={false}
+        >
+          {tagChild}
+        </TweenOneGroup>
+        <hr></hr>
+        {inputVisible && (
+        <Input
+          ref={inputRef}
+          type="text"
+          size="small"
+          style={{
+            width: 78,
+          }}
+          value={inputValue}
+          onChange={handleInputChange}
+          onBlur={handleInputConfirm}
+          onPressEnter={handleInputConfirm}
+        />
+      )}
+      {!inputVisible && (
+        <Tag onClick={showInput} className="site-tag-plus">
+          <PlusOutlined /> New Tag
+        </Tag>
+      )}
+        </Form.Item>
         </Card>
       </Col>
       <Col xs={24} sm={24} md={7}>
