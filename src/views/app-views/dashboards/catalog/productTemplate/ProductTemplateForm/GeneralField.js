@@ -22,6 +22,8 @@ import { TweenOneGroup } from 'rc-tween-one';
 // const { Dragger } = Upload
 const { Option } = Select
 
+const SITE_NAME = process.env.REACT_APP_SITE_NAME
+
 const rules = {
   name: [
     {
@@ -229,20 +231,21 @@ inputValue,showInput
               treeDefaultExpandAll
             />
           </Form.Item>
-
-          <Form.Item
-            name="manufacturer"
-            label="Manufacturer"
-            rules={rules.manufacturer}
-          >
-            <Select placeholder="Manufacturer">
-              {manufacturers.map((manufacturer) => (
-                <Option key={manufacturer.id} value={manufacturer.id}>
-                  {manufacturer.name}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
+          {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+            <Form.Item
+              name="manufacturer"
+              label="Manufacturer"
+              rules={rules.manufacturer}
+            >
+              <Select placeholder="Manufacturer">
+                {manufacturers.map((manufacturer) => (
+                  <Option key={manufacturer.id} value={manufacturer.id}>
+                    {manufacturer.name}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+          )}
 
           {/* <Form.Item
           name="productType"
@@ -251,28 +254,32 @@ inputValue,showInput
         >
           <Input placeholder="Product Type" />
         </Form.Item> */}
+          {SITE_NAME === 'zapkart' && (
+            <Form.Item
+              name="medicineTypeId"
+              label="Medicine Type"
+              rules={rules.medicineTypeId}
+            >
+              <Select placeholder="Medicine Packaging">
+                {medicineTypes.map((medicineType) => (
+                  <Option key={medicineType.id} value={medicineType.id}>
+                    {medicineType.name}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+          )}
 
-          <Form.Item
-            name="medicineTypeId"
-            label="Medicine Type"
-            rules={rules.medicineTypeId}
-          >
-            <Select placeholder="Medicine Packaging">
-              {medicineTypes.map((medicineType) => (
-                <Option key={medicineType.id} value={medicineType.id}>
-                  {medicineType.name}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
+          {SITE_NAME === 'zapkart' && (
+            <Form.Item
+              name="medicinePackaging"
+              label="Medicine Packaging"
+              rules={rules.medicinePackaging}
+            >
+              <Input placeholder="Medicine Packaging" />
+            </Form.Item>
+          )}
 
-          <Form.Item
-            name="medicinePackaging"
-            label="Medicine Packaging"
-            rules={rules.medicinePackaging}
-          >
-            <Input placeholder="Medicine Packaging" />
-          </Form.Item>
           <Form.Item name="status" label="Status" rules={rules.status}>
             <Select placeholder="Status">
               <Option value="Active">Active</Option>
@@ -331,103 +338,114 @@ inputValue,showInput
           <Form.Item name="minQty" label="minQty" rules={rules.minQty}>
             <InputNumber type="number" min={0} max={100000} />
           </Form.Item>
-          <Form.Item
-            name="prescriptionRequired"
-            label="PrescriptionRequired"
-            rules={rules.prescriptionRequired}
-          >
-            <Select placeholder="PrescriptionRequired">
-              <Option value={true}>Yes</Option>
-              <Option value={false}>No</Option>
-            </Select>
-          </Form.Item>
+
+          {SITE_NAME === 'zapkart' && (
+            <Form.Item
+              name="prescriptionRequired"
+              label="PrescriptionRequired"
+              rules={rules.prescriptionRequired}
+            >
+              <Select placeholder="PrescriptionRequired">
+                <Option value={true}>Yes</Option>
+                <Option value={false}>No</Option>
+              </Select>
+            </Form.Item>
+          )}
 
           {/* Compostion */}
-
-          <label style={{ fontWeight: 500, marginBottom: '10px' }}>
-            Composition
-          </label>
-          <Form.List name="composition">
-            {(fields, { add, remove }) => {
-              console.log(fields, 'show-filelds')
-              return (
-                <>
-                  {fields.map((field) => (
-                    <Space
-                      key={field.key}
-                      style={{ display: 'flex' }}
-                      align="baseline"
-                    >
-                      <Form.Item
-                        {...field}
-                        rules={[{ required: true, message: 'required' }]}
-                        name={[field.name, 'id']}
-                        fieldKey={[field.fieldKey, 'id']}
-                      >
-                        <Select
-                          placeholder="Medicine Packaging"
-                          onChange={() => onCompositionChange()}
+          {SITE_NAME === 'zapkart' && (
+            <>
+              <label style={{ fontWeight: 500, marginBottom: '10px' }}>
+                Composition
+              </label>
+              <Form.List name="composition">
+                {(fields, { add, remove }) => {
+                  console.log(fields, 'show-filelds')
+                  return (
+                    <>
+                      {fields.map((field) => (
+                        <Space
+                          key={field.key}
+                          style={{ display: 'flex' }}
+                          align="baseline"
                         >
-                          {compositions?.map((composition) => (
-                            <Option key={composition.id} value={composition.id}>
-                              {composition.name}
-                            </Option>
-                          ))}
-                        </Select>
-                        {/* <Input placeholder="name" /> */}
+                          <Form.Item
+                            {...field}
+                            rules={[{ required: true, message: 'required' }]}
+                            name={[field.name, 'id']}
+                            fieldKey={[field.fieldKey, 'id']}
+                          >
+                            <Select
+                              placeholder="Medicine Packaging"
+                              onChange={() => onCompositionChange()}
+                            >
+                              {compositions?.map((composition) => (
+                                <Option
+                                  key={composition.id}
+                                  value={composition.id}
+                                >
+                                  {composition.name}
+                                </Option>
+                              ))}
+                            </Select>
+                            {/* <Input placeholder="name" /> */}
+                          </Form.Item>
+                          <Form.Item
+                            {...field}
+                            rules={[{ required: true, message: 'required' }]}
+                            name={[field.name, 'qty']}
+                            fieldKey={[field.fieldKey, 'qty']}
+                          >
+                            <InputNumber
+                              type="number"
+                              min={0}
+                              max={100000}
+                              placeholder="Qty"
+                            />
+                          </Form.Item>
+                          <MinusCircleOutlined
+                            onClick={() => {
+                              remove(field.name)
+                              onCompositionChange()
+                            }}
+                          />
+                        </Space>
+                      ))}
+                      <Form.Item>
+                        <Button
+                          type="dashed"
+                          onClick={() => add()}
+                          icon={<PlusOutlined />}
+                        >
+                          Add item
+                        </Button>
                       </Form.Item>
-                      <Form.Item
-                        {...field}
-                        rules={[{ required: true, message: 'required' }]}
-                        name={[field.name, 'qty']}
-                        fieldKey={[field.fieldKey, 'qty']}
-                      >
-                        <InputNumber
-                          type="number"
-                          min={0}
-                          max={100000}
-                          placeholder="Qty"
-                        />
-                      </Form.Item>
-                      <MinusCircleOutlined
-                        onClick={() => {
-                          remove(field.name)
-                          onCompositionChange()
-                        }}
-                      />
-                    </Space>
-                  ))}
-                  <Form.Item>
-                    <Button
-                      type="dashed"
-                      onClick={() => add()}
-                      icon={<PlusOutlined />}
-                    >
-                      Add item
-                    </Button>
-                  </Form.Item>
-                </>
-              )
-            }}
-          </Form.List>
+                    </>
+                  )
+                }}
+              </Form.List>
+            </>
+          )}
 
-          <Form.Item
-            name="productType"
-            label="ProductType"
-            rules={rules.productType}
-          >
-            <Select
-              placeholder="Product Type"
-              onChange={(e) => setProductType(e)}
+          {SITE_NAME === 'zapkart' && (
+            <Form.Item
+              name="productType"
+              label="ProductType"
+              rules={rules.productType}
             >
-              <Option value="Medicine">Medicine</Option>
-              <Option value="NonMedicine">Non Medicine</Option>
-            </Select>
-          </Form.Item>
+              <Select
+                placeholder="Product Type"
+                onChange={(e) => setProductType(e)}
+              >
+                <Option value="Medicine">Medicine</Option>
+                <Option value="NonMedicine">Non Medicine</Option>
+              </Select>
+            </Form.Item>
+          )}
         </Card>
 
         {/* Medicine Informations */}
-        {productType === 'Medicine' && (
+        {productType === 'Medicine' && SITE_NAME === 'zapkart' && (
           <Card title="Medicine Informations">
             <Form.Item
               name="pregnancyInteraction"

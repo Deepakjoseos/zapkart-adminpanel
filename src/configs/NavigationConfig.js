@@ -269,30 +269,6 @@ const dashBoardNavTree = [
             breadcrumb: false,
             submenu: [],
           },
-          {
-            key: 'dashboards-catalog-medicinetype',
-            path: `${APP_PREFIX_PATH}/dashboards/catalog/medicinetype/medicinetype-list`,
-            title: 'Medicine Type',
-            icon: FormatPainterOutlined,
-            breadcrumb: false,
-            submenu: [],
-          },
-          {
-            key: 'dashboards-catalog-manufacturer',
-            path: `${APP_PREFIX_PATH}/dashboards/catalog/manufacturer/manufacturer-list`,
-            title: 'Manufacturer',
-            icon: FormatPainterOutlined,
-            breadcrumb: false,
-            submenu: [],
-          },
-          {
-            key: 'dashboards-catalog-composition',
-            path: `${APP_PREFIX_PATH}/dashboards/catalog/composition/composition-list`,
-            title: 'Composition',
-            icon: FormatPainterOutlined,
-            breadcrumb: false,
-            submenu: [],
-          },
         ],
       },
 
@@ -384,6 +360,60 @@ const dashBoardNavTree = [
     ],
   },
 ]
+
+// {
+//   key: 'dashboards-catalog-medicinetype',
+//   path: `${APP_PREFIX_PATH}/dashboards/catalog/medicinetype/medicinetype-list`,
+//   title: 'Medicine Type',
+//   icon: FormatPainterOutlined,
+//   breadcrumb: false,
+//   submenu: [],
+// },
+// {
+//   key: 'dashboards-catalog-manufacturer',
+//   path: `${APP_PREFIX_PATH}/dashboards/catalog/manufacturer/manufacturer-list`,
+//   title: 'Manufacturer',
+//   icon: FormatPainterOutlined,
+//   breadcrumb: false,
+//   submenu: [],
+// },
+// {
+//   key: 'dashboards-catalog-composition',
+//   path: `${APP_PREFIX_PATH}/dashboards/catalog/composition/composition-list`,
+//   title: 'Composition',
+//   icon: FormatPainterOutlined,
+//   breadcrumb: false,
+//   submenu: [],
+// },
+
+if (process.env.REACT_APP_SITE_NAME === 'zapkart') {
+  dashBoardNavTree[0].submenu[1].submenu.push({
+    key: 'dashboards-catalog-medicinetype',
+    path: `${APP_PREFIX_PATH}/dashboards/catalog/medicinetype/medicinetype-list`,
+    title: 'Medicine Type',
+    icon: FormatPainterOutlined,
+    breadcrumb: false,
+    submenu: [],
+  })
+
+  dashBoardNavTree[0].submenu[1].submenu.push({
+    key: 'dashboards-catalog-manufacturer',
+    path: `${APP_PREFIX_PATH}/dashboards/catalog/manufacturer/manufacturer-list`,
+    title: 'Manufacturer',
+    icon: FormatPainterOutlined,
+    breadcrumb: false,
+    submenu: [],
+  })
+
+  dashBoardNavTree[0].submenu[1].submenu.push({
+    key: 'dashboards-catalog-composition',
+    path: `${APP_PREFIX_PATH}/dashboards/catalog/composition/composition-list`,
+    title: 'Composition',
+    icon: FormatPainterOutlined,
+    breadcrumb: false,
+    submenu: [],
+  })
+}
 
 const appsNavTree = [
   {

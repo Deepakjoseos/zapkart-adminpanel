@@ -475,6 +475,14 @@ const Orders = () => {
     }
   }
 
+  const cancelOrder = async (userId, orderId) => {
+    const cancelOrder = await orderService.cancelOrder(userId, orderId)
+
+    if (cancelOrder) {
+      notification.success({ message: 'Order Cancelled' })
+    }
+  }
+
   const tableColumns = [
     {
       title: 'OrderNo',
@@ -566,7 +574,16 @@ const Orders = () => {
       dataIndex: 'actions',
       render: (_, elm) => (
         <div className="text-right">
-          <EllipsisDropdown menu={dropdownMenu(elm)} />
+          <Flex>
+            <EllipsisDropdown menu={dropdownMenu(elm)} />
+            <Button
+              type="primary"
+              className="ml-2"
+              onClick={() => cancelOrder(elm.userId, elm.id)}
+            >
+              Cancel Order
+            </Button>
+          </Flex>
         </div>
       ),
     },
@@ -625,11 +642,16 @@ const Orders = () => {
             </Select>
           </div> */}
         </Flex>
-        {/* <div>
-          <Button type="primary" icon={<FileExcelOutlined />} block>
-            Export All
+        <div>
+          <Button
+            onClick={() => history.push('/app/dashboards/orders/create-order')}
+            type="primary"
+            icon={<PlusCircleOutlined />}
+            block
+          >
+            Create Order
           </Button>
-        </div> */}
+        </div>
       </Flex>
       <div className="table-responsive">
         <Table

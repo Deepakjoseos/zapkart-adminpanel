@@ -5,11 +5,10 @@ const productService = {}
 productService.getProducts = async function () {
   try {
     const res = await fetch({
-      url: '/products',
+      url: '/products?status=Active',
       method: 'get',
     })
-    const data = res.data.filter((cur) => cur.status !== 'Deleted')
-    return data
+    return res.data
   } catch (err) {
     console.log(err, 'show-err')
   }
@@ -71,6 +70,24 @@ productService.approvalProduct = async function (id, approvalValue) {
     const res = await fetch({
       url: `/products/${id}/${approvalValue}`,
       method: 'put',
+    })
+    return res
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
+
+productService.createProductFromExcel = async function (data) {
+  const formData = new FormData()
+  formData.append('file', data.file)
+  formData.append('deliveryZoneId', data.deliveryZoneId)
+  formData.append('vendorId', data.vendorId)
+
+  try {
+    const res = await fetch({
+      url: `/products`,
+      method: 'post',
+      data: formData,
     })
     return res
   } catch (err) {
