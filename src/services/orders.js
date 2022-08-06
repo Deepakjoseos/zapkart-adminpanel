@@ -1,3 +1,4 @@
+import { notification } from 'antd'
 import fetch from 'auth/FetchInterceptor'
 
 const orderService = {}
@@ -55,10 +56,41 @@ orderService.updateOrderItemStatus = async function (id, data) {
   }
 }
 
-orderService.cancelOrder = async function (userId, orderId) {
+orderService.createOrder = async function (userId, data) {
   try {
     const res = await fetch({
-      url: `/order/admin/cancel/${orderId}/${userId}`,
+      url: `/order/admin/request/${userId}`,
+      method: 'post',
+      data,
+    })
+
+    return res
+  } catch (err) {
+    try {
+      const parsedErr = JSON.parse(err.response.data.detail)
+      if (parsedErr) {
+        parsedErr.forEach((cur) => {
+          notification.error({
+            message: cur.type,
+            description: cur.item.name,
+          })
+        })
+      }
+    } catch (err) {
+      notification.error({
+        message: 'Error',
+        description: err.response.data.detail,
+      })
+    }
+
+    console.log(err, 'show-err')
+  }
+}
+
+orderService.cancelOrder = async function (orderId) {
+  try {
+    const res = await fetch({
+      url: `/order/admin/${orderId}`,
       method: 'put',
     })
 

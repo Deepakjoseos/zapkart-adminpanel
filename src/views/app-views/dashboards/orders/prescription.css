@@ -1,27 +1,7 @@
-.loading.cover-content {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  -webkit-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-}
-.loading.cover-page {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.loading .ant-spin {
-  color: #3e79f7;
-}
-
 .presc-select-cont {
   position: relative;
 }
-
-/* .presc-select-cont .overlay {
+.presc-select-cont .overlay {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -33,11 +13,9 @@
   transition: 0.3s ease;
   background-color: rgba(0, 0, 0, 0.5);
 }
-
-.presc-select-cont .selected-active .overlay {
+.presc-select-cont.selected-active .overlay {
   opacity: 1;
 }
-
 .presc-select-cont .icon {
   color: white;
   font-size: 20px;
@@ -48,7 +26,6 @@
   -ms-transform: translate(-50%, -50%);
   text-align: center;
 }
-
 .presc-select-cont .fi-rs-search:hover {
   color: #eee;
-} */
+}

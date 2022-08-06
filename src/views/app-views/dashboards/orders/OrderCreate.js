@@ -6,6 +6,8 @@ import {
   Form,
   Input,
   InputNumber,
+  message,
+  notification,
   Row,
   Select,
   Space,
@@ -17,6 +19,8 @@ import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import productService from 'services/product'
 import customerService from 'services/customer'
+import PrescriptionSelector from './PrescriptionSelector'
+import orderService from 'services/orders'
 
 const OrderCreate = () => {
   const { Option } = Select
@@ -30,6 +34,8 @@ const OrderCreate = () => {
   const [isShippingAndBillingAddressSame, setIsShippingAndBillingAddressSame] =
     useState(true)
   const [customerPrescriptions, setCustomerPrescriptions] = useState([])
+  const [selectedPrescriptions, setSelectedPrescriptions] = useState([])
+  const [isPrescriptionRequired, setIsPrescriptionRequired] = useState(false)
 
   const rules = {
     name: [
@@ -87,7 +93,7 @@ const OrderCreate = () => {
   const getCustomerPrescriptions = async (customerId) => {
     const data = await customerService.getCustomerPrescription(customerId)
     if (data) {
-      setCustomerPrescriptions(data)
+      setCustomerPrescriptions(data.prescriptions)
     }
   }
 
@@ -113,6 +119,70 @@ const OrderCreate = () => {
     getProducts()
     getCustomers()
   }, [])
+
+  const onFinish = async () => {
+    setSubmitLoading(true)
+    form
+      .validateFields()
+      .then(async (values) => {
+        if (isPrescriptionRequired && selectedPrescriptions.length === 0) {
+          message.error('Please select atleast one prescription')
+          setSubmitLoading(false)
+          return
+        }
+
+        const sendingData = {
+          items: values.items,
+          fromCart: false,
+          shippingAddressId: values.shippingAddressId,
+          billingAddressId: isShippingAndBillingAddressSame
+            ? values.shippingAddressId
+            : values.billingAddressId,
+          prescriptions: selectedPrescriptions ? selectedPrescriptions : [],
+        }
+        if (values.couponCode !== '') {
+          sendingData.couponCode = values.couponCode
+        }
+
+        const data = await orderService.createOrder(
+          values.customerId,
+          sendingData
+        )
+
+        if (data) {
+          notification.success({
+            message: 'Success',
+            description: 'Order created successfully',
+          })
+
+          history.push('/app/dashboards/orders/orders-list')
+        }
+        setSubmitLoading(false)
+      })
+      .catch((info) => {
+        setSubmitLoading(false)
+        console.log('info', info)
+        // message.error('Please enter all required field ')
+      })
+    setSubmitLoading(false)
+  }
+
+  const checkPrescriptionRequired = () => {
+    const productsval = form.getFieldValue('items')
+
+    if (products) {
+      const ids = productsval?.map((cur) => cur.id)
+      console.log(ids, 'plkss')
+
+      if (ids) {
+        const prescriptionRequired = products.some(
+          (cur) => ids.includes(cur.id) && cur.prescriptionRequired
+        )
+
+        setIsPrescriptionRequired(prescriptionRequired)
+      }
+    }
+  }
 
   return (
     <Form
@@ -150,7 +220,7 @@ const OrderCreate = () => {
               </Button>
               <Button
                 type="primary"
-                // onClick={() => onFinish()}
+                onClick={onFinish}
                 htmlType="submit"
                 loading={submitLoading}
               >
@@ -167,7 +237,7 @@ const OrderCreate = () => {
               <Form.Item
                 label="Customer"
                 name="customerId"
-                rules={rules.customerId}
+                rules={[{ required: true, message: 'required' }]}
               >
                 <Select
                   placeholder="Select Customer"
@@ -226,11 +296,9 @@ const OrderCreate = () => {
                                       .toLowerCase()
                                       .indexOf(input.toLowerCase()) >= 0
                                   }
-
-                                  //   onChange={(e) => {
-                                  //     onSelectAttribute(e)
-                                  //     onAttributeChange()
-                                  //   }}
+                                  onChange={(e) => {
+                                    checkPrescriptionRequired()
+                                  }}
                                 >
                                   {products?.map((product) => (
                                     <Option key={product.id} value={product.id}>
@@ -262,6 +330,7 @@ const OrderCreate = () => {
                                   onClick={() => {
                                     //   onAttributeChange()
                                     remove(field.name)
+                                    checkPrescriptionRequired()
                                   }}
                                 />
                               )}
@@ -270,7 +339,10 @@ const OrderCreate = () => {
                           <Form.Item>
                             <Button
                               type="dashed"
-                              onClick={() => add()}
+                              onClick={() => {
+                                add()
+                                // checkPrescriptionRequired()
+                              }}
                               icon={<PlusOutlined />}
                             >
                               Add Product
@@ -284,7 +356,8 @@ const OrderCreate = () => {
                   <Form.Item
                     name="shippingAddressId"
                     label="Shipping Address"
-                    rules={rules.shippingAddressId}
+                    // rules={rules.shippingAddressId}
+                    rules={[{ required: true, message: 'required' }]}
                   >
                     <Select
                       allowClear
@@ -292,10 +365,10 @@ const OrderCreate = () => {
                       placeholder="Address"
                       onSelect={() => {
                         if (isShippingAndBillingAddressSame) {
-                          form.setFieldsValue(
-                            'billingAddressId',
-                            form.getFieldsValue('shippingAddressId')
-                          )
+                          form.setFieldsValue({
+                            billingAddressId:
+                              form.getFieldValue('shippingAddressId'),
+                          })
                         }
                       }}
                     >
@@ -321,7 +394,8 @@ const OrderCreate = () => {
                     <Form.Item
                       name="billingAddressId"
                       label="Billing Address"
-                      rules={rules.billingAddressId}
+                      // rules={rules.billingAddressId}
+                      rules={[{ required: true, message: 'required' }]}
                     >
                       <Select
                         allowClear
@@ -338,6 +412,31 @@ const OrderCreate = () => {
                       </Select>
                     </Form.Item>
                   )}
+                  {isPrescriptionRequired && (
+                    <>
+                      <div style={{ fontWeight: 500, marginBottom: '10px' }}>
+                        Prescription
+                      </div>
+                      {customerPrescriptions?.length === 0 && (
+                        <h4>No Prescription Found</h4>
+                      )}
+                      <Flex>
+                        {customerPrescriptions &&
+                          customerPrescriptions.map((prescription) => (
+                            <PrescriptionSelector
+                              selectedPrescriptions={selectedPrescriptions}
+                              setSelectedPrescriptions={
+                                setSelectedPrescriptions
+                              }
+                              cur={prescription}
+                            />
+                          ))}
+                      </Flex>
+                    </>
+                  )}
+                  <Form.Item name="couponCode" label="CouponCode">
+                    <Input placeholder="CouponCode" />
+                  </Form.Item>
                 </>
               )}
 
