@@ -100,10 +100,9 @@ const OrderCreate = () => {
 
   const onSetSameAddressCheckChange = (e) => {
     if (e.target.checked) {
-      form.setFieldsValue(
-        'billingAddressId',
-        form.getFieldsValue('shippingAddressId')
-      )
+      form.setFieldsValue({
+        billingAddressId: form.getFieldValue('shippingAddressId'),
+      })
       setIsShippingAndBillingAddressSame(true)
     } else {
       setIsShippingAndBillingAddressSame(false)

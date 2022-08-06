@@ -1,6 +1,6 @@
-import React, { useState, useEffect,useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import PageHeaderAlt from 'components/layout-components/PageHeaderAlt'
-import { Tabs, Form, Button, message,Tag } from 'antd'
+import { Tabs, Form, Button, message, Tag } from 'antd'
 import Flex from 'components/shared-components/Flex'
 import GeneralField from './GeneralField'
 import VariantsField from './variantsField'
@@ -39,11 +39,10 @@ const ProductForm = (props) => {
 
   const [productType, setProductType] = useState('')
   const [returnable, setReturnable] = useState(false)
-  const [tags, setTags] = useState([]);
-  const [inputVisible, setInputVisible] = useState(false);
-  const [inputValue, setInputValue] = useState('');
-  const inputRef = useRef(null);
-
+  const [tags, setTags] = useState([])
+  const [inputVisible, setInputVisible] = useState(false)
+  const [inputValue, setInputValue] = useState('')
+  const inputRef = useRef(null)
 
   const {
     fileList: fileListImages,
@@ -54,40 +53,40 @@ const ProductForm = (props) => {
   } = useUpload(1, 'multiple')
   useEffect(() => {
     if (inputVisible) {
-      inputRef.current?.focus();
+      inputRef.current?.focus()
     }
-  }, []);
+  }, [])
   const handleClose = (removedTag) => {
-    const newTags = tags.filter((tag) => tag !== removedTag);
-    console.log(newTags);
-    setTags(newTags);
-  };
+    const newTags = tags.filter((tag) => tag !== removedTag)
+    console.log(newTags)
+    setTags(newTags)
+  }
   const showInput = () => {
-    setInputVisible(true);
-  };
+    setInputVisible(true)
+  }
   const handleInputChange = (e) => {
-    setInputValue(e.target.value);
-  };
+    setInputValue(e.target.value)
+  }
   const handleInputConfirm = () => {
     if (inputValue && tags.indexOf(inputValue) === -1) {
-      setTags([...tags, inputValue]);
+      setTags([...tags, inputValue])
     }
 
-    setInputVisible(false);
-    setInputValue('');
-  };
+    setInputVisible(false)
+    setInputValue('')
+  }
   const forMap = (tag) => {
     const tagElem = (
       <Tag
         closable
         onClose={(e) => {
-          e.preventDefault();
-          handleClose(tag);
+          e.preventDefault()
+          handleClose(tag)
         }}
       >
         {tag}
       </Tag>
-    );
+    )
     return (
       <span
         key={tag}
@@ -97,9 +96,9 @@ const ProductForm = (props) => {
       >
         {tagElem}
       </span>
-    );
-  };
-  const tagChild = tags.map(forMap);
+    )
+  }
+  const tagChild = tags.map(forMap)
   const getCategories = async () => {
     const data = await categoryService.getCategories()
     const activeCategories = data.filter((item) => item.status === 'Active')
@@ -214,7 +213,11 @@ const ProductForm = (props) => {
           returnPeriod: data.returnPeriod,
           allowedQuantityPerOrder: data.allowedQuantityPerOrder,
           minQty: data.minQty,
-          slug: 'hi',
+          slug: data.slug,
+          tags: tags,
+          metaTitle: data.metaTitle,
+          metaDescription: data.metaDescription,
+          keywords: data.keywords,
 
           lengthClass: data.shippingDetail.lengthClass,
           weightClass: data.shippingDetail.weightClass,
@@ -263,6 +266,11 @@ const ProductForm = (props) => {
           allowedQuantityPerOrder: data.allowedQuantityPerOrder,
           minQty: data.minQty,
           productType: 'nonMedicine',
+          slug: data.slug,
+          tags: tags,
+          metaTitle: data.metaTitle,
+          metaDescription: data.metaDescription,
+          keywords: data.keywords,
 
           lengthClass: data.shippingDetail.lengthClass,
           weightClass: data.shippingDetail.weightClass,
@@ -339,7 +347,12 @@ const ProductForm = (props) => {
             medicinePackaging: values.medicinePackaging,
             manufacturer: values.manufacturer,
             minQty: values.minQty,
-            slug: 'hi',
+            slug: values.slug,
+            tags: tags,
+            metaTitle: values.metaTitle,
+            metaDescription: values.metaDescription,
+            keywords: values.keywords,
+
             composition: values?.composition?.map((comp) => {
               return { id: comp.id, qty: comp.qty }
             }),
@@ -384,6 +397,11 @@ const ProductForm = (props) => {
             productType: 'NonMedicine',
             medicinePackaging: 'no',
             minQty: values.minQty,
+            slug: values.slug,
+            tags: tags,
+            metaTitle: values.metaTitle,
+            metaDescription: values.metaDescription,
+            keywords: values.keywords,
 
             // status: values.status,
             shippingDetail: {
@@ -527,10 +545,13 @@ const ProductForm = (props) => {
                 setReturnable={setReturnable}
                 returnable={returnable}
                 fileListImages={fileListImages}
-                tagChild={tagChild}  inputVisible={inputVisible}
-                handleInputChange={handleInputChange} handleInputConfirm={handleInputConfirm}
-
-              inputRef={inputRef} showInput={showInput} inputValue={inputValue}
+                tagChild={tagChild}
+                inputVisible={inputVisible}
+                handleInputChange={handleInputChange}
+                handleInputConfirm={handleInputConfirm}
+                inputRef={inputRef}
+                showInput={showInput}
+                inputValue={inputValue}
               />
             </TabPane>
             {mode === EDIT && (

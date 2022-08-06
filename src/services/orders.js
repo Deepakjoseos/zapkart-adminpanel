@@ -58,7 +58,7 @@ orderService.updateOrderItemStatus = async function (id, data) {
 orderService.cancelOrder = async function (userId, orderId) {
   try {
     const res = await fetch({
-      url: `/order/admin/${userId}/${orderId}`,
+      url: `/order/admin/cancel/${orderId}/${userId}`,
       method: 'put',
     })
 
