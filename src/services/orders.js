@@ -55,6 +55,33 @@ orderService.updateOrderItemStatus = async function (id, data) {
   }
 }
 
+orderService.cancelOrder = async function (userId, orderId) {
+  try {
+    const res = await fetch({
+      url: `/order/admin/${userId}/${orderId}`,
+      method: 'put',
+    })
+
+    return res
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
+
+orderService.cancelOrderItem = async function (id, data) {
+  try {
+    const res = await fetch({
+      url: `/order/admin/${id}`,
+      method: 'post',
+      data: [data],
+    })
+
+    return res
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
+
 // orderService.getProductById = async function (id) {
 //   try {
 //     const res = await fetch({

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import {
   Card,
   Table,
@@ -8,19 +8,24 @@ import {
   Menu,
   Tag,
   notification,
+  Modal,
 } from 'antd'
+
 import {
-  // EyeOutlined,
-  // DeleteOutlined,
+  EyeOutlined,
+  DeleteOutlined,
   SearchOutlined,
   PlusCircleOutlined,
+  FileAddOutlined,
+  DownloadOutlined,
 } from '@ant-design/icons'
 // import EllipsisDropdown from 'components/shared-components/EllipsisDropdown'
 import Flex from 'components/shared-components/Flex'
 import { useHistory } from 'react-router-dom'
 import utils from 'utils'
 import productService from 'services/product'
-// import DeliveryZoneService from 'services/deliveryZone'
+import DeliveryZoneService from 'services/deliveryZone'
+import vendorService from 'services/vendor'
 
 const { Option } = Select
 
@@ -43,11 +48,19 @@ const getStockStatus = (status) => {
 }
 const ProductList = () => {
   let history = useHistory()
+  const fileInputRef = useRef(null)
 
   const [list, setList] = useState([])
   const [searchBackupList, setSearchBackupList] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
+
+  const [isExcelModalOpen, setIsExcelModalOpen] = useState(false)
+  const [deliveryZones, setDeliveryZones] = useState([])
+  const [vendorId, setVendorId] = useState(null)
+  const [deliveryZoneId, setDeliveryZoneId] = useState(null)
+  const [excelFile, setExcelFile] = useState(null)
+  const [vendors, setVendors] = useState([])
 
   // const getDeliveryZoneName = (id) => {
   //   const deliveryZoneName = await DeliveryZoneService.getDeliveryZoneById(id)
@@ -86,6 +99,57 @@ const ProductList = () => {
   //     </Menu.Item>
   //   </Menu>
   // )
+
+  const getDeliveryZones = async () => {
+    const deliveryZonesData =
+      await DeliveryZoneService.getDeliveryZonesByVendorId(vendorId)
+    if (deliveryZonesData) {
+      setDeliveryZones(deliveryZonesData)
+    }
+  }
+
+  const getVendors = async () => {
+    const vendorsData = await vendorService.getVendors()
+    if (vendorsData) {
+      setVendors(vendorsData)
+    }
+  }
+
+  useEffect(() => {
+    if (isExcelModalOpen) {
+      getVendors()
+    }
+  }, [isExcelModalOpen])
+
+  useEffect(() => {
+    if (vendorId) {
+      getDeliveryZones()
+    }
+  }, [vendorId])
+
+  const onExcelSubmit = async () => {
+    const sendingData = {
+      file: excelFile,
+      deliveryZoneId,
+      vendorId,
+    }
+
+    const sendExcelFile = await productService.createProductFromExcel(
+      sendingData
+    )
+
+    if (sendExcelFile) {
+      setIsExcelModalOpen(false)
+      setDeliveryZoneId(null)
+      setDeliveryZones([])
+      setExcelFile(null)
+      setVendorId(null)
+      setVendors([])
+      notification.success({
+        message: 'Product Excel File Uploaded',
+      })
+    }
+  }
 
   const addProduct = () => {
     history.push(`/app/dashboards/catalog/product/add-product`)
@@ -134,6 +198,12 @@ const ProductList = () => {
       // )
       // setList(data)
     }
+  }
+
+  const handleExcelUpload = (e) => {
+    let file = e.target.files[0]
+
+    setExcelFile(file)
   }
 
   const tableColumns = [
@@ -304,10 +374,21 @@ const ProductList = () => {
   )
 
   return (
-    <Card>
-      <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
-        {filters()}
-        {/* <div>
+    <>
+      <Card>
+        <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
+          {filters()}
+          <div className="mr-2">
+            <Button
+              type="primary"
+              icon={<FileAddOutlined />}
+              onClick={() => setIsExcelModalOpen(true)}
+              block
+            >
+              Excel Upload
+            </Button>
+          </div>
+          {/* <div>
           <Button
             onClick={addProduct}
             type="primary"
@@ -317,11 +398,80 @@ const ProductList = () => {
             Add Product
           </Button>
         </div> */}
-      </Flex>
-      <div className="table-responsive">
-        <Table columns={tableColumns} dataSource={list} rowKey="id" />
-      </div>
-    </Card>
+        </Flex>
+        <div className="table-responsive">
+          <Table columns={tableColumns} dataSource={list} rowKey="id" />
+        </div>
+      </Card>
+
+      <Modal
+        title="Product Excel Upload"
+        visible={isExcelModalOpen}
+        onCancel={() => {
+          setIsExcelModalOpen(false)
+          setExcelFile(null)
+          setDeliveryZoneId(null)
+          setVendorId(null)
+          setVendors([])
+        }}
+        footer={false}
+      >
+        <Flex flexDirection="column" alignItems="center">
+          <Select
+            placeholder="Select Delivery Zone"
+            style={{ width: '80%' }}
+            className="mb-2"
+            onChange={(e) => setVendorId(e)}
+            value={vendorId}
+          >
+            {vendors?.map((vendor) => (
+              <Option value={vendor.id}>
+                {vendor?.firstName} {vendor?.lastName}
+              </Option>
+            ))}
+          </Select>
+
+          {vendorId && (
+            <Select
+              placeholder="Select Delivery Zone"
+              style={{ width: '80%' }}
+              className="mb-2"
+              onChange={(e) => setDeliveryZoneId(e)}
+              value={deliveryZoneId}
+            >
+              {deliveryZones?.map((zone) => (
+                <Option value={zone.id}>{zone.name}</Option>
+              ))}
+            </Select>
+          )}
+
+          {deliveryZoneId && (
+            <div className="mb-4 mt-4">
+              <Button
+                type="primary"
+                icon={<DownloadOutlined />}
+                onClick={() => fileInputRef.current.click()}
+              >
+                Upload Excel File
+              </Button>
+              <input
+                accept=".xls,.xlsx"
+                multiple={false}
+                ref={fileInputRef}
+                type="file"
+                onChange={handleExcelUpload}
+                hidden
+              />
+              <p> {excelFile && excelFile?.name}</p>
+            </div>
+          )}
+
+          <Button type="primary" disabled={!excelFile} onClick={onExcelSubmit}>
+            Submit
+          </Button>
+        </Flex>
+      </Modal>
+    </>
   )
 }
 
