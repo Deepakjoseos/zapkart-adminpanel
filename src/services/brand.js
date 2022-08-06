@@ -1,15 +1,21 @@
 import fetch from 'auth/FetchInterceptor'
 
 const brandService = {}
+const api= `/brands`
 
-brandService.getBrands = async function () {
+brandService.getBrands = async function (query) {
+  
   try {
+    let url = `${api}`
+    const orderByPriority = query?.orderByPriority
+    if(orderByPriority)
+    url= `${api}?orderByPriority=${orderByPriority}`;
     const res = await fetch({
-      url: '/brands',
+      url,
       method: 'get',
     })
-    // const data = res.data.filter((cur) => cur.status !== 'Deleted')
-    return res.data
+    const data = res.data.filter((cur) => cur.status !== 'Deleted')
+    return data
   } catch (err) {
     console.log(err, 'show-err')
   }

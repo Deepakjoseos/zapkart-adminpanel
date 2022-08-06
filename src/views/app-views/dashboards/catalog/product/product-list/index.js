@@ -405,7 +405,7 @@ const ProductList = () => {
     }
   }
   const filters = () => (
-    <Flex className="mb-1" mobileFlex={false}>
+    <Flex className="mb-1 flex-wrap" mobileFlex={false}>
       <div className="mr-md-3 mb-3">
         <Input
           placeholder="Search"

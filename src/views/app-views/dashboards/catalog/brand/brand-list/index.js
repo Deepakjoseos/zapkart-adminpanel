@@ -127,6 +127,7 @@ const BrandList = () => {
     }
   }
 
+
   const handleClearFilter = async () => {
     setSelectedorder(null)
  
@@ -229,7 +230,8 @@ const BrandList = () => {
           onChange={(value) => setSelectedorder(value)}
           // onSelect={handleQuery}
           value={selectedOrder}
-          placeholder="Approval Method">
+          placeholder="OrderBy Priority">
+            
              <Option value="">All</Option>
              <Option value="true">Yes</Option>
              <Option value="false">No</Option>
