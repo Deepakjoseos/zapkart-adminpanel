@@ -40,6 +40,7 @@ const BannerList = () => {
   const [searchBackupList, setSearchBackupList] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
+  const [selectedOrder,setSelectedorder]= useState('')
 
   useEffect(() => {
     const getBanners = async () => {
@@ -100,7 +101,28 @@ const BannerList = () => {
       }
     }
   }
+  const handleQuery = async () => {
+    const query = {}
+    if ((selectedOrder) !== 'All')
+      query.orderByPriority = selectedOrder
 
+    console.log('query', query)
+    const data = await bannerService.getBanners(query)
+    if (data) {
+      setList(data)
+      setSearchBackupList(data)
+    }
+  }
+
+  const handleClearFilter = async () => {
+    setSelectedorder(null)
+ 
+    const data = await bannerService.getBanners({})
+    if (data) {
+      setList(data)
+      setSearchBackupList(data)
+    }
+  }
   const tableColumns = [
     {
       title: 'Banner',
@@ -185,7 +207,32 @@ const BannerList = () => {
           <Option value="Active">Active</Option>
           <Option value="Hold">Hold</Option>
         </Select>
+
       </div>
+      <div className="mr-md-3 mb-3">
+      <Select
+          className="w-100"
+          style={{ minWidth: 180 }}
+          onChange={(value) => setSelectedorder(value)}
+          // onSelect={handleQuery}
+          value={selectedOrder}
+          placeholder="Approval Method">
+             <Option value="">All</Option>
+             <Option value="true">Yes</Option>
+             <Option value="false">No</Option>
+          </Select>
+      </div>
+      <div >
+        <Button type="primary" className="mr-2 " onClick={handleQuery}>
+          Filter
+        </Button>
+      </div>
+      <div>
+        <Button type="primary" className="mr-2" onClick={handleClearFilter}>
+          Clear
+        </Button>
+      </div>
+
     </Flex>
   )
 

@@ -1,11 +1,16 @@
 import fetch from 'auth/FetchInterceptor'
 
 const bannerService = {}
+const api = '/banners'
 
-bannerService.getBanners = async function () {
+bannerService.getBanners = async function (query) {
   try {
+    let url = `${api}`
+    const orderByPriority = query?.orderByPriority
+    if(orderByPriority)
+    url= `${api}?orderByPriority=${orderByPriority}`;
     const res = await fetch({
-      url: '/banners',
+      url,
       method: 'get',
     })
     const data = res.data.filter((cur) => cur.status !== 'Deleted')

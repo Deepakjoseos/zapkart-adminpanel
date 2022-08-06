@@ -1,13 +1,31 @@
 import fetch from 'auth/FetchInterceptor'
 
 const productTemplate = {}
+const api= 'producttemplates'
 
-productTemplate.getProductTemplates = async function () {
+productTemplate.getProductTemplates = async function (query) {
   try {
+      let url = `${api}`;
+      const brandId = query?.brandId;
+      const categoryId = query?.categoryId;
+      const status = query?.status;
+      if (brandId) url = `${url}?brandId=${brandId}`;
+      if (categoryId)
+        url =
+          brandId && brandId !== null
+            ? `${url}&categoryId=${categoryId}`
+            : `${url}?categoryId=${categoryId}`;
+      if (status)
+        url =
+          (brandId && brandId !== null) ||
+            (categoryId && categoryId !== null)
+            ? `${url}&status=${status}`
+            : `${url}?status=${status}`;
     const res = await fetch({
-      url: '/producttemplates',
+      url,
       method: 'get',
     })
+
     const data = res.data.filter((cur) => cur.status !== 'Deleted')
     return data
   } catch (err) {
