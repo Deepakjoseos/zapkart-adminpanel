@@ -70,6 +70,14 @@ const OrderView = () => {
     }
   }
 
+  const cancleOrderItem = async (itemId) => {
+    const cancel = await orderService.cancelOrderItem(id, itemId)
+
+    if (cancel) {
+      notification.success({ message: 'Order Item Cancelled' })
+    }
+  }
+
   return (
     <div className="container">
       <Card>
@@ -155,6 +163,16 @@ const OrderView = () => {
                 </Select>
               )}
             />
+
+            <Column
+              title="Action"
+              render={(_, row) => (
+                <Button type="primary" onClick={() => cancleOrderItem(row.id)}>
+                  Cancel Order Item
+                </Button>
+              )}
+            />
+
             {/* <Column
               title="Price"
               render={(text) => (

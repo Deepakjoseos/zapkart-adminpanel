@@ -475,8 +475,8 @@ const Orders = () => {
     }
   }
 
-  const cancelOrder = async (userId, orderId) => {
-    const cancelOrder = await orderService.cancelOrder(userId, orderId)
+  const cancelOrder = async (orderId) => {
+    const cancelOrder = await orderService.cancelOrder(orderId)
 
     if (cancelOrder) {
       notification.success({ message: 'Order Cancelled' })
@@ -579,7 +579,7 @@ const Orders = () => {
             <Button
               type="primary"
               className="ml-2"
-              onClick={() => cancelOrder(elm.userId, elm.id)}
+              onClick={() => cancelOrder(elm.id)}
             >
               Cancel Order
             </Button>

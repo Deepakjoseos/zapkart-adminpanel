@@ -463,7 +463,7 @@ const ProductForm = (props) => {
       .catch((info) => {
         setSubmitLoading(false)
         console.log('info', info)
-        message.error('Please enter all required field ')
+        // message.error('Please enter all required field ')
       })
   }
 
