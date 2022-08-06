@@ -13,6 +13,8 @@ import Flex from 'components/shared-components/Flex'
 import { useHistory } from 'react-router-dom'
 import utils from 'utils'
 import productTemplate from 'services/productTemplate'
+import brandService from 'services/brand'
+import categoryService from 'services/category'
 
 const { Option } = Select
 
@@ -40,6 +42,10 @@ const ProductTemplateList = () => {
   const [searchBackupList, setSearchBackupList] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
+  const[brands,setBrands] = useState([])
+  const [categories,setCategories] = useState([])
+  const [selectedBrandId,setSelectedBrandId] = useState(null)
+  const [selectedCategoryId,setSelectedCategoryId] = useState(null)
 
   useEffect(() => {
     const getProductTemplates = async () => {
@@ -50,9 +56,45 @@ const ProductTemplateList = () => {
         console.log(data, 'show-data')
       }
     }
+    const getBrands= async ()=>{
+      const data= await brandService.getBrands()
+      if(data){
+        setBrands(data)
+      }
+    }
+    const getCategories= async ()=>{
+      const data= await categoryService.getCategories()
+      if(data){
+        setCategories(data)
+      }
+    }
     getProductTemplates()
+    getBrands()
+    getCategories()
   }, [])
+  const handleQuery = async () => {
+    const query = {}
+    if ((selectedBrandId || selectedBrandId) !== 'All')
+      query.brandId = selectedBrandId
+    query.categoryId = selectedCategoryId
+    console.log('query', query)
+    const data = await productTemplate.getProductTemplates(query)
+    if (data) {
+      setList(data)
+      setSearchBackupList(data)
+    }
+  }
 
+  const handleClearFilter = async () => {
+    setSelectedBrandId(null)
+    setSelectedCategoryId(null)
+
+    const data = await productTemplate.getProductTemplates({})
+    if (data) {
+      setList(data)
+      setSearchBackupList(data)
+    }
+  }
   const dropdownMenu = (row) => (
     <Menu>
       <Menu.Item onClick={() => viewDetails(row)}>
@@ -226,6 +268,51 @@ const ProductTemplateList = () => {
           <Option value="Hold">Hold</Option>
         </Select>
       </div>
+      <div className="mr-md-3 mb-3">
+        <Select
+          className="w-100"
+          style={{ minWidth: 180 }}
+          onChange={(value) => setSelectedBrandId(value)}
+          // onSelect={handleQuery}
+          placeholder="Brand"
+          value={selectedBrandId}
+        >
+          <Option value="">All</Option>
+          {brands.map((brand) => (
+            <Option key={brand.id} value={brand.id}>
+              {brand.name}
+            </Option>
+          ))}
+        </Select>
+      </div>
+
+      <div className="mr-md-3 mb-3">
+        <Select
+          className="w-100"
+          style={{ minWidth: 180 }}
+          onChange={(value) => setSelectedCategoryId(value)}
+          // onSelect={handleQuery}
+          value={selectedCategoryId}
+          placeholder="Category"
+        >
+          <Option value="">All</Option>
+          {categories.map((category) => (
+            <Option key={category.id} value={category.id}>
+              {category.name}
+            </Option>
+          ))}
+        </Select>
+      </div>
+      <div >
+        <Button type="primary" className="mr-2 " onClick={handleQuery}>
+          Filter
+        </Button>
+      </div>
+      <div>
+        <Button type="primary" className="mr-2" onClick={handleClearFilter}>
+          Clear
+        </Button>
+      </div>
     </Flex>
   )
 
@@ -233,17 +320,18 @@ const ProductTemplateList = () => {
     <Card>
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
         {filters()}
-        <div>
+       
+      </Flex>
+      <div>
           <Button
             onClick={addProduct}
             type="primary"
             icon={<PlusCircleOutlined />}
-            block
+            
           >
             Add Product Template
           </Button>
         </div>
-      </Flex>
       <div className="table-responsive">
         <Table columns={tableColumns} dataSource={list} rowKey="id" />
       </div>

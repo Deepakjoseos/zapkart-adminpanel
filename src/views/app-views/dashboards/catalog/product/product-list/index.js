@@ -26,6 +26,9 @@ import utils from 'utils'
 import productService from 'services/product'
 import DeliveryZoneService from 'services/deliveryZone'
 import vendorService from 'services/vendor'
+import brandService from 'services/brand'
+import { get } from 'lodash'
+import categoryService from 'services/category'
 
 const { Option } = Select
 
@@ -61,7 +64,14 @@ const ProductList = () => {
   const [deliveryZoneId, setDeliveryZoneId] = useState(null)
   const [excelFile, setExcelFile] = useState(null)
   const [vendors, setVendors] = useState([])
-
+  const[brands,setBrands] = useState([])
+  const [categories,setCategories] = useState([])
+  const [selectedBrandId,setSelectedBrandId] = useState(null)
+  const [selectedCategoryId,setSelectedCategoryId] = useState(null)
+  const [selectedVendorId,setSelectedVendorId]= useState(null)
+  const [selectedApproval,setSelectedApproval] = useState('')
+  const [selectedacquirementMethod,setSelectedacquirementMethod]= useState('')
+  
   // const getDeliveryZoneName = (id) => {
   //   const deliveryZoneName = await DeliveryZoneService.getDeliveryZoneById(id)
   //   return
@@ -76,7 +86,24 @@ const ProductList = () => {
         console.log(data, 'show-data')
       }
     }
+    const getBrands= async ()=>{
+      const data= await brandService.getBrands()
+      if(data){
+        setBrands(data)
+      }
+    }
+    const getCategories= async ()=>{
+      const data= await categoryService.getCategories()
+      if(data){
+        setCategories(data)
+      }
+    }
     getProducts()
+    getBrands()
+    getCategories()
+    getVendors()
+    console.log('vendors',vendors)
+
   }, [])
 
   // const dropdownMenu = (row) => (
@@ -279,6 +306,10 @@ const ProductList = () => {
       sorter: (a, b) => utils.antdTableSorter(a, b, 'qty'),
     },
     {
+      title: 'AcquirementMethod',
+      dataIndex: 'acquirementMethod',
+    },
+    {
       title: 'Vendor',
       dataIndex: 'username',
     },
@@ -347,7 +378,32 @@ const ProductList = () => {
       setList(searchBackupList)
     }
   }
+  const handleQuery = async () => {
+    const query = {}
+    if ((selectedBrandId || selectedBrandId) !== 'All')
+      query.brandId = selectedBrandId
+    query.categoryId = selectedCategoryId
+    query.vendorId=selectedVendorId
+    query.approval=selectedApproval
+    query.acquirementMethod=selectedacquirementMethod
+    console.log('query', query)
+    const data = await productService.getProducts(query)
+    if (data) {
+      setList(data)
+      setSearchBackupList(data)
+    }
+  }
 
+  const handleClearFilter = async () => {
+    setSelectedBrandId(null)
+    setSelectedCategoryId(null)
+
+    const data = await productService.getProducts({})
+    if (data) {
+      setList(data)
+      setSearchBackupList(data)
+    }
+  }
   const filters = () => (
     <Flex className="mb-1" mobileFlex={false}>
       <div className="mr-md-3 mb-3">
@@ -370,6 +426,99 @@ const ProductList = () => {
           <Option value="Hold">Hold</Option>
         </Select>
       </div>
+      <div className="mr-md-3 mb-3">
+        <Select
+          className="w-100"
+          style={{ minWidth: 180 }}
+          onChange={(value) => setSelectedBrandId(value)}
+          // onSelect={handleQuery}
+          placeholder="Brand"
+          value={selectedBrandId}
+        >
+          <Option value="">All</Option>
+          {brands.map((brand) => (
+            <Option key={brand.id} value={brand.id}>
+              {brand.name}
+            </Option>
+          ))}
+        </Select>
+      </div>
+
+      <div className="mr-md-3 mb-3">
+        <Select
+          className="w-100"
+          style={{ minWidth: 180 }}
+          onChange={(value) => setSelectedCategoryId(value)}
+          // onSelect={handleQuery}
+          value={selectedCategoryId}
+          placeholder="Category"
+        >
+          <Option value="">All</Option>
+          {categories.map((category) => (
+            <Option key={category.id} value={category.id}>
+              {category.name}
+            </Option>
+          ))}
+        </Select>
+      </div>
+      <div className="mr-md-3 mb-3">
+      <Select
+          className="w-100"
+          style={{ minWidth: 180 }}
+          onChange={(value) => setSelectedVendorId(value)}
+          // onSelect={handleQuery}
+          value={selectedVendorId}
+          placeholder="Vendor">
+             <Option value="">All</Option>
+            {vendors?.map((vendor) => (
+              <Option value={vendor.id}>
+                {vendor?.firstName} {vendor?.lastName}
+              </Option>
+            ))}
+          </Select>
+      </div>
+      <div className="mr-md-3 mb-3">
+      <Select
+          className="w-100"
+          style={{ minWidth: 180 }}
+          onChange={(value) => setSelectedApproval(value)}
+          // onSelect={handleQuery}
+          value={selectedApproval}
+          placeholder="Approval Method">
+             <Option value="">All</Option>
+             <Option value="Pending">Pending</Option>
+             <Option value="Approved">Approved</Option>
+             <Option value="On Hold">On Hold</Option>
+             <Option value="Rejected">Rejected</Option>
+          </Select>
+      </div>
+      <div className="mr-md-3 mb-3">
+      <Select
+          className="w-100"
+          style={{ minWidth: 180 }}
+          onChange={(value) => setSelectedacquirementMethod(value)}
+          // onSelect={handleQuery}
+          value={selectedacquirementMethod}
+          placeholder="AcquirementMethod">
+             <Option value="">All</Option>
+             <Option value="Rent">Rent</Option>
+             <Option value="Lend">Lend</Option>
+             <Option value="Purchase">Purchase</Option>
+             <Option value="Giveaway">Giveaway</Option>
+          </Select>
+      </div>
+      <div >
+        <Button type="primary" className="mr-2 " onClick={handleQuery}>
+          Filter
+        </Button>
+      </div>
+      <div>
+        <Button type="primary" className="mr-2" onClick={handleClearFilter}>
+          Clear
+        </Button>
+      </div>
+    
+      
     </Flex>
   )
 
@@ -378,16 +527,7 @@ const ProductList = () => {
       <Card>
         <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
           {filters()}
-          <div className="mr-2">
-            <Button
-              type="primary"
-              icon={<FileAddOutlined />}
-              onClick={() => setIsExcelModalOpen(true)}
-              block
-            >
-              Excel Upload
-            </Button>
-          </div>
+      
           {/* <div>
           <Button
             onClick={addProduct}
@@ -399,6 +539,16 @@ const ProductList = () => {
           </Button>
         </div> */}
         </Flex>
+        <div className="mr-2">
+            <Button
+              type="primary"
+              icon={<FileAddOutlined />}
+              onClick={() => setIsExcelModalOpen(true)}
+              
+            >
+              Excel Upload
+            </Button>
+          </div>
         <div className="table-responsive">
           <Table columns={tableColumns} dataSource={list} rowKey="id" />
         </div>
