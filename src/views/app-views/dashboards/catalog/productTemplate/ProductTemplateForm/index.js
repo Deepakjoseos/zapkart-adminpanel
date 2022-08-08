@@ -214,7 +214,6 @@ const ProductForm = (props) => {
           allowedQuantityPerOrder: data.allowedQuantityPerOrder,
           minQty: data.minQty,
           slug: data.slug,
-          tags: tags,
           metaTitle: data.metaTitle,
           metaDescription: data.metaDescription,
           keywords: data.keywords,
@@ -266,11 +265,11 @@ const ProductForm = (props) => {
           allowedQuantityPerOrder: data.allowedQuantityPerOrder,
           minQty: data.minQty,
           productType: 'nonMedicine',
-          slug: data.slug,
-          tags: tags,
-          metaTitle: data.metaTitle,
-          metaDescription: data.metaDescription,
-          keywords: data.keywords,
+          // slug: data.slug,
+          // tags: tags,
+          // metaTitle: data.metaTitle,
+          // metaDescription: data.metaDescription,
+          // keywords: data.keywords,
 
           lengthClass: data.shippingDetail.lengthClass,
           weightClass: data.shippingDetail.weightClass,
@@ -326,7 +325,9 @@ const ProductForm = (props) => {
     setSubmitLoading(true)
     form
       .validateFields()
+     
       .then(async (values) => {
+      
         console.log(values, 'values')
         let sendingValues = {}
 
@@ -348,10 +349,10 @@ const ProductForm = (props) => {
             manufacturer: values.manufacturer,
             minQty: values.minQty,
             slug: values.slug,
-            tags: tags,
-            metaTitle: values.metaTitle,
-            metaDescription: values.metaDescription,
-            keywords: values.keywords,
+             tags: tags,
+             metaTitle: values.metaTitle,
+             metaDescription: values.metaDescription,
+             keywords: values.keywords,
 
             composition: values?.composition?.map((comp) => {
               return { id: comp.id, qty: comp.qty }
@@ -397,11 +398,11 @@ const ProductForm = (props) => {
             productType: 'NonMedicine',
             medicinePackaging: 'no',
             minQty: values.minQty,
-            slug: values.slug,
-            tags: tags,
-            metaTitle: values.metaTitle,
-            metaDescription: values.metaDescription,
-            keywords: values.keywords,
+            // slug: values.slug,
+            // tags: tags,
+            // metaTitle: values.metaTitle,
+            // metaDescription: values.metaDescription,
+            // keywords: values.keywords,
 
             // status: values.status,
             shippingDetail: {

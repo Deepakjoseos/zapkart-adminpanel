@@ -40,7 +40,7 @@ const InformationList = () => {
   const [searchBackupList, setSearchBackupList] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
-
+  const [selectedOrder, setSelectedorder] = useState('')
   useEffect(() => {
     const getInformations = async () => {
       const data = await informationService.getInformations()
@@ -144,7 +144,29 @@ const InformationList = () => {
       ),
     },
   ]
+  const handleQuery = async () => {
+    const query = {}
+    if ((selectedOrder) !== 'All')
+      query.orderByPriority = selectedOrder
 
+    console.log('query', query)
+    const data = await informationService.getInformations(query)
+    if (data) {
+      setList(data)
+      setSearchBackupList(data)
+    }
+  }
+
+
+  const handleClearFilter = async () => {
+    setSelectedorder(null)
+
+    const data = await informationService.getInformations({})
+    if (data) {
+      setList(data)
+      setSearchBackupList(data)
+    }
+  }
   const onSearch = (e) => {
     const value = e.currentTarget.value
     const searchArray = e.currentTarget.value ? list : searchBackupList
@@ -185,6 +207,31 @@ const InformationList = () => {
           <Option value="Hold">Hold</Option>
         </Select>
       </div>
+
+      <div className="mr-md-3 mb-3">
+        <Select
+          className="w-100"
+          style={{ minWidth: 180 }}
+          onChange={(value) => setSelectedorder(value)}
+          // onSelect={handleQuery}
+          value={selectedOrder}
+          placeholder="OrderBy Priority">
+
+          <Option value="">All</Option>
+          <Option value="true">Yes</Option>
+          <Option value="false">No</Option>
+        </Select>
+      </div>
+      <div >
+        <Button type="primary" className="mr-2 " onClick={handleQuery}>
+          Filter
+        </Button>
+      </div>
+      <div>
+        <Button type="primary" className="mr-2" onClick={handleClearFilter}>
+          Clear
+        </Button>
+      </div>
     </Flex>
   )
 
@@ -192,17 +239,18 @@ const InformationList = () => {
     <Card>
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
         {filters()}
-        <div>
+        
+      </Flex>
+      <div>
           <Button
             onClick={addProduct}
             type="primary"
             icon={<PlusCircleOutlined />}
-            block
+            
           >
             Add Information
           </Button>
         </div>
-      </Flex>
       <div className="table-responsive">
         <Table columns={tableColumns} dataSource={list} rowKey="id" />
       </div>
