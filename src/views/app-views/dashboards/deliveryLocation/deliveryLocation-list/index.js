@@ -13,6 +13,7 @@ import Flex from 'components/shared-components/Flex'
 import { useHistory } from 'react-router-dom'
 import utils from 'utils'
 import deliveryLocationService from 'services/deliveryLocation'
+import vendorService from 'services/vendor'
 
 const { Option } = Select
 
@@ -40,6 +41,8 @@ const ProductList = () => {
   const [searchBackupList, setSearchBackupList] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
+  const [vendors,setVendors] = useState(null)
+  const [selectedVendorId,setSelectedVendorId]= useState(null)
 
   useEffect(() => {
     const getDeliveryLocations = async () => {
@@ -50,7 +53,15 @@ const ProductList = () => {
         console.log(data, 'show-data')
       }
     }
+    const getVendors = async ()=>{
+      const data = await vendorService.getVendors()
+      if(data){
+        setVendors(data)
+      
+      }
+    }
     getDeliveryLocations()
+    getVendors()
   }, [])
 
   const dropdownMenu = (row) => (
@@ -156,7 +167,27 @@ const ProductList = () => {
     setList(data)
     setSelectedRowKeys([])
   }
+  const handleQuery = async () => {
+    const query = {}
+    if ((selectedVendorId) !== 'All')
+      query.vendorId = selectedVendorId
+  
+    const data = await deliveryLocationService.getDeliveryLocations(query)
+    if (data) {
+      setList(data)
+      setSearchBackupList(data)
+    }
+  }
 
+  const handleClearFilter = async () => {
+    setSelectedVendorId(null)
+
+    const data = await deliveryLocationService.getDeliveryLocations({})
+    if (data) {
+      setList(data)
+      setSearchBackupList(data)
+    }
+  }
   const handleShowStatus = (value) => {
     if (value !== 'All') {
       const key = 'status'
@@ -170,13 +201,15 @@ const ProductList = () => {
   const filters = () => (
     <Flex className="mb-1" mobileFlex={false}>
       <div className="mr-md-3 mb-3">
+      <label className='mt-2'>Search</label>
         <Input
           placeholder="Search"
           prefix={<SearchOutlined />}
           onChange={(e) => onSearch(e)}
         />
       </div>
-      <div className="mb-3">
+      <div className="mr-md-3 mb-3">
+      <label className='mt-2'>Status</label>
         <Select
           defaultValue="All"
           className="w-100"
@@ -189,6 +222,34 @@ const ProductList = () => {
           <Option value="Hold">Hold</Option>
         </Select>
       </div>
+      <div className="mr-md-3 mb-3">
+        <label className='mt-2'>Vendors</label>
+      <Select
+          className="w-100"
+          style={{ minWidth: 180 }}
+          onChange={(value) => setSelectedVendorId(value)}
+          // onSelect={handleQuery}
+          value={selectedVendorId}
+          placeholder="Vendor">
+             <Option value="">All</Option>
+            {vendors?.map((vendor) => (
+              <Option value={vendor.id}>
+                {vendor?.firstName} {vendor?.lastName}
+              </Option>
+            ))}
+          </Select>
+      </div>
+     
+      <div >
+        <Button type="primary" className="mr-1 mt-4" onClick={handleQuery}>
+          Filter
+        </Button>
+      </div>
+      <div>
+        <Button type="primary" className="mr-1 mt-4" onClick={handleClearFilter}>
+          Clear
+        </Button>
+      </div>
     </Flex>
   )
 
@@ -196,17 +257,18 @@ const ProductList = () => {
     <Card>
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
         {filters()}
-        <div>
+       
+      </Flex>
+      <div>
           <Button
             onClick={addProduct}
             type="primary"
             icon={<PlusCircleOutlined />}
-            block
+            
           >
             Add DeliveryLocation
           </Button>
         </div>
-      </Flex>
       <div className="table-responsive">
         <Table columns={tableColumns} dataSource={list} rowKey="id" />
       </div>

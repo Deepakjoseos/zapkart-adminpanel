@@ -1,11 +1,16 @@
 import fetch from 'auth/FetchInterceptor'
 
 const manufacturerService = {}
+const api= '/manufacturers'
 
-manufacturerService.getManufacturer = async function () {
+manufacturerService.getManufacturer = async function (query) {
   try {
+    let url = `${api}`
+    const orderByPriority = query?.orderByPriority
+    if(orderByPriority)
+    url= `${api}?orderByPriority=${orderByPriority}`;
     const res = await fetch({
-      url: '/manufacturers',
+      url,
       method: 'get',
     })
     const data = res.data.filter((cur) => cur.status !== 'Deleted')

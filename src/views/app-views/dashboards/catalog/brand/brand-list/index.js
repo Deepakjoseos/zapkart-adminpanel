@@ -204,13 +204,17 @@ const BrandList = () => {
   const filters = () => (
     <Flex className="mb-1" mobileFlex={false}>
       <div className="mr-md-3 mb-3">
+      <label className="mt-2" >Search</label>
+
         <Input
           placeholder="Search"
           prefix={<SearchOutlined />}
           onChange={(e) => onSearch(e)}
         />
       </div>
-      <div className="mb-3">
+  
+      <div className="mr-md-3 mb-3">
+      <label className="mt-2" >Status</label>
         <Select
           defaultValue="All"
           className="w-100"
@@ -223,7 +227,9 @@ const BrandList = () => {
           <Option value="Hold">Hold</Option>
         </Select>
       </div>
+  
       <div className="mr-md-3 mb-3">
+      <label className="mt-2">Order By Priority</label>
       <Select
           className="w-100"
           style={{ minWidth: 180 }}
@@ -238,12 +244,12 @@ const BrandList = () => {
           </Select>
       </div>
       <div >
-        <Button type="primary" className="mr-2 " onClick={handleQuery}>
+        <Button type="primary" className="mr-2 mt-4" onClick={handleQuery}>
           Filter
         </Button>
       </div>
       <div>
-        <Button type="primary" className="mr-2" onClick={handleClearFilter}>
+        <Button type="primary" className="mr-2 mt-4" onClick={handleClearFilter}>
           Clear
         </Button>
       </div>

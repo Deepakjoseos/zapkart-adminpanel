@@ -29,6 +29,7 @@ import vendorService from 'services/vendor'
 import brandService from 'services/brand'
 import { get } from 'lodash'
 import categoryService from 'services/category'
+import Label from 'views/app-views/components/data-display/timeline/Label'
 
 const { Option } = Select
 
@@ -306,10 +307,6 @@ const ProductList = () => {
       sorter: (a, b) => utils.antdTableSorter(a, b, 'qty'),
     },
     {
-      title: 'AcquirementMethod',
-      dataIndex: 'acquirementMethod',
-    },
-    {
       title: 'Vendor',
       dataIndex: 'username',
     },
@@ -397,6 +394,9 @@ const ProductList = () => {
   const handleClearFilter = async () => {
     setSelectedBrandId(null)
     setSelectedCategoryId(null)
+    setSelectedApproval(null)
+    setSelectedacquirementMethod(null)
+    setSelectedVendorId(null)
 
     const data = await productService.getProducts({})
     if (data) {
@@ -407,13 +407,15 @@ const ProductList = () => {
   const filters = () => (
     <Flex className="mb-1 flex-wrap" mobileFlex={false}>
       <div className="mr-md-3 mb-3">
+      <label className='mt-2'>Search</label>
         <Input
           placeholder="Search"
           prefix={<SearchOutlined />}
           onChange={(e) => onSearch(e)}
         />
       </div>
-      <div className="mb-3">
+      <div className="mr-md-3 mb-3">
+         <label className='mt-2'>Status</label>
         <Select
           defaultValue="All"
           className="w-100"
@@ -426,7 +428,8 @@ const ProductList = () => {
           <Option value="Hold">Hold</Option>
         </Select>
       </div>
-      <div className="mr-md-3 mb-3">
+      <div className=" mr-md-3 mb-3">
+        <label className='mt-2'>Brands</label>
         <Select
           className="w-100"
           style={{ minWidth: 180 }}
@@ -445,6 +448,7 @@ const ProductList = () => {
       </div>
 
       <div className="mr-md-3 mb-3">
+        <label className='mt-2'>Categories</label>
         <Select
           className="w-100"
           style={{ minWidth: 180 }}
@@ -462,6 +466,7 @@ const ProductList = () => {
         </Select>
       </div>
       <div className="mr-md-3 mb-3">
+        <label className='mt-2'>Vendors</label>
       <Select
           className="w-100"
           style={{ minWidth: 180 }}
@@ -478,6 +483,7 @@ const ProductList = () => {
           </Select>
       </div>
       <div className="mr-md-3 mb-3">
+        <label className='mt-2'>Approval</label>
       <Select
           className="w-100"
           style={{ minWidth: 180 }}
@@ -492,28 +498,31 @@ const ProductList = () => {
              <Option value="Rejected">Rejected</Option>
           </Select>
       </div>
-      <div className="mr-md-3 mb-3">
-      <Select
-          className="w-100"
-          style={{ minWidth: 180 }}
-          onChange={(value) => setSelectedacquirementMethod(value)}
-          // onSelect={handleQuery}
-          value={selectedacquirementMethod}
-          placeholder="AcquirementMethod">
-             <Option value="">All</Option>
-             <Option value="Rent">Rent</Option>
-             <Option value="Lend">Lend</Option>
-             <Option value="Purchase">Purchase</Option>
-             <Option value="Giveaway">Giveaway</Option>
-          </Select>
-      </div>
+      {process.env.REACT_APP_SITE_NAME === 'awen' ? 
+     <div className="mr-md-3 mb-3">
+      <label className='mt-2'>Acquirement Method</label>
+     <Select
+         className="w-100"
+         style={{ minWidth: 180 }}
+         onChange={(value) => setSelectedacquirementMethod(value)}
+         // onSelect={handleQuery}
+         value={selectedacquirementMethod}
+         placeholder="AcquirementMethod">
+            <Option value="">All</Option>
+            <Option value="Rent">Rent</Option>
+            <Option value="Lend">Lend</Option>
+            <Option value="Purchase">Purchase</Option>
+            <Option value="Giveaway">Giveaway</Option>
+         </Select>
+     </div>  :""}
+      
       <div >
-        <Button type="primary" className="mr-2 " onClick={handleQuery}>
+        <Button type="primary" className="mr-1 mt-4" onClick={handleQuery}>
           Filter
         </Button>
       </div>
       <div>
-        <Button type="primary" className="mr-2" onClick={handleClearFilter}>
+        <Button type="primary" className="mr-1 mt-4" onClick={handleClearFilter}>
           Clear
         </Button>
       </div>
