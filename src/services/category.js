@@ -1,11 +1,23 @@
 import fetch from 'auth/FetchInterceptor'
 
 const categoryService = {}
+const api = '/categories'
 
-categoryService.getCategories = async function () {
+categoryService.getCategories = async function (query) {
   try {
+
+    let url = `${api}`;
+    const orderByPriority = query?.orderByPriority;
+    const orderByLevel = query?.orderByLevel;
+
+    if (orderByPriority) url = `${url}?orderByPriority=${orderByPriority}`;
+    if (orderByLevel)
+      url =
+      orderByPriority && orderByPriority !== null
+          ? `${url}&orderByLevel=${orderByLevel}`
+          : `${url}?orderByLevel=${orderByLevel}`;
     const res = await fetch({
-      url: '/categories',
+      url,
       method: 'get',
     })
     const data = res.data.filter((cur) => cur.status !== 'Deleted')

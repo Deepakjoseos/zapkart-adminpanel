@@ -3,10 +3,14 @@ import fetch from 'auth/FetchInterceptor'
 const widgetService = {}
 const apiRoute = '/widget'
 
-widgetService.getWidgets = async function () {
+widgetService.getWidgets = async function (query) {
   try {
+    let url = `${apiRoute}`;
+    const orderByPriority = query?.orderByPriority;
+
+    if (orderByPriority) url = `${url}?orderByPriority=${orderByPriority}`;
     const res = await fetch({
-      url: apiRoute,
+      url,
       method: 'get',
     })
     const data = res.data.filter((cur) => cur.status !== 'Deleted')
