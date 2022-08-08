@@ -45,8 +45,7 @@ const rules = {
 
 }
 
-const GeneralField = ({propsImages,tagChild,inputVisible,handleInputChange,handleInputConfirm,inputRef,
-  inputValue,showInput}) => (
+const GeneralField = ({propsImages,handleChange}) => (
   <Row gutter={16}>
     <Col xs={24} sm={24} md={17}>
       <Card title="Basic Info">
@@ -83,48 +82,16 @@ const GeneralField = ({propsImages,tagChild,inputVisible,handleInputChange,handl
           <Input placeholder="slug" />
         </Form.Item>
         <Form.Item name="tags" label="Tags" >
-        <TweenOneGroup
-          enter={{
-            scale: 0.8,
-            opacity: 0,
-            type: 'from',
-            duration: 100,
-          }}
-          // onEnd={(e) => {
-          //   if (e.type === 'appear' || e.type === 'enter') {
-          //     e.target.style = 'display: inline-block';
-          //   }
-          // }}
-          leave={{
-            opacity: 0,
-            width: 0,
-            scale: 0,
-            duration: 200,
-          }}
-          appear={false}
-        >
-          {tagChild}
-        </TweenOneGroup>
-        <hr></hr>
-        {inputVisible && (
-        <Input
-          ref={inputRef}
-          type="text"
-          size="small"
-          style={{
-            width: 78,
-          }}
-          value={inputValue}
-          onChange={handleInputChange}
-          onBlur={handleInputConfirm}
-          onPressEnter={handleInputConfirm}
-        />
-      )}
-      {!inputVisible && (
-        <Tag onClick={showInput} className="site-tag-plus">
-          <PlusOutlined /> New Tag
-        </Tag>
-      )}
+        <Select dropdownStyle={{ display: "none" }}
+            mode="tags"
+            style={{
+              width: '100%',
+            }}
+            placeholder="Tags"
+            onChange={handleChange}
+          >
+
+          </Select>
         </Form.Item>
       </Card>
     </Col>

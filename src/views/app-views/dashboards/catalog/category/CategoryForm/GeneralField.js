@@ -8,7 +8,7 @@ import {
   Upload,
   InputNumber,
   Select,
-  TreeSelect,Tag
+  TreeSelect, Tag
 } from 'antd'
 import { ImageSvg } from 'assets/svg/icon'
 import CustomIcon from 'components/util-components/CustomIcon'
@@ -32,10 +32,10 @@ const rules = {
       message: 'Required',
     },
   ],
-  priority:[
+  priority: [
     {
-      required:true,
-      message:'Required'
+      required: true,
+      message: 'Required'
     }
   ],
   status: [
@@ -47,13 +47,12 @@ const rules = {
   slug: [
     {
       required: true,
-       message: 'Required',
+      message: 'Required',
     },
   ],
 }
 
-const GeneralField = ({propsImages,categories,tagChild,inputVisible,handleInputChange,handleInputConfirm,inputRef,
-inputValue,showInput}) => (
+const GeneralField = ({ propsImages, categories, handleChange }) => (
   <Row gutter={16}>
     <Col xs={24} sm={24} md={17}>
       <Card title="Basic Info">
@@ -69,11 +68,11 @@ inputValue,showInput}) => (
             treeData={categories}
             placeholder="Please select parent"
             treeDefaultExpandAll
-            // onChange={(e) =>
-            //   props.form.setFieldsValue({
-            //     parentId: e,
-            //   })
-            // }
+          // onChange={(e) =>
+          //   props.form.setFieldsValue({
+          //     parentId: e,
+          //   })
+          // }
           />
         </Form.Item>
         <Form.Item name="priority" label="Priority" rules={rules.priority}>
@@ -93,7 +92,7 @@ inputValue,showInput}) => (
         </Form.Item>
       </Card>
       <Card title="SEO">
-      <Form.Item name="metaTitle" label="MetaTitle">
+        <Form.Item name="metaTitle" label="MetaTitle">
           <Input placeholder="Meta Title" />
         </Form.Item>
         <Form.Item name="metaDescription" label="metaDescription" >
@@ -105,53 +104,22 @@ inputValue,showInput}) => (
         <Form.Item name="slug" label="Slug" rules={rules.slug}>
           <Input placeholder="Slug" />
         </Form.Item>
-      
+
         <Form.Item name="tags" label="Tags" >
-        <TweenOneGroup
-          enter={{
-            scale: 0.8,
-            opacity: 0,
-            type: 'from',
-            duration: 100,
-          }}
-          // onEnd={(e) => {
-          //   if (e.type === 'appear' || e.type === 'enter') {
-          //     e.target.style = 'display: inline-block';
-          //   }
-          // }}
-          leave={{
-            opacity: 0,
-            width: 0,
-            scale: 0,
-            duration: 200,
-          }}
-          appear={false}
-        >
-          {tagChild}
-        </TweenOneGroup>
-        <hr></hr>
-        {inputVisible && (
-        <Input
-          ref={inputRef}
-          type="text"
-          size="small"
-          style={{
-            width: 78,
-          }}
-          value={inputValue}
-          onChange={handleInputChange}
-          onBlur={handleInputConfirm}
-          onPressEnter={handleInputConfirm}
-        />
-      )}
-      {!inputVisible && (
-        <Tag onClick={showInput} className="site-tag-plus">
-          <PlusOutlined /> New Tag
-        </Tag>
-      )}
+
+          <Select dropdownStyle={{ display: "none" }}
+            mode="tags"
+            style={{
+              width: '100%',
+            }}
+            placeholder="Tags"
+            onChange={handleChange}
+          >
+
+          </Select>
         </Form.Item>
-      
-      
+
+
       </Card>
     </Col>
     <Col xs={24} sm={24} md={7}>

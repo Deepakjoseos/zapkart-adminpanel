@@ -1,11 +1,15 @@
 import fetch from 'auth/FetchInterceptor'
 
 const deliveryLocation = {}
-
-deliveryLocation.getDeliveryLocations = async function () {
+const api = '/deliverylocations'
+deliveryLocation.getDeliveryLocations = async function (query) {
   try {
+    let url = `${api}`
+    const vendorId = query?.vendorId
+    if(vendorId)
+    url= `${api}?vendorId=${vendorId}`;
     const res = await fetch({
-      url: '/deliverylocations',
+      url,
       method: 'get',
     })
     const data = res.data.filter((cur) => cur.status !== 'Deleted')

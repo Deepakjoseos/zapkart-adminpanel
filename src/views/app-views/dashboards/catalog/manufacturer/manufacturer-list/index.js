@@ -41,7 +41,7 @@ const ProductList = () => {
   const [searchBackupList, setSearchBackupList] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
-
+  const [selectedOrder,setSelectedorder] = useState(null)
   useEffect(() => {
     const getManufacturer = async () => {
       const data = await manufacturerService.getManufacturer()
@@ -53,7 +53,29 @@ const ProductList = () => {
     }
     getManufacturer()
   }, [])
+  const handleQuery = async () => {
+    const query = {}
+    if ((selectedOrder) !== 'All')
+      query.orderByPriority = selectedOrder
 
+    console.log('query', query)
+    const data = await manufacturerService.getManufacturer(query)
+    if (data) {
+      setList(data)
+      setSearchBackupList(data)
+    }
+  }
+
+
+  const handleClearFilter = async () => {
+    setSelectedorder(null)
+ 
+    const data = await manufacturerService.getManufacturer({})
+    if (data) {
+      setList(data)
+      setSearchBackupList(data)
+    }
+  }
   const dropdownMenu = (row) => (
     <Menu>
       <Menu.Item onClick={() => viewDetails(row)}>
@@ -164,14 +186,17 @@ const ProductList = () => {
 
   const filters = () => (
     <Flex className="mb-1" mobileFlex={false}>
+      
       <div className="mr-md-3 mb-3">
+      <label className='mt-2'>Search</label>
         <Input
           placeholder="Search"
           prefix={<SearchOutlined />}
           onChange={(e) => onSearch(e)}
         />
       </div>
-      <div className="mb-3">
+      <div className="mr-md-3 mb-3">
+        <label className='mt-2'>Status</label>
         <Select
           defaultValue="All"
           className="w-100"
@@ -184,6 +209,31 @@ const ProductList = () => {
           <Option value="Hold">Hold</Option>
         </Select>
       </div>
+      <div className="mr-md-3 mb-3">
+      <label className="mt-2">Order By Priority</label>
+      <Select
+          className="w-100"
+          style={{ minWidth: 180 }}
+          onChange={(value) => setSelectedorder(value)}
+          // onSelect={handleQuery}
+          value={selectedOrder}
+          placeholder="OrderBy Priority">
+            
+             <Option value="">All</Option>
+             <Option value="true">Yes</Option>
+             <Option value="false">No</Option>
+          </Select>
+      </div>
+      <div >
+        <Button type="primary" className="mr-2 mt-4" onClick={handleQuery}>
+          Filter
+        </Button>
+      </div>
+      <div>
+        <Button type="primary" className="mr-2 mt-4" onClick={handleClearFilter}>
+          Clear
+        </Button>
+      </div>
     </Flex>
   )
 
@@ -191,17 +241,18 @@ const ProductList = () => {
     <Card>
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
         {filters()}
-        <div>
+      
+      </Flex>
+      <div>
           <Button
             onClick={addProduct}
             type="primary"
             icon={<PlusCircleOutlined />}
-            block
+          
           >
             Add Manufacturer
           </Button>
         </div>
-      </Flex>
       <div className="table-responsive">
         <Table columns={tableColumns} dataSource={list} rowKey="id" />
       </div>
