@@ -1,7 +1,21 @@
-import React from 'react'
-import { Input, Row, Col, Card, Form, Upload, InputNumber, Select } from 'antd'
+import React, { useEffect, useState } from 'react'
+import {
+  Input,
+  Row,
+  Col,
+  Card,
+  Form,
+  Upload,
+  InputNumber,
+  Select,
+  Space,
+  DatePicker,
+} from 'antd'
 import { ImageSvg } from 'assets/svg/icon'
 import CustomIcon from 'components/util-components/CustomIcon'
+import OrderSelectionField from './OrderSelectionField'
+import moment from 'moment'
+import shipmentService from 'services/shipment'
 
 // const { Dragger } = Upload
 const { Option } = Select
@@ -33,38 +47,147 @@ const rules = {
   ],
 }
 
-const GeneralField = (props) => (
-  <Row gutter={16}>
-    <Col xs={24} sm={24} md={17}>
-      <Card title="Basic Info">
-        <Form.Item name="name" label="Name" rules={rules.name}>
-          <Input placeholder="Name" />
-        </Form.Item>
-        <Form.Item name="priority" label="Priority" rules={rules.priority}>
-          <InputNumber
-            placeholder="Priority"
-            size="large"
-            min={0}
-            max={100000}
-          />
-        </Form.Item>
+const GeneralField = ({ form }) => {
+  const [shippedByVendor, setShippedByVendor] = useState(null)
+  const [pickupLocations, setPickUpLocations] = useState([])
 
-        <Form.Item name="status" label="Status" rules={rules.status}>
-          <Select placeholder="Status">
-            <Option value="Active">Active</Option>
-            <Option value="Hold">Hold</Option>
-          </Select>
-        </Form.Item>
-      </Card>
-    </Col>
-    <Col xs={24} sm={24} md={7}>
-      <Card title="Media">
-        <Upload listType="picture-card" name="image" {...props.propsImages}>
-          <CustomIcon className="display-3" svg={ImageSvg} />
-        </Upload>
-      </Card>
-    </Col>
-  </Row>
-)
+  const getPickupLocations = async () => {
+    const data = await shipmentService.getPickupLocations()
+    if (data?.shipping_address) {
+      setPickUpLocations(data.shipping_address)
+    }
+  }
+
+  useEffect(() => {
+    getPickupLocations()
+  }, [])
+  return (
+    <Row gutter={16}>
+      <Col xs={24} sm={24} md={24}>
+        <Card title="Basic Info">
+          <Form.Item
+            name="shippedByVendor"
+            label="Shipped By Vendor"
+            rules={rules.shippedByVendor}
+          >
+            <Select
+              placeholder="Shipped By Vendoratus"
+              onChange={(e) => {
+                setShippedByVendor(e)
+              }}
+            >
+              <Option value={true}>Yes</Option>
+              <Option value={false}>No</Option>
+            </Select>
+          </Form.Item>
+
+          {shippedByVendor && (
+            <Form.Item
+              name="expectedDeliveryDate"
+              label="Expected Delivery Date"
+            >
+              <DatePicker
+                defaultValue={moment()}
+                format="YYYY-MM-DD"
+                onChange={(date, dateString) => {
+                  // console.log(date, dateString, 'plss')
+                  form.setFieldsValue({
+                    expectedDeliveryDate: moment(dateString),
+                  })
+                }}
+              />
+            </Form.Item>
+          )}
+
+          <Form.List name="items">
+            {(fields, { add, remove }) => {
+              console.log(fields, 'show-filelds')
+              return (
+                <OrderSelectionField
+                  add={add}
+                  fields={fields}
+                  remove={remove}
+                  form={form}
+                />
+              )
+            }}
+          </Form.List>
+
+          {/* <Form.Item name="name" label="Name" rules={rules.name}>
+            <Input placeholder="Name" />
+          </Form.Item> */}
+        </Card>
+        {shippedByVendor === false && (
+          <Card title="Shipment Details">
+            <Form.Item name="description" label="Description">
+              <Input placeholder="Description" />
+            </Form.Item>
+
+            <Form.Item name="pickup_location" label="Pickup Location">
+              <Select placeholder="Pickup Location">
+                {pickupLocations.map((item) => (
+                  <Option value={item?.pickup_location}>
+                    {`${item.address}, ${item.city}, ${item.state}, ${item?.pin_code}`}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Row gutter={16}>
+              <Col xs={24} sm={24} md={8}>
+                <Form.Item name="length" label="Length">
+                  <InputNumber
+                    placeholder="Length"
+                    // size="large"
+                    style={{ width: '100%' }}
+                    min={0}
+                    max={100000}
+                    addonAfter="cm"
+                  />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={8}>
+                <Form.Item name="breadth" label="Breadth">
+                  <InputNumber
+                    placeholder="Breadth"
+                    style={{ width: '100%' }}
+                    // size="large"
+                    min={0}
+                    max={100000}
+                    addonAfter="cm"
+                  />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={8}>
+                <Form.Item name="height" label="Height">
+                  <InputNumber
+                    placeholder="Height"
+                    style={{ width: '100%' }}
+                    // size="large"
+                    min={0}
+                    max={100000}
+                    addonAfter="cm"
+                  />
+                </Form.Item>
+              </Col>
+
+              <Col xs={24} sm={24} md={8}>
+                <Form.Item name="weight" label="Weight">
+                  <InputNumber
+                    placeholder="Weight"
+                    style={{ width: '100%' }}
+                    // size="large"
+                    min={0}
+                    max={100000}
+                    addonAfter="kg"
+                  />
+                </Form.Item>
+              </Col>
+            </Row>
+          </Card>
+        )}
+      </Col>
+    </Row>
+  )
+}
 
 export default GeneralField

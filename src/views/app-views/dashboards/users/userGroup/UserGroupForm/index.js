@@ -43,7 +43,6 @@ const ProductForm = (props) => {
     form
       .validateFields()
       .then(async (values) => {
-        setSubmitLoading(false)
         if (mode === ADD) {
           const created = await userGroupService.createUserGroup(values)
           if (created) {
@@ -58,6 +57,7 @@ const ProductForm = (props) => {
             history.goBack()
           }
         }
+        setSubmitLoading(false)
       })
       .catch((info) => {
         setSubmitLoading(false)

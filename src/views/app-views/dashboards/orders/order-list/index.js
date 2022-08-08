@@ -476,10 +476,15 @@ const Orders = () => {
   }
 
   const cancelOrder = async (orderId) => {
+    notification.warning({ message: 'Order Cancelling...' })
     const cancelOrder = await orderService.cancelOrder(orderId)
 
     if (cancelOrder) {
       notification.success({ message: 'Order Cancelled' })
+
+      setTimeout(() => {
+        window.location.reload()
+      }, 2000)
     }
   }
 
@@ -576,13 +581,15 @@ const Orders = () => {
         <div className="text-right">
           <Flex>
             <EllipsisDropdown menu={dropdownMenu(elm)} />
-            <Button
-              type="primary"
-              className="ml-2"
-              onClick={() => cancelOrder(elm.id)}
-            >
-              Cancel Order
-            </Button>
+            {elm.status !== 'Cancelled' && (
+              <Button
+                type="primary"
+                className="ml-2"
+                onClick={() => cancelOrder(elm.id)}
+              >
+                Cancel Order
+              </Button>
+            )}
           </Flex>
         </div>
       ),

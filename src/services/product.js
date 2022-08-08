@@ -5,58 +5,55 @@ const api = '/products'
 
 productService.getProducts = async function (query) {
   try {
-    let url = `${api}`;
-    const brandId = query?.brandId;
-    const categoryId = query?.categoryId;
-    const status = query?.status;
-    const vendorId = query?.vendorId;
-    const approval = query?.approval;
-    const acquirementMethod = query?.acquirementMethod;
-    if (brandId) url = `${url}?brandId=${brandId}`;
+    let url = `${api}`
+    const brandId = query?.brandId
+    const categoryId = query?.categoryId
+    const status = query?.status
+    const vendorId = query?.vendorId
+    const approval = query?.approval
+    const acquirementMethod = query?.acquirementMethod
+    if (brandId) url = `${url}?brandId=${brandId}`
     if (categoryId)
       url =
         brandId && brandId !== null
           ? `${url}&categoryId=${categoryId}`
-          : `${url}?categoryId=${categoryId}`;
+          : `${url}?categoryId=${categoryId}`
     if (status)
       url =
-        (brandId && brandId !== null) ||
-          (categoryId && categoryId !== null)
+        (brandId && brandId !== null) || (categoryId && categoryId !== null)
           ? `${url}&status=${status}`
-          : `${url}?status=${status}`;
+          : `${url}?status=${status}`
 
     if (vendorId)
       url =
-        (brandId && brandId !== null) ||
-          (categoryId && categoryId !== null)
+        (brandId && brandId !== null) || (categoryId && categoryId !== null)
           ? `${url}&vendorId=${vendorId}`
-          : `${url}?vendorId=${vendorId}`;
+          : `${url}?vendorId=${vendorId}`
     if (approval)
       url =
         (brandId && brandId !== null) ||
-          (categoryId && categoryId !== null) ||
-          (vendorId && vendorId !== null) 
+        (categoryId && categoryId !== null) ||
+        (vendorId && vendorId !== null)
           ? `${url}&approval=${approval}`
-          : `${url}?approval=${approval}`;
+          : `${url}?approval=${approval}`
     if (acquirementMethod)
       url =
         (brandId && brandId !== null) ||
-          (categoryId && categoryId !== null) ||
-          (vendorId && vendorId !== null)||
-          (approval && approval!==null)
+        (categoryId && categoryId !== null) ||
+        (vendorId && vendorId !== null) ||
+        (approval && approval !== null)
           ? `${url}&acquirementMethod=${acquirementMethod}`
-          : `${url}?acquirementMethod=${acquirementMethod}`;
-
+          : `${url}?acquirementMethod=${acquirementMethod}`
 
     const res = await fetch({
       url,
-      method: "get",
-    });
-    return res.data;
+      method: 'get',
+    })
+    return res.data
   } catch (err) {
-    console.log(err, "show-err");
+    console.log(err, 'show-err')
   }
-};
+}
 productService.deleteProduct = async function (id) {
   try {
     const res = await fetch({
@@ -128,7 +125,7 @@ productService.createProductFromExcel = async function (data) {
 
   try {
     const res = await fetch({
-      url: `/products`,
+      url: `/products/createFromExcel`,
       method: 'post',
       data: formData,
     })

@@ -185,11 +185,11 @@ const ProductForm = (props) => {
               message.success(`Edited ${values.name} to Banner list`)
               history.goBack()
             }
-            setSubmitLoading(false)
           } else {
             message.error('Please upload image')
           }
         }
+        setSubmitLoading(false)
       })
       .catch((info) => {
         setSubmitLoading(false)

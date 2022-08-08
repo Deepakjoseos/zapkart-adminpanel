@@ -43,7 +43,7 @@ shipmentService.getShipmentById = async function (id) {
 shipmentService.createShipment = async function (data) {
   try {
     const res = await fetch({
-      url: apiRoute,
+      url: `${apiRoute}/create`,
       method: 'post',
       data: data,
     })
@@ -58,6 +58,57 @@ shipmentService.editShipment = async function (id, data) {
     const res = await fetch({
       url: `${apiRoute}/${id}`,
       method: 'put',
+      data: data,
+    })
+    return res
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
+
+shipmentService.getPickupLocations = async function () {
+  try {
+    const res = await fetch({
+      url: `${apiRoute}/pickupLocations/get_all`,
+      method: 'get',
+    })
+    return res.data
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
+
+shipmentService.createPickupLocation = async function (data) {
+  try {
+    const res = await fetch({
+      url: `${apiRoute}/pickupLocations/new`,
+      method: 'post',
+      data,
+    })
+    return res
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
+
+shipmentService.requestPickupOrder = async function (data) {
+  try {
+    const res = await fetch({
+      url: `${apiRoute}/pickupOrder/request`,
+      method: 'post',
+      data: data,
+    })
+    return res
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
+
+shipmentService.shipmentCancel = async function (data) {
+  try {
+    const res = await fetch({
+      url: `${apiRoute}/cancel`,
+      method: 'post',
       data: data,
     })
     return res
