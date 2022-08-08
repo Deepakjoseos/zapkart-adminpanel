@@ -5,12 +5,14 @@ import { invoiceData } from '../../../pages/invoice/invoiceData'
 import NumberFormat from 'react-number-format'
 import { useParams } from 'react-router-dom'
 import orderService from 'services/orders'
+import ShipmentCreateForm from './ShipmentCreateForm'
 
 const { Column } = Table
 const { Option } = Select
 const OrderView = () => {
   const { id } = useParams()
   const [order, setOrder] = useState({})
+  const [isFormOpen, setIsFormOpen] = useState(false)
 
   const getOrderById = async () => {
     const orderData = await orderService.getOrderById(id)
@@ -67,6 +69,9 @@ const OrderView = () => {
 
     if (updatedOrderStatus) {
       notification.success({ message: 'Order Status Updated' })
+      setTimeout(() => {
+        window.location.reload()
+      }, 2000)
     }
   }
 
@@ -75,6 +80,9 @@ const OrderView = () => {
 
     if (cancel) {
       notification.success({ message: 'Order Item Cancelled' })
+      setTimeout(() => {
+        window.location.reload()
+      }, 2000)
     }
   }
 
@@ -111,6 +119,13 @@ const OrderView = () => {
             </address>
           </div>
           <div className="mt-3 text-right">
+            <Button
+              type="primary"
+              className="mb-4"
+              onClick={() => setIsFormOpen(true)}
+            >
+              Create Shipment
+            </Button>
             <h2 className="mb-1 font-weight-semibold">
               Order No: {order?.orderNo}
             </h2>
@@ -166,11 +181,18 @@ const OrderView = () => {
 
             <Column
               title="Action"
-              render={(_, row) => (
-                <Button type="primary" onClick={() => cancleOrderItem(row.id)}>
-                  Cancel Order Item
-                </Button>
-              )}
+              render={(_, row) => {
+                return (
+                  row.status !== 'Cancelled' && (
+                    <Button
+                      type="primary"
+                      onClick={() => cancleOrderItem(row.id)}
+                    >
+                      Cancel Order Item
+                    </Button>
+                  )
+                )
+              }}
             />
 
             {/* <Column
@@ -255,6 +277,14 @@ const OrderView = () => {
           </Button>
         </div> */}
       </Card>
+
+      <ShipmentCreateForm
+        setIsFormOpen={setIsFormOpen}
+        isFormOpen={isFormOpen}
+        orderItems={order?.items}
+        orderNo={order?.orderNo}
+        orderId={order?.id}
+      />
     </div>
   )
 }

@@ -350,6 +350,31 @@ const dashBoardNavTree = [
         submenu: [],
       },
       {
+        key: 'dashboards-shipment',
+        path: `${APP_PREFIX_PATH}/dashboards/shipments`,
+        title: 'Shipment',
+        icon: NodeExpandOutlined,
+        breadcrumb: false,
+        submenu: [
+          {
+            key: 'dashboards-shipment-shipment',
+            path: `${APP_PREFIX_PATH}/dashboards/shipments/shipment/shipment-list`,
+            title: 'Shipment',
+            icon: NodeExpandOutlined,
+            breadcrumb: false,
+            submenu: [],
+          },
+          {
+            key: 'dashboards-shipment-pickuplocation',
+            path: `${APP_PREFIX_PATH}/dashboards/shipments/pickuplocation/pickuplocation-list`,
+            title: 'Pickup Location',
+            icon: NodeExpandOutlined,
+            breadcrumb: false,
+            submenu: [],
+          },
+        ],
+      },
+      {
         key: 'dashboards-settings',
         path: `${APP_PREFIX_PATH}/dashboards/settings`,
         title: 'Settings',

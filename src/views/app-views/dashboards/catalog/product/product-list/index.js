@@ -65,14 +65,14 @@ const ProductList = () => {
   const [deliveryZoneId, setDeliveryZoneId] = useState(null)
   const [excelFile, setExcelFile] = useState(null)
   const [vendors, setVendors] = useState([])
-  const[brands,setBrands] = useState([])
-  const [categories,setCategories] = useState([])
-  const [selectedBrandId,setSelectedBrandId] = useState(null)
-  const [selectedCategoryId,setSelectedCategoryId] = useState(null)
-  const [selectedVendorId,setSelectedVendorId]= useState(null)
-  const [selectedApproval,setSelectedApproval] = useState('')
-  const [selectedacquirementMethod,setSelectedacquirementMethod]= useState('')
-  
+  const [brands, setBrands] = useState([])
+  const [categories, setCategories] = useState([])
+  const [selectedBrandId, setSelectedBrandId] = useState(null)
+  const [selectedCategoryId, setSelectedCategoryId] = useState(null)
+  const [selectedVendorId, setSelectedVendorId] = useState(null)
+  const [selectedApproval, setSelectedApproval] = useState('')
+  const [selectedacquirementMethod, setSelectedacquirementMethod] = useState('')
+
   // const getDeliveryZoneName = (id) => {
   //   const deliveryZoneName = await DeliveryZoneService.getDeliveryZoneById(id)
   //   return
@@ -87,15 +87,15 @@ const ProductList = () => {
         console.log(data, 'show-data')
       }
     }
-    const getBrands= async ()=>{
-      const data= await brandService.getBrands()
-      if(data){
+    const getBrands = async () => {
+      const data = await brandService.getBrands()
+      if (data) {
         setBrands(data)
       }
     }
-    const getCategories= async ()=>{
-      const data= await categoryService.getCategories()
-      if(data){
+    const getCategories = async () => {
+      const data = await categoryService.getCategories()
+      if (data) {
         setCategories(data)
       }
     }
@@ -103,8 +103,7 @@ const ProductList = () => {
     getBrands()
     getCategories()
     getVendors()
-    console.log('vendors',vendors)
-
+    console.log('vendors', vendors)
   }, [])
 
   // const dropdownMenu = (row) => (
@@ -240,11 +239,7 @@ const ProductList = () => {
       dataIndex: 'name',
       sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
     },
-    {
-      title: 'Product Buy Type',
-      dataIndex: 'acquirementMethod',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'acquirementMethod'),
-    },
+
     // {
     //   title: 'MRP Price',
     //   dataIndex: 'mrpPrice',
@@ -358,6 +353,14 @@ const ProductList = () => {
     // },
   ]
 
+  if (process.env.REACT_APP_SITE_NAME === 'awen') {
+    tableColumns.splice(tableColumns?.length - 4, 0, {
+      title: 'Product Buy Type',
+      dataIndex: 'acquirementMethod',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'acquirementMethod'),
+    })
+  }
+
   const onSearch = (e) => {
     const value = e.currentTarget.value
     const searchArray = e.currentTarget.value ? list : searchBackupList
@@ -380,9 +383,9 @@ const ProductList = () => {
     if ((selectedBrandId || selectedBrandId) !== 'All')
       query.brandId = selectedBrandId
     query.categoryId = selectedCategoryId
-    query.vendorId=selectedVendorId
-    query.approval=selectedApproval
-    query.acquirementMethod=selectedacquirementMethod
+    query.vendorId = selectedVendorId
+    query.approval = selectedApproval
+    query.acquirementMethod = selectedacquirementMethod
     console.log('query', query)
     const data = await productService.getProducts(query)
     if (data) {
@@ -405,7 +408,7 @@ const ProductList = () => {
     }
   }
   const filters = () => (
-    <Flex className="mb-1 flex-wrap" mobileFlex={false}>
+    <Flex className="mb-1" mobileFlex={false}>
       <div className="mr-md-3 mb-3">
       <label className='mt-2'>Search</label>
         <Input
@@ -473,14 +476,15 @@ const ProductList = () => {
           onChange={(value) => setSelectedVendorId(value)}
           // onSelect={handleQuery}
           value={selectedVendorId}
-          placeholder="Vendor">
-             <Option value="">All</Option>
-            {vendors?.map((vendor) => (
-              <Option value={vendor.id}>
-                {vendor?.firstName} {vendor?.lastName}
-              </Option>
-            ))}
-          </Select>
+          placeholder="Vendor"
+        >
+          <Option value="">All</Option>
+          {vendors?.map((vendor) => (
+            <Option value={vendor.id}>
+              {vendor?.firstName} {vendor?.lastName}
+            </Option>
+          ))}
+        </Select>
       </div>
       <div className="mr-md-3 mb-3">
         <label className='mt-2'>Approval</label>
@@ -490,13 +494,14 @@ const ProductList = () => {
           onChange={(value) => setSelectedApproval(value)}
           // onSelect={handleQuery}
           value={selectedApproval}
-          placeholder="Approval Method">
-             <Option value="">All</Option>
-             <Option value="Pending">Pending</Option>
-             <Option value="Approved">Approved</Option>
-             <Option value="On Hold">On Hold</Option>
-             <Option value="Rejected">Rejected</Option>
-          </Select>
+          placeholder="Approval Method"
+        >
+          <Option value="">All</Option>
+          <Option value="Pending">Pending</Option>
+          <Option value="Approved">Approved</Option>
+          <Option value="On Hold">On Hold</Option>
+          <Option value="Rejected">Rejected</Option>
+        </Select>
       </div>
       {process.env.REACT_APP_SITE_NAME === 'awen' ? 
      <div className="mr-md-3 mb-3">
@@ -526,8 +531,6 @@ const ProductList = () => {
           Clear
         </Button>
       </div>
-    
-      
     </Flex>
   )
 
@@ -536,7 +539,7 @@ const ProductList = () => {
       <Card>
         <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
           {filters()}
-      
+
           {/* <div>
           <Button
             onClick={addProduct}
@@ -549,15 +552,14 @@ const ProductList = () => {
         </div> */}
         </Flex>
         <div className="mr-2">
-            <Button
-              type="primary"
-              icon={<FileAddOutlined />}
-              onClick={() => setIsExcelModalOpen(true)}
-              
-            >
-              Excel Upload
-            </Button>
-          </div>
+          <Button
+            type="primary"
+            icon={<FileAddOutlined />}
+            onClick={() => setIsExcelModalOpen(true)}
+          >
+            Excel Upload
+          </Button>
+        </div>
         <div className="table-responsive">
           <Table columns={tableColumns} dataSource={list} rowKey="id" />
         </div>

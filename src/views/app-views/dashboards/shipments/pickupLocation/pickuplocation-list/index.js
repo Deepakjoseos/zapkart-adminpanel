@@ -1,15 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import {
-  Card,
-  Table,
-  Select,
-  Input,
-  Button,
-  Menu,
-  Tag,
-  notification,
-} from 'antd'
-// import ShipmentListData from 'assets/data/product-list.data.json'
+import { Card, Table, Select, Input, Button, Menu, Tag } from 'antd'
+// import PickupLocationListData from 'assets/data/product-list.data.json'
 import {
   EyeOutlined,
   DeleteOutlined,
@@ -51,7 +42,7 @@ const getStockStatus = (status) => {
   }
   return null
 }
-const ShipmentList = () => {
+const PickupLocationList = () => {
   let history = useHistory()
 
   const [list, setList] = useState([])
@@ -60,15 +51,15 @@ const ShipmentList = () => {
 
   useEffect(() => {
     // Getting Brands List to display in the table
-    const getShipments = async () => {
-      const data = await shipmentService.getShipments()
-      if (data) {
-        setList(data)
-        setSearchBackupList(data)
+    const getPickupLocations = async () => {
+      const data = await shipmentService.getPickupLocations()
+      if (data?.shipping_address) {
+        setList(data?.shipping_address)
+        setSearchBackupList(data?.shipping_address)
         console.log(data, 'show-data')
       }
     }
-    getShipments()
+    getPickupLocations()
   }, [])
 
   // Dropdown menu for each row
@@ -94,11 +85,13 @@ const ShipmentList = () => {
   )
 
   const addProduct = () => {
-    history.push(`/app/dashboards/shipments/shipment/add-shipment`)
+    history.push(`/app/dashboards/shipments/pickuplocation/add-pickuplocation`)
   }
 
   const viewDetails = (row) => {
-    history.push(`/app/dashboards/shipments/shipment/edit-shipment/${row.id}`)
+    history.push(
+      `/app/dashboards/shipments/pickuplocation/edit-pickuplocation/${row.id}`
+    )
   }
 
   // For deleting a row
@@ -124,53 +117,42 @@ const ShipmentList = () => {
   // Antd Table Columns
   const tableColumns = [
     {
-      title: 'Shipment',
-      dataIndex: 'items',
-      render: (_, record) => (
-        <div>
-          {record.items.map((item, index) => (
-            <>
-              <div>{`OrderId: ${item?.orderId}`}</div>
-              <div>Products: {item?.items?.map((cur) => `${cur.name}, `)}</div>
-            </>
-          ))}
-        </div>
-      ),
+      title: 'Pickup Location Name',
+      dataIndex: 'pickup_location',
+
       sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
     },
     {
-      title: 'shippedByVendor',
-      dataIndex: 'shippedByVendor',
-      render: (text) => <div>{text ? 'Yes' : 'No'}</div>,
+      title: 'Name',
+      dataIndex: 'name',
     },
     {
-      title: 'Status',
-      dataIndex: 'status',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'status'),
+      title: 'Address',
+      dataIndex: 'address',
     },
+    {
+      title: 'City',
+      dataIndex: 'city',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'city'),
+    },
+    {
+      title: 'State',
+      dataIndex: 'state',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'state'),
+    },
+    {
+      title: 'Pin Code',
+      dataIndex: 'pin_code',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'pin_code'),
+    },
+
     {
       title: '',
       dataIndex: 'actions',
       render: (_, elm) => (
-        <Flex>
-          <Button
-            type="primary"
-            className="ml-auto"
-            onClick={() => requestPickupOrder(elm.id)}
-          >
-            Request Shipment
-          </Button>
-          <Button
-            className="mr-auto ml-2"
-            onClick={() => cancelShipment(elm.id)}
-          >
-            Cancel Shipment
-          </Button>
-
-          <div className="text-right">
-            <EllipsisDropdown menu={dropdownMenu(elm)} />
-          </div>
-        </Flex>
+        <div className="text-right">
+          <EllipsisDropdown menu={dropdownMenu(elm)} />
+        </div>
       ),
     },
   ]
@@ -221,26 +203,6 @@ const ShipmentList = () => {
     </Flex>
   )
 
-  const requestPickupOrder = async (shipmentId) => {
-    const resp = await shipmentService.requestPickupOrder({ shipmentId })
-    if (resp) {
-      notification.success({
-        message: 'Success',
-        description: 'Request pickup order successfully',
-      })
-    }
-  }
-
-  const cancelShipment = async (shipmentId) => {
-    const resp = await shipmentService.shipmentCancel({ shipmentId })
-    if (resp) {
-      notification.success({
-        message: 'Success',
-        description: 'Cancel shipment successfully',
-      })
-    }
-  }
-
   return (
     <Card>
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
@@ -252,7 +214,7 @@ const ShipmentList = () => {
             icon={<PlusCircleOutlined />}
             block
           >
-            Add Shipment
+            Add Pickup Location
           </Button>
         </div>
       </Flex>
@@ -263,4 +225,4 @@ const ShipmentList = () => {
   )
 }
 
-export default ShipmentList
+export default PickupLocationList

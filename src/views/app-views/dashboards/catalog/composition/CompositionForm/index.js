@@ -44,7 +44,6 @@ const CompositionForm = (props) => {
     form
       .validateFields()
       .then(async (values) => {
-        setSubmitLoading(false)
         if (mode === ADD) {
           const created = await compositionService.createComposition(values)
           if (created) {
@@ -62,6 +61,7 @@ const CompositionForm = (props) => {
             history.goBack()
           }
         }
+        setSubmitLoading(false)
       })
       .catch((info) => {
         setSubmitLoading(false)

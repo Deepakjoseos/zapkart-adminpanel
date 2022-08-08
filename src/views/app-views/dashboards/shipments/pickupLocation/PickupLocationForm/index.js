@@ -65,25 +65,12 @@ const ShipmentForm = (props) => {
     form
       .validateFields()
       .then(async (values) => {
-        const sendingValues = {
-          shippedByVendor: values.shippedByVendor,
-          items: values.items,
-          expectedDeliveryDate: moment(values.expectedDeliveryDate).format(
-            'YYYY-MM-DD'
-          ),
-          shipRocket: {
-            pickup_location: values.pickup_location,
-            length: values.length,
-            breadth: values.breadth,
-            height: values.height,
-            weight: values.weight,
-          },
-        }
-
         if (mode === ADD) {
-          const created = await shipmentService.createShipment(sendingValues)
-          if (created) {
-            message.success(`Created Shipment Successfully`)
+          values.country = 'India'
+          const data = await shipmentService.createPickupLocation(values)
+
+          if (data) {
+            message.success('Pickup Location Added Successfully')
             history.goBack()
           }
         }
@@ -146,13 +133,17 @@ const ShipmentForm = (props) => {
               alignItems="center"
             >
               <h2 className="mb-3">
-                {mode === 'ADD' ? 'Add New Shipment' : `Edit Shipment`}{' '}
+                {mode === 'ADD'
+                  ? 'Add New Pickup Location'
+                  : `Edit Pickup Location`}{' '}
               </h2>
               <div className="mb-3">
                 <Button
                   className="mr-2"
                   onClick={() =>
-                    history.push('/app/dashboards/shipment/shipment-list')
+                    history.push(
+                      '/app/dashboards/pickuplocation/pickuplocation-list'
+                    )
                   }
                 >
                   Discard

@@ -1,5 +1,6 @@
 import React from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
+import PickupLocation from './pickupLocation'
 import Shipment from './shipment'
 
 const Shipments = ({ match }) => {
@@ -11,6 +12,7 @@ const Shipments = ({ match }) => {
         to={`${match.url}/shipment/shipment-list`}
       />
       <Route path={`${match.url}/shipment`} component={Shipment} />
+      <Route path={`${match.url}/pickuplocation`} component={PickupLocation} />
     </Switch>
   )
 }
