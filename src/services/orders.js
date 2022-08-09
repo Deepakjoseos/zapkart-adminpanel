@@ -3,10 +3,23 @@ import fetch from 'auth/FetchInterceptor'
 
 const orderService = {}
 
-orderService.getOrders = async function () {
+const api = '/order/admin/view_all'
+orderService.getOrders = async function (query) {
   try {
+    let url = `${api}`
+    const status = query?.status
+    const userId=query?.userId
+
+    if (status) url = `${url}?status=${status}`;
+   if (userId)
+      url =
+        status && status !== null
+          ? `${url}&userId=${userId}`
+          : `${url}?userId=${userId}`;
+
+
     const res = await fetch({
-      url: '/order/admin/view_all',
+      url,
       method: 'get',
     })
     const data = res.data.filter((cur) => cur.status !== 'Deleted')
