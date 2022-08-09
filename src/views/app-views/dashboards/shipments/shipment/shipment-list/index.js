@@ -23,6 +23,7 @@ import NumberFormat from 'react-number-format'
 import { useHistory } from 'react-router-dom'
 import utils from 'utils'
 import shipmentService from 'services/shipment'
+import CheckIfDeliverable from './CheckIfDeliverable'
 
 const { Option } = Select
 
@@ -57,6 +58,7 @@ const ShipmentList = () => {
   const [list, setList] = useState([])
   const [searchBackupList, setSearchBackupList] = useState([])
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
+  const [checkIfDeliverableOpen, setCheckIfDeliverableOpen] = useState(false)
 
   useEffect(() => {
     // Getting Brands List to display in the table
@@ -93,7 +95,7 @@ const ShipmentList = () => {
     </Menu>
   )
 
-  const addProduct = () => {
+  const addShipment = () => {
     history.push(`/app/dashboards/shipments/shipment/add-shipment`)
   }
 
@@ -245,9 +247,16 @@ const ShipmentList = () => {
     <Card>
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
         {filters()}
-        <div>
+        <div className="d-flex">
           <Button
-            onClick={addProduct}
+            onClick={() => setCheckIfDeliverableOpen(true)}
+            block
+            className="mr-2"
+          >
+            Check If Deliverable?
+          </Button>
+          <Button
+            onClick={addShipment}
             type="primary"
             icon={<PlusCircleOutlined />}
             block
@@ -259,6 +268,10 @@ const ShipmentList = () => {
       <div className="table-responsive">
         <Table columns={tableColumns} dataSource={list} rowKey="id" />
       </div>
+      <CheckIfDeliverable
+        setCheckIfDeliverableOpen={setCheckIfDeliverableOpen}
+        checkIfDeliverableOpen={checkIfDeliverableOpen}
+      />
     </Card>
   )
 }
