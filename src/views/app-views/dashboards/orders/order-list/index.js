@@ -506,6 +506,11 @@ const Orders = () => {
     {
       title: 'OrderNo',
       dataIndex: 'orderNo',
+      render: (text, record) => (
+        <Link to={`/app/dashboards/orders/order-view/${record.id}`}>
+          {text}
+        </Link>
+      ),
     },
 
     {
@@ -751,12 +756,12 @@ const Orders = () => {
           columns={tableColumns}
           dataSource={list}
           rowKey="id"
-          rowSelection={{
-            selectedRowKeys: selectedRowKeys,
-            type: 'checkbox',
-            preserveSelectedRowKeys: false,
-            ...rowSelection,
-          }}
+          // rowSelection={{
+          //   selectedRowKeys: selectedRowKeys,
+          //   type: 'checkbox',
+          //   preserveSelectedRowKeys: false,
+          //   ...rowSelection,
+          // }}
         />
       </div>
     </Card>
