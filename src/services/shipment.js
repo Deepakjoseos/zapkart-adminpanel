@@ -117,4 +117,17 @@ shipmentService.shipmentCancel = async function (data) {
   }
 }
 
+shipmentService.checkIfDeliverable = async function (data) {
+  try {
+    const res = await fetch({
+      url: `${apiRoute}/checkIfDeliverable`,
+      method: 'post',
+      data: data,
+    })
+    return res.data?.available_courier_companies
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
+
 export default shipmentService

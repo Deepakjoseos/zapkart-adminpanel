@@ -345,7 +345,7 @@ import moment from 'moment'
 import { DATE_FORMAT_DD_MM_YYYY } from 'constants/DateConstant'
 import utils from 'utils'
 import orderService from 'services/orders'
-import { useHistory } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 
 const { Option } = Select
 
@@ -492,6 +492,11 @@ const Orders = () => {
     {
       title: 'OrderNo',
       dataIndex: 'orderNo',
+      render: (text, record) => (
+        <Link to={`/app/dashboards/orders/order-view/${record.id}`}>
+          {text}
+        </Link>
+      ),
     },
 
     {
@@ -665,12 +670,12 @@ const Orders = () => {
           columns={tableColumns}
           dataSource={list}
           rowKey="id"
-          rowSelection={{
-            selectedRowKeys: selectedRowKeys,
-            type: 'checkbox',
-            preserveSelectedRowKeys: false,
-            ...rowSelection,
-          }}
+          // rowSelection={{
+          //   selectedRowKeys: selectedRowKeys,
+          //   type: 'checkbox',
+          //   preserveSelectedRowKeys: false,
+          //   ...rowSelection,
+          // }}
         />
       </div>
     </Card>
