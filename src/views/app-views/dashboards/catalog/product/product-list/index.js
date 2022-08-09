@@ -19,7 +19,7 @@ import {
   FileAddOutlined,
   DownloadOutlined,
 } from '@ant-design/icons'
-// import EllipsisDropdown from 'components/shared-components/EllipsisDropdown'
+import EllipsisDropdown from 'components/shared-components/EllipsisDropdown'
 import Flex from 'components/shared-components/Flex'
 import { useHistory } from 'react-router-dom'
 import utils from 'utils'
@@ -106,26 +106,26 @@ const ProductList = () => {
     console.log('vendors', vendors)
   }, [])
 
-  // const dropdownMenu = (row) => (
-  //   <Menu>
-  //     <Menu.Item onClick={() => viewDetails(row)}>
-  //       <Flex alignItems="center">
-  //         <EyeOutlined />
-  //         <span className="ml-2">View Details</span>
-  //       </Flex>
-  //     </Menu.Item>
-  //     <Menu.Item onClick={() => deleteRow(row)}>
-  //       <Flex alignItems="center">
-  //         <DeleteOutlined />
-  //         <span className="ml-2">
-  //           {selectedRows.length > 0
-  //             ? `Delete (${selectedRows.length})`
-  //             : 'Delete'}
-  //         </span>
-  //       </Flex>
-  //     </Menu.Item>
-  //   </Menu>
-  // )
+  const dropdownMenu = (row) => (
+    <Menu>
+      <Menu.Item onClick={() => viewDetails(row)}>
+        <Flex alignItems="center">
+          <EyeOutlined />
+          <span className="ml-2">View Details</span>
+        </Flex>
+      </Menu.Item>
+      {/* <Menu.Item onClick={() => deleteRow(row)}>
+        <Flex alignItems="center">
+          <DeleteOutlined />
+          <span className="ml-2">
+            {selectedRows.length > 0
+              ? `Delete (${selectedRows.length})`
+              : 'Delete'}
+          </span>
+        </Flex>
+      </Menu.Item> */}
+    </Menu>
+  )
 
   const getDeliveryZones = async () => {
     const deliveryZonesData =
@@ -182,9 +182,9 @@ const ProductList = () => {
     history.push(`/app/dashboards/catalog/product/add-product`)
   }
 
-  // const viewDetails = (row) => {
-  //   history.push(`/app/dashboards/catalog/product/edit-product/${row.id}`)
-  // }
+  const viewDetails = (row) => {
+    history.push(`/app/dashboards/catalog/product/edit-product/${row.id}`)
+  }
 
   // const deleteRow = async (row) => {
   //   const resp = await productService.deleteProduct(row.id)
@@ -342,15 +342,15 @@ const ProductList = () => {
       ),
       sorter: (a, b) => utils.antdTableSorter(a, b, 'status'),
     },
-    // {
-    //   title: '',
-    //   dataIndex: 'actions',
-    //   render: (_, elm) => (
-    //     <div className="text-right">
-    //       <EllipsisDropdown menu={dropdownMenu(elm)} />
-    //     </div>
-    //   ),
-    // },
+    {
+      title: '',
+      dataIndex: 'actions',
+      render: (_, elm) => (
+        <div className="text-right">
+          <EllipsisDropdown menu={dropdownMenu(elm)} />
+        </div>
+      ),
+    },
   ]
 
   if (process.env.REACT_APP_SITE_NAME === 'awen') {
@@ -408,9 +408,9 @@ const ProductList = () => {
     }
   }
   const filters = () => (
-    <Flex className="mb-1" mobileFlex={false}>
+    <Flex flexWrap="wrap" className="mb-1" mobileFlex={false}>
       <div className="mr-md-3 mb-3">
-      <label className='mt-2'>Search</label>
+        <label className="mt-2">Search</label>
         <Input
           placeholder="Search"
           prefix={<SearchOutlined />}
@@ -418,7 +418,7 @@ const ProductList = () => {
         />
       </div>
       <div className="mr-md-3 mb-3">
-         <label className='mt-2'>Status</label>
+        <label className="mt-2">Status</label>
         <Select
           defaultValue="All"
           className="w-100"
@@ -432,7 +432,7 @@ const ProductList = () => {
         </Select>
       </div>
       <div className=" mr-md-3 mb-3">
-        <label className='mt-2'>Brands</label>
+        <label className="mt-2">Brands</label>
         <Select
           className="w-100"
           style={{ minWidth: 180 }}
@@ -451,7 +451,7 @@ const ProductList = () => {
       </div>
 
       <div className="mr-md-3 mb-3">
-        <label className='mt-2'>Categories</label>
+        <label className="mt-2">Categories</label>
         <Select
           className="w-100"
           style={{ minWidth: 180 }}
@@ -469,8 +469,8 @@ const ProductList = () => {
         </Select>
       </div>
       <div className="mr-md-3 mb-3">
-        <label className='mt-2'>Vendors</label>
-      <Select
+        <label className="mt-2">Vendors</label>
+        <Select
           className="w-100"
           style={{ minWidth: 180 }}
           onChange={(value) => setSelectedVendorId(value)}
@@ -487,8 +487,8 @@ const ProductList = () => {
         </Select>
       </div>
       <div className="mr-md-3 mb-3">
-        <label className='mt-2'>Approval</label>
-      <Select
+        <label className="mt-2">Approval</label>
+        <Select
           className="w-100"
           style={{ minWidth: 180 }}
           onChange={(value) => setSelectedApproval(value)}
@@ -503,31 +503,39 @@ const ProductList = () => {
           <Option value="Rejected">Rejected</Option>
         </Select>
       </div>
-      {process.env.REACT_APP_SITE_NAME === 'awen' ? 
-     <div className="mr-md-3 mb-3">
-      <label className='mt-2'>Acquirement Method</label>
-     <Select
-         className="w-100"
-         style={{ minWidth: 180 }}
-         onChange={(value) => setSelectedacquirementMethod(value)}
-         // onSelect={handleQuery}
-         value={selectedacquirementMethod}
-         placeholder="AcquirementMethod">
+      {process.env.REACT_APP_SITE_NAME === 'awen' ? (
+        <div className="mr-md-3 mb-3">
+          <label className="mt-2">Acquirement Method</label>
+          <Select
+            className="w-100"
+            style={{ minWidth: 180 }}
+            onChange={(value) => setSelectedacquirementMethod(value)}
+            // onSelect={handleQuery}
+            value={selectedacquirementMethod}
+            placeholder="AcquirementMethod"
+          >
             <Option value="">All</Option>
             <Option value="Rent">Rent</Option>
             <Option value="Lend">Lend</Option>
             <Option value="Purchase">Purchase</Option>
             <Option value="Giveaway">Giveaway</Option>
-         </Select>
-     </div>  :""}
-      
-      <div >
+          </Select>
+        </div>
+      ) : (
+        ''
+      )}
+
+      <div>
         <Button type="primary" className="mr-1 mt-4" onClick={handleQuery}>
           Filter
         </Button>
       </div>
       <div>
-        <Button type="primary" className="mr-1 mt-4" onClick={handleClearFilter}>
+        <Button
+          type="primary"
+          className="mr-1 mt-4"
+          onClick={handleClearFilter}
+        >
           Clear
         </Button>
       </div>
@@ -539,19 +547,8 @@ const ProductList = () => {
       <Card>
         <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
           {filters()}
-
-          {/* <div>
-          <Button
-            onClick={addProduct}
-            type="primary"
-            icon={<PlusCircleOutlined />}
-            block
-          >
-            Add Product
-          </Button>
-        </div> */}
         </Flex>
-        <div className="mr-2">
+        <div className="mr-2 d-flex justify-content-between">
           <Button
             type="primary"
             icon={<FileAddOutlined />}
@@ -559,6 +556,16 @@ const ProductList = () => {
           >
             Excel Upload
           </Button>
+          <div>
+            <Button
+              onClick={addProduct}
+              type="primary"
+              icon={<PlusCircleOutlined />}
+              block
+            >
+              Add Product
+            </Button>
+          </div>
         </div>
         <div className="table-responsive">
           <Table columns={tableColumns} dataSource={list} rowKey="id" />
