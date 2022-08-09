@@ -345,7 +345,8 @@ import moment from 'moment'
 import { DATE_FORMAT_DD_MM_YYYY } from 'constants/DateConstant'
 import utils from 'utils'
 import orderService from 'services/orders'
-import { Link, useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
+import customerService from 'services/customer'
 
 const { Option } = Select
 
@@ -380,6 +381,10 @@ const Orders = () => {
   const [selectedRows, setSelectedRows] = useState([])
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
   const history = useHistory()
+  const[selectedStatus,setSelectedStatus] = useState('')
+  const[users,setUsers] = useState([])
+  const[selectedUserId,setSelectedUserId] = useState(null)
+
 
   useEffect(() => {
     const getOrders = async () => {
@@ -390,7 +395,16 @@ const Orders = () => {
         console.log(data, 'show-data')
       }
     }
+    const getCustomers = async () => {
+      const data = await customerService.getCustomers()
+      if (data) {
+        setUsers(data)
+        console.log('users',data);
+       
+      }
+    }
     getOrders()
+    getCustomers()
   }, [])
 
   // const handleShowStatus = (value) => {
@@ -625,18 +639,89 @@ const Orders = () => {
       setList(searchBackupList)
     }
   }
+  const handleQuery = async () => {
+    const query = {}
+    if ((selectedStatus) !== 'All')
+      query.status = selectedStatus
+      query.userId=selectedUserId
+  
+    console.log('query', query)
+    const data = await orderService.getOrders(query)
+    if (data) {
+      setList(data)
+      setSearchBackupList(data)
+    }
+  }
+
+  const handleClearFilter = async () => {
+    setSelectedStatus(null)
+  
+
+    const data = await orderService.getOrders({})
+    if (data) {
+      setList(data)
+      setSearchBackupList(data)
+    }
+  }
 
   return (
     <Card>
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
         <Flex className="mb-1" mobileFlex={false}>
           <div className="mr-md-3 mb-3">
+            <label className='mt-2'> Search</label>
             <Input
               placeholder="Search"
               prefix={<SearchOutlined />}
               onChange={(e) => onSearch(e)}
             />
           </div>
+          <div className="mr-md-3 mb-3">
+        <label className='mt-2'>Status</label>
+        <Select
+          className="w-100"
+          style={{ minWidth: 180 }}
+          onChange={(value) => setSelectedStatus(value)}
+          // onSelect={handleQuery}
+          value={selectedStatus}
+          placeholder="Status"
+        >
+          <Option value="">All</Option>
+          {orderStatuses.map((status) => (
+            <Option key={status} value={status}>
+              {status}
+            </Option>
+          ))}
+        </Select>
+      </div>
+      <div className="mr-md-3 mb-3">
+        <label className='mt-2'>Customers</label>
+        <Select
+          className="w-100"
+          style={{ minWidth: 180 }}
+          onChange={(value) => setSelectedUserId(value)}
+          // onSelect={handleQuery}
+          value={selectedUserId}
+          placeholder="Users"
+        >
+          <Option value="">All</Option>
+          {users.map((user) => (
+            <Option key={user.id} value={user.id}>
+              {user.firstName} {user.lastName}
+            </Option>
+          ))}
+        </Select>
+      </div>
+      <div >
+        <Button type="primary" className="mr-1 mt-4" onClick={handleQuery}>
+          Filter
+        </Button>
+      </div>
+      <div>
+        <Button type="primary" className="mr-1 mt-4" onClick={handleClearFilter}>
+          Clear
+        </Button>
+      </div>
           {/* <div className="mb-3">
             <Select
               defaultValue="All"
@@ -654,17 +739,18 @@ const Orders = () => {
             </Select>
           </div> */}
         </Flex>
-        <div>
+        
+      </Flex>
+      <div>
           <Button
             onClick={() => history.push('/app/dashboards/orders/create-order')}
             type="primary"
             icon={<PlusCircleOutlined />}
-            block
+          
           >
             Create Order
           </Button>
         </div>
-      </Flex>
       <div className="table-responsive">
         <Table
           columns={tableColumns}
