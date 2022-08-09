@@ -363,7 +363,7 @@ const ProductList = () => {
 
   const onSearch = (e) => {
     const value = e.currentTarget.value
-    const searchArray =   searchBackupList
+    const searchArray = searchBackupList
     const data = utils.wildCardSearch(searchArray, value)
     setList(data)
     setSelectedRowKeys([])
@@ -568,7 +568,9 @@ const ProductList = () => {
           </div>
         </div>
         <div className="table-responsive">
-          <Table columns={tableColumns} dataSource={list} rowKey="id" />
+          <Table columns={tableColumns} scroll={{
+            x: true,
+          }} dataSource={list} rowKey="id" />
         </div>
       </Card>
 
