@@ -73,7 +73,15 @@ const OrderCreate = () => {
   const getProducts = async () => {
     const data = await productService.getProducts()
     if (data) {
-      setProducts(data)
+      const productList = data.map((product) => {
+        return {
+          ...product,
+          productname: product?.variant?.name
+            ? product?.variant?.name
+            : product?.name,
+        }
+      })
+      setProducts(productList)
     }
   }
 
@@ -302,7 +310,7 @@ const OrderCreate = () => {
                                 >
                                   {products?.map((product) => (
                                     <Option key={product.id} value={product.id}>
-                                      {product.name}
+                                      {product.productname}
                                     </Option>
                                   ))}
                                 </Select>
