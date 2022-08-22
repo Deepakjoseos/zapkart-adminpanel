@@ -568,10 +568,9 @@ const ProductList = () => {
           </div>
         </div>
         <div className="table-responsive">
-          <Table columns={tableColumns} dataSource={list}
-          scroll={{
+          <Table columns={tableColumns} scroll={{
             x: true,
-          }} rowKey="id" />
+          }} dataSource={list} rowKey="id" />
         </div>
       </Card>
 

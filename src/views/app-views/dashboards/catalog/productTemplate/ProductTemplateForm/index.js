@@ -404,14 +404,7 @@ const ProductForm = (props) => {
             // keywords: values.keywords,
 
             // status: values.status,
-            shippingDetail: {
-              lengthClass: values.lengthClass,
-              weightClass: values.weightClass,
-              height: values.height,
-              length: values.length,
-              width: values.width,
-              weight: values.weight,
-            },
+       
           }
         }
 
