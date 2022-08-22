@@ -276,9 +276,8 @@ const ProductForm = (props) => {
     setSubmitLoading(true)
     form
       .validateFields()
-     
+
       .then(async (values) => {
-      
         console.log(values, 'values')
         let sendingValues = {}
 
@@ -356,14 +355,7 @@ const ProductForm = (props) => {
             // keywords: values.keywords,
 
             // status: values.status,
-            shippingDetail: {
-              lengthClass: values.lengthClass,
-              weightClass: values.weightClass,
-              height: values.height,
-              length: values.length,
-              width: values.width,
-              weight: values.weight,
-            },
+       
           }
         }
 
