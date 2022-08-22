@@ -16,7 +16,6 @@ import AvatarStatus from 'components/shared-components/AvatarStatus'
 import GoalWidget from 'components/shared-components/GoalWidget'
 import {
   VisitorChartData,
-  AnnualStatisticData,
   ActiveMembersData,
   NewMembersData,
   RecentTransactionData,
@@ -38,6 +37,8 @@ import { withRouter } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import customerService from 'services/customer'
 import orderService from 'services/orders'
+import authAdminService from 'services/auth/admin'
+import moment from 'moment'
 
 const MembersChart = (props) => <ApexChart {...props} />
 
@@ -180,25 +181,34 @@ const tableColumns = [
 
 export const DefaultDashboard = () => {
   const [visitorChartData] = useState(VisitorChartData)
-  const [annualStatisticData] = useState(AnnualStatisticData)
+  const [annualStatisticData, setAnnualStatisticData] = useState({})
   const [activeMembersData] = useState(ActiveMembersData)
   const [newMembersData, setNewMembersData] = useState([])
   const [recentTransactionData, setRecentTransactionData] = useState([])
   const { direction } = useSelector((state) => state.theme)
 
   const getCustomers = async () => {
-    const customers = await customerService.getCustomers()
+    const customers = await customerService.getCustomers('limit=5')
     setNewMembersData(customers?.slice(0, 5))
   }
 
   const getOrders = async () => {
-    const orders = await orderService.getOrders()
+    const orders = await orderService.getOrders({ limit: 5 })
     setRecentTransactionData(orders?.slice(0, 5))
+  }
+
+  const getStatics = async () => {
+    const staticsData = await authAdminService.getStatistics()
+    if (staticsData) {
+      setAnnualStatisticData(staticsData)
+    }
   }
 
   useEffect(() => {
     getCustomers()
     getOrders()
+
+    getStatics()
   }, [])
 
   return (
@@ -206,16 +216,35 @@ export const DefaultDashboard = () => {
       <Row gutter={16}>
         <Col xs={24} sm={24} md={24} lg={24}>
           <Row gutter={16}>
-            {annualStatisticData.map((elm, i) => (
-              <Col xs={24} sm={24} md={24} lg={24} xl={6} key={i}>
-                <StatisticWidget
-                  title={elm.title}
-                  value={elm.value}
-                  status={elm.status}
-                  subtitle={elm.subtitle}
-                />
-              </Col>
-            ))}
+            <Col xs={24} sm={24} md={24} lg={24} xl={6}>
+              <StatisticWidget
+                title="Total Transaction"
+                value={`₹${annualStatisticData?.transactions}`}
+                // status={elm.status}
+                subtitle={`This Year ${moment().year()}`}
+              />
+            </Col>
+            <Col xs={24} sm={24} md={24} lg={24} xl={6}>
+              <StatisticWidget
+                title="Total Sales"
+                value={annualStatisticData?.orders}
+                subtitle={`This Year ${moment().year()}`}
+              />
+            </Col>
+            <Col xs={24} sm={24} md={24} lg={24} xl={6}>
+              <StatisticWidget
+                title="Total Customers"
+                value={annualStatisticData?.customers}
+                subtitle={`This Year ${moment().year()}`}
+              />
+            </Col>
+            <Col xs={24} sm={24} md={24} lg={24} xl={6}>
+              <StatisticWidget
+                title="Total Vendors"
+                value={annualStatisticData?.vendors}
+                subtitle={`This Year ${moment().year()}`}
+              />
+            </Col>
           </Row>
           {/* <Row gutter={16}>
             <Col span={24}>

@@ -3,10 +3,10 @@ import fetch from 'auth/FetchInterceptor'
 const customerService = {}
 const apiRoute = '/customers'
 
-customerService.getCustomers = async function () {
+customerService.getCustomers = async function (query = '') {
   try {
     const res = await fetch({
-      url: `${apiRoute}/all`,
+      url: `${apiRoute}/all?${query}`,
       method: 'get',
     })
     const data = res.data.filter((cur) => cur.status !== 'Deleted')
