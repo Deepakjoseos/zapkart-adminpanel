@@ -39,10 +39,9 @@ const ProductForm = (props) => {
 
   const [productType, setProductType] = useState('')
   const [returnable, setReturnable] = useState(false)
-  const [tags, setTags] = useState([])
-  const [inputVisible, setInputVisible] = useState(false)
-  const [inputValue, setInputValue] = useState('')
-  const inputRef = useRef(null)
+
+  const [maxQty, setMaxQty] = useState(0)
+  const [minQty, setMinQty] = useState(0)
 
   const {
     fileList: fileListImages,
@@ -51,8 +50,6 @@ const ProductForm = (props) => {
     onRemove: onRemoveImages,
     setFileList: setFileListImages,
   } = useUpload(1, 'multiple')
-
-
 
   const getBrands = async () => {
     const data = await brandService.getBrands()
@@ -80,8 +77,8 @@ const ProductForm = (props) => {
   }
 
   useEffect(() => {
-    
     getBrands()
+    getCategories()
 
     if (process.env.REACT_APP_SITE_NAME === 'zapkart') {
       getMedicineTypes()
@@ -89,6 +86,13 @@ const ProductForm = (props) => {
       getCompositions()
     }
   }, [])
+
+  const getCategories = async () => {
+    const data = await categoryService.getCategories()
+    const activeCategories = data.filter((item) => item.status === 'Active')
+    const treeCatList = Utils.createCategoryList(activeCategories)
+    setCategories(treeCatList)
+  }
 
   const fetchProductTemplateById = async () => {
     const { id } = param
@@ -173,7 +177,6 @@ const ProductForm = (props) => {
           weight: data.shippingDetail.weight,
           length: data.shippingDetail.length,
           width: data.shippingDetail.width,
-          
 
           // shippingDetail: {
           //   lengthClass: data.shippingDetail.lengthClass,
@@ -243,6 +246,8 @@ const ProductForm = (props) => {
 
       setProductType(data.productType)
       setReturnable(data.returnable)
+      setMinQty(data.minQty)
+      setMaxQty(data.allowedQuantityPerOrder)
 
       setVariantsList(data.variants)
       // setTags(data.tags)
@@ -299,10 +304,10 @@ const ProductForm = (props) => {
             manufacturer: values.manufacturer,
             minQty: values.minQty,
             slug: values.slug,
-             tags: values.tags,
-             metaTitle: values.metaTitle,
-             metaDescription: values.metaDescription,
-             keywords: values.keywords,
+            tags: values.tags,
+            metaTitle: values.metaTitle,
+            metaDescription: values.metaDescription,
+            keywords: values.keywords,
 
             composition: values?.composition?.map((comp) => {
               return { id: comp.id, qty: comp.qty }
@@ -348,6 +353,12 @@ const ProductForm = (props) => {
             productType: 'NonMedicine',
             medicinePackaging: 'no',
             minQty: values.minQty,
+
+            slug: values.slug,
+            tags: values.tags,
+            metaTitle: values.metaTitle,
+            metaDescription: values.metaDescription,
+            keywords: values.keywords,
             // slug: values.slug,
             // tags: tags,
             // metaTitle: values.metaTitle,
@@ -355,7 +366,6 @@ const ProductForm = (props) => {
             // keywords: values.keywords,
 
             // status: values.status,
-       
           }
         }
 
@@ -488,13 +498,10 @@ const ProductForm = (props) => {
                 onCompositionChange={onCompositionChange}
                 setReturnable={setReturnable}
                 returnable={returnable}
-                fileListImages={fileListImages}
-                inputVisible={inputVisible}
-                // handleInputChange={handleInputChange}
-                // handleInputConfirm={handleInputConfirm}
-                inputRef={inputRef}
-                // showInput={showInput}
-                inputValue={inputValue}
+                setMaxQty={setMaxQty}
+                maxQty={maxQty}
+                setMinQty={setMinQty}
+                minQty={minQty}
               />
             </TabPane>
             {mode === EDIT && (

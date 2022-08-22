@@ -11,8 +11,6 @@ import {
   TreeSelect,
   Space,
   Button,
-  Image,
-  Tag,
 } from 'antd'
 import { ImageSvg } from 'assets/svg/icon'
 import CustomIcon from 'components/util-components/CustomIcon'
@@ -172,14 +170,10 @@ const GeneralField = ({
   setReturnable,
   returnable,
   onCompositionChange,
-  fileListImages,
-  tagChild,
-  inputVisible,
-  handleInputChange,
-  handleInputConfirm,
-  inputRef,
-  inputValue,
-  showInput,
+  setMaxQty,
+  maxQty,
+  setMinQty,
+  minQty,
 }) => {
   const [image, setImage] = useState(false)
 
@@ -343,13 +337,47 @@ const GeneralField = ({
           <Form.Item
             name="allowedQuantityPerOrder"
             label="AllowedQuantityPerOrder"
-            rules={rules.allowedQuantityPerOrder}
+            rules={[
+              {
+                required: true,
+                message: 'Required',
+              },
+              // {
+              //   min: minQty,
+              //   message: 'Must be greater than Min Qty ' + minQty,
+              // },
+            ]}
           >
-            <InputNumber type="number" min={0} max={100000} />
+            <InputNumber
+              type="number"
+              min={minQty && minQty}
+              max={100000}
+              onChange={(val) => setMaxQty(val)}
+            />
           </Form.Item>
-          <Form.Item name="minQty" label="minQty" rules={rules.minQty}>
-            <InputNumber type="number" min={0} max={100000} />
-          </Form.Item>
+          {maxQty !== 0 && (
+            <Form.Item
+              name="minQty"
+              label="minQty"
+              rules={[
+                {
+                  required: true,
+                  message: 'Required',
+                },
+                // {
+                //   max: maxQty,
+                //   message: 'Must be less than AllowedQuantityPerOrder ' + maxQty,
+                // },
+              ]}
+            >
+              <InputNumber
+                type="number"
+                min={1}
+                max={maxQty && maxQty}
+                onChange={(val) => setMinQty(val)}
+              />
+            </Form.Item>
+          )}
 
           {SITE_NAME === 'zapkart' && (
             <Form.Item
@@ -605,50 +633,7 @@ const GeneralField = ({
           <Form.Item name="slug" label="Slug" rules={rules.slug}>
             <Input placeholder="Slug" />
           </Form.Item>
-          {/* <Form.Item name="tags" label="Tags">
-            <TweenOneGroup
-              enter={{
-                scale: 0.8,
-                opacity: 0,
-                type: 'from',
-                duration: 100,
-              }}
-              // onEnd={(e) => {
-              //   if (e.type === 'appear' || e.type === 'enter') {
-              //     e.target.style = 'display: inline-block';
-              //   }
-              // }}
-              leave={{
-                opacity: 0,
-                width: 0,
-                scale: 0,
-                duration: 200,
-              }}
-              appear={false}
-            >
-              {tagChild}
-            </TweenOneGroup>
-            <hr></hr>
-            {inputVisible && (
-              <Input
-                ref={inputRef}
-                type="text"
-                size="small"
-                style={{
-                  width: 78,
-                }}
-                value={inputValue}
-                onChange={handleInputChange}
-                onBlur={handleInputConfirm}
-                onPressEnter={handleInputConfirm}
-              />
-            )}
-            {!inputVisible && (
-              <Tag onClick={showInput} className="site-tag-plus">
-                <PlusOutlined /> New Tag
-              </Tag>
-            )}
-          </Form.Item> */}
+
           <Form.Item name="tags" label="Tags">
             <Select
               dropdownStyle={{ display: 'none' }}
