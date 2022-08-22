@@ -325,9 +325,8 @@ const ProductForm = (props) => {
     setSubmitLoading(true)
     form
       .validateFields()
-     
+
       .then(async (values) => {
-      
         console.log(values, 'values')
         let sendingValues = {}
 
@@ -349,10 +348,10 @@ const ProductForm = (props) => {
             manufacturer: values.manufacturer,
             minQty: values.minQty,
             slug: values.slug,
-             tags: tags,
-             metaTitle: values.metaTitle,
-             metaDescription: values.metaDescription,
-             keywords: values.keywords,
+            tags: tags,
+            metaTitle: values.metaTitle,
+            metaDescription: values.metaDescription,
+            keywords: values.keywords,
 
             composition: values?.composition?.map((comp) => {
               return { id: comp.id, qty: comp.qty }

@@ -143,25 +143,25 @@ const ProductForm = (props) => {
           delete sendingValues.available
         }
 
-        if (sendingValues?.products?.length === 0) {
-          delete sendingValues.products
-        }
+        // if (sendingValues?.products?.length === 0) {
+        //   delete sendingValues.products
+        // }
 
-        if (sendingValues?.categories?.length === 0) {
-          delete sendingValues.categories
-        }
+        // if (sendingValues?.categories?.length === 0) {
+        //   delete sendingValues.categories
+        // }
 
-        if (sendingValues?.brands?.length === 0) {
-          delete sendingValues.brands
-        }
+        // if (sendingValues?.brands?.length === 0) {
+        //   delete sendingValues.brands
+        // }
 
-        if (sendingValues?.userGroups?.length === 0) {
-          delete sendingValues.userGroups
-        }
+        // if (sendingValues?.userGroups?.length === 0) {
+        //   delete sendingValues.userGroups
+        // }
 
-        if (sendingValues?.users?.length === 0) {
-          delete sendingValues.users
-        }
+        // if (sendingValues?.users?.length === 0) {
+        //   delete sendingValues.users
+        // }
 
         if (values.startEndDate) {
           sendingValues.startDate = moment(values.startEndDate[0]).format(
