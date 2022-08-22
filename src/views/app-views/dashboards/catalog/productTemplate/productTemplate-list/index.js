@@ -9,6 +9,7 @@ import {
   Tag,
   Modal,
   notification,
+  message,
 } from 'antd'
 // import ProductTemplateListData from 'assets/data/product-list.data.json'
 import {
@@ -161,6 +162,26 @@ const ProductTemplateList = () => {
     }
   }
 
+  const fetchProductTemplateById = async (id) => {
+    const data = await productTemplate.getProductTemplateById(id)
+    return data
+  }
+
+  const handleStatusChange = async (value, selectedRow) => {
+   const selectedProductTemp =  await fetchProductTemplateById(selectedRow.id)
+   console.log('selectedproductTemp', selectedProductTemp)
+
+   const sendingValues = {...selectedProductTemp, categoryId: selectedProductTemp.category.id, status: value}
+
+   
+   const edited = await productTemplate.editProductTemplate(
+    selectedRow.id,
+    sendingValues
+  )
+  if (edited) {
+    message.success(`Status Edited Successfully:  ${selectedProductTemp.name}`) 
+  }
+  }
   const tableColumns = [
     {
       title: 'Product Template',
@@ -200,17 +221,35 @@ const ProductTemplateList = () => {
       // sorter: (a, b) => utils.antdTableSorter(a, b, 'category.name'),
     },
 
-    {
-      title: 'Vendor',
-      dataIndex: 'username',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'username'),
-    },
+    // {
+    //   title: 'Vendor',
+    //   dataIndex: 'username',
+    //   sorter: (a, b) => utils.antdTableSorter(a, b, 'username'),
+    // },
     {
       title: 'Status',
       dataIndex: 'status',
-      render: (status) => (
-        <Flex alignItems="center">{getStockStatus(status)}</Flex>
-      ),
+      
+      // render: (status) => (
+      //   <Flex alignItems="center">{getStockStatus(status)}</Flex>
+      // ),
+      render: (status, row) => {
+        return (
+          <Select
+            defaultValue={status.charAt(0).toUpperCase() + status.slice(1)}
+            // style={{ width: 120 }}
+            onChange={(e) => handleStatusChange(e, row)}
+          >
+            <Option value="Active">
+              <Tag color="green">Active</Tag>
+            </Option>
+            <Option value="Hold">
+              <Tag color="red">Hold</Tag>
+            </Option>
+            
+          </Select>
+        )
+      },
       sorter: (a, b) => utils.antdTableSorter(a, b, 'status'),
     },
     {

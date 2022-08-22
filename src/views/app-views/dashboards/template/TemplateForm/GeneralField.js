@@ -83,7 +83,11 @@ const GeneralField = ({ form, tempConstants }) => {
             label="Listing Type"
             rules={rules.listingType}
           >
-            <Select placeholder="Listing Type">
+            <Select placeholder="Listing Type" showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }>
               {tempConstants?.LISTING_TYPES &&
                 Object.values(tempConstants['LISTING_TYPES']).map(
                   (listtype) => <Option value={listtype}>{listtype}</Option>

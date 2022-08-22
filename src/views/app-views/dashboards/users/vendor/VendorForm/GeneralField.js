@@ -125,7 +125,7 @@ const GeneralField = ({ propsDisplayImages, form }) => (
     </Col>
     <Col xs={24} sm={24} md={7}>
       <Card title="Display Image">
-        <Upload listType="picture-card" name="image" {...propsDisplayImages}>
+        <Upload listType="picture-card" name="image" {...propsDisplayImages} accept="image/*">
           <CustomIcon className="display-3" svg={ImageSvg} />
         </Upload>
       </Card>

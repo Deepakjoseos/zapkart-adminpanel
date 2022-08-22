@@ -154,7 +154,11 @@ const GeneralField = ({
     <>
       <Card title="Basic Info">
         <Form.Item name="vendorId" label="Vendor" rules={rules.vendor}>
-          <Select
+          <Select showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
             placeholder="Vendor"
             onChange={(e) => {
               getDeliveryZones(e)
@@ -176,7 +180,7 @@ const GeneralField = ({
           label="deliveryZone"
           rules={rules.deliveryZoneId}
         >
-          <Select placeholder="deliveryZoneId">
+          <Select placeholder="deliveryZoneId" >
             {deliveryZones.map((deliveryZone) => (
               <Option value={deliveryZone.id}>{deliveryZone.name}</Option>
             ))}
@@ -188,7 +192,11 @@ const GeneralField = ({
           label="productTemplate"
           rules={rules.productTemplateId}
         >
-          <Select
+          <Select showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
             placeholder="productTemplate"
             onChange={(e) => getVariants(e)}
           >
@@ -211,7 +219,11 @@ const GeneralField = ({
             label="productVariant"
             // rules={rules.productVariantId}
           >
-            <Select placeholder="productVariant">
+            <Select placeholder="productVariant" showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }>
               {variants?.map((variant) => (
                 <Option value={variant.id}>{variant.name}</Option>
               ))}
@@ -247,7 +259,11 @@ const GeneralField = ({
             label="Product Buy Type"
             rules={rules.acquirementMethod}
           >
-            <Select
+            <Select showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
               placeholder="Acquirement Method"
               onChange={(e) => setProductBuyType(e)}
             >

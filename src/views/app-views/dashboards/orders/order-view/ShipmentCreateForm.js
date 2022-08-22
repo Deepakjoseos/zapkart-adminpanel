@@ -152,7 +152,10 @@ const ShipmentCreateForm = ({
                 ]}
               >
                 <Select
-                  mode="multiple"
+                  mode="multiple" optionFilterProp="children"
+                  filterOption={(input, option) =>
+                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                  }
                   //   size={size}
                   placeholder="Products Items"
                   defaultValue={[]}
