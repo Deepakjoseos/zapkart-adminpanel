@@ -116,7 +116,7 @@ const GeneralField = ({ propsImages, categories, handleChange, form }) => {
 
           <Form.Item name="tags" label="Tags">
             <Select
-              // dropdownStyle={{ display: 'none' }}
+              dropdownStyle={{ display: 'none' }}
               mode="tags"
               style={{
                 width: '100%',
