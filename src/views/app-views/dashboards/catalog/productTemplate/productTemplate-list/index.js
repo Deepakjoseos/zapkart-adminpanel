@@ -63,15 +63,16 @@ const ProductTemplateList = () => {
   const [isExcelModalOpen, setIsExcelModalOpen] = useState(false)
   const [excelFile, setExcelFile] = useState(null)
 
-  useEffect(() => {
-    const getProductTemplates = async () => {
-      const data = await productTemplate.getProductTemplates()
-      if (data) {
-        setList(data)
-        setSearchBackupList(data)
-        console.log(data, 'show-data')
-      }
+  const getProductTemplates = async () => {
+    const data = await productTemplate.getProductTemplates()
+    if (data) {
+      setList(data)
+      setSearchBackupList(data)
+      console.log(data, 'show-data')
     }
+  }
+
+  useEffect(() => {
     const getBrands = async () => {
       const data = await brandService.getBrands()
       if (data) {
@@ -321,6 +322,7 @@ const ProductTemplateList = () => {
       notification.success({
         message: 'Product Excel File Uploaded',
       })
+      getProductTemplates()
     }
   }
 
