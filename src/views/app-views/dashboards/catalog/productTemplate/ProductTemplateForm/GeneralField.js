@@ -605,7 +605,7 @@ const GeneralField = ({
           <Form.Item name="slug" label="Slug" rules={rules.slug}>
             <Input placeholder="Slug" />
           </Form.Item>
-          <Form.Item name="tags" label="Tags">
+          {/* <Form.Item name="tags" label="Tags">
             <TweenOneGroup
               enter={{
                 scale: 0.8,
@@ -648,6 +648,16 @@ const GeneralField = ({
                 <PlusOutlined /> New Tag
               </Tag>
             )}
+          </Form.Item> */}
+          <Form.Item name="tags" label="Tags">
+            <Select
+              dropdownStyle={{ display: 'none' }}
+              mode="tags"
+              style={{
+                width: '100%',
+              }}
+              placeholder="Tags"
+            ></Select>
           </Form.Item>
         </Card>
       </Col>

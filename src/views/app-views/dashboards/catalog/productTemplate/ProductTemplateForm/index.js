@@ -51,60 +51,8 @@ const ProductForm = (props) => {
     onRemove: onRemoveImages,
     setFileList: setFileListImages,
   } = useUpload(1, 'multiple')
-  useEffect(() => {
-    if (inputVisible) {
-      inputRef.current?.focus()
-    }
-  }, [])
-  const handleClose = (removedTag) => {
-    const newTags = tags.filter((tag) => tag !== removedTag)
-    console.log(newTags)
-    setTags(newTags)
-  }
-  const showInput = () => {
-    setInputVisible(true)
-  }
-  const handleInputChange = (e) => {
-    setInputValue(e.target.value)
-  }
-  const handleInputConfirm = () => {
-    if (inputValue && tags.indexOf(inputValue) === -1) {
-      setTags([...tags, inputValue])
-    }
 
-    setInputVisible(false)
-    setInputValue('')
-  }
-  const forMap = (tag) => {
-    const tagElem = (
-      <Tag
-        closable
-        onClose={(e) => {
-          e.preventDefault()
-          handleClose(tag)
-        }}
-      >
-        {tag}
-      </Tag>
-    )
-    return (
-      <span
-        key={tag}
-        style={{
-          display: 'inline-block',
-        }}
-      >
-        {tagElem}
-      </span>
-    )
-  }
-  const tagChild = tags.map(forMap)
-  const getCategories = async () => {
-    const data = await categoryService.getCategories()
-    const activeCategories = data.filter((item) => item.status === 'Active')
-    const treeCatList = Utils.createCategoryList(activeCategories)
-    setCategories(treeCatList)
-  }
+
 
   const getBrands = async () => {
     const data = await brandService.getBrands()
@@ -132,7 +80,7 @@ const ProductForm = (props) => {
   }
 
   useEffect(() => {
-    getCategories()
+    
     getBrands()
 
     if (process.env.REACT_APP_SITE_NAME === 'zapkart') {
@@ -217,6 +165,7 @@ const ProductForm = (props) => {
           metaTitle: data.metaTitle,
           metaDescription: data.metaDescription,
           keywords: data.keywords,
+          tags: data.tags,
 
           lengthClass: data.shippingDetail.lengthClass,
           weightClass: data.shippingDetail.weightClass,
@@ -224,6 +173,8 @@ const ProductForm = (props) => {
           weight: data.shippingDetail.weight,
           length: data.shippingDetail.length,
           width: data.shippingDetail.width,
+          
+
           // shippingDetail: {
           //   lengthClass: data.shippingDetail.lengthClass,
           //   weightClass: data.shippingDetail.weightClass,
@@ -294,7 +245,7 @@ const ProductForm = (props) => {
       setReturnable(data.returnable)
 
       setVariantsList(data.variants)
-      setTags(data.tags)
+      // setTags(data.tags)
     } else {
       history.replace(
         '/app/dashboards/catalog/producttemplate/producttemplate-list'
@@ -348,10 +299,10 @@ const ProductForm = (props) => {
             manufacturer: values.manufacturer,
             minQty: values.minQty,
             slug: values.slug,
-            tags: tags,
-            metaTitle: values.metaTitle,
-            metaDescription: values.metaDescription,
-            keywords: values.keywords,
+             tags: values.tags,
+             metaTitle: values.metaTitle,
+             metaDescription: values.metaDescription,
+             keywords: values.keywords,
 
             composition: values?.composition?.map((comp) => {
               return { id: comp.id, qty: comp.qty }
@@ -538,12 +489,11 @@ const ProductForm = (props) => {
                 setReturnable={setReturnable}
                 returnable={returnable}
                 fileListImages={fileListImages}
-                tagChild={tagChild}
                 inputVisible={inputVisible}
-                handleInputChange={handleInputChange}
-                handleInputConfirm={handleInputConfirm}
+                // handleInputChange={handleInputChange}
+                // handleInputConfirm={handleInputConfirm}
                 inputRef={inputRef}
-                showInput={showInput}
+                // showInput={showInput}
                 inputValue={inputValue}
               />
             </TabPane>
