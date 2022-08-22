@@ -91,6 +91,19 @@ shipmentService.createPickupLocation = async function (data) {
   }
 }
 
+shipmentService.changePickupLocation = async function (data) {
+  try {
+    const res = await fetch({
+      url: `${apiRoute}/pickupLocations`,
+      method: 'put',
+      data,
+    })
+    return res
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
+
 shipmentService.requestPickupOrder = async function (data) {
   try {
     const res = await fetch({
@@ -125,6 +138,57 @@ shipmentService.checkIfDeliverable = async function (data) {
       data: data,
     })
     return res.data?.available_courier_companies
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
+
+// Generate Api's
+shipmentService.generateAwb = async function (data) {
+  try {
+    const res = await fetch({
+      url: `${apiRoute}/generateAwb`,
+      method: 'post',
+      data,
+    })
+    return res
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
+
+shipmentService.generateManifest = async function (data) {
+  try {
+    const res = await fetch({
+      url: `${apiRoute}/generateManifest`,
+      method: 'post',
+      data,
+    })
+    return res
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
+shipmentService.generateLabel = async function (data) {
+  try {
+    const res = await fetch({
+      url: `${apiRoute}/generateLabel`,
+      method: 'post',
+      data,
+    })
+    return res
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
+shipmentService.generateInvoice = async function (data) {
+  try {
+    const res = await fetch({
+      url: `${apiRoute}/generateInvoice`,
+      method: 'post',
+      data,
+    })
+    return res
   } catch (err) {
     console.log(err, 'show-err')
   }

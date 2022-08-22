@@ -276,9 +276,8 @@ const ProductForm = (props) => {
     setSubmitLoading(true)
     form
       .validateFields()
-     
+
       .then(async (values) => {
-      
         console.log(values, 'values')
         let sendingValues = {}
         sendingValues.status = values.status

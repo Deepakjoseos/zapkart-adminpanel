@@ -9,6 +9,7 @@ orderService.getOrders = async function (query) {
     let url = `${api}`
     const status = query?.status
     const userId = query?.userId
+    const limit = query?.limit
 
     if (status) url = `${url}?status=${status}`
     if (userId)
@@ -16,6 +17,12 @@ orderService.getOrders = async function (query) {
         status && status !== null
           ? `${url}&userId=${userId}`
           : `${url}?userId=${userId}`
+
+    if (limit)
+      url =
+        (status && status !== null) || (userId && userId !== null)
+          ? `${url}&limit=${limit}`
+          : `${url}?limit=${limit}`
 
     const res = await fetch({
       url,

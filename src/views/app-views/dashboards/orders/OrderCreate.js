@@ -522,7 +522,7 @@ const OrderCreate = () => {
                                       placeholder="Quantity"
                                       size="large"
                                       style={{ width: 300 }}
-                                      min={0}
+                                      min={1}
                                       type="number"
                                       max={100000}
                                     />

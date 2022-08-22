@@ -138,7 +138,6 @@ const ProductList = () => {
     {
       title: 'Priority',
       dataIndex: 'priority',
-      // sorter: (a, b) => utils.antdTableSorter(a, b, 'parentId'),
     },
 
     {

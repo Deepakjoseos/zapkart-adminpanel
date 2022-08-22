@@ -70,6 +70,57 @@ const ShipmentList = () => {
     }
   }
 
+  const generateAwb = async (id) => {
+    const data = await shipmentService.generateAwb({
+      shipmentId: id,
+    })
+    if (data) {
+      notification.success({
+        message: 'Success',
+        description: 'AWB Generated Successfully',
+      })
+      // getShipments()
+    }
+  }
+
+  const generateManifest = async (id) => {
+    const data = await shipmentService.generateManifest({
+      shipmentId: id,
+    })
+    if (data) {
+      notification.success({
+        message: 'Success',
+        description: 'Manifest Generated Successfully',
+      })
+      // getShipments()
+    }
+  }
+
+  const generateLabel = async (id) => {
+    const data = await shipmentService.generateLabel({
+      shipmentId: id,
+    })
+    if (data) {
+      notification.success({
+        message: 'Success',
+        description: 'Label Generated Successfully',
+      })
+      // getShipments()
+    }
+  }
+  const generateInvoice = async (id) => {
+    const data = await shipmentService.generateInvoice({
+      shipmentId: id,
+    })
+    if (data) {
+      notification.success({
+        message: 'Success',
+        description: 'Label Generated Successfully',
+      })
+      // getShipments()
+    }
+  }
+
   useEffect(() => {
     getShipments()
   }, [])
@@ -81,6 +132,26 @@ const ShipmentList = () => {
         <Flex alignItems="center">
           <EyeOutlined />
           <span className="ml-2">View Details</span>
+        </Flex>
+      </Menu.Item>
+      <Menu.Item onClick={() => generateAwb(row.id)}>
+        <Flex alignItems="center">
+          <span className="ml-2">Generate AWB</span>
+        </Flex>
+      </Menu.Item>
+      <Menu.Item onClick={() => generateManifest(row.id)}>
+        <Flex alignItems="center">
+          <span className="ml-2">Generate Manifest</span>
+        </Flex>
+      </Menu.Item>
+      <Menu.Item onClick={() => generateLabel(row.id)}>
+        <Flex alignItems="center">
+          <span className="ml-2">Generate Label</span>
+        </Flex>
+      </Menu.Item>
+      <Menu.Item onClick={() => generateInvoice(row.id)}>
+        <Flex alignItems="center">
+          <span className="ml-2">Generate Invoice</span>
         </Flex>
       </Menu.Item>
       {/* <Menu.Item onClick={() => deleteRow(row)}>
