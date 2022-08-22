@@ -8,15 +8,14 @@ orderService.getOrders = async function (query) {
   try {
     let url = `${api}`
     const status = query?.status
-    const userId=query?.userId
+    const userId = query?.userId
 
-    if (status) url = `${url}?status=${status}`;
-   if (userId)
+    if (status) url = `${url}?status=${status}`
+    if (userId)
       url =
         status && status !== null
           ? `${url}&userId=${userId}`
-          : `${url}?userId=${userId}`;
-
+          : `${url}?userId=${userId}`
 
     const res = await fetch({
       url,
@@ -124,6 +123,29 @@ orderService.cancelOrderItem = async function (id, data) {
     return res
   } catch (err) {
     console.log(err, 'show-err')
+  }
+}
+
+orderService.orderPaymentMethod = async function (data) {
+  try {
+    const res = await fetch({
+      url: `/payment/paymentMethod`,
+      method: 'post',
+      data: data,
+    })
+    // alert(JSON.stringify(res.data))
+    return res
+  } catch (err) {
+    const parsedErr = JSON.parse(err.response.data.detail)
+
+    if (parsedErr) {
+      parsedErr.forEach((cur) => {
+        notification.error({
+          message: cur.type,
+          description: cur.item.name,
+        })
+      })
+    }
   }
 }
 

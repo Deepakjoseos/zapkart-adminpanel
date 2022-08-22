@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Card, Table, Select, Input, Button, Menu, Tag } from 'antd'
 // import BrandListData from 'assets/data/product-list.data.json'
 import {
@@ -49,8 +49,9 @@ const BrandList = () => {
   const [searchBackupList, setSearchBackupList] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
-  const [selectedOrder,setSelectedorder]= useState('')
-
+  const [selectedOrder, setSelectedorder] = useState('')
+  const [search, setSearch] = useState('')
+  const [status, setStatus] = useState('All')
 
   useEffect(() => {
     // Getting Brands List to display in the table
@@ -116,8 +117,7 @@ const BrandList = () => {
   }
   const handleQuery = async () => {
     const query = {}
-    if ((selectedOrder) !== 'All')
-      query.orderByPriority = selectedOrder
+    if (selectedOrder !== 'All') query.orderByPriority = selectedOrder
 
     console.log('query', query)
     const data = await brandService.getBrands(query)
@@ -127,10 +127,10 @@ const BrandList = () => {
     }
   }
 
-
   const handleClearFilter = async () => {
-    setSelectedorder(null)
- 
+    setSelectedorder('')
+    setSearch('')
+    setStatus('All')
     const data = await brandService.getBrands({})
     if (data) {
       setList(data)
@@ -181,6 +181,7 @@ const BrandList = () => {
   // When Search is used
   const onSearch = (e) => {
     const value = e.currentTarget.value
+    setSearch(value)
     console.log(value, 'value')
     const searchArray = searchBackupList
     // e.currentTarget.value?.length > 0 ? searchBackupList : searchBackupList
@@ -191,6 +192,7 @@ const BrandList = () => {
 
   // Filter Status Handler
   const handleShowStatus = (value) => {
+    setStatus(value)
     if (value !== 'All') {
       const key = 'status'
       const data = utils.filterArray(searchBackupList, key, value)
@@ -202,75 +204,82 @@ const BrandList = () => {
 
   // Table Filters JSX Elements
   const filters = () => (
-    <Flex className="mb-1" mobileFlex={false}>
-      <div className="mr-md-3 mb-3">
-      <label className="mt-2" >Search</label>
+    <form>
+      <Flex className="mb-1" mobileFlex={false}>
+        <div className="mr-md-3 mb-3">
+          <label className="mt-2">Search</label>
 
-        <Input
-          placeholder="Search"
-          prefix={<SearchOutlined />}
-          onChange={(e) => onSearch(e)}
-        />
-      </div>
-  
-      <div className="mr-md-3 mb-3">
-      <label className="mt-2" >Status</label>
-        <Select
-          defaultValue="All"
-          className="w-100"
-          style={{ minWidth: 180 }}
-          onChange={handleShowStatus}
-          placeholder="Status"
-        >
-          <Option value="All">All</Option>
-          <Option value="Active">Active</Option>
-          <Option value="Hold">Hold</Option>
-        </Select>
-      </div>
-  
-      <div className="mr-md-3 mb-3">
-      <label className="mt-2">Order By Priority</label>
-      <Select
-          className="w-100"
-          style={{ minWidth: 180 }}
-          onChange={(value) => setSelectedorder(value)}
-          // onSelect={handleQuery}
-          value={selectedOrder}
-          placeholder="OrderBy Priority">
-            
-             <Option value="">All</Option>
-             <Option value="true">Yes</Option>
-             <Option value="false">No</Option>
+          <Input
+            placeholder="Search"
+            prefix={<SearchOutlined />}
+            onChange={(e) => onSearch(e)}
+            value={search}
+          />
+        </div>
+
+        <div className="mr-md-3 mb-3">
+          <label className="mt-2">Status</label>
+          <Select
+            defaultValue="All"
+            className="w-100"
+            style={{ minWidth: 180 }}
+            onChange={handleShowStatus}
+            value={status}
+            placeholder="Status"
+          >
+            <Option value="All">All</Option>
+            <Option value="Active">Active</Option>
+            <Option value="Hold">Hold</Option>
           </Select>
-      </div>
-      <div >
-        <Button type="primary" className="mr-2 mt-4" onClick={handleQuery}>
-          Filter
-        </Button>
-      </div>
-      <div>
-        <Button type="primary" className="mr-2 mt-4" onClick={handleClearFilter}>
-          Clear
-        </Button>
-      </div>
-    </Flex>
+        </div>
+
+        <div className="mr-md-3 mb-3">
+          <label className="mt-2">Order By Priority</label>
+          <Select
+            className="w-100"
+            style={{ minWidth: 180 }}
+            onChange={(value) => setSelectedorder(value)}
+            // onSelect={handleQuery}
+            value={selectedOrder}
+            placeholder="OrderBy Priority"
+          >
+            <Option value="">All</Option>
+            <Option value="true">Yes</Option>
+            <Option value="false">No</Option>
+          </Select>
+        </div>
+        <div>
+          <Button type="primary" className="mr-2 mt-4" onClick={handleQuery}>
+            Filter
+          </Button>
+        </div>
+        <div>
+          <Button
+            type="primary"
+            className="mr-2 mt-4"
+            onClick={handleClearFilter}
+          >
+            Clear
+          </Button>
+        </div>
+      </Flex>
+    </form>
   )
 
   return (
     <Card>
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
         {filters()}
- 
       </Flex>
       <div>
-          <Button
-            onClick={addProduct}
-            type="primary"
-            icon={<PlusCircleOutlined />}
-          >
-            Add Brand
-          </Button>
-        </div>
+        <Button
+          onClick={addProduct}
+          type="primary"
+          icon={<PlusCircleOutlined />}
+        >
+          Add Brand
+        </Button>
+      </div>
       <div className="table-responsive">
         <Table columns={tableColumns} dataSource={list} rowKey="id" />
       </div>

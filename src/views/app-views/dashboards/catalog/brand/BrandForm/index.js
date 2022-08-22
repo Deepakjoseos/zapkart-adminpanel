@@ -1,6 +1,6 @@
-import React, { useState, useEffect,useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import PageHeaderAlt from 'components/layout-components/PageHeaderAlt'
-import { Tabs, Form, Button, message,Tag } from 'antd'
+import { Tabs, Form, Button, message, Tag } from 'antd'
 import Flex from 'components/shared-components/Flex'
 import GeneralField from './GeneralField'
 import useUpload from 'hooks/useUpload'
@@ -8,6 +8,7 @@ import { singleImageUploader } from 'utils/s3/s3ImageUploader'
 import brandService from 'services/brand'
 import Utils from 'utils'
 import { useHistory } from 'react-router-dom'
+import slugify from 'slugify'
 
 const { TabPane } = Tabs
 
@@ -23,8 +24,6 @@ const ProductForm = (props) => {
   // For Image Upload
   const [uploadedImg, setImage] = useState(null)
   const [submitLoading, setSubmitLoading] = useState(false)
-  const [children,setChildren] = useState([]) 
-  
 
   // For Image upload
   const {
@@ -34,11 +33,7 @@ const ProductForm = (props) => {
     onRemove: onRemoveImages,
     setFileList: setFileListImages,
   } = useUpload(1) // useUpload(1, 'multiple') or useUpload(1)
-  const handleChange = (value) => {
-    setChildren([...value, { value }])
-    return { children }
 
-  };
   useEffect(() => {
     if (mode === EDIT) {
       const fetchBrandById = async () => {
@@ -65,11 +60,11 @@ const ProductForm = (props) => {
             name: data.name,
             status: data.status,
             priority: data.priority,
-            metaTitle:data.metaTitle,
-            metaDescription:data.metaDescription,
-            keywords:data.keywords,
-            slug:data.slug,
-            tags:data.tags
+            metaTitle: data.metaTitle,
+            metaDescription: data.metaDescription,
+            keywords: data.keywords,
+            slug: data.slug,
+            tags: data.tags,
           })
         } else {
           history.replace('/app/dashboards/catalog/brand/brands-list')
@@ -100,7 +95,6 @@ const ProductForm = (props) => {
     form
       .validateFields()
       .then(async (values) => {
-     
         if (mode === ADD) {
           // Checking if image exists
           if (uploadedImg.length !== 0 && uploadedImg !== null) {
@@ -209,7 +203,7 @@ const ProductForm = (props) => {
                 // uploadLoading={uploadLoading}
                 // handleUploadChange={handleUploadChange}
                 propsImages={propsImages}
-                handleChange={handleChange}
+                form={form}
               />
             </TabPane>
           </Tabs>

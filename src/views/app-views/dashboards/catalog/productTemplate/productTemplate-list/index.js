@@ -1,11 +1,23 @@
 import React, { useEffect, useState } from 'react'
-import { Card, Table, Select, Input, Button, Menu, Tag } from 'antd'
+import {
+  Card,
+  Table,
+  Select,
+  Input,
+  Button,
+  Menu,
+  Tag,
+  Modal,
+  notification,
+} from 'antd'
 // import ProductTemplateListData from 'assets/data/product-list.data.json'
 import {
   EyeOutlined,
   DeleteOutlined,
   SearchOutlined,
   PlusCircleOutlined,
+  FileAddOutlined,
+  DownloadOutlined,
 } from '@ant-design/icons'
 import AvatarStatus from 'components/shared-components/AvatarStatus'
 import EllipsisDropdown from 'components/shared-components/EllipsisDropdown'
@@ -37,15 +49,18 @@ const getStockStatus = (status) => {
 }
 const ProductTemplateList = () => {
   let history = useHistory()
+  const fileInputRef = React.useRef(null)
 
   const [list, setList] = useState([])
   const [searchBackupList, setSearchBackupList] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
-  const[brands,setBrands] = useState([])
-  const [categories,setCategories] = useState([])
-  const [selectedBrandId,setSelectedBrandId] = useState(null)
-  const [selectedCategoryId,setSelectedCategoryId] = useState(null)
+  const [brands, setBrands] = useState([])
+  const [categories, setCategories] = useState([])
+  const [selectedBrandId, setSelectedBrandId] = useState(null)
+  const [selectedCategoryId, setSelectedCategoryId] = useState(null)
+  const [isExcelModalOpen, setIsExcelModalOpen] = useState(false)
+  const [excelFile, setExcelFile] = useState(null)
 
   useEffect(() => {
     const getProductTemplates = async () => {
@@ -56,15 +71,15 @@ const ProductTemplateList = () => {
         console.log(data, 'show-data')
       }
     }
-    const getBrands= async ()=>{
-      const data= await brandService.getBrands()
-      if(data){
+    const getBrands = async () => {
+      const data = await brandService.getBrands()
+      if (data) {
         setBrands(data)
       }
     }
-    const getCategories= async ()=>{
-      const data= await categoryService.getCategories()
-      if(data){
+    const getCategories = async () => {
+      const data = await categoryService.getCategories()
+      if (data) {
         setCategories(data)
       }
     }
@@ -246,10 +261,34 @@ const ProductTemplateList = () => {
     }
   }
 
+  const handleExcelUpload = (e) => {
+    let file = e.target.files[0]
+
+    setExcelFile(file)
+  }
+
+  const onExcelSubmit = async () => {
+    const sendingData = {
+      file: excelFile,
+    }
+
+    const sendExcelFile = await productTemplate.createProductFromExcel(
+      sendingData
+    )
+
+    if (sendExcelFile) {
+      setIsExcelModalOpen(false)
+      setExcelFile(null)
+      notification.success({
+        message: 'Product Excel File Uploaded',
+      })
+    }
+  }
+
   const filters = () => (
     <Flex className="mb-1" mobileFlex={false}>
       <div className="mr-md-3 mb-3">
-      <label className='mt-2'>Search</label>
+        <label className="mt-2">Search</label>
         <Input
           placeholder="Search"
           prefix={<SearchOutlined />}
@@ -257,7 +296,7 @@ const ProductTemplateList = () => {
         />
       </div>
       <div className="mr-md-3 mb-3">
-      <label className='mt-2'>Status</label>
+        <label className="mt-2">Status</label>
         <Select
           defaultValue="All"
           className="w-100"
@@ -271,7 +310,7 @@ const ProductTemplateList = () => {
         </Select>
       </div>
       <div className="mr-md-3 mb-3">
-      <label className='mt-2'>Brands</label>
+        <label className="mt-2">Brands</label>
         <Select
           className="w-100"
           style={{ minWidth: 180 }}
@@ -290,7 +329,7 @@ const ProductTemplateList = () => {
       </div>
 
       <div className="mr-md-3 mb-3">
-      <label className='mt-2'>Categories</label>
+        <label className="mt-2">Categories</label>
         <Select
           className="w-100"
           style={{ minWidth: 180 }}
@@ -307,13 +346,17 @@ const ProductTemplateList = () => {
           ))}
         </Select>
       </div>
-      <div >
+      <div>
         <Button type="primary" className="mr-2 mt-4 " onClick={handleQuery}>
           Filter
         </Button>
       </div>
       <div>
-        <Button type="primary" className="mr-2 mt-4" onClick={handleClearFilter}>
+        <Button
+          type="primary"
+          className="mr-2 mt-4"
+          onClick={handleClearFilter}
+        >
           Clear
         </Button>
       </div>
@@ -324,18 +367,62 @@ const ProductTemplateList = () => {
     <Card>
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
         {filters()}
-       
       </Flex>
-      <div>
+      <div className="mr-2 d-flex justify-content-between">
+        <Button
+          type="primary"
+          icon={<FileAddOutlined />}
+          onClick={() => setIsExcelModalOpen(true)}
+        >
+          Excel Upload
+        </Button>
+        <div>
           <Button
             onClick={addProduct}
             type="primary"
             icon={<PlusCircleOutlined />}
-            
+            block
           >
             Add Product Template
           </Button>
         </div>
+      </div>
+
+      <Modal
+        title="Product Template Excel Upload"
+        visible={isExcelModalOpen}
+        onCancel={() => {
+          setIsExcelModalOpen(false)
+          setExcelFile(null)
+        }}
+        footer={false}
+      >
+        <Flex flexDirection="column" alignItems="center">
+          <div className="mb-4 mt-4">
+            <Button
+              type="primary"
+              icon={<DownloadOutlined />}
+              onClick={() => fileInputRef.current.click()}
+            >
+              Upload Excel File
+            </Button>
+            <input
+              accept=".xls,.xlsx"
+              multiple={false}
+              ref={fileInputRef}
+              type="file"
+              onChange={handleExcelUpload}
+              hidden
+            />
+            <p> {excelFile && excelFile?.name}</p>
+          </div>
+
+          <Button type="primary" disabled={!excelFile} onClick={onExcelSubmit}>
+            Submit
+          </Button>
+        </Flex>
+      </Modal>
+
       <div className="table-responsive">
         <Table columns={tableColumns} dataSource={list} rowKey="id" />
       </div>

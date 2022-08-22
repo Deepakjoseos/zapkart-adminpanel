@@ -60,16 +60,17 @@ const ShipmentList = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
   const [checkIfDeliverableOpen, setCheckIfDeliverableOpen] = useState(false)
 
-  useEffect(() => {
-    // Getting Brands List to display in the table
-    const getShipments = async () => {
-      const data = await shipmentService.getShipments()
-      if (data) {
-        setList(data)
-        setSearchBackupList(data)
-        console.log(data, 'show-data')
-      }
+  // Getting Brands List to display in the table
+  const getShipments = async () => {
+    const data = await shipmentService.getShipments()
+    if (data) {
+      setList(data)
+      setSearchBackupList(data)
+      console.log(data, 'show-data')
     }
+  }
+
+  useEffect(() => {
     getShipments()
   }, [])
 
@@ -155,19 +156,24 @@ const ShipmentList = () => {
       dataIndex: 'actions',
       render: (_, elm) => (
         <Flex>
-          <Button
-            type="primary"
-            className="ml-auto"
-            onClick={() => requestPickupOrder(elm.id)}
-          >
-            Request Shipment
-          </Button>
-          <Button
-            className="mr-auto ml-2"
-            onClick={() => cancelShipment(elm.id)}
-          >
-            Cancel Shipment
-          </Button>
+          {!elm.shippedByVendor && (
+            <Button
+              type="primary"
+              className="ml-auto"
+              onClick={() => requestPickupOrder(elm.id)}
+            >
+              Request Shipment
+            </Button>
+          )}
+
+          {elm.status !== 'Cancelled' && (
+            <Button
+              className="mr-auto ml-2"
+              onClick={() => cancelShipment(elm.id)}
+            >
+              Cancel Shipment
+            </Button>
+          )}
 
           <div className="text-right">
             <EllipsisDropdown menu={dropdownMenu(elm)} />
@@ -236,6 +242,8 @@ const ShipmentList = () => {
   const cancelShipment = async (shipmentId) => {
     const resp = await shipmentService.shipmentCancel({ shipmentId })
     if (resp) {
+      getShipments()
+
       notification.success({
         message: 'Success',
         description: 'Cancel shipment successfully',
