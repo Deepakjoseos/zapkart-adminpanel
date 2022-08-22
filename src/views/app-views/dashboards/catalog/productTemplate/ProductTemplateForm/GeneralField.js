@@ -223,8 +223,12 @@ const GeneralField = ({
               <Option value="Hold">Hold</Option>
             </Select>
           </Form.Item>
-          <Form.Item name="brandId" label="Brand">
-            <Select placeholder="Brand">
+          <Form.Item name="brandId" label="Brand" >
+            <Select placeholder="Brand" showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }>
               {brands.map((brand) => (
                 <Option key={brand.id} value={brand.id}>
                   {brand.name}
@@ -237,7 +241,11 @@ const GeneralField = ({
             label="Category"
             rules={rules.categoryId}
           >
-            <TreeSelect
+            <TreeSelect showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
               treeData={categories}
               placeholder="Please select Category"
               treeDefaultExpandAll
@@ -249,7 +257,11 @@ const GeneralField = ({
               label="Manufacturer"
               rules={rules.manufacturer}
             >
-              <Select placeholder="Manufacturer">
+              <Select placeholder="Manufacturer" showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }>
                 {manufacturers.map((manufacturer) => (
                   <Option key={manufacturer.id} value={manufacturer.id}>
                     {manufacturer.name}
@@ -272,7 +284,11 @@ const GeneralField = ({
               label="Medicine Type"
               rules={rules.medicineTypeId}
             >
-              <Select placeholder="Medicine Packaging">
+              <Select placeholder="Medicine Packaging" showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }>
                 {medicineTypes.map((medicineType) => (
                   <Option key={medicineType.id} value={medicineType.id}>
                     {medicineType.name}
@@ -292,22 +308,25 @@ const GeneralField = ({
             </Form.Item>
           )}
 
-          <Form.Item name="status" label="Status" rules={rules.status}>
+          {/* <Form.Item name="status" label="Status" rules={rules.status}>
             <Select placeholder="Status">
               <Option value="Active">Active</Option>
               <Option value="Hold">Hold</Option>
             </Select>
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item
             name="allowedPaymentTypes"
             label="Allowed Payment Types"
             rules={rules.allowedPaymentTypes}
           >
             <Select
-              mode="multiple"
+              mode="multiple" optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
               allowClear
               style={{ width: '100%' }}
-              placeholder="Allowed Payment Types"
+              placeholder="Allowed Payment Types" 
             >
               <Option key="Cod" value="Cod">
                 Cod
@@ -387,7 +406,11 @@ const GeneralField = ({
                             name={[field.name, 'id']}
                             fieldKey={[field.fieldKey, 'id']}
                           >
-                            <Select
+                            <Select showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
                               placeholder="Medicine Packaging"
                               onChange={() => onCompositionChange()}
                             >
@@ -445,7 +468,11 @@ const GeneralField = ({
               label="ProductType"
               rules={rules.productType}
             >
-              <Select
+              <Select showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
                 placeholder="Product Type"
                 onChange={(e) => setProductType(e)}
               >
@@ -599,56 +626,23 @@ const GeneralField = ({
           <Form.Item name="metaDescription" label="Meta Description">
             <Input placeholder="Meta Description" />
           </Form.Item>
-          <Form.Item name="keywords" label="Keywords">
+          {/* <Form.Item name="keywords" label="Keywords">
             <Input placeholder="Keywords" />
+          </Form.Item> */}
+          <Form.Item name="keywords" label="Keywords">
+            <Select
+              dropdownStyle={{ display: 'none' }}
+              mode="tags"
+              style={{
+                width: '100%',
+              }}
+              placeholder="Keywords"
+            ></Select>
           </Form.Item>
           <Form.Item name="slug" label="Slug" rules={rules.slug}>
             <Input placeholder="Slug" />
           </Form.Item>
-          {/* <Form.Item name="tags" label="Tags">
-            <TweenOneGroup
-              enter={{
-                scale: 0.8,
-                opacity: 0,
-                type: 'from',
-                duration: 100,
-              }}
-              // onEnd={(e) => {
-              //   if (e.type === 'appear' || e.type === 'enter') {
-              //     e.target.style = 'display: inline-block';
-              //   }
-              // }}
-              leave={{
-                opacity: 0,
-                width: 0,
-                scale: 0,
-                duration: 200,
-              }}
-              appear={false}
-            >
-              {tagChild}
-            </TweenOneGroup>
-            <hr></hr>
-            {inputVisible && (
-              <Input
-                ref={inputRef}
-                type="text"
-                size="small"
-                style={{
-                  width: 78,
-                }}
-                value={inputValue}
-                onChange={handleInputChange}
-                onBlur={handleInputConfirm}
-                onPressEnter={handleInputConfirm}
-              />
-            )}
-            {!inputVisible && (
-              <Tag onClick={showInput} className="site-tag-plus">
-                <PlusOutlined /> New Tag
-              </Tag>
-            )}
-          </Form.Item> */}
+         
           <Form.Item name="tags" label="Tags">
             <Select
               dropdownStyle={{ display: 'none' }}

@@ -62,7 +62,11 @@ const GeneralField = ({
       </Select>
     </Form.Item>
 
-    <Form.Item name="parentId" label="Parent">
+    <Form.Item name="parentId" label="Parent" showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }>
       <Select placeholder="Parent">
         {deliveryLocations.map((cur) => (
           <Option value={cur.id} key={cur.id}>

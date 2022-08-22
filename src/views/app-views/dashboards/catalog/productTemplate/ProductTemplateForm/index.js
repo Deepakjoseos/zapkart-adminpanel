@@ -281,6 +281,7 @@ const ProductForm = (props) => {
       
         console.log(values, 'values')
         let sendingValues = {}
+        sendingValues.status = values.status
 
         if (process.env.REACT_APP_SITE_NAME === 'zapkart') {
           sendingValues = {
@@ -309,7 +310,6 @@ const ProductForm = (props) => {
               return { id: comp.id, qty: comp.qty }
             }),
 
-            // status: values.status,
             shippingDetail: {
               lengthClass: values.lengthClass,
               weightClass: values.weightClass,
@@ -354,8 +354,7 @@ const ProductForm = (props) => {
             // metaTitle: values.metaTitle,
             // metaDescription: values.metaDescription,
             // keywords: values.keywords,
-
-            // status: values.status,
+              // status: values.status,
             shippingDetail: {
               lengthClass: values.lengthClass,
               weightClass: values.weightClass,
