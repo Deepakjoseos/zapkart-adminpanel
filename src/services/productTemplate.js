@@ -1,26 +1,25 @@
 import fetch from 'auth/FetchInterceptor'
 
 const productTemplate = {}
-const api= 'producttemplates'
+const api = 'producttemplates'
 
 productTemplate.getProductTemplates = async function (query) {
   try {
-      let url = `${api}`;
-      const brandId = query?.brandId;
-      const categoryId = query?.categoryId;
-      const status = query?.status;
-      if (brandId) url = `${url}?brandId=${brandId}`;
-      if (categoryId)
-        url =
-          brandId && brandId !== null
-            ? `${url}&categoryId=${categoryId}`
-            : `${url}?categoryId=${categoryId}`;
-      if (status)
-        url =
-          (brandId && brandId !== null) ||
-            (categoryId && categoryId !== null)
-            ? `${url}&status=${status}`
-            : `${url}?status=${status}`;
+    let url = `${api}`
+    const brandId = query?.brandId
+    const categoryId = query?.categoryId
+    const status = query?.status
+    if (brandId) url = `${url}?brandId=${brandId}`
+    if (categoryId)
+      url =
+        brandId && brandId !== null
+          ? `${url}&categoryId=${categoryId}`
+          : `${url}?categoryId=${categoryId}`
+    if (status)
+      url =
+        (brandId && brandId !== null) || (categoryId && categoryId !== null)
+          ? `${url}&status=${status}`
+          : `${url}?status=${status}`
     const res = await fetch({
       url,
       method: 'get',
@@ -161,6 +160,22 @@ productTemplate.deleteProductTemplateVariantAttribute = async function (
     const res = await fetch({
       url: `/productTemplates/${productTemplateId}/variant/${productTemplateVariantId}/attribute/${attributeId}`,
       method: 'delete',
+    })
+    return res
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
+
+productTemplate.createProductFromExcel = async function (data) {
+  const formData = new FormData()
+  formData.append('file', data.file)
+
+  try {
+    const res = await fetch({
+      url: `/productTemplates/createFromExcel`,
+      method: 'post',
+      data: formData,
     })
     return res
   } catch (err) {

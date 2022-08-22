@@ -568,9 +568,10 @@ const ProductList = () => {
           </div>
         </div>
         <div className="table-responsive">
-          <Table columns={tableColumns} scroll={{
+          <Table columns={tableColumns} dataSource={list}
+          scroll={{
             x: true,
-          }} dataSource={list} rowKey="id" />
+          }} rowKey="id" />
         </div>
       </Card>
 
@@ -646,3 +647,4 @@ const ProductList = () => {
 }
 
 export default ProductList
+

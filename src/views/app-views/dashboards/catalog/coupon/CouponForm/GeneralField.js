@@ -170,9 +170,12 @@ const GeneralField = ({
         <Form.Item name="products" label="Products" rules={rules.products}>
           <Select
             mode="multiple"
-            allowClear
             style={{ width: '100%' }}
             placeholder="Products"
+            optionFilterProp="children"
+            filterOption={(input, option) =>
+              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
           >
             {productTemplates.map((productTemplate) => (
               <Option key={productTemplate.id} value={productTemplate.id}>
