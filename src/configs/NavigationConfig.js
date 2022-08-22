@@ -208,14 +208,14 @@ const dashBoardNavTree = [
         key: 'dashboards-catalog',
         path: `${APP_PREFIX_PATH}/dashboards/catalog`,
         title: 'Catalog',
-        icon: AppstoreOutlined,
+        // icon: AppstoreOutlined,
         breadcrumb: false,
         submenu: [
           {
             key: 'dashboards-catalog-brands',
             path: `${APP_PREFIX_PATH}/dashboards/catalog/brand/brands-list`,
             title: 'Brands',
-            icon: VerifiedOutlined,
+            // icon: VerifiedOutlined,
             breadcrumb: false,
             submenu: [],
           },

@@ -74,6 +74,11 @@ const GeneralField = ({ propsImages, categories, handleChange, form }) => {
               // style={{ width: 300 }}
               // value={props.form.getFieldValue('parentId')}
               // dropdownStyle={dropdownStyle}
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
               treeData={categories}
               placeholder="Please select parent"
               treeDefaultExpandAll
@@ -128,7 +133,7 @@ const GeneralField = ({ propsImages, categories, handleChange, form }) => {
       </Col>
       <Col xs={24} sm={24} md={7}>
         <Card title="Media">
-          <Upload listType="picture-card" name="image" {...propsImages}>
+          <Upload listType="picture-card" name="image" {...propsImages} accept="image/*">
             <CustomIcon className="display-3" svg={ImageSvg} />
           </Upload>
         </Card>

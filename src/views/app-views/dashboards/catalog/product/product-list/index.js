@@ -254,7 +254,7 @@ const ProductList = () => {
             <div style={{ color: 'gray', textDecoration: 'line-through' }}>
               {row.mrpPrice}
             </div>{' '}
-            <div>{price}</div>
+            <div><span class="WebRupee">&#x20B9;</span>{price}</div>
           </Flex>
         )
       },
@@ -306,7 +306,7 @@ const ProductList = () => {
       dataIndex: 'username',
     },
     {
-      title: 'approval',
+      title: 'Approval',
       dataIndex: 'approval',
       render: (approval, row) => {
         return (
@@ -589,7 +589,7 @@ const ProductList = () => {
       >
         <Flex flexDirection="column" alignItems="center">
           <Select
-            placeholder="Select Delivery Zone"
+            placeholder="Select Vendor"
             style={{ width: '80%' }}
             className="mb-2"
             onChange={(e) => setVendorId(e)}

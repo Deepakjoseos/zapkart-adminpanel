@@ -103,7 +103,7 @@ const GeneralField = ({ form }) => {
             {(fields, { add, remove }) => {
               console.log(fields, 'show-filelds')
               return (
-                <OrderSelectionField
+                <OrderSelectionField 
                   add={add}
                   fields={fields}
                   remove={remove}
