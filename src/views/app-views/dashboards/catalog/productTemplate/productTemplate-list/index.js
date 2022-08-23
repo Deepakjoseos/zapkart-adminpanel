@@ -162,25 +162,20 @@ const ProductTemplateList = () => {
     }
   }
 
-  const fetchProductTemplateById = async (id) => {
-    const data = await productTemplate.getProductTemplateById(id)
-    return data
-  }
-
   const handleStatusChange = async (value, selectedRow) => {
-   const selectedProductTemp =  await fetchProductTemplateById(selectedRow.id)
-   console.log('selectedproductTemp', selectedProductTemp)
+    const sendingValues = {
+      ...selectedRow,
+      categoryId: selectedRow.category.id,
+      status: value,
+    }
 
-   const sendingValues = {...selectedProductTemp, categoryId: selectedProductTemp.category.id, status: value}
-
-   
-   const edited = await productTemplate.editProductTemplate(
-    selectedRow.id,
-    sendingValues
-  )
-  if (edited) {
-    message.success(`Status Edited Successfully:  ${selectedProductTemp.name}`) 
-  }
+    const edited = await productTemplate.editProductTemplate(
+      selectedRow.id,
+      sendingValues
+    )
+    if (edited) {
+      message.success(`Status Edited Successfully:  ${selectedRow.name}`)
+    }
   }
   const tableColumns = [
     {
@@ -229,7 +224,7 @@ const ProductTemplateList = () => {
     {
       title: 'Status',
       dataIndex: 'status',
-      
+
       // render: (status) => (
       //   <Flex alignItems="center">{getStockStatus(status)}</Flex>
       // ),
@@ -246,7 +241,6 @@ const ProductTemplateList = () => {
             <Option value="Hold">
               <Tag color="red">Hold</Tag>
             </Option>
-            
           </Select>
         )
       },
