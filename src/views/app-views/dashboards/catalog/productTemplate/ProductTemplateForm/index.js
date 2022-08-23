@@ -285,7 +285,6 @@ const ProductForm = (props) => {
       .then(async (values) => {
         console.log(values, 'values')
         let sendingValues = {}
-        sendingValues.status = values.status
 
         if (process.env.REACT_APP_SITE_NAME === 'zapkart') {
           sendingValues = {
@@ -309,6 +308,7 @@ const ProductForm = (props) => {
             metaTitle: values.metaTitle,
             metaDescription: values.metaDescription,
             keywords: values.keywords,
+            status: values.status,
 
             composition: values?.composition?.map((comp) => {
               return { id: comp.id, qty: comp.qty }
@@ -353,6 +353,7 @@ const ProductForm = (props) => {
             productType: 'NonMedicine',
             medicinePackaging: 'no',
             minQty: values.minQty,
+            status: values.status,
 
             slug: values.slug,
             tags: values.tags,
@@ -364,7 +365,7 @@ const ProductForm = (props) => {
             // metaTitle: values.metaTitle,
             // metaDescription: values.metaDescription,
             // keywords: values.keywords,
-              // status: values.status,
+            // status: values.status,
             shippingDetail: {
               lengthClass: values.lengthClass,
               weightClass: values.weightClass,
