@@ -70,6 +70,7 @@ const rules = {
 }
 
 const GeneralField = ({ form, tempConstants }) => {
+  console.log('constants',tempConstants)
   return (
     <Row gutter={16}>
       <Col xs={24} sm={24} md={24}>
@@ -140,7 +141,7 @@ const GeneralField = ({ form, tempConstants }) => {
                 <List
                   dataSource={
                     tempConstants?.KEYS
-                      ? Object.values(tempConstants['LISTING_TYPES'])
+                      ? Object.values(tempConstants['KEYS'])
                       : []
                   }
                   renderItem={(item) => (
@@ -204,7 +205,7 @@ const GeneralField = ({ form, tempConstants }) => {
                 <List
                   dataSource={
                     tempConstants?.KEYS
-                      ? Object.values(tempConstants['LISTING_TYPES'])
+                      ? Object.values(tempConstants['KEYS'])
                       : []
                   }
                   renderItem={(item) => (
@@ -268,7 +269,7 @@ const GeneralField = ({ form, tempConstants }) => {
                 <List
                   dataSource={
                     tempConstants?.KEYS
-                      ? Object.values(tempConstants['LISTING_TYPES'])
+                      ? Object.values(tempConstants['KEYS'])
                       : []
                   }
                   renderItem={(item) => (

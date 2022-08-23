@@ -38,6 +38,8 @@ const[setmode,setMode]=useState('')
             facebookUrl: data.facebookUrl,
             instagramUrl: data.instagramUrl,
             twitterUrl: data.twitterUrl,
+            vendorCommission:data.vendorCommission,
+            deliveryCharges: data.deliveryCharges
           })
         
         setSettings(data)
@@ -58,6 +60,11 @@ const[setmode,setMode]=useState('')
     form
       .validateFields()
       .then(async (values) => {
+        // const deliveryCharges={
+        //   startAmount:values?.startAmount,
+        //   endAmount:values?.endAmount,
+        //   charge:values?.charge
+        // }
         const sendingValues =
         {
           name: values?.name,
@@ -67,6 +74,8 @@ const[setmode,setMode]=useState('')
           facebookUrl: values?.facebookUrl,
           instagramUrl: values?.instagramUrl,
           twitterUrl: values?.twitterUrl,
+          vendorCommission:values?.vendorCommission,
+          deliveryCharges: values?.deliveryCharges
         }
 
 
@@ -79,7 +88,7 @@ const[setmode,setMode]=useState('')
           if (created) {
             console.log(created);
             message.success(`Created New Settings`);
-            history.goBack();
+            // history.goBack();
           }
         }
         if (setmode === 'Edit') {
@@ -90,7 +99,7 @@ const[setmode,setMode]=useState('')
           )
           if (edited) {
             message.success(`Edited settings list`)
-            history.goBack()
+            // history.goBack()
           }
         }
         setSubmitLoading(false)
@@ -105,12 +114,19 @@ const[setmode,setMode]=useState('')
   return (
     <>
       <Form
+       
         layout="vertical"
         form={form}
         name="advanced_search"
         className="ant-advanced-search-form"
         initialValues={{
-          group: 1,
+          deliveryCharges: [
+            {
+              startAmount: '',
+              endAmount: '',
+              charge:''
+            },
+          ],
         }}
       >
         <PageHeaderAlt className="border-bottom" overlap>
@@ -125,14 +141,14 @@ const[setmode,setMode]=useState('')
                 {setmode === "ADD" ? "Add New settings" : `Edit settings`}{" "}
               </h2>
               <div className="mb-3">
-                <Button
+                {/* <Button
                   className="mr-2"
                   onClick={() =>
-                    history.push("/app/dashboards/user/user-list")
+                    history.push("/app/dashboards/settings/edit-settings/user-list")
                   }
                 >
                   Discard
-                </Button>
+                </Button> */}
                 <Button
                   type="primary"
                   onClick={() => onFinish()}
