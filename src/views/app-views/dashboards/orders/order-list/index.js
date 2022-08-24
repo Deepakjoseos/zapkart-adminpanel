@@ -187,7 +187,15 @@ const Orders = () => {
         </Link>
       ),
     },
-
+    {
+      title: 'OrderDate',
+      dataIndex: 'createdAt',
+      render: (createdAt) => (
+        <Flex alignItems="center">
+          {moment(parseInt(createdAt)).format('YYYY-MM-DD')}
+        </Flex>
+      ),
+    },
     {
       title: 'User Name',
       dataIndex: 'userName',

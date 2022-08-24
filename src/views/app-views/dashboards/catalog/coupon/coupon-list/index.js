@@ -85,7 +85,7 @@ const CouponList = () => {
   }
 
   const deleteRow = async (row) => {
-    const resp = await couponService.deleteBrand(row.id)
+    const resp = await couponService.deleteCoupon(row.id)
 
     if (resp) {
       const objKey = 'id'

@@ -93,70 +93,60 @@ const OrderView = () => {
   }
 
   return (
-    <>
-      <Flex justifyContent='end'>
-        <Button
-          type="primary"
-          className="mb-4 float-right"
-          onClick={handlePrint}
-        >
-          Print this out!
-        </Button>
-      </Flex>
-
-      <div className="container" ref={componentRef}>
-        <Card>
-          <div className="d-md-flex justify-content-md-between">
-            <div>
-              <address>
-                <p>
-                  <span className="font-weight-semibold text-dark font-size-md">
-                    {order?.userName}
-                  </span>
-                  <br />
-                  <span>Invoice No: {order?.invoice?.invoiceNo}</span>
-                  <br />
-                  <span>
-                    ShippingAddress: {order?.shippingAddress?.addressLine1},{' '}
-                    {order?.shippingAddress?.city},{' '}
-                    {order?.shippingAddress?.stateOrRegion},{' '}
-                    {order?.shippingAddress?.country}
-                  </span>
-                  <br />
-                  <abbr className="text-dark" title="Phone">
-                    Phone:{' '}
-                  </abbr>
-                  <span>{order?.shippingAddress?.mobileNumber}</span>
-                  <br />
-                  <abbr className="text-dark" title="Phone">
-                    Address Type:{' '}
-                  </abbr>
-                  <span>{order?.shippingAddress?.addressType}</span>
-                </p>
-              </address>
-            </div>
-            <div className="mt-3 text-right">
-              <Button
-                type="primary"
-                className="mb-4"
-                onClick={() => setIsFormOpen(true)}
-              >
-                Create Shipment
-              </Button>
-              <h2 className="mb-1 font-weight-semibold">
-                Order No: {order?.orderNo}
-              </h2>
-              <p>Status: {order?.status}</p>
-              <p>shipping Charge: {order?.shippingCharge}</p>
-              <p>Total Amount: ₹{order?.totalAmount}</p>
-              <address>
-                <p>
-                  <span className="font-weight-semibold text-dark font-size-md">
-                    Payment Status:{' '}
-                    {order?.payment?.completed ? 'Completed' : 'Not Completed'}
-                  </span>
-                  <br />
-                  {/* <span>8626 Maiden Dr. </span>
+    <div className="container">
+      <Card>
+        <div className="d-md-flex justify-content-md-between">
+          <div>
+            <address>
+              <p>
+                <span className="font-weight-semibold text-dark font-size-md">
+                  {order?.userName}
+                </span>
+                <br />
+                <span>Invoice No: {order?.invoice?.invoiceNo}</span>
+                <br />
+                <span>
+                  ShippingAddress: {order?.shippingAddress?.addressLine1},{' '}
+                  {order?.shippingAddress?.city},{' '}
+                  {order?.shippingAddress?.stateOrRegion},{' '}
+                  {order?.shippingAddress?.country}
+                </span>
+                <br />
+                <abbr className="text-dark" title="Phone">
+                  Phone:{' '}
+                </abbr>
+                <span>{order?.shippingAddress?.mobileNumber}</span>
+                <br />
+                <abbr className="text-dark" title="Phone">
+                  Address Type:{' '}
+                </abbr>
+                <span>{order?.shippingAddress?.addressType}</span>
+              </p>
+            </address>
+          </div>
+          <div className="mt-3 text-right">
+            <Button
+              type="primary"
+              className="mb-4"
+              onClick={() => setIsFormOpen(true)}
+            >
+              Create Shipment
+            </Button>
+            <h2 className="mb-1 font-weight-semibold">
+              Order No: {order?.orderNo}
+            </h2>
+            <p>Order Date:{moment(parseInt(order?.createdAt)).format('YYYY-MM-DD')}</p>
+            <p>Status: {order?.status}</p>
+            <p>shipping Charge: {order?.shippingCharge}</p>
+            <p>Total Amount: ₹{order?.totalAmount}</p>
+            <address>
+              <p>
+                <span className="font-weight-semibold text-dark font-size-md">
+                  Payment Status:{' '}
+                  {order?.payment?.completed ? 'Completed' : 'Not Completed'}
+                </span>
+                <br />
+                {/* <span>8626 Maiden Dr. </span>
                 <br />
                 <span>Niagara Falls, New York 14304</span> */}
                 </p>

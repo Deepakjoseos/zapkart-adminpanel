@@ -439,7 +439,7 @@ const GeneralField = ({
               filterOption={(input, option) =>
                 option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
               }
-                              placeholder="Medicine Packaging"
+                              placeholder="Medicine Type"
                               onChange={() => onCompositionChange()}
                             >
                               {compositions?.map((composition) => (

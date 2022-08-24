@@ -12,7 +12,7 @@ const ViewPrescriptions = ({
   setSelectedPrescriptionCustomerId,
 }) => {
   const [prescriptions, setPrescriptions] = useState([])
-
+  console.log('customerId',selectedPrescriptionCustomerId)
   const {
     fileList: fileListImages,
     beforeUpload: beforeUploadImages,
@@ -80,14 +80,14 @@ const ViewPrescriptions = ({
   }
 
   return (
-    <Drawer
-      title="Address Details"
-      width={720}
-      onClose={() => {
-        setSelectedPrescriptionCustomerId(null)
-      }}
-      visible={selectedPrescriptionCustomerId ? true : false}
-      bodyStyle={{ paddingBottom: 80 }}
+    // <Drawer
+    //   title="Prescription Details"
+    //   width={720}
+    //   onClose={() => {
+    //     setSelectedPrescriptionCustomerId(null)
+    //   }}
+    //   visible={selectedPrescriptionCustomerId ? true : false}
+    //   bodyStyle={{ paddingBottom: 80 }}
       // footer={
       //   <div
       //     style={{
@@ -106,7 +106,7 @@ const ViewPrescriptions = ({
       //     </Button>
       //   </div>
       // }
-    >
+    // >
       <Card title="Media">
         <Upload listType="picture-card" name="image" {...propsImages}>
           <CustomIcon className="display-3" svg={ImageSvg} />
@@ -117,7 +117,7 @@ const ViewPrescriptions = ({
           </Button>
         </Flex>
       </Card>
-    </Drawer>
+    // </Drawer>
   )
 }
 

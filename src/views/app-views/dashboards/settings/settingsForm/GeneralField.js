@@ -131,7 +131,7 @@ const GeneralField = ({ setmode }) => {
 
         </>
         <div>
-
+         <p>Delivery Charges</p>
           <Form.List name="deliveryCharges">
             {(fields, { add, remove }) => {
               console.log(fields, 'show-filelds')
@@ -144,7 +144,7 @@ const GeneralField = ({ setmode }) => {
                       align="baseline"
                     >
                       <Form.Item
-                        {...field}
+                        {...field} label="Start Amount"
                         rules={[
                           { required: true, message: 'required' },
                         ]}
@@ -158,7 +158,7 @@ const GeneralField = ({ setmode }) => {
                         />
                       
                       </Form.Item>
-                      <Form.Item
+                      <Form.Item label="end Amount"
                         {...field}
                         rules={[
                           { required: true, message: 'required' },
@@ -173,7 +173,7 @@ const GeneralField = ({ setmode }) => {
 
                         />
                       </Form.Item>
-                      <Form.Item
+                      <Form.Item label="Charge"
                         {...field}
                         rules={[
                           { required: true, message: 'required' },
@@ -206,7 +206,7 @@ const GeneralField = ({ setmode }) => {
                       }}
                       icon={<PlusOutlined />}
                     >
-                      Add Shipment
+                      Add Delivery charges
                     </Button>
                   </Form.Item>
                 </>
