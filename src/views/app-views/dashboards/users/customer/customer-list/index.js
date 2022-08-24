@@ -22,8 +22,6 @@ import { useHistory } from 'react-router-dom'
 import utils from 'utils'
 import customerService from 'services/customer'
 import AvatarStatus from 'components/shared-components/AvatarStatus'
-import ViewAddresses from './ViewAddresses'
-import ViewPrescriptions from './ViewPrescriptions'
 
 const { Option } = Select
 

@@ -11,7 +11,6 @@ import {
 import Utils from 'utils'
 import { useHistory } from 'react-router-dom'
 import customerService from 'services/customer'
-import AddressList from '../address'
 import ViewAddresses from '../customer-list/ViewAddresses'
 import ViewPrescriptions from '../customer-list/ViewPrescriptions'
 const { TabPane } = Tabs

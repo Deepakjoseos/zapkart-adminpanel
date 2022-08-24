@@ -8,10 +8,7 @@ import utils from 'utils'
 
 
 const ViewAddresses = ({
-  customerAddressOpen,
-  setCustomerAddressOpen,
-  selectedViewAddress,
-  setSelectedViewAddress,
+ 
   selectedCustomerId,
   refetchData,
   addressList
@@ -51,22 +48,6 @@ const ViewAddresses = ({
 
   return (
     <div className='table-responsive'>
-            {/* <Table columns={tableColumns} dataSource={addressList} rowKey="id" /> */}
-
-      
-
-      {/* <Drawer
-        title="Address Details"
-        width={720}
-        onClose={() => {
-          setCustomerAddressOpen(false)
-          setSelectedViewAddress([])
-        }}
-        visible={customerAddressOpen}
-        bodyStyle={{ paddingBottom: 80 }}
-     
-      > */}
-        
           <Flex justifyContent="end" className="mb-2">
           <Button
             type="primary"
@@ -108,7 +89,7 @@ const ViewAddresses = ({
             }
           >
             {'City: ' + address.city} <br />
-            {'Country' + address.country} <br />
+            {'Country:' + address.country} <br />
             {'line1: ' + address.line1} <br />
             {'Phone: ' + address.phone} <br />
             {'State: ' + address.state} <br />
