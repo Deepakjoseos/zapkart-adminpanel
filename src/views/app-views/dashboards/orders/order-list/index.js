@@ -215,6 +215,16 @@ const Orders = () => {
       sorter: (a, b) => utils.antdTableSorter(a, b, 'shippingCharge'),
       // render: (items, record) => <div>{items?.length}</div>,
     },
+    {
+      title: 'Order Date',
+      dataIndex: 'createdAt',
+      render: (createdAt) => (
+        <Flex alignItems="center">
+         {moment(parseInt(createdAt)).format('L')}
+        </Flex>
+      ),
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'createdAt'),
+    },
     // {
     //   title: 'Date',
     //   dataIndex: 'date',

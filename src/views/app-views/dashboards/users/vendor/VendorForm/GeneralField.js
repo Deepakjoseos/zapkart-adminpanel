@@ -59,7 +59,7 @@ const GeneralField = ({ propsDisplayImages, form }) => (
         )}
       </Card>
 
-      <Card title="Address">
+      {/* <Card title="Address">
         <Form.Item name="address.line1" label="Line1">
           <Input placeholder="Line 1" />
         </Form.Item>
@@ -83,7 +83,7 @@ const GeneralField = ({ propsDisplayImages, form }) => (
         <Form.Item name="address.zipcode" label="Zipcode">
           <Input placeholder="Zipcode" />
         </Form.Item>
-      </Card>
+      </Card> */}
 
       {/* 'business.name': data?.business?.name,
         'business.address.line1': data?.business?.address?.line1,
