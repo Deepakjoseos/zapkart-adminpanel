@@ -6,6 +6,7 @@ import NumberFormat from 'react-number-format'
 import { useParams } from 'react-router-dom'
 import orderService from 'services/orders'
 import ShipmentCreateForm from './ShipmentCreateForm'
+import moment from 'moment'
 
 const { Column } = Table
 const { Option } = Select
@@ -129,6 +130,7 @@ const OrderView = () => {
             <h2 className="mb-1 font-weight-semibold">
               Order No: {order?.orderNo}
             </h2>
+            <p>Order Date:{moment(parseInt(order?.createdAt)).format('L')}</p>
             <p>Status: {order?.status}</p>
             <p>shipping Charge: {order?.shippingCharge}</p>
             <p>Total Amount: ₹{order?.totalAmount}</p>

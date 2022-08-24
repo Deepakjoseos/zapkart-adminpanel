@@ -11,7 +11,8 @@ import {
 import Utils from 'utils'
 import { useHistory } from 'react-router-dom'
 import customerService from 'services/customer'
-
+import AddressList from '../address'
+import ViewAddresses from '../customer-list/ViewAddresses'
 const { TabPane } = Tabs
 
 const ADD = 'ADD'
@@ -19,12 +20,14 @@ const EDIT = 'EDIT'
 
 const ProductForm = (props) => {
   const { mode = ADD, param } = props
+  const id = param?.id
 
   const history = useHistory()
 
   const [form] = Form.useForm()
   const [displayImage, setDisplayImage] = useState(null)
   const [submitLoading, setSubmitLoading] = useState(false)
+  const [addressList,setAddressList] = useState(null)
 
   const {
     fileList: fileListDisplayImages,
@@ -38,6 +41,7 @@ const ProductForm = (props) => {
     const { id } = param
     const data = await customerService.getCustomerById(id)
     if (data) {
+      setAddressList(data.address)
       let himg = []
       if (data.displayImage) {
         himg = [
@@ -177,6 +181,14 @@ const ProductForm = (props) => {
             <TabPane tab="General" key="1">
               <GeneralField propsDisplayImages={propsDisplayImages} />
             </TabPane>
+            {id && (
+              <TabPane tab="Address" key="2">
+                <ViewAddresses 
+                 
+                  addressList={addressList}
+                />
+              </TabPane>
+            )}
           </Tabs>
         </div>
       </Form>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Card, Table, Select, Input, Menu, Tag, notification } from 'antd'
+import { Card, Table, Select, Input, Menu, Tag, notification,Modal } from 'antd'
 import { EyeOutlined, SearchOutlined } from '@ant-design/icons'
 import EllipsisDropdown from 'components/shared-components/EllipsisDropdown'
 import Flex from 'components/shared-components/Flex'
@@ -33,6 +33,9 @@ const VendorList = () => {
   const [list, setList] = useState([])
   const [searchBackupList, setSearchBackupList] = useState([])
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
+  const [pickUpLocations,setPickUpLocations]= useState([])
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
 
   useEffect(() => {
     const getVendors = async () => {
@@ -49,6 +52,17 @@ const VendorList = () => {
   const viewDetails = (row) => {
     history.push(`/app/dashboards/users/vendor/edit-vendor/${row.id}`)
   }
+  const viewPickUpLocations = (row) => {
+    setPickUpLocations(row.pickupLocations)
+    setIsModalVisible(true);
+  }
+  const handleOk = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
 
   const dropdownMenu = (row) => (
     <Menu>
@@ -56,6 +70,12 @@ const VendorList = () => {
         <Flex alignItems="center">
           <EyeOutlined />
           <span className="ml-2">View Details</span>
+        </Flex>
+      </Menu.Item>
+      <Menu.Item onClick={() => viewPickUpLocations(row)}>
+        <Flex alignItems="center">
+          <EyeOutlined />
+          <span className="ml-2">View PickUpLocations</span>
         </Flex>
       </Menu.Item>
       {/* <Menu.Item onClick={() => deleteRow(row)}>
@@ -119,6 +139,39 @@ const VendorList = () => {
       // setList(data)
     }
   }
+  const pickUpLocationsColumns= [
+    {
+      
+        title: 'Name',
+        dataIndex: 'name',
+        sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
+      },
+      {
+      
+        title: 'City',
+        dataIndex: 'city',
+        sorter: (a, b) => utils.antdTableSorter(a, b, 'city'),
+      },
+      {
+      
+        title: 'State',
+        dataIndex: 'state',
+        sorter: (a, b) => utils.antdTableSorter(a, b, 'state'),
+      },
+      {
+      
+        title: 'Country',
+        dataIndex: 'country',
+        sorter: (a, b) => utils.antdTableSorter(a, b, 'country'),
+      },
+      {
+      
+        title: 'Pin Code',
+        dataIndex: 'pin_code',
+        sorter: (a, b) => utils.antdTableSorter(a, b, 'pin_code'),
+      },
+    
+  ]
 
   const tableColumns = [
     {
@@ -233,6 +286,7 @@ const VendorList = () => {
   )
 
   return (
+    <>
     <Card>
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
         {filters()}
@@ -256,6 +310,11 @@ const VendorList = () => {
         /> */}
       </div>
     </Card>
+    <Modal title="Basic Modal" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+    <Table columns={pickUpLocationsColumns} dataSource={pickUpLocations} />
+
+      </Modal>
+    </>
   )
 }
 
