@@ -13,6 +13,7 @@ import { useHistory } from 'react-router-dom'
 import customerService from 'services/customer'
 import AddressList from '../address'
 import ViewAddresses from '../customer-list/ViewAddresses'
+import ViewPrescriptions from '../customer-list/ViewPrescriptions'
 const { TabPane } = Tabs
 
 const ADD = 'ADD'
@@ -27,8 +28,11 @@ const ProductForm = (props) => {
   const [form] = Form.useForm()
   const [displayImage, setDisplayImage] = useState(null)
   const [submitLoading, setSubmitLoading] = useState(false)
-  const [addressList,setAddressList] = useState(null)
-
+  const [addressList, setAddressList] = useState(null)
+  const [selectedCustomerId, setSelectedCustomerId] = useState(null)
+  const [customers, setCustomers] = useState([])
+  const [selectedPrescriptionCustomerId, setSelectedPrescriptionCustomerId] =
+  useState(null)
   const {
     fileList: fileListDisplayImages,
     beforeUpload: beforeUploadDisplayImages,
@@ -39,9 +43,12 @@ const ProductForm = (props) => {
 
   const fetchCustomerById = async () => {
     const { id } = param
+  
     const data = await customerService.getCustomerById(id)
     if (data) {
       setAddressList(data.address)
+      setSelectedCustomerId(data.id)
+      setSelectedPrescriptionCustomerId(data.id)
       let himg = []
       if (data.displayImage) {
         himg = [
@@ -182,12 +189,20 @@ const ProductForm = (props) => {
               <GeneralField propsDisplayImages={propsDisplayImages} />
             </TabPane>
             {id && (
-              <TabPane tab="Address" key="2">
-                <ViewAddresses 
-                 
-                  addressList={addressList}
-                />
-              </TabPane>
+              <>
+                <TabPane tab="Address" key="2">
+                  <ViewAddresses
+
+                    addressList={addressList} selectedCustomerId={selectedCustomerId} refetchData={fetchCustomerById}
+                  />
+                </TabPane>
+                <TabPane tab="Prescriptions" key="3">
+                  <ViewPrescriptions
+                    selectedPrescriptionCustomerId={selectedPrescriptionCustomerId}
+                    setSelectedPrescriptionCustomerId={setSelectedPrescriptionCustomerId}
+                  />
+                </TabPane>
+              </>
             )}
           </Tabs>
         </div>

@@ -55,8 +55,7 @@ const CustomerList = () => {
   const [customerAddressOpen, setCustomerAddressOpen] = useState(false)
 
   const [selectedCustomerId, setSelectedCustomerId] = useState(null)
-  const [selectedPrescriptionCustomerId, setSelectedPrescriptionCustomerId] =
-    useState(null)
+  const [selectedPrescriptionCustomerId, setSelectedPrescriptionCustomerId] =    useState(null)
 
   const getCustomers = async () => {
     const data = await customerService.getCustomers()
@@ -87,7 +86,7 @@ const CustomerList = () => {
           <span className="ml-2">Edit User</span>
         </Flex>
       </Menu.Item>
-      <Menu.Item
+      {/* <Menu.Item
         onClick={() => {
           setSelectedViewAddress(row.address)
           setSelectedCustomerId(row.id)
@@ -98,8 +97,8 @@ const CustomerList = () => {
           <EyeOutlined />
           <span className="ml-2">View Address</span>
         </Flex>
-      </Menu.Item>
-      <Menu.Item
+      </Menu.Item> */}
+      {/* <Menu.Item
         onClick={() => {
           setSelectedPrescriptionCustomerId(row.id)
         }}
@@ -108,7 +107,7 @@ const CustomerList = () => {
           <EyeOutlined />
           <span className="ml-2">View Prescriptions</span>
         </Flex>
-      </Menu.Item>
+      </Menu.Item> */}
       {/* <Menu.Item onClick={() => deleteRow(row)}>
         <Flex alignItems="center">
           <DeleteOutlined />
@@ -295,7 +294,7 @@ const CustomerList = () => {
       <div className="table-responsive">
         <Table columns={tableColumns} dataSource={list} rowKey="id" />
 
-        <ViewAddresses
+        {/* <ViewAddresses
           selectedViewAddress={selectedViewAddress}
           setSelectedViewAddress={setSelectedViewAddress}
           setCustomerAddressOpen={setCustomerAddressOpen}
@@ -306,7 +305,7 @@ const CustomerList = () => {
         <ViewPrescriptions
           selectedPrescriptionCustomerId={selectedPrescriptionCustomerId}
           setSelectedPrescriptionCustomerId={setSelectedPrescriptionCustomerId}
-        />
+        /> */}
       </div>
     </Card>
   )

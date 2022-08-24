@@ -1,9 +1,11 @@
-import { Button, Card, Drawer, notification, Typography } from 'antd'
+import { Button, Card, Drawer, notification, Table, Typography } from 'antd'
 import Flex from 'components/shared-components/Flex'
 import React, { useEffect, useState } from 'react'
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
 import AddressForm from './AddressForm'
 import customerService from 'services/customer'
+import utils from 'utils'
+
 
 const ViewAddresses = ({
   customerAddressOpen,
@@ -12,7 +14,10 @@ const ViewAddresses = ({
   setSelectedViewAddress,
   selectedCustomerId,
   refetchData,
+  addressList
 }) => {
+
+  console.log('addressList',addressList)
   const [viewFormModal, setViewFormModal] = useState(false)
   const [formMode, setFormMode] = useState('add')
   const [selectedFormAddress, setSelectedFormAddress] = useState({})
@@ -30,10 +35,27 @@ const ViewAddresses = ({
       refetchData()
     }
   }
+  const tableColumns = [
+    {
+      title: 'City',
+      dataIndex: 'city',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'city'),
+    },
+    {
+      title: 'Country',
+      dataIndex: 'country',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'country'),
+    },
+  ]
+
 
   return (
-    <div>
-      <Drawer
+    <div className='table-responsive'>
+            {/* <Table columns={tableColumns} dataSource={addressList} rowKey="id" /> */}
+
+      
+
+      {/* <Drawer
         title="Address Details"
         width={720}
         onClose={() => {
@@ -42,26 +64,10 @@ const ViewAddresses = ({
         }}
         visible={customerAddressOpen}
         bodyStyle={{ paddingBottom: 80 }}
-        // footer={
-        //   <div
-        //     style={{
-        //       textAlign: 'right',
-        //     }}
-        //   >
-        //     <Button
-        //       onClick={() => setOpenVariantsForm(false)}
-        //       style={{ marginRight: 8 }}
-        //       htmlType="button"
-        //     >
-        //       Cancel
-        //     </Button>
-        //     <Button htmlType="button" onClick={onFinish} type="primary">
-        //       Submit
-        //     </Button>
-        //   </div>
-        // }
-      >
-        <Flex justifyContent="end" className="mb-2">
+     
+      > */}
+        
+          <Flex justifyContent="end" className="mb-2">
           <Button
             type="primary"
             onClick={() => {
@@ -73,8 +79,9 @@ const ViewAddresses = ({
             + Add Address
           </Button>
         </Flex>
+        
 
-        {selectedViewAddress.map((address, i) => (
+        {addressList?.map((address, i) => (
           <Card
             key={address.id}
             title={`Address ${i + 1}`}
@@ -108,7 +115,7 @@ const ViewAddresses = ({
             {'Zipcode: ' + address.zipcode}
           </Card>
         ))}
-      </Drawer>
+      {/* </Drawer> */}
 
       <AddressForm
         formMode={formMode}
@@ -120,6 +127,7 @@ const ViewAddresses = ({
         selectedCustomerId={selectedCustomerId}
         refetchData={refetchData}
       />
+
     </div>
   )
 }
