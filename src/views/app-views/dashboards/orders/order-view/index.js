@@ -1,12 +1,12 @@
-import React, { Component, useEffect, useState } from 'react'
+import React, { Component, useEffect, useRef, useState } from 'react'
 import { PrinterOutlined } from '@ant-design/icons'
 import { Card, Table, Button, Select, notification } from 'antd'
-import { invoiceData } from '../../../pages/invoice/invoiceData'
-import NumberFormat from 'react-number-format'
+import { useReactToPrint } from 'react-to-print'
+
 import { useParams } from 'react-router-dom'
 import orderService from 'services/orders'
 import ShipmentCreateForm from './ShipmentCreateForm'
-import moment from 'moment'
+import Flex from 'components/shared-components/Flex'
 
 const { Column } = Table
 const { Option } = Select
@@ -14,6 +14,11 @@ const OrderView = () => {
   const { id } = useParams()
   const [order, setOrder] = useState({})
   const [isFormOpen, setIsFormOpen] = useState(false)
+
+  const componentRef = useRef()
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  })
 
   const getOrderById = async () => {
     const orderData = await orderService.getOrderById(id)
@@ -144,60 +149,64 @@ const OrderView = () => {
                 {/* <span>8626 Maiden Dr. </span>
                 <br />
                 <span>Niagara Falls, New York 14304</span> */}
-              </p>
-            </address>
+                </p>
+              </address>
+            </div>
           </div>
-        </div>
-        <div className="mt-4">
-          <Table dataSource={order?.items} pagination={false} className="mb-5">
-            <Column title="Product" dataIndex="name" key="name" />
-            <Column title="Quantity" dataIndex="quantity" key="quantity" />
-            <Column title="Price" dataIndex="price" key="price" />
-            {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
-              <Column
-                title="Prescription Required"
-                dataIndex="prescriptionRequired"
-                key="prescriptionRequired"
-                render={(presc) => <>{presc ? 'Yes' : 'No'}</>}
-              />
-            )}
-
-            <Column
-              title="Status"
-              dataIndex="status"
-              key="status"
-              render={(status, row) => (
-                <Select
-                  defaultValue={status}
-                  style={{ width: 150 }}
-                  onChange={(e) => handleOrderStatusChange(e, row)}
-                >
-                  {orderStatuses.map((item) => (
-                    <Option key={item} value={item}>
-                      {item}
-                    </Option>
-                  ))}
-                </Select>
+          <div className="mt-4">
+            <Table
+              dataSource={order?.items}
+              pagination={false}
+              className="mb-5"
+            >
+              <Column title="Product" dataIndex="name" key="name" />
+              <Column title="Quantity" dataIndex="quantity" key="quantity" />
+              <Column title="Price" dataIndex="price" key="price" />
+              {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+                <Column
+                  title="Prescription Required"
+                  dataIndex="prescriptionRequired"
+                  key="prescriptionRequired"
+                  render={(presc) => <>{presc ? 'Yes' : 'No'}</>}
+                />
               )}
-            />
 
-            <Column
-              title="Action"
-              render={(_, row) => {
-                return (
-                  row.status !== 'Cancelled' && (
-                    <Button
-                      type="primary"
-                      onClick={() => cancleOrderItem(row.id)}
-                    >
-                      Cancel Order Item
-                    </Button>
+              <Column
+                title="Status"
+                dataIndex="status"
+                key="status"
+                render={(status, row) => (
+                  <Select
+                    defaultValue={status}
+                    style={{ width: 150 }}
+                    onChange={(e) => handleOrderStatusChange(e, row)}
+                  >
+                    {orderStatuses.map((item) => (
+                      <Option key={item} value={item}>
+                        {item}
+                      </Option>
+                    ))}
+                  </Select>
+                )}
+              />
+
+              <Column
+                title="Action"
+                render={(_, row) => {
+                  return (
+                    row.status !== 'Cancelled' && (
+                      <Button
+                        type="primary"
+                        onClick={() => cancleOrderItem(row.id)}
+                      >
+                        Cancel Order Item
+                      </Button>
+                    )
                   )
-                )
-              }}
-            />
+                }}
+              />
 
-            {/* <Column
+              {/* <Column
               title="Price"
               render={(text) => (
                 <NumberFormat
@@ -209,7 +218,7 @@ const OrderView = () => {
               )}
               key="price"
             /> */}
-            {/* <Column
+              {/* <Column
               title="Total"
               render={(text) => (
                 <NumberFormat
@@ -223,10 +232,10 @@ const OrderView = () => {
               )}
               key="total"
             /> */}
-          </Table>
-          <div className="d-flex justify-content-end">
-            <div className="text-right ">
-              {/* <div className="border-bottom">
+            </Table>
+            <div className="d-flex justify-content-end">
+              <div className="text-right ">
+                {/* <div className="border-bottom">
                 <p className="mb-2">
                   <span>Sub - Total amount: </span>
                   <NumberFormat
@@ -244,9 +253,9 @@ const OrderView = () => {
                   )}
                 </p>
               </div> */}
-              <h2 className="font-weight-semibold mt-3">
-                <span className="mr-1">Grand Total: </span>
-                {/* <NumberFormat
+                <h2 className="font-weight-semibold mt-3">
+                  <span className="mr-1">Grand Total: </span>
+                  {/* <NumberFormat
                   displayType={'text'}
                   value={(
                     Math.round(this.total() * 100) / 100 -
@@ -255,11 +264,11 @@ const OrderView = () => {
                   prefix={'$'}
                   thousandSeparator={true}
                 /> */}{' '}
-                ₹{order?.totalAmount}
-              </h2>
+                  ₹{order?.totalAmount}
+                </h2>
+              </div>
             </div>
-          </div>
-          {/* <p className="mt-5">
+            {/* <p className="mt-5">
             <small>
               In exceptional circumstances, Financial Services can provide an
               urgent manually processed special cheque. Note, however, that
@@ -270,24 +279,25 @@ const OrderView = () => {
               cheque payment
             </small>
           </p> */}
-        </div>
-        {/* <hr className="d-print-none" />
+          </div>
+          {/* <hr className="d-print-none" />
         <div className="text-right d-print-none">
           <Button type="primary" onClick={() => window.print()}>
             <PrinterOutlined type="printer" />
             <span className="ml-1">Print</span>
           </Button>
         </div> */}
-      </Card>
+        </Card>
 
-      <ShipmentCreateForm
-        setIsFormOpen={setIsFormOpen}
-        isFormOpen={isFormOpen}
-        orderItems={order?.items}
-        orderNo={order?.orderNo}
-        orderId={order?.id}
-      />
-    </div>
+        <ShipmentCreateForm
+          setIsFormOpen={setIsFormOpen}
+          isFormOpen={isFormOpen}
+          orderItems={order?.items}
+          orderNo={order?.orderNo}
+          orderId={order?.id}
+        />
+      </div>
+    </>
   )
 }
 //   total() {
