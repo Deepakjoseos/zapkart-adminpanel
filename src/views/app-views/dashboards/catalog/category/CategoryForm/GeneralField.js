@@ -112,8 +112,18 @@ const GeneralField = ({ propsImages, categories, handleChange, form }) => {
           <Form.Item name="metaDescription" label="metaDescription">
             <Input placeholder="Meta Description" />
           </Form.Item>
-          <Form.Item name="keywords" label="Keywords">
+          {/* <Form.Item name="keywords" label="Keywords">
             <Input placeholder="Keywords" />
+          </Form.Item> */}
+            <Form.Item name="keywords" label="Keywords">
+            <Select
+              dropdownStyle={{ display: 'none' }}
+              mode="tags"
+              style={{
+                width: '100%',
+              }}
+              placeholder="Keywords"
+            ></Select>
           </Form.Item>
           <Form.Item name="slug" label="Slug" rules={rules.slug}>
             <Input placeholder="Slug" />
