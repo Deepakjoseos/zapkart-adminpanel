@@ -113,7 +113,14 @@ const GeneralField = ({ propsImages, categories, handleChange, form }) => {
             <Input placeholder="Meta Description" />
           </Form.Item>
           <Form.Item name="keywords" label="Keywords">
-            <Input placeholder="Keywords" />
+            <Select
+              dropdownStyle={{ display: 'none' }}
+              mode="tags"
+              style={{
+                width: '100%',
+              }}
+              placeholder="Keywords"
+            ></Select>
           </Form.Item>
           <Form.Item name="slug" label="Slug" rules={rules.slug}>
             <Input placeholder="Slug" />
@@ -133,7 +140,12 @@ const GeneralField = ({ propsImages, categories, handleChange, form }) => {
       </Col>
       <Col xs={24} sm={24} md={7}>
         <Card title="Media">
-          <Upload listType="picture-card" name="image" {...propsImages} accept="image/*">
+          <Upload
+            listType="picture-card"
+            name="image"
+            {...propsImages}
+            accept="image/*"
+          >
             <CustomIcon className="display-3" svg={ImageSvg} />
           </Upload>
         </Card>
