@@ -135,7 +135,8 @@ const OrderView = () => {
             <p>Status: {order?.status}</p>
             <p>shipping Charge: {order?.shippingCharge}</p>
             <p>Payment method  : {order?.payment?.type}</p>
-            <p>Transaction ID : {order?.transaction?.id}</p>
+            {order?.transaction ?  <p>Transaction ID : {order?.transaction?.id}</p>:""}
+           
 
             <p>Total Amount: ₹{order?.totalAmount}</p>
             <address>
