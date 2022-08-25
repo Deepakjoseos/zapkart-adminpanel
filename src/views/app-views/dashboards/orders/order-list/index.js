@@ -26,6 +26,7 @@ import utils from 'utils'
 import orderService from 'services/orders'
 import { useHistory, Link } from 'react-router-dom'
 import customerService from 'services/customer'
+import constantsService from 'services/constants'
 
 const { Option } = Select
 
@@ -61,6 +62,7 @@ const Orders = () => {
   const [selectedStatus, setSelectedStatus] = useState('')
   const [users, setUsers] = useState([])
   const [selectedUserId, setSelectedUserId] = useState(null)
+  const[paymentStatuses,setPaymentStatuses]=useState([])
 
   useEffect(() => {
     const getOrders = async () => {
@@ -78,9 +80,23 @@ const Orders = () => {
         console.log('users', data)
       }
     }
+    const fetchConstants = async () => {
+      const data = await constantsService.getConstants()
+      if (data) {
+        setPaymentStatuses(data.PAYMENT.PAYMENT_STATUS)
+      }
+    }
+    
+
+    fetchConstants()
     getOrders()
     getCustomers()
+    console.log('payment_statuses',paymentStatuses)
+
   }, [])
+  
+ 
+ 
 
   // const handleShowStatus = (value) => {
   //   if (value !== 'All') {
@@ -106,6 +122,7 @@ const Orders = () => {
       </Menu.Item>
     </Menu>
   )
+
 
   const orderStatuses = [
     'Pending',
@@ -204,35 +221,28 @@ const Orders = () => {
       // render: (items, record) => <div>{items?.length}</div>,
     },
 
-    {
-      title: 'Products Count',
-      dataIndex: 'items',
-      render: (items, record) => <div>{items?.length}</div>,
-    },
+    // {
+    //   title: 'Products Count',
+    //   dataIndex: 'items',
+    //   render: (items, record) => <div>{items?.length}</div>,
+    // },
 
     {
       title: 'Total Amount',
       dataIndex: 'totalAmount',
+      render :(totalAmount)=><div><span class="WebRupee">&#x20B9;</span>{totalAmount}</div>,
+      
       sorter: (a, b) => utils.antdTableSorter(a, b, 'totalAmount'),
 
       // render: (items, record) => <div>{items?.length}</div>,
     },
-    {
-      title: 'Shipping Charge',
-      dataIndex: 'shippingCharge',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'shippingCharge'),
-      // render: (items, record) => <div>{items?.length}</div>,
-    },
-    {
-      title: 'Order Date',
-      dataIndex: 'createdAt',
-      render: (createdAt) => (
-        <Flex alignItems="center">
-         {moment(parseInt(createdAt)).format('L')}
-        </Flex>
-      ),
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'createdAt'),
-    },
+    // {
+    //   title: 'Shipping Charge',
+    //   dataIndex: 'shippingCharge',
+    //   sorter: (a, b) => utils.antdTableSorter(a, b, 'shippingCharge'),
+    //   // render: (items, record) => <div>{items?.length}</div>,
+    // },
+
     // {
     //   title: 'Date',
     //   dataIndex: 'date',
@@ -273,7 +283,27 @@ const Orders = () => {
       // render: (isUnlimited) => <Flex>{isUnlimited ? 'Yes' : 'No'}</Flex>,
       // sorter: (a, b) => utils.antdTableSorter(a, b, 'approval'),
     },
-
+    {
+      title: 'Payment status',
+      dataIndex: 'status',
+      render: (status, row) => {
+        return (
+          <Select
+            defaultValue={status}
+            style={{ width: 150 }}
+            onChange={(e) => handleOrderStatusChange(e, row)}
+          >
+            {orderStatuses.map((item) => (
+              <Option key={item} value={item}>
+                {item}
+              </Option>
+            ))}
+          </Select>
+        )
+      },
+      // render: (isUnlimited) => <Flex>{isUnlimited ? 'Yes' : 'No'}</Flex>,
+      // sorter: (a, b) => utils.antdTableSorter(a, b, 'approval'),
+    },
     {
       title: 'Payment status',
       dataIndex: 'payment',
@@ -387,7 +417,11 @@ const Orders = () => {
           </div>
           <div className="mr-md-3 mb-3">
             <label className="mt-2">Customers</label>
-            <Select
+            <Select showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
               className="w-100"
               style={{ minWidth: 180 }}
               onChange={(value) => setSelectedUserId(value)}
@@ -445,7 +479,9 @@ const Orders = () => {
         </Button>
       </div>
       <div className="table-responsive">
-        <Table
+        <Table  scroll={{
+            x: true,
+          }}
           columns={tableColumns}
           dataSource={list}
           rowKey="id"

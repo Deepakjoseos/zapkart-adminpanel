@@ -58,6 +58,11 @@ const ProductForm = (props) => {
             status: data.status,
             priority: data.priority,
             description: data.description,
+            metaTitle: data.metaTitle,
+            metaDescription: data.metaDescription,
+            keywords: data.keywords,
+            // slug: data.slug,
+            tags: data.tags
           })
 
           setEditorRender(true)

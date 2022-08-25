@@ -346,7 +346,11 @@ const ProductTemplateList = () => {
       </div>
       <div className="mr-md-3 mb-3">
         <label className="mt-2">Brands</label>
-        <Select
+        <Select showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
           className="w-100"
           style={{ minWidth: 180 }}
           onChange={(value) => setSelectedBrandId(value)}
@@ -365,7 +369,11 @@ const ProductTemplateList = () => {
 
       <div className="mr-md-3 mb-3">
         <label className="mt-2">Categories</label>
-        <Select
+        <Select showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
           className="w-100"
           style={{ minWidth: 180 }}
           onChange={(value) => setSelectedCategoryId(value)}

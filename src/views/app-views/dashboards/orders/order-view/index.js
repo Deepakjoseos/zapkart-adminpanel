@@ -1,6 +1,6 @@
 import React, { Component, useEffect, useState } from 'react'
 import { PrinterOutlined } from '@ant-design/icons'
-import { Card, Table, Button, Select, notification } from 'antd'
+import { Card, Table, Button, Select, notification,Image } from 'antd'
 import { invoiceData } from '../../../pages/invoice/invoiceData'
 import NumberFormat from 'react-number-format'
 import { useParams } from 'react-router-dom'
@@ -21,6 +21,7 @@ const OrderView = () => {
     if (order) {
       setOrder(orderData)
     }
+    console.log('order payment',order.payment)
   }
 
   useEffect(() => {
@@ -133,6 +134,9 @@ const OrderView = () => {
             <p>Order Date:{moment(parseInt(order?.createdAt)).format('YYYY-MM-DD')}</p>
             <p>Status: {order?.status}</p>
             <p>shipping Charge: {order?.shippingCharge}</p>
+            <p>Payment method  : {order?.payment?.type}</p>
+            <p>Transaction ID : {order?.transaction?.id}</p>
+
             <p>Total Amount: ₹{order?.totalAmount}</p>
             <address>
               <p>
@@ -148,10 +152,16 @@ const OrderView = () => {
             </address>
           </div>
         </div>
+        <Image
+    width={100}
+    src={order?.prescriptions}
+  />
         <div className="mt-4">
           <Table dataSource={order?.items} pagination={false} className="mb-5">
             <Column title="Product" dataIndex="name" key="name" />
             <Column title="Quantity" dataIndex="quantity" key="quantity" />
+            <Column title="Vendor" dataIndex="vendorName" key="vendorName" />
+
             <Column title="Price" dataIndex="price" key="price" />
             {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
               <Column
