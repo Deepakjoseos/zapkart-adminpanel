@@ -75,12 +75,48 @@ const GeneralField = (props) => (
           </Select>
         </Form.Item>
       </Card>
+      <Card title="SEO">
+          <Form.Item name="metaTitle" label="Meta Title">
+            <Input placeholder="Meta Title" />
+          </Form.Item>
+          <Form.Item name="metaDescription" label="Meta Description">
+            <Input placeholder="Meta Description" />
+          </Form.Item>
+          {/* <Form.Item name="keywords" label="Keywords">
+            <Input placeholder="Keywords" />
+          </Form.Item> */}
+          <Form.Item name="keywords" label="Keywords">
+            <Select
+              dropdownStyle={{ display: 'none' }}
+              mode="tags"
+              style={{
+                width: '100%',
+              }}
+              placeholder="Keywords"
+            ></Select>
+          </Form.Item>
+          {/* <Form.Item name="slug" label="Slug" rules={rules.slug}>
+            <Input placeholder="Slug" />
+          </Form.Item> */}
+         
+          <Form.Item name="tags" label="Tags">
+            <Select
+              dropdownStyle={{ display: 'none' }}
+              mode="tags"
+              style={{
+                width: '100%',
+              }}
+              placeholder="Tags"
+            ></Select>
+          </Form.Item>
+        </Card>
     </Col>
     <Col xs={24} sm={24} md={7}>
       <Card title="Media">
         <Upload listType="picture-card" name="image" {...props.propsImages}>
           <CustomIcon className="display-3" svg={ImageSvg} />
         </Upload>
+        size: 1495 * 420
       </Card>
     </Col>
   </Row>

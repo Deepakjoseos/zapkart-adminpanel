@@ -439,7 +439,7 @@ const GeneralField = ({
               filterOption={(input, option) =>
                 option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
               }
-                              placeholder="Medicine Type"
+                              placeholder="Composition"
                               onChange={() => onCompositionChange()}
                             >
                               {compositions?.map((composition) => (
@@ -459,11 +459,9 @@ const GeneralField = ({
                             name={[field.name, 'qty']}
                             fieldKey={[field.fieldKey, 'qty']}
                           >
-                            <InputNumber
-                              type="number"
-                              min={0}
-                              max={100000}
-                              placeholder="Qty"
+                            <Input
+                            
+                             placeholder="Qty"
                             />
                           </Form.Item>
                           <MinusCircleOutlined
@@ -693,6 +691,7 @@ const GeneralField = ({
           >
             <CustomIcon className="display-3" svg={ImageSvg} />
           </Upload>
+          size: 600 * 405
         </Card>
       </Col>
     </Row>

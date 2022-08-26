@@ -433,7 +433,11 @@ const ProductList = () => {
       </div>
       <div className=" mr-md-3 mb-3">
         <label className="mt-2">Brands</label>
-        <Select
+        <Select showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
           className="w-100"
           style={{ minWidth: 180 }}
           onChange={(value) => setSelectedBrandId(value)}
@@ -452,7 +456,11 @@ const ProductList = () => {
 
       <div className="mr-md-3 mb-3">
         <label className="mt-2">Categories</label>
-        <Select
+        <Select showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
           className="w-100"
           style={{ minWidth: 180 }}
           onChange={(value) => setSelectedCategoryId(value)}
@@ -470,7 +478,11 @@ const ProductList = () => {
       </div>
       <div className="mr-md-3 mb-3">
         <label className="mt-2">Vendors</label>
-        <Select
+        <Select showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
           className="w-100"
           style={{ minWidth: 180 }}
           onChange={(value) => setSelectedVendorId(value)}
@@ -488,7 +500,11 @@ const ProductList = () => {
       </div>
       <div className="mr-md-3 mb-3">
         <label className="mt-2">Approval</label>
-        <Select
+        <Select showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
           className="w-100"
           style={{ minWidth: 180 }}
           onChange={(value) => setSelectedApproval(value)}
@@ -506,7 +522,11 @@ const ProductList = () => {
       {process.env.REACT_APP_SITE_NAME === 'awen' ? (
         <div className="mr-md-3 mb-3">
           <label className="mt-2">Acquirement Method</label>
-          <Select
+          <Select showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
             className="w-100"
             style={{ minWidth: 180 }}
             onChange={(value) => setSelectedacquirementMethod(value)}
