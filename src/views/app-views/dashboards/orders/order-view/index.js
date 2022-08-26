@@ -1,8 +1,8 @@
 import React, { Component, useEffect, useRef, useState } from 'react'
 import { PrinterOutlined } from '@ant-design/icons'
-import { Card, Table, Button, Select, notification } from 'antd'
-import { useReactToPrint } from 'react-to-print'
-
+import { Card, Table, Button, Select, notification,Image } from 'antd'
+import { invoiceData } from '../../../pages/invoice/invoiceData'
+import NumberFormat from 'react-number-format'
 import { useParams } from 'react-router-dom'
 import orderService from 'services/orders'
 import ShipmentCreateForm from './ShipmentCreateForm'
@@ -37,6 +37,7 @@ const OrderView = () => {
     if (order) {
       setOrder(orderData)
     }
+    console.log('order payment',order.payment)
   }
 
   useEffect(() => {

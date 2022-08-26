@@ -371,6 +371,7 @@ const VariantsForm = ({
           <Upload listType="picture-card" name="image" {...propsImages}>
             <CustomIcon className="display-3" svg={ImageSvg} />
           </Upload>
+          size: 600 * 405
         </Card>
       </Form>
     </Drawer>
