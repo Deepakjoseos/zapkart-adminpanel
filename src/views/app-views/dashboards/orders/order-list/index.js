@@ -108,6 +108,7 @@ const Orders = () => {
   )
 
   const orderStatuses = [
+    'Prescriptions Missing',
     'Pending',
     'Received',
     'Confirmed',
@@ -228,7 +229,7 @@ const Orders = () => {
       dataIndex: 'createdAt',
       render: (createdAt) => (
         <Flex alignItems="center">
-         {moment(parseInt(createdAt)).format('L')}
+          {moment(parseInt(createdAt)).format('L')}
         </Flex>
       ),
       sorter: (a, b) => utils.antdTableSorter(a, b, 'createdAt'),
