@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState } from 'react'
+import React, { Component, useEffect, useRef, useState } from 'react'
 import { PrinterOutlined } from '@ant-design/icons'
 import { Card, Table, Button, Select, notification,Image } from 'antd'
 import { invoiceData } from '../../../pages/invoice/invoiceData'
@@ -6,6 +6,7 @@ import NumberFormat from 'react-number-format'
 import { useParams } from 'react-router-dom'
 import orderService from 'services/orders'
 import ShipmentCreateForm from './ShipmentCreateForm'
+import Flex from 'components/shared-components/Flex'
 import moment from 'moment'
 
 const { Column } = Table
@@ -14,6 +15,11 @@ const OrderView = () => {
   const { id } = useParams()
   const [order, setOrder] = useState({})
   const [isFormOpen, setIsFormOpen] = useState(false)
+
+  const componentRef = useRef()
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  })
 
   const getOrderById = async () => {
     const orderData = await orderService.getOrderById(id)
@@ -131,7 +137,10 @@ const OrderView = () => {
             <h2 className="mb-1 font-weight-semibold">
               Order No: {order?.orderNo}
             </h2>
-            <p>Order Date:{moment(parseInt(order?.createdAt)).format('YYYY-MM-DD')}</p>
+            <p>
+              Order Date:
+              {moment(parseInt(order?.createdAt)).format('YYYY-MM-DD')}
+            </p>
             <p>Status: {order?.status}</p>
             <p>shipping Charge: {order?.shippingCharge}</p>
             <p>Payment method  : {order?.payment?.type}</p>

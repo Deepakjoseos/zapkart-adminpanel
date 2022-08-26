@@ -143,7 +143,12 @@ const GeneralField = ({ propsImages, categories, handleChange, form }) => {
       </Col>
       <Col xs={24} sm={24} md={7}>
         <Card title="Media">
-          <Upload listType="picture-card" name="image" {...propsImages} accept="image/*">
+          <Upload
+            listType="picture-card"
+            name="image"
+            {...propsImages}
+            accept="image/*"
+          >
             <CustomIcon className="display-3" svg={ImageSvg} />
           </Upload>
           size: 100 * 100
