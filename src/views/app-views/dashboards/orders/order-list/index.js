@@ -125,6 +125,7 @@ const Orders = () => {
 
 
   const orderStatuses = [
+    'Prescriptions Missing',
     'Pending',
     'Received',
     'Confirmed',
@@ -236,13 +237,22 @@ const Orders = () => {
 
       // render: (items, record) => <div>{items?.length}</div>,
     },
-    // {
-    //   title: 'Shipping Charge',
-    //   dataIndex: 'shippingCharge',
-    //   sorter: (a, b) => utils.antdTableSorter(a, b, 'shippingCharge'),
-    //   // render: (items, record) => <div>{items?.length}</div>,
-    // },
-
+    {
+      title: 'Shipping Charge',
+      dataIndex: 'shippingCharge',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'shippingCharge'),
+      // render: (items, record) => <div>{items?.length}</div>,
+    },
+    {
+      title: 'Order Date',
+      dataIndex: 'createdAt',
+      render: (createdAt) => (
+        <Flex alignItems="center">
+          {moment(parseInt(createdAt)).format('L')}
+        </Flex>
+      ),
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'createdAt'),
+    },
     // {
     //   title: 'Date',
     //   dataIndex: 'date',

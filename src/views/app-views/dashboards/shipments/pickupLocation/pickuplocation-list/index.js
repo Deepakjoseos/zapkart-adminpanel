@@ -65,12 +65,12 @@ const PickupLocationList = () => {
   // Dropdown menu for each row
   const dropdownMenu = (row) => (
     <Menu>
-      <Menu.Item onClick={() => viewDetails(row)}>
+      {/* <Menu.Item onClick={() => viewDetails(row)}>
         <Flex alignItems="center">
           <EyeOutlined />
           <span className="ml-2">View Details</span>
         </Flex>
-      </Menu.Item>
+      </Menu.Item> */}
       {/* <Menu.Item onClick={() => deleteRow(row)}>
         <Flex alignItems="center">
           <DeleteOutlined />
@@ -146,15 +146,15 @@ const PickupLocationList = () => {
       sorter: (a, b) => utils.antdTableSorter(a, b, 'pin_code'),
     },
 
-    {
-      title: '',
-      dataIndex: 'actions',
-      render: (_, elm) => (
-        <div className="text-right">
-          <EllipsisDropdown menu={dropdownMenu(elm)} />
-        </div>
-      ),
-    },
+    // {
+    //   title: '',
+    //   dataIndex: 'actions',
+    //   render: (_, elm) => (
+    //     <div className="text-right">
+    //       <EllipsisDropdown menu={dropdownMenu(elm)} />
+    //     </div>
+    //   ),
+    // },
   ]
 
   // When Search is used

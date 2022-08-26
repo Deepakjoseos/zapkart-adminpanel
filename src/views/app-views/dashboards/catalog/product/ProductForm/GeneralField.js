@@ -130,7 +130,7 @@ const GeneralField = ({
   const getVariants = (id) => {
     const curTemp = productTemplates.find((cur) => cur.id === id)
     console.log(curTemp, 'hoooooo')
-    setVariants(curTemp.variants)
+    setVariants(curTemp?.variants)
     form.setFieldsValue({
       productVariantId: '',
     })
@@ -145,7 +145,7 @@ const GeneralField = ({
           (cur) => cur.id === productTemplateId
         )
 
-        setVariants(curTemp.variants)
+        setVariants(curTemp?.variants)
       }
     }
   }, [productTemplateId, productTemplates])
@@ -154,11 +154,12 @@ const GeneralField = ({
     <>
       <Card title="Basic Info">
         <Form.Item name="vendorId" label="Vendor" rules={rules.vendor}>
-          <Select showSearch
-              optionFilterProp="children"
-              filterOption={(input, option) =>
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }
+          <Select
+            showSearch
+            optionFilterProp="children"
+            filterOption={(input, option) =>
+              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
             placeholder="Vendor"
             onChange={(e) => {
               getDeliveryZones(e)
@@ -180,7 +181,7 @@ const GeneralField = ({
           label="deliveryZone"
           rules={rules.deliveryZoneId}
         >
-          <Select placeholder="deliveryZoneId" >
+          <Select placeholder="deliveryZoneId">
             {deliveryZones.map((deliveryZone) => (
               <Option value={deliveryZone.id}>{deliveryZone.name}</Option>
             ))}
@@ -192,11 +193,12 @@ const GeneralField = ({
           label="productTemplate"
           rules={rules.productTemplateId}
         >
-          <Select showSearch
-              optionFilterProp="children"
-              filterOption={(input, option) =>
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }
+          <Select
+            showSearch
+            optionFilterProp="children"
+            filterOption={(input, option) =>
+              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
             placeholder="productTemplate"
             onChange={(e) => getVariants(e)}
           >
@@ -213,17 +215,20 @@ const GeneralField = ({
         >
           <Input placeholder="Product Code" />
         </Form.Item>
-        {variants.length > 0 && (
+        {variants?.length > 0 && (
           <Form.Item
             name="productVariantId"
             label="productVariant"
             // rules={rules.productVariantId}
           >
-            <Select placeholder="productVariant" showSearch
+            <Select
+              placeholder="productVariant"
+              showSearch
               optionFilterProp="children"
               filterOption={(input, option) =>
                 option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }>
+              }
+            >
               {variants?.map((variant) => (
                 <Option value={variant.id}>{variant.name}</Option>
               ))}
@@ -259,7 +264,8 @@ const GeneralField = ({
             label="Product Buy Type"
             rules={rules.acquirementMethod}
           >
-            <Select showSearch
+            <Select
+              showSearch
               optionFilterProp="children"
               filterOption={(input, option) =>
                 option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
