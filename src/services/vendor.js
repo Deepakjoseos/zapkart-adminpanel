@@ -27,7 +27,18 @@ vendorService.getVendorById = async function (id) {
     console.log(err, 'show-err')
   }
 }
-
+vendorService.addVendor = async function (data) {
+  try {
+    const res = await fetch({
+      url: `${apiRoute}`,
+      method: 'post',
+      data: data,
+    })
+    return res
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
 vendorService.editVendor = async function (id, data) {
   try {
     const res = await fetch({

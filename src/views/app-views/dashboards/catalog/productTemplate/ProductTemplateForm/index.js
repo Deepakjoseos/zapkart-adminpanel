@@ -17,7 +17,7 @@ import categoryService from 'services/category'
 import medicineTypeService from 'services/medicineType'
 import manufacturerService from 'services/manufacturer'
 import compositionService from 'services/composition'
-
+import constantsService from 'services/constants'
 const { TabPane } = Tabs
 
 const ADD = 'ADD'
@@ -42,6 +42,8 @@ const ProductForm = (props) => {
 
   const [maxQty, setMaxQty] = useState(0)
   const [minQty, setMinQty] = useState(0)
+  const [weightClass,setWeightClass] = useState([])
+  const [lengthClass,setLengthClass] = useState([])
 
   const {
     fileList: fileListImages,
@@ -84,6 +86,8 @@ const ProductForm = (props) => {
       getMedicineTypes()
       getManufacturers()
       getCompositions()
+      fetchConstants()
+
     }
   }, [])
 
@@ -92,6 +96,15 @@ const ProductForm = (props) => {
     const activeCategories = data.filter((item) => item.status === 'Active')
     const treeCatList = Utils.createCategoryList(activeCategories)
     setCategories(treeCatList)
+  }
+ 
+  const fetchConstants = async () => {
+    const data = await constantsService.getConstants()
+    if (data) {
+      // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
+      setWeightClass( Object.values(data.GENERAL['WEIGHT_CLASS']))
+      setLengthClass(Object.values(data.GENERAL['LENGTH_CLASS']))
+    }
   }
 
   const fetchProductTemplateById = async () => {
@@ -510,6 +523,8 @@ const ProductForm = (props) => {
                 maxQty={maxQty}
                 setMinQty={setMinQty}
                 minQty={minQty}
+                weightClass={weightClass}
+                lengthClass={lengthClass}
               />
             </TabPane>
             {mode === EDIT && (

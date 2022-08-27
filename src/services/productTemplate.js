@@ -9,6 +9,9 @@ productTemplate.getProductTemplates = async function (query) {
     const brandId = query?.brandId
     const categoryId = query?.categoryId
     const status = query?.status
+    const manufacturerId = query?.manufacturerId
+    const medicineTypeId= query?.medicineTypeId
+    const prescriptionRequired = query?.prescriptionRequired
     if (brandId) url = `${url}?brandId=${brandId}`
     if (categoryId)
       url =
@@ -20,6 +23,29 @@ productTemplate.getProductTemplates = async function (query) {
         (brandId && brandId !== null) || (categoryId && categoryId !== null)
           ? `${url}&status=${status}`
           : `${url}?status=${status}`
+
+          if (manufacturerId)
+          url =
+            (brandId && brandId !== null) || (categoryId && categoryId !== null)
+            || (status && status !==null)
+              ? `${url}&manufacturerId=${manufacturerId}`
+              : `${url}?manufacturerId=${manufacturerId}`
+          if(medicineTypeId)
+          url = 
+          (brandId && brandId !== null) || (categoryId && categoryId !== null) 
+          ||(status && status !==null) ||(manufacturerId && manufacturerId !==null)
+          ? `${url}&medicineTypeId=${medicineTypeId}`
+          : `${url}?medicineTypeId=${medicineTypeId}`
+
+          if(prescriptionRequired)
+          url = 
+          (brandId && brandId !== null) || (categoryId && categoryId !== null) 
+          ||(status && status !==null) ||(manufacturerId && manufacturerId !==null) || (medicineTypeId && medicineTypeId !==null)
+          
+         
+          ? `${url}&prescriptionRequired=${prescriptionRequired}`
+          : `${url}?prescriptionRequired=${prescriptionRequired}`
+
     const res = await fetch({
       url,
       method: 'get',

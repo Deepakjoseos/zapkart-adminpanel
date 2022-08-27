@@ -176,12 +176,16 @@ const GeneralField = ({
           </Select>
         </Form.Item>
 
-        <Form.Item
+        <Form.Item  
           name="deliveryZoneId"
           label="deliveryZone"
           rules={rules.deliveryZoneId}
         >
-          <Select placeholder="deliveryZoneId">
+          <Select placeholder="deliveryZone" showSearch
+            optionFilterProp="children"
+            filterOption={(input, option) =>
+              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }>
             {deliveryZones.map((deliveryZone) => (
               <Option value={deliveryZone.id}>{deliveryZone.name}</Option>
             ))}

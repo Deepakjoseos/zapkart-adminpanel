@@ -7,7 +7,7 @@ import {
   Form,
   InputNumber,
   Select,
-  DatePicker
+  DatePicker,
 } from 'antd'
 
 const { Option } = Select
@@ -117,6 +117,8 @@ const GeneralField = ({
   productTemplates,
   users,
   userGroups,
+  valueTypes,
+  availableTypes
 }) => {
   const [availableType,setAvailableType] = useState(null)
   console.log('availableType',availableType)
@@ -133,10 +135,15 @@ const GeneralField = ({
           </Form.Item>
 
           <Form.Item name="valueType" label="Value Type" rules={rules.valueType}>
-            <Select placeholder="Value Type" >
-              <Option value="Percentage">Percentage</Option>
-              <Option value="Amount">Amount</Option>
-            </Select>
+          <Select
+            style={{ width: 150 }}
+          >
+            {valueTypes?.map((item) => (
+              <Option key={item} value={item}>
+                {item}
+              </Option>
+            ))}
+          </Select>
           </Form.Item>
 
           <Form.Item name="value" label="Value" rules={rules.priority}>
@@ -164,9 +171,14 @@ const GeneralField = ({
               <Select placeholder="Available Type"  onChange={value => {
               setAvailableType(value)
               }}>
-                <Option value="Limited">Limited</Option>
-                <Option value="Unlimited">Unlimited</Option>
-              </Select>
+          
+            {availableTypes?.map((item) => (
+              <Option key={item} value={item}>
+                {item}
+              </Option>
+            ))}
+          </Select>
+                
             </Form.Item>
             </Col>
             {availableType === "Limited" ? 
