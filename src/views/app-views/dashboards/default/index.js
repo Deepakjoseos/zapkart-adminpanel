@@ -151,6 +151,8 @@ const tableColumns = [
     title: 'Total Amount',
     dataIndex: 'totalAmount',
     key: 'totalAmount',
+    render :(totalAmount)=><div><span class="WebRupee">&#x20B9;</span>{totalAmount}</div>,
+
   },
   {
     title: 'Status',

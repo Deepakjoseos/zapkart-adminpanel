@@ -13,6 +13,7 @@ import { useHistory } from 'react-router-dom'
 import customerService from 'services/customer'
 import ViewAddresses from '../customer-list/ViewAddresses'
 import ViewPrescriptions from '../customer-list/ViewPrescriptions'
+import ViewGroups from './ViewGroups'
 const { TabPane } = Tabs
 
 const ADD = 'ADD'
@@ -32,6 +33,7 @@ const ProductForm = (props) => {
   const [customers, setCustomers] = useState([])
   const [selectedPrescriptionCustomerId, setSelectedPrescriptionCustomerId] =
   useState(null)
+  const [groupList,setGroupList] = useState([])
   const {
     fileList: fileListDisplayImages,
     beforeUpload: beforeUploadDisplayImages,
@@ -48,6 +50,7 @@ const ProductForm = (props) => {
       setAddressList(data.address)
       setSelectedCustomerId(data.id)
       setSelectedPrescriptionCustomerId(data.id)
+      setGroupList(data.groups)
       let himg = []
       if (data.displayImage) {
         himg = [
@@ -68,6 +71,9 @@ const ProductForm = (props) => {
         lastName: data.lastName,
         email: data?.email,
         phone: data?.phone,
+        status:data?.status,
+        password:data?.password,
+        emailVerified:data?.emailVerified
       })
     } else {
       // history.replace('/app/dashboards/users/customer/customer-list')
@@ -102,11 +108,22 @@ const ProductForm = (props) => {
         const sendingValues = {
           firstName: values.firstName,
           lastName: values.lastName,
+          // email: values.email,
+          // phone: values.phone,
+          // status:values.status,
+          // password:values.password,
+          // emailVerified:values.emailVerified
         }
 
         if (mode === ADD) {
-          //
+    
+          const created = await customerService.addCustomer(values)
+          if (created) {
+            message.success(`Created Customer Success`)
+            history.goBack()
+          }
         }
+        console.log('mode',mode)
         if (mode === EDIT) {
           // Checking if image exists
           if (displayImage.length !== 0 && displayImage !== null) {
@@ -185,7 +202,7 @@ const ProductForm = (props) => {
         <div className="container">
           <Tabs defaultActiveKey="1" style={{ marginTop: 30 }}>
             <TabPane tab="General" key="1">
-              <GeneralField propsDisplayImages={propsDisplayImages} />
+              <GeneralField propsDisplayImages={propsDisplayImages} mode={mode} />
             </TabPane>
             {id && (
               <>
@@ -199,6 +216,11 @@ const ProductForm = (props) => {
                   <ViewPrescriptions
                     selectedPrescriptionCustomerId={selectedPrescriptionCustomerId}
                     setSelectedPrescriptionCustomerId={setSelectedPrescriptionCustomerId}
+                  />
+                </TabPane>
+                <TabPane tab="Groups" key="4">
+                  <ViewGroups
+                   groupList={groupList} selectedCustomerId={selectedCustomerId} refetchData={fetchCustomerById}
                   />
                 </TabPane>
               </>

@@ -34,7 +34,7 @@ const getStockStatus = (status) => {
   }
   return null
 }
-const ProductList = () => {
+const DeliveryZonesList = () => {
   let history = useHistory()
 
   const [list, setList] = useState([])
@@ -45,8 +45,8 @@ const ProductList = () => {
   const [selectedVendorId,setSelectedVendorId]= useState(null)
 
   useEffect(() => {
-    const getDeliveryLocations = async () => {
-      const data = await deliveryLocationService.getDeliveryLocations()
+    const getDeliveryZones = async () => {
+      const data = await deliveryLocationService.getDeliveryZones()
       if (data) {
         setList(data)
         setSearchBackupList(data)
@@ -60,7 +60,7 @@ const ProductList = () => {
       
       }
     }
-    getDeliveryLocations()
+    getDeliveryZones()
     getVendors()
   }, [])
 
@@ -72,7 +72,7 @@ const ProductList = () => {
           <span className="ml-2">View Details</span>
         </Flex>
       </Menu.Item>
-      <Menu.Item onClick={() => deleteRow(row)}>
+      {/* <Menu.Item onClick={() => deleteRow(row)}>
         <Flex alignItems="center">
           <DeleteOutlined />
           <span className="ml-2">
@@ -81,38 +81,38 @@ const ProductList = () => {
               : 'Delete'}
           </span>
         </Flex>
-      </Menu.Item>
+      </Menu.Item> */}
     </Menu>
   )
 
   const addProduct = () => {
-    history.push(`/app/dashboards/deliverylocation/add-deliverylocation`)
+    history.push(`/app/dashboards/deliverylocation/deliveryzone/add-deliveryzone`)
   }
 
   const viewDetails = (row) => {
     history.push(
-      `/app/dashboards/deliverylocation/edit-deliverylocation/${row.id}`
+      `/app/dashboards/deliverylocation/deliveryzone/edit-deliveryzone/${row.id}`
     )
   }
 
-  const deleteRow = async (row) => {
-    const resp = await deliveryLocationService.deleteDeliveryLocation(row.id)
+//   const deleteRow = async (row) => {
+//     const resp = await deliveryLocationService.dele(row.id)
 
-    if (resp) {
-      const objKey = 'id'
-      let data = list
-      if (selectedRows.length > 1) {
-        selectedRows.forEach((elm) => {
-          data = utils.deleteArrayRow(data, objKey, elm.id)
-          setList(data)
-          setSelectedRows([])
-        })
-      } else {
-        data = utils.deleteArrayRow(data, objKey, row.id)
-        setList(data)
-      }
-    }
-  }
+//     if (resp) {
+//       const objKey = 'id'
+//       let data = list
+//       if (selectedRows.length > 1) {
+//         selectedRows.forEach((elm) => {
+//           data = utils.deleteArrayRow(data, objKey, elm.id)
+//           setList(data)
+//           setSelectedRows([])
+//         })
+//       } else {
+//         data = utils.deleteArrayRow(data, objKey, row.id)
+//         setList(data)
+//       }
+//     }
+//   }
 
   const getParentName = (parentId) => {
     const parentName = searchBackupList.find((cur) => cur.id === parentId)
@@ -270,7 +270,7 @@ const ProductList = () => {
             icon={<PlusCircleOutlined />}
             
           >
-            Add DeliveryLocation
+            Add DeliveryZone
           </Button>
         </div>
       <div className="table-responsive">
@@ -280,4 +280,4 @@ const ProductList = () => {
   )
 }
 
-export default ProductList
+export default DeliveryZonesList

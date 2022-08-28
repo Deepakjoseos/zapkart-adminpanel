@@ -2,36 +2,40 @@ import { Button, Card, Drawer, notification, Table, Typography } from 'antd'
 import Flex from 'components/shared-components/Flex'
 import React, { useEffect, useState } from 'react'
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
+// import AddressForm from './AddressForm'
+import customerService from 'services/customer'
+import GroupForm from './GroupForm'
 import utils from 'utils'
-import PickupLocationForm from './PickUpLocationForm'
 
 
-const ViewPickupLocations = ({
+const ViewGroups = ({
  
-  selectedVendorId,
+  selectedCustomerId,
   refetchData,
-  pickupLocations
+  groupList
 }) => {
 
-  console.log('pickupLocations',pickupLocations)
+  console.log('groupList',groupList)
+  console.log('selectedCustomerId',selectedCustomerId)
+
   const [viewFormModal, setViewFormModal] = useState(false)
   const [formMode, setFormMode] = useState('add')
-  const [selectedFormPickUpLocation, setSelectedFormPickupLocation] = useState({})
+  const [selectedGroupForm, setSelectedGroupForm] = useState({})
 
-//   const onDeleteAddress = async (addressId) => {
-//     const customerDelete = await customerService.deleteAddress(
-//       selectedCustomerId,
-//       addressId
-//     )
+  const onDeleteAddress = async (addressId) => {
+    const customerDelete = await customerService.deleteAddress(
+      selectedCustomerId,
+      addressId
+    )
 
-//     if (customerDelete) {
-//       notification.success({
-//         message: 'Address deleted successfully',
-//       })
-//       refetchData()
-//     }
-//   }
-
+    if (customerDelete) {
+      notification.success({
+        message: 'Address deleted successfully',
+      })
+      refetchData()
+    }
+  }
+ 
 
 
   return (
@@ -45,15 +49,15 @@ const ViewPickupLocations = ({
             }}
           >
             {' '}
-            + Add PickUpLocations
+            + Add Group
           </Button>
         </Flex>
         
 
-        {pickupLocations?.map((pickupLocation, i) => (
+        {groupList?.map((group, i) => (
           <Card
-            key={pickupLocation.id}
-            title={`pickupLocation ${i + 1}`}
+            key={group.id}
+            title={`group ${i + 1}`}
             extra={
               <>
                 <Button
@@ -63,7 +67,7 @@ const ViewPickupLocations = ({
                   onClick={() => {
                     setViewFormModal(true)
                     setFormMode('edit')
-                    setSelectedFormPickupLocation(pickupLocation)
+                    setSelectedGroupForm(group)
                   }}
                   className="mr-2"
                 />
@@ -76,23 +80,24 @@ const ViewPickupLocations = ({
               </>
             }
           >
-            {'City: ' + pickupLocation.city} <br />
-            {'Country:' + pickupLocation.country} <br />
-            {'Phone: ' + pickupLocation.phone} <br />
-            {'State: ' + pickupLocation.state} <br />
-            {'Address: ' + pickupLocation.address}
+            {/* {'City: ' + groups.city} <br />
+            {'Country:' + groups.country} <br />
+            {'line1: ' + groups.line1} <br />
+            {'Phone: ' + groups.phone} <br />
+            {'State: ' + groups.state} <br />
+            {'Zipcode: ' + groups.zipcode} */}
           </Card>
         ))}
       {/* </Drawer> */}
 
-      <PickupLocationForm
+      <GroupForm
         formMode={formMode}
-        selectedFormPickUpLocation={selectedFormPickUpLocation}
-        setSelectedFormPickupLocation={setSelectedFormPickupLocation}
+        selectedGroupForm={selectedGroupForm}
+        setSelectedGroupForm={setSelectedGroupForm}
         setFormMode={setFormMode}
         viewFormModal={viewFormModal}
         setViewFormModal={setViewFormModal}
-        selectedVendorId={selectedVendorId}
+        selectedCustomerId={selectedCustomerId}
         refetchData={refetchData}
       />
 
@@ -100,4 +105,4 @@ const ViewPickupLocations = ({
   )
 }
 
-export default ViewPickupLocations
+export default ViewGroups

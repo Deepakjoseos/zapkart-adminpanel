@@ -1,5 +1,5 @@
 import React from 'react'
-import { Input, Row, Col, Card, Form, Upload, InputNumber, Select } from 'antd'
+import { Input, Row, Col, Card, Form, Upload, InputNumber, Select,TreeSelect} from 'antd'
 import { ImageSvg } from 'assets/svg/icon'
 import CustomIcon from 'components/util-components/CustomIcon'
 
@@ -62,18 +62,18 @@ const GeneralField = ({
       </Select>
     </Form.Item>
 
-    <Form.Item name="parentId" label="Parent" showSearch
+    <Form.Item name="parentId" label="Parent" >
+      <TreeSelect placeholder="Parent"  showSearch searchable drop-down
               optionFilterProp="children"
               filterOption={(input, option) =>
                 option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
               }>
-      <Select placeholder="Parent">
         {deliveryLocations.map((cur) => (
           <Option value={cur.id} key={cur.id}>
             {cur.name}
           </Option>
         ))}
-      </Select>
+      </TreeSelect>
     </Form.Item>
   </Card>
 )

@@ -7,7 +7,7 @@ import {
   Button,
   Menu,
   Tag,
-  notification,
+  notification,Drawer
 } from 'antd'
 // import CustomerListData from 'assets/data/product-list.data.json'
 import {
@@ -15,6 +15,7 @@ import {
   DeleteOutlined,
   SearchOutlined,
   EditOutlined,
+  PlusCircleOutlined
 } from '@ant-design/icons'
 import EllipsisDropdown from 'components/shared-components/EllipsisDropdown'
 import Flex from 'components/shared-components/Flex'
@@ -22,6 +23,7 @@ import { useHistory } from 'react-router-dom'
 import utils from 'utils'
 import customerService from 'services/customer'
 import AvatarStatus from 'components/shared-components/AvatarStatus'
+import { groupList } from 'views/app-views/pages/profile/profileData'
 
 const { Option } = Select
 
@@ -51,6 +53,8 @@ const CustomerList = () => {
   const [selectedRows, setSelectedRows] = useState([])
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
   const [customerAddressOpen, setCustomerAddressOpen] = useState(false)
+  const [customerAddFormOpen, setCustomerAddFormOpen] = useState(false)
+
 
   const [selectedCustomerId, setSelectedCustomerId] = useState(null)
   const [selectedPrescriptionCustomerId, setSelectedPrescriptionCustomerId] =    useState(null)
@@ -145,6 +149,11 @@ const CustomerList = () => {
   //     }
   //   }
   // }
+  const addCustomer =() =>{
+   
+    history.push(`/app/dashboards/users/customer/add-customer`)
+    
+  }
 
   const handleStatusChange = async (value, selectedRow) => {
     const updatedProductApproval = await customerService.ediCustomerStatus(
@@ -188,6 +197,21 @@ const CustomerList = () => {
       title: 'Last Name',
       dataIndex: 'lastName',
       sorter: (a, b) => utils.antdTableSorter(a, b, 'lastname'),
+    },
+    {
+      title: 'Groups',
+      dataIndex: 'groups',
+      render:(groups)=>{
+        return <>{groups?.map((group)=>{
+          <>
+          <p>Name:{group.name}</p>
+          <p>Type:{group.type}</p>
+          <p>Status:{group.status}</p>
+          </>
+        })}
+        </>
+      }
+      // sorter: (a, b) => utils.antdTableSorter(a, b, 'lastname'),
     },
     {
       title: 'Email',
@@ -278,16 +302,16 @@ const CustomerList = () => {
     <Card>
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
         {filters()}
-        {/* <div>
+        <div>
           <Button
-            onClick={addProduct}
+            onClick={addCustomer}
             type="primary"
             icon={<PlusCircleOutlined />}
             block
           >
-            Add UserGroup
+            Add Customer
           </Button>
-        </div> */}
+        </div>
       </Flex>
       <div className="table-responsive">
         <Table columns={tableColumns} dataSource={list} rowKey="id" />
@@ -300,6 +324,7 @@ const CustomerList = () => {
           selectedCustomerId={selectedCustomerId}
           refetchData={getCustomers}
         />
+        
         <ViewPrescriptions
           selectedPrescriptionCustomerId={selectedPrescriptionCustomerId}
           setSelectedPrescriptionCustomerId={setSelectedPrescriptionCustomerId}

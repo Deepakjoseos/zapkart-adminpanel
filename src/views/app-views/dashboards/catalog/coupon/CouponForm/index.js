@@ -11,7 +11,7 @@ import brandService from 'services/brand'
 import userGroupService from 'services/userGroup'
 import customerService from 'services/customer'
 import productTemplateService from 'services/productTemplate'
-
+import constantsService from 'services/constants'
 const { TabPane } = Tabs
 
 const ADD = 'ADD'
@@ -30,6 +30,9 @@ const ProductForm = (props) => {
   const [brands, setBrands] = useState([])
   const [userGroups, setUserGroups] = useState([])
   const [users, setUsers] = useState([])
+  const [valueTypes,setValueTypes] = useState([])
+  const[availableTypes,setAvailableTypes] = useState([])
+  
 
   const getCategories = async () => {
     const data = await categoryService.getCategories()
@@ -78,6 +81,14 @@ const ProductForm = (props) => {
       setProductsTemplate(availableProductTemplates)
     }
   }
+  const fetchConstants = async () => {
+    const data = await constantsService.getConstants()
+    if (data) {
+      // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
+      setValueTypes( Object.values(data.COUPON['VALUE_TYPE']))
+      setAvailableTypes(Object.values(data.COUPON['AVAILABLE_TYPE']))
+    }
+  }
 
   useEffect(() => {
     getCategories()
@@ -85,6 +96,8 @@ const ProductForm = (props) => {
     getUserGroups()
     getUsers()
     geProductsTemplate()
+    fetchConstants()
+
   }, [])
 
   useEffect(() => {
@@ -249,6 +262,8 @@ const ProductForm = (props) => {
                 productTemplates={productsTemplate}
                 users={users}
                 userGroups={userGroups}
+                valueTypes={valueTypes}
+                availableTypes={availableTypes}
               />
             </TabPane>
           </Tabs>

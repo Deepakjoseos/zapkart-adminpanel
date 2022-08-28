@@ -8,6 +8,7 @@ import { singleImageUploader } from 'utils/s3/s3ImageUploader'
 import Utils from 'utils'
 import { useHistory } from 'react-router-dom'
 import vendorService from 'services/vendor'
+import ViewPickupLocations from '../vendor-list/ViewPickUpLocations'
 
 const { TabPane } = Tabs
 
@@ -22,19 +23,24 @@ const ProductForm = (props) => {
   const [form] = Form.useForm()
   const [displayImage, setDisplayImage] = useState(null)
   const [submitLoading, setSubmitLoading] = useState(false)
+  const[pickupLocations,setPickUpLocations] = useState(null)
+  const [selectedVendorId, setSelectedCustomerId] = useState(null)
 
-  const {
-    fileList: fileListDisplayImages,
-    beforeUpload: beforeUploadDisplayImages,
-    onChange: onChangeDisplayImages,
-    onRemove: onRemoveDisplayImages,
-    setFileList: setFileListDisplayImages,
-  } = useUpload(1)
+
+   const {
+     fileList: fileListDisplayImages,
+     beforeUpload: beforeUploadDisplayImages,
+     onChange: onChangeDisplayImages,
+     onRemove: onRemoveDisplayImages,
+     setFileList: setFileListDisplayImages,
+   } = useUpload(1)
 
   const fetchVendorById = async () => {
     const { id } = param
     const data = await vendorService.getVendorById(id)
     if (data) {
+
+      setPickUpLocations(data.pickupLocations)
       let himg = []
       if (data.displayImage) {
         himg = [
@@ -109,6 +115,7 @@ const ProductForm = (props) => {
           firstName: values.firstName,
           lastName: values.lastName,
           tanNumber: values.tanNumber,
+          tanNumber: values.pan,
           gst: values.gst,
           address: {
             line1: values['address.line1'],
@@ -146,7 +153,11 @@ const ProductForm = (props) => {
         }
 
         if (mode === ADD) {
-          //
+          const created = await vendorService.addVendor(values)
+          if (created) {
+            message.success(`Created Vendor Success`)
+            history.goBack()
+          }
         }
         if (mode === EDIT) {
           // Checking if image exists
@@ -226,8 +237,11 @@ const ProductForm = (props) => {
             <TabPane tab="General" key="1">
               <GeneralField
                 propsDisplayImages={propsDisplayImages}
-                form={form}
+                form={form} mode={mode}
               />
+            </TabPane>
+            <TabPane tab="PickUpLocations" key="2">
+              <ViewPickupLocations pickupLocations={pickupLocations} selectedVendorId={selectedVendorId} refetchData={fetchVendorById}/>
             </TabPane>
           </Tabs>
         </div>

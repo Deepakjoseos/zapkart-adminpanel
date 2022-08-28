@@ -120,13 +120,13 @@ const GeneralField = ({ setmode }) => {
           >
             <Input placeholder="Twitter" type="text" />
           </Form.Item>
-          <Form.Item
+          {/* <Form.Item
             name="vendorCommission"
             label="Vendor Commission"
             rules={rules.vendorCommission}
           >
             <Input placeholder="Vendor Commission" type="text" />
-          </Form.Item>
+          </Form.Item> */}
           {/* </div> */}
 
         </>

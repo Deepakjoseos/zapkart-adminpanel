@@ -174,6 +174,8 @@ const GeneralField = ({
   maxQty,
   setMinQty,
   minQty,
+  weightClass,
+  lengthClass
 }) => {
   const [image, setImage] = useState(false)
 
@@ -235,11 +237,12 @@ const GeneralField = ({
             label="Category"
             rules={rules.categoryId}
           >
-            <TreeSelect showSearch
-              optionFilterProp="children"
-              filterOption={(input, option) =>
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }
+            <TreeSelect 
+             showSearch
+            //  optionFilterProp="children"
+            //  filterOption={(input, option) =>
+            //    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            //  }
               treeData={categories}
               placeholder="Please select Category"
               treeDefaultExpandAll
@@ -278,7 +281,7 @@ const GeneralField = ({
               label="Medicine Type"
               rules={rules.medicineTypeId}
             >
-              <Select placeholder="Medicine Packaging" showSearch
+              <Select placeholder="Medicine Type" showSearch
               optionFilterProp="children"
               filterOption={(input, option) =>
                 option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
@@ -609,9 +612,14 @@ const GeneralField = ({
             label="Length Class"
             rules={rules.lengthClass}
           >
-            <Select placeholder="Length Class">
-              <Option value="centimeter">Centimeter</Option>
-              <Option value="meter">Meter</Option>
+             <Select
+            style={{ width: 150 }}
+          >
+            {lengthClass?.map((item) => (
+              <Option key={item} value={item}>
+                {item}
+              </Option>
+            ))}
             </Select>
           </Form.Item>
 
@@ -620,13 +628,20 @@ const GeneralField = ({
             label="Weight Class"
             rules={rules.weightClass}
           >
-            <Select placeholder="Weight Class">
-              <Option value="kilograms">Kilograms</Option>
-              <Option value="grams">Grams</Option>
-              <Option value="pound">Pound</Option>
-              <Option value="litre">Litre</Option>
-              <Option value="millilitre">Millilitre</Option>
-            </Select>
+            
+     
+       
+          <Select
+            style={{ width: 150 }}
+          >
+            {weightClass?.map((item) => (
+              <Option key={item} value={item}>
+                {item}
+              </Option>
+            ))}
+          </Select>
+        
+    
           </Form.Item>
 
           <Form.Item name="height" label="Height" rules={rules.height}>
@@ -691,7 +706,7 @@ const GeneralField = ({
           >
             <CustomIcon className="display-3" svg={ImageSvg} />
           </Upload>
-          size: 600 * 405
+          size: 600px * 405px
         </Card>
       </Col>
     </Row>

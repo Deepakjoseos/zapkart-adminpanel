@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { Card, Table, Select, Input, Menu, Tag, notification,Modal } from 'antd'
-import { EyeOutlined, SearchOutlined } from '@ant-design/icons'
+import { Card, Table, Select, Input, Menu, Tag, notification,Modal,Button } from 'antd'
+import { EyeOutlined, SearchOutlined,PlusCircleOutlined } from '@ant-design/icons'
 import EllipsisDropdown from 'components/shared-components/EllipsisDropdown'
 import Flex from 'components/shared-components/Flex'
 import { useHistory } from 'react-router-dom'
@@ -51,6 +51,10 @@ const VendorList = () => {
 
   const viewDetails = (row) => {
     history.push(`/app/dashboards/users/vendor/edit-vendor/${row.id}`)
+  }
+  const addVendor = ()=>{
+    history.push(`/app/dashboards/users/vendor/add-vendor`)
+
   }
   const viewPickUpLocations = (row) => {
     setPickUpLocations(row.pickupLocations)
@@ -290,16 +294,16 @@ const VendorList = () => {
     <Card>
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
         {filters()}
-        {/* <div>
+        <div>
           <Button
-            onClick={addProduct}
+            onClick={addVendor}
             type="primary"
             icon={<PlusCircleOutlined />}
             block
           >
-            Add UserGroup
+            Add Vendor
           </Button>
-        </div> */}
+        </div>
       </Flex>
       <div className="table-responsive">
         <Table columns={tableColumns} dataSource={list} rowKey="id" />

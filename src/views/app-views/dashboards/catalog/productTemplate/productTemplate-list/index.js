@@ -28,6 +28,8 @@ import utils from 'utils'
 import productTemplate from 'services/productTemplate'
 import brandService from 'services/brand'
 import categoryService from 'services/category'
+import medicineTypeService from 'services/medicineType'
+import manufacturerService from 'services/manufacturer'
 
 const { Option } = Select
 
@@ -62,6 +64,11 @@ const ProductTemplateList = () => {
   const [selectedCategoryId, setSelectedCategoryId] = useState(null)
   const [isExcelModalOpen, setIsExcelModalOpen] = useState(false)
   const [excelFile, setExcelFile] = useState(null)
+  const [medicineTypes,setMedicineTypes] = useState([])
+  const[selectedMedicineTypeId,setSelectedMedicineTypeId] = useState(null)
+  const[manufacturers,setManufacturers] = useState([])
+  const[selectedManufacturerId,setSelectedManufacturerId] = useState(null)
+  const [selectedPrescriptionrequired,setSelectedPrescriptionRequired] = useState(null)
 
   const getProductTemplates = async () => {
     const data = await productTemplate.getProductTemplates()
@@ -71,6 +78,19 @@ const ProductTemplateList = () => {
       console.log(data, 'show-data')
     }
   }
+  const getMedicineTypes = async () => {
+    const data = await medicineTypeService.getMedicineTypes()
+    const activeMedicineTypes = data.filter((item) => item.status === 'Active')
+    setMedicineTypes(activeMedicineTypes)
+  }
+
+  const getManufacturers = async () => {
+    const data = await manufacturerService.getManufacturer()
+    const activeManufacturers = data.filter((item) => item.status === 'Active')
+    setManufacturers(activeManufacturers)
+  }
+
+ 
 
   useEffect(() => {
     const getBrands = async () => {
@@ -88,12 +108,20 @@ const ProductTemplateList = () => {
     getProductTemplates()
     getBrands()
     getCategories()
+    getMedicineTypes()
+    getManufacturers()
   }, [])
   const handleQuery = async () => {
     const query = {}
     if ((selectedBrandId || selectedBrandId) !== 'All')
       query.brandId = selectedBrandId
     query.categoryId = selectedCategoryId
+    query.manufacturerId=selectedManufacturerId
+    query.prescriptionRequired=selectedPrescriptionrequired
+    console.log('medicineTypeId',selectedMedicineTypeId)
+    console.log('manufacturerId',selectedManufacturerId)
+
+    query.medicineTypeId=selectedMedicineTypeId
     console.log('query', query)
     const data = await productTemplate.getProductTemplates(query)
     if (data) {
@@ -105,7 +133,9 @@ const ProductTemplateList = () => {
   const handleClearFilter = async () => {
     setSelectedBrandId(null)
     setSelectedCategoryId(null)
-
+    setSelectedMedicineTypeId(null)
+    setSelectedManufacturerId(null)
+    setSelectedPrescriptionRequired(null)
     const data = await productTemplate.getProductTemplates({})
     if (data) {
       setList(data)
@@ -197,8 +227,20 @@ const ProductTemplateList = () => {
     {
       title: 'Brand',
       dataIndex: 'brand',
-      render: (brand) => <Flex alignItems="center">{brand?.name}</Flex>,
+      render: (brand) => <Flex alignItems="center">{brand ? brand?.name : "-"}</Flex>,
       sorter: (a, b) => utils.antdTableSorter(a, b, 'brand.name'),
+    },
+    {
+      title: 'Manufacturer',
+      dataIndex: 'manufacturer',
+      render: (manufacturer) => <Flex alignItems="center">{manufacturer ?manufacturer?.name : "-"}</Flex>,
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'brand.name'),
+    },
+    {
+      title: 'Medicine Type',
+      dataIndex: 'medicineType',
+      // render: (brand) => <Flex alignItems="center">{brand ? brand?.name : "-"}</Flex>,
+      // sorter: (a, b) => utils.antdTableSorter(a, b, 'brand.name'),
     },
     {
       title: 'Category',
@@ -321,7 +363,7 @@ const ProductTemplateList = () => {
   }
 
   const filters = () => (
-    <Flex className="mb-1" mobileFlex={false}>
+    <Flex className="mb-1 flex-wrap" mobileFlex={false}>
       <div className="mr-md-3 mb-3">
         <label className="mt-2">Search</label>
         <Input
@@ -387,6 +429,70 @@ const ProductTemplateList = () => {
               {category.name}
             </Option>
           ))}
+        </Select>
+      </div>
+      <div className="mr-md-3 mb-3">
+        <label className="mt-2">Medicine Types</label>
+        <Select showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+          className="w-100"
+          style={{ minWidth: 180 }}
+          onChange={(value) => setSelectedMedicineTypeId(value)}
+          // onSelect={handleQuery}
+          value={selectedMedicineTypeId}
+          placeholder="Medicine Types"
+        >
+          <Option value="">All</Option>
+          {medicineTypes.map((medicineType) => (
+            <Option key={medicineType.id} value={medicineType.id}>
+              {medicineType.name}
+            </Option>
+          ))}
+        </Select>
+      </div>
+      <div className="mr-md-3 mb-3">
+        <label className="mt-2">Manufacturers</label>
+        <Select showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+          className="w-100"
+          style={{ minWidth: 180 }}
+          onChange={(value) => setSelectedManufacturerId(value)}
+          // onSelect={handleQuery}
+          value={selectedManufacturerId}
+          placeholder="Manufacturers"
+        >
+          <Option value="">All</Option>
+          {manufacturers.map((man) => (
+            <Option key={man.id} value={man.id}>
+              {man.name}
+            </Option>
+          ))}
+        </Select>
+      </div>
+      <div className="mr-md-3 mb-3">
+        <label className="mt-2">Presecription Required</label>
+        <Select showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+          className="w-100"
+          style={{ minWidth: 180 }}
+          onChange={(value) => setSelectedPrescriptionRequired(value)}
+          // onSelect={handleQuery}
+          value={selectedPrescriptionrequired}
+          placeholder="Prescription Required"
+        >
+          <Option value="">All</Option>
+          <Option value={true}>Yes</Option>
+          <Option value={false}>No</Option>
+          
         </Select>
       </div>
       <div>
@@ -467,7 +573,9 @@ const ProductTemplateList = () => {
       </Modal>
 
       <div className="table-responsive">
-        <Table columns={tableColumns} dataSource={list} rowKey="id" />
+        <Table scroll={{
+            x: true,
+          }} columns={tableColumns} dataSource={list} rowKey="id" />
       </div>
     </Card>
   )
