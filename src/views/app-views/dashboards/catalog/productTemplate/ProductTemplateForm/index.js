@@ -190,7 +190,7 @@ const ProductForm = (props) => {
           productType: data.productType,
           medicineTypeId: data.medicineTypeId,
           medicinePackaging: data.medicinePackaging,
-          manufacturer: data.manufacturer,
+          manufacturerId: data.manufacturerId,
           composition: data.composition,
 
           // productType =============> 'Medicine'
@@ -301,7 +301,7 @@ const ProductForm = (props) => {
             priority: values.priority,
             medicineTypeId: values.medicineTypeId,
             medicinePackaging: values.medicinePackaging,
-            manufacturer: values.manufacturer,
+            manufacturerId: values.manufacturerId,
             minQty: values.minQty,
             slug: values.slug,
             tags: values.tags,

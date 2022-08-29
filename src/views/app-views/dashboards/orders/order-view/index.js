@@ -1,6 +1,6 @@
 import React, { Component, useEffect, useRef, useState } from 'react'
 import { PrinterOutlined } from '@ant-design/icons'
-import { Card, Table, Button, Select, notification, Image } from 'antd'
+import { Card, Table, Button, Select, notification, Image, Modal } from 'antd'
 import { invoiceData } from '../../../pages/invoice/invoiceData'
 import NumberFormat from 'react-number-format'
 import { useParams } from 'react-router-dom'
@@ -9,6 +9,8 @@ import ShipmentCreateForm from './ShipmentCreateForm'
 import Flex from 'components/shared-components/Flex'
 import moment from 'moment'
 import { useReactToPrint } from 'react-to-print'
+import customerService from 'services/customer'
+import PrescriptionSelector from './PrescriptionSelector'
 
 const { Column } = Table
 const { Option } = Select
@@ -17,6 +19,7 @@ const OrderView = () => {
   const [order, setOrder] = useState({})
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [printing, setPrinting] = useState(false)
+  const [isPrescriptionModalOpen, setIsPrescriptionModalOpen] = useState(false)
 
   const componentRef = useRef()
   const handlePrint = useReactToPrint({
@@ -105,9 +108,48 @@ const OrderView = () => {
     }
   }
 
+  const handleOrderStatus = async (value) => {
+    const updatedOrderStatus = await orderService.updateOrderStatus(
+      order.id,
+      value
+    )
+
+    if (updatedOrderStatus) {
+      notification.success({ message: 'Order Status Updated' })
+
+      setTimeout(() => {
+        window.location.reload()
+      }, 2000)
+    }
+  }
+
+  // const getCustomerPrescription = async(value) => {
+  //   await customerService.getCustomerPrescription
+  // }
+
   return (
     <div className="container">
       <Flex justifyContent="end">
+        {order.status === 'Verifying Prescription' && (
+          <Button
+            type="primary"
+            className="mb-4 mr-2"
+            onClick={() => handleOrderStatus('Pending')}
+          >
+            Verify Prescription
+          </Button>
+        )}
+
+        {order?.status === 'Prescriptions Missing' && (
+          <Button
+            type="primary"
+            className="mb-4 mr-2"
+            onClick={() => setIsPrescriptionModalOpen(true)}
+          >
+            Re-Upload Prescription
+          </Button>
+        )}
+
         <Button
           type="primary"
           className="mb-4 mr-2"
@@ -156,7 +198,8 @@ const OrderView = () => {
               </h2>
               <p>
                 Order Date:
-                {moment(parseInt(order?.createdAt)).format('YYYY-MM-DD')}
+                {moment(new Date(order?.createdAt * 1000)).format('DD-MM-YYYY')}
+                {/* {moment(parseInt(order?.createdAt)).format('YYYY-MM-DD')} */}
               </p>
               <p>Status: {order?.status}</p>
               <p>shipping Charge: {order?.shippingCharge}</p>
@@ -184,7 +227,9 @@ const OrderView = () => {
           {order?.prescriptions?.length > 0 && (
             <>
               <p>Prescriptions: </p>
-              <Image width={100} src={order?.prescriptions} />
+              {order?.prescriptions?.map((cur) => (
+                <Image width={100} src={cur} />
+              ))}
             </>
           )}
           <div className="mt-4">
@@ -324,6 +369,21 @@ const OrderView = () => {
         </div> */}
         </Card>
       </div>
+
+      <Modal
+        title="Product Excel Upload"
+        visible={isPrescriptionModalOpen}
+        onCancel={() => {
+          setIsPrescriptionModalOpen(false)
+        }}
+        footer={false}
+      >
+        <PrescriptionSelector
+          orderId={order.id}
+          userId={order.userId}
+          setIsPrescriptionModalOpen={setIsPrescriptionModalOpen}
+        />
+      </Modal>
 
       <ShipmentCreateForm
         setIsFormOpen={setIsFormOpen}

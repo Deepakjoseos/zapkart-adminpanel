@@ -74,10 +74,14 @@ const GeneralField = ({ propsImages, categories, handleChange, form }) => {
               // style={{ width: 300 }}
               // value={props.form.getFieldValue('parentId')}
               // dropdownStyle={dropdownStyle}
+              // showSearch
+              // optionFilterProp="children"
+              // filterOption={(input, option) =>
+              //   option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              // }
               showSearch
-              optionFilterProp="children"
-              filterOption={(input, option) =>
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              filterOption={(inputValue, option) =>
+                option.title.toLowerCase().includes(inputValue.toLowerCase())
               }
               treeData={categories}
               placeholder="Please select parent"
@@ -115,7 +119,7 @@ const GeneralField = ({ propsImages, categories, handleChange, form }) => {
           {/* <Form.Item name="keywords" label="Keywords">
             <Input placeholder="Keywords" />
           </Form.Item> */}
-            <Form.Item name="keywords" label="Keywords">
+          <Form.Item name="keywords" label="Keywords">
             <Select
               dropdownStyle={{ display: 'none' }}
               mode="tags"

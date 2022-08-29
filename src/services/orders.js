@@ -156,6 +156,24 @@ orderService.orderPaymentMethod = async function (data) {
   }
 }
 
+orderService.updateUserOrderPrescriptions = async function (
+  orderId,
+  userId,
+  data
+) {
+  try {
+    const res = await fetch({
+      url: `/order/admin/prescription/${orderId}/${userId}`,
+      method: 'post',
+      data,
+    })
+
+    return res
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
+
 // orderService.getProductById = async function (id) {
 //   try {
 //     const res = await fetch({

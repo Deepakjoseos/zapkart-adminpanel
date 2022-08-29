@@ -62,7 +62,8 @@ const Orders = () => {
   const [selectedStatus, setSelectedStatus] = useState('')
   const [users, setUsers] = useState([])
   const [selectedUserId, setSelectedUserId] = useState(null)
-  const[paymentStatuses,setPaymentStatuses]=useState([])
+  const [paymentStatuses, setPaymentStatuses] = useState([])
+  const [customerPrescriptions, setCustomerPrescriptions] = useState([])
 
   useEffect(() => {
     const getOrders = async () => {
@@ -86,17 +87,12 @@ const Orders = () => {
         setPaymentStatuses(data.PAYMENT.PAYMENT_STATUS)
       }
     }
-    
 
     fetchConstants()
     getOrders()
     getCustomers()
-    console.log('payment_statuses',paymentStatuses)
-
+    console.log('payment_statuses', paymentStatuses)
   }, [])
-  
- 
- 
 
   // const handleShowStatus = (value) => {
   //   if (value !== 'All') {
@@ -122,7 +118,6 @@ const Orders = () => {
       </Menu.Item>
     </Menu>
   )
-
 
   const orderStatuses = [
     'Prescriptions Missing',
@@ -158,6 +153,7 @@ const Orders = () => {
     'Refund Delayed',
     'Refund Completed',
     'Refund Failed',
+    'Verifying Prescription',
   ]
 
   const handleOrderStatusChange = async (value, selectedRow) => {
@@ -179,6 +175,13 @@ const Orders = () => {
       //   value
       // )
       // setList(data)
+    }
+  }
+
+  const getCustomerPrescriptions = async (customerId) => {
+    const data = await customerService.getCustomerPrescription(customerId)
+    if (data) {
+      setCustomerPrescriptions(data.prescriptions)
     }
   }
 
@@ -205,15 +208,7 @@ const Orders = () => {
         </Link>
       ),
     },
-    {
-      title: 'OrderDate',
-      dataIndex: 'createdAt',
-      render: (createdAt) => (
-        <Flex alignItems="center">
-          {moment(parseInt(createdAt)).format('YYYY-MM-DD')}
-        </Flex>
-      ),
-    },
+
     {
       title: 'User Name',
       dataIndex: 'userName',
@@ -231,8 +226,13 @@ const Orders = () => {
     {
       title: 'Total Amount',
       dataIndex: 'totalAmount',
-      render :(totalAmount)=><div><span class="WebRupee">&#x20B9;</span>{totalAmount}</div>,
-      
+      render: (totalAmount) => (
+        <div>
+          <span class="WebRupee">&#x20B9;</span>
+          {totalAmount}
+        </div>
+      ),
+
       sorter: (a, b) => utils.antdTableSorter(a, b, 'totalAmount'),
 
       // render: (items, record) => <div>{items?.length}</div>,
@@ -248,7 +248,7 @@ const Orders = () => {
       dataIndex: 'createdAt',
       render: (createdAt) => (
         <Flex alignItems="center">
-          {moment(parseInt(createdAt)).format('L')}
+          {moment(new Date(createdAt * 1000)).format('DD-MM-YYYY')}
         </Flex>
       ),
       sorter: (a, b) => utils.antdTableSorter(a, b, 'createdAt'),
@@ -293,27 +293,27 @@ const Orders = () => {
       // render: (isUnlimited) => <Flex>{isUnlimited ? 'Yes' : 'No'}</Flex>,
       // sorter: (a, b) => utils.antdTableSorter(a, b, 'approval'),
     },
-    {
-      title: 'Payment status',
-      dataIndex: 'status',
-      render: (status, row) => {
-        return (
-          <Select
-            defaultValue={status}
-            style={{ width: 150 }}
-            onChange={(e) => handleOrderStatusChange(e, row)}
-          >
-            {orderStatuses.map((item) => (
-              <Option key={item} value={item}>
-                {item}
-              </Option>
-            ))}
-          </Select>
-        )
-      },
-      // render: (isUnlimited) => <Flex>{isUnlimited ? 'Yes' : 'No'}</Flex>,
-      // sorter: (a, b) => utils.antdTableSorter(a, b, 'approval'),
-    },
+    // {
+    //   title: 'Payment status',
+    //   dataIndex: 'status',
+    //   render: (status, row) => {
+    //     return (
+    //       <Select
+    //         defaultValue={status}
+    //         style={{ width: 150 }}
+    //         onChange={(e) => handleOrderStatusChange(e, row)}
+    //       >
+    //         {orderStatuses.map((item) => (
+    //           <Option key={item} value={item}>
+    //             {item}
+    //           </Option>
+    //         ))}
+    //       </Select>
+    //     )
+    //   },
+    //   // render: (isUnlimited) => <Flex>{isUnlimited ? 'Yes' : 'No'}</Flex>,
+    //   // sorter: (a, b) => utils.antdTableSorter(a, b, 'approval'),
+    // },
     {
       title: 'Payment status',
       dataIndex: 'payment',
@@ -427,7 +427,8 @@ const Orders = () => {
           </div>
           <div className="mr-md-3 mb-3">
             <label className="mt-2">Customers</label>
-            <Select showSearch
+            <Select
+              showSearch
               optionFilterProp="children"
               filterOption={(input, option) =>
                 option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
@@ -489,7 +490,8 @@ const Orders = () => {
         </Button>
       </div>
       <div className="table-responsive">
-        <Table  scroll={{
+        <Table
+          scroll={{
             x: true,
           }}
           columns={tableColumns}
