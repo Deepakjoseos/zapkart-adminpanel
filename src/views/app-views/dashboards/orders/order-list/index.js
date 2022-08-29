@@ -95,8 +95,7 @@ const Orders = () => {
     fetchConstants()
     getOrders()
     getCustomers()
-    console.log('payment_statuses',paymentStatuses)
-
+    console.log('payment_statuses', paymentStatuses)
   }, [])
   console.log('order Status',orderStatuses)
   
@@ -188,7 +187,13 @@ const Orders = () => {
   }
 const handlePaymentStatusChange = () =>{
 
-}
+  const getCustomerPrescriptions = async (customerId) => {
+    const data = await customerService.getCustomerPrescription(customerId)
+    if (data) {
+      setCustomerPrescriptions(data.prescriptions)
+    }
+  }
+
   const cancelOrder = async (orderId) => {
     notification.warning({ message: 'Order Cancelling...' })
     const cancelOrder = await orderService.cancelOrder(orderId)
@@ -212,15 +217,7 @@ const handlePaymentStatusChange = () =>{
         </Link>
       ),
     },
-    {
-      title: 'OrderDate',
-      dataIndex: 'createdAt',
-      render: (createdAt) => (
-        <Flex alignItems="center">
-          {moment(parseInt(createdAt)).format('YYYY-MM-DD')}
-        </Flex>
-      ),
-    },
+
     {
       title: 'User Name',
       dataIndex: 'userName',
@@ -238,8 +235,13 @@ const handlePaymentStatusChange = () =>{
     {
       title: 'Total Amount',
       dataIndex: 'totalAmount',
-      render :(totalAmount)=><div><span class="WebRupee">&#x20B9;</span>{totalAmount}</div>,
-      
+      render: (totalAmount) => (
+        <div>
+          <span class="WebRupee">&#x20B9;</span>
+          {totalAmount}
+        </div>
+      ),
+
       sorter: (a, b) => utils.antdTableSorter(a, b, 'totalAmount'),
 
       // render: (items, record) => <div>{items?.length}</div>,
@@ -255,7 +257,7 @@ const handlePaymentStatusChange = () =>{
       dataIndex: 'createdAt',
       render: (createdAt) => (
         <Flex alignItems="center">
-          {moment(parseInt(createdAt)).format('L')}
+          {moment(new Date(createdAt * 1000)).format('DD-MM-YYYY')}
         </Flex>
       ),
       sorter: (a, b) => utils.antdTableSorter(a, b, 'createdAt'),
@@ -441,7 +443,8 @@ const handlePaymentStatusChange = () =>{
           </div>
           <div className="mr-md-3 mb-3">
             <label className="mt-2">Customers</label>
-            <Select showSearch
+            <Select
+              showSearch
               optionFilterProp="children"
               filterOption={(input, option) =>
                 option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
@@ -503,7 +506,8 @@ const handlePaymentStatusChange = () =>{
         </Button>
       </div>
       <div className="table-responsive">
-        <Table  scroll={{
+        <Table
+          scroll={{
             x: true,
           }}
           columns={tableColumns}

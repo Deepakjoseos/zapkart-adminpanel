@@ -219,12 +219,15 @@ const GeneralField = ({
               <Option value="Hold">Hold</Option>
             </Select>
           </Form.Item>
-          <Form.Item name="brandId" label="Brand" >
-            <Select placeholder="Brand" showSearch
+          <Form.Item name="brandId" label="Brand">
+            <Select
+              placeholder="Brand"
+              showSearch
               optionFilterProp="children"
               filterOption={(input, option) =>
                 option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }>
+              }
+            >
               {brands.map((brand) => (
                 <Option key={brand.id} value={brand.id}>
                   {brand.name}
@@ -237,12 +240,11 @@ const GeneralField = ({
             label="Category"
             rules={rules.categoryId}
           >
-            <TreeSelect 
-             showSearch
-            //  optionFilterProp="children"
-            //  filterOption={(input, option) =>
-            //    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-            //  }
+            <TreeSelect
+              showSearch
+              filterOption={(inputValue, option) =>
+                option.title.toLowerCase().includes(inputValue.toLowerCase())
+              }
               treeData={categories}
               placeholder="Please select Category"
               treeDefaultExpandAll
@@ -250,15 +252,19 @@ const GeneralField = ({
           </Form.Item>
           {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
             <Form.Item
-              name="manufacturer"
+              name="manufacturerId"
               label="Manufacturer"
               rules={rules.manufacturer}
             >
-              <Select placeholder="Manufacturer" showSearch
-              optionFilterProp="children"
-              filterOption={(input, option) =>
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }>
+              <Select
+                placeholder="Manufacturer"
+                showSearch
+                optionFilterProp="children"
+                filterOption={(input, option) =>
+                  option.children.toLowerCase().indexOf(input.toLowerCase()) >=
+                  0
+                }
+              >
                 {manufacturers.map((manufacturer) => (
                   <Option key={manufacturer.id} value={manufacturer.id}>
                     {manufacturer.name}
@@ -317,13 +323,14 @@ const GeneralField = ({
             rules={rules.allowedPaymentTypes}
           >
             <Select
-              mode="multiple" optionFilterProp="children"
+              mode="multiple"
+              optionFilterProp="children"
               filterOption={(input, option) =>
                 option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
               }
               allowClear
               style={{ width: '100%' }}
-              placeholder="Allowed Payment Types" 
+              placeholder="Allowed Payment Types"
             >
               <Option key="Cod" value="Cod">
                 Cod
@@ -437,11 +444,14 @@ const GeneralField = ({
                             name={[field.name, 'id']}
                             fieldKey={[field.fieldKey, 'id']}
                           >
-                            <Select showSearch
-              optionFilterProp="children"
-              filterOption={(input, option) =>
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }
+                            <Select
+                              showSearch
+                              optionFilterProp="children"
+                              filterOption={(input, option) =>
+                                option.children
+                                  .toLowerCase()
+                                  .indexOf(input.toLowerCase()) >= 0
+                              }
                               placeholder="Composition"
                               onChange={() => onCompositionChange()}
                             >
@@ -462,10 +472,7 @@ const GeneralField = ({
                             name={[field.name, 'qty']}
                             fieldKey={[field.fieldKey, 'qty']}
                           >
-                            <Input
-                            
-                             placeholder="Qty"
-                            />
+                            <Input placeholder="Qty" />
                           </Form.Item>
                           <MinusCircleOutlined
                             onClick={() => {
@@ -497,11 +504,13 @@ const GeneralField = ({
               label="ProductType"
               rules={rules.productType}
             >
-              <Select showSearch
-              optionFilterProp="children"
-              filterOption={(input, option) =>
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }
+              <Select
+                showSearch
+                optionFilterProp="children"
+                filterOption={(input, option) =>
+                  option.children.toLowerCase().indexOf(input.toLowerCase()) >=
+                  0
+                }
                 placeholder="Product Type"
                 onChange={(e) => setProductType(e)}
               >
@@ -683,7 +692,7 @@ const GeneralField = ({
           <Form.Item name="slug" label="Slug" rules={rules.slug}>
             <Input placeholder="Slug" />
           </Form.Item>
-         
+
           <Form.Item name="tags" label="Tags">
             <Select
               dropdownStyle={{ display: 'none' }}
