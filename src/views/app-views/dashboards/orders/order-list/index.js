@@ -62,8 +62,9 @@ const Orders = () => {
   const [selectedStatus, setSelectedStatus] = useState('')
   const [users, setUsers] = useState([])
   const [selectedUserId, setSelectedUserId] = useState(null)
-  const[paymentStatuses,setPaymentStatuses]=useState([])
-  const[orderStatuses,setOrderStatuses]= useState([])
+  const [paymentStatuses, setPaymentStatuses] = useState([])
+  const [orderStatuses, setOrderStatuses] = useState([])
+  const [customerPrescriptions, setCustomerPrescriptions] = useState([])
 
   useEffect(() => {
     const getOrders = async () => {
@@ -85,22 +86,17 @@ const Orders = () => {
       const data = await constantsService.getConstants()
       if (data) {
         // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
-        setOrderStatuses( Object.values(data.ORDER['ORDER_STATUS']))
+        setOrderStatuses(Object.values(data.ORDER['ORDER_STATUS']))
         setPaymentStatuses(Object.values(data.PAYMENT['PAYMENT_STATUS']))
-
       }
     }
-    
-  
+
     fetchConstants()
     getOrders()
     getCustomers()
     console.log('payment_statuses', paymentStatuses)
   }, [])
-  console.log('order Status',orderStatuses)
-  
- 
- 
+  console.log('order Status', orderStatuses)
 
   // const handleShowStatus = (value) => {
   //   if (value !== 'All') {
@@ -126,7 +122,6 @@ const Orders = () => {
       </Menu.Item>
     </Menu>
   )
-
 
   // const orderStatuses = [
   //   'Prescriptions Missing',
@@ -185,7 +180,7 @@ const Orders = () => {
       // setList(data)
     }
   }
-const handlePaymentStatusChange = () =>{
+  const handlePaymentStatusChange = () => {}
 
   const getCustomerPrescriptions = async (customerId) => {
     const data = await customerService.getCustomerPrescription(customerId)
@@ -303,11 +298,11 @@ const handlePaymentStatusChange = () =>{
       // sorter: (a, b) => utils.antdTableSorter(a, b, 'approval'),
     },
     {
-      title:'Payment Status',
-      dataIndex:'payment',
-      render:(payment)=>{
-        return <Flex alignItems='centre'>{payment?.status}</Flex>
-      }
+      title: 'Payment Status',
+      dataIndex: 'payment',
+      render: (payment) => {
+        return <Flex alignItems="centre">{payment?.status}</Flex>
+      },
     },
     // {
     //   title: 'Payment status',
