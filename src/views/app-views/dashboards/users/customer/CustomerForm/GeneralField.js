@@ -21,7 +21,7 @@ const rules = {
   ],
 }
 
-const GeneralField = ({ propsDisplayImages }) => (
+const GeneralField = ({ propsDisplayImages, mode }) => (
   <Row gutter={16}>
     <Col xs={24} sm={24} md={17}>
       <Card title="Basic Info">
@@ -31,21 +31,62 @@ const GeneralField = ({ propsDisplayImages }) => (
         <Form.Item name="lastName" label="Last Name" rules={rules.lastName}>
           <Input placeholder="Last Name" />
         </Form.Item>
-        <Form.Item
-          name="email"
-          label="Email"
-          hasFeedback
-          validateStatus="success"
-        >
-          <Input disabled id="success" />
-        </Form.Item>
+        {mode === 'EDIT' ?
+
+          <Form.Item
+            name="email"
+            label="Email"
+            hasFeedback
+            validateStatus="success"
+          >
+            <Input disabled id="success" />
+            <Form.Item name="phone" label="Phone">
+              <Input disabled />
+            </Form.Item>
+          </Form.Item>
+          : ""}
+
+        {mode === 'ADD' ?
+          <>
+            <Form.Item
+              name="email"
+              label="Email"
+              hasFeedback
+              validateStatus="success"
+            >
+              <Input id="success" placeholder='Email' />
+            </Form.Item>
+            <Form.Item name="phone" label="Phone" placeholder='Phone'>
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Password"
+              name="password"
+              rules={rules.password}
+            >
+              <Input.Password />
+            </Form.Item>
+            <Form.Item name="status" label="Status" rules={rules.status}>
+              <Select placeholder="Status">
+                <Option value="Active">Active</Option>
+                <Option value="Hold">Hold</Option>
+              </Select>
+            </Form.Item>
+            <Form.Item name="emailVerified" label="Email Verified" rules={rules.status}>
+              <Select placeholder="Email Verified">
+                <Option value={true}>Yes</Option>
+                <Option value={false}>NO</Option>
+              </Select>
+            </Form.Item>
+          </>
+
+
+          : ""}
 
         {/* <Form.Item >
           <Input disabled />
         </Form.Item> */}
-        <Form.Item name="phone" label="Phone">
-          <Input disabled />
-        </Form.Item>
+
       </Card>
     </Col>
     <Col xs={24} sm={24} md={7}>

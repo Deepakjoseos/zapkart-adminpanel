@@ -239,6 +239,11 @@ const ProductList = () => {
       dataIndex: 'name',
       sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
     },
+    {
+      title: 'Commission',
+      dataIndex: 'commission',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'commission'),
+    },
 
     // {
     //   title: 'MRP Price',

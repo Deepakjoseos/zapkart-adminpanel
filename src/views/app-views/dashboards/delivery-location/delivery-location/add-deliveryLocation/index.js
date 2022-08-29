@@ -1,8 +1,8 @@
 import React from 'react'
 import DeliveryLocationForm from '../DeliveryLocationForm'
 
-const AddProduct = () => {
+const AddDeliveryLocation = () => {
   return <DeliveryLocationForm mode="ADD" />
 }
 
-export default AddProduct
+export default AddDeliveryLocation

@@ -155,7 +155,7 @@ const GeneralField = ({ propsImages, categories, handleChange, form }) => {
           >
             <CustomIcon className="display-3" svg={ImageSvg} />
           </Upload>
-          size: 100 * 100
+          size: 100px * 100px
         </Card>
       </Col>
     </Row>

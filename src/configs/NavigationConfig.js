@@ -39,7 +39,13 @@ import {
   CheckSquareOutlined,
   MedicineBoxOutlined,
   BuildOutlined,
-  DeliveredProcedureOutlined
+  DeliveredProcedureOutlined,
+  ExperimentOutlined,
+  ShoppingFilled,
+  ShopOutlined,
+  FileImageOutlined,
+  SafetyCertificateOutlined
+  
   
 } from '@ant-design/icons'
 import { APP_PREFIX_PATH, AUTH_PREFIX_PATH } from 'configs/AppConfig'
@@ -223,7 +229,7 @@ const dashBoardNavTree = [
             key: 'dashboards-catalog-brands',
             path: `${APP_PREFIX_PATH}/dashboards/catalog/brand/brands-list`,
             title: 'Brands',
-            icon: VerifiedOutlined,
+            icon: SafetyCertificateOutlined,
             breadcrumb: false,
             submenu: [],
           },
@@ -232,7 +238,7 @@ const dashBoardNavTree = [
             key: 'dashboards-catalog-banner',
             path: `${APP_PREFIX_PATH}/dashboards/catalog/banner/banner-list`,
             title: 'Banner',
-            icon: BorderOutlined,
+            icon: FileImageOutlined,
             breadcrumb: false,
             submenu: [],
           },
@@ -248,7 +254,7 @@ const dashBoardNavTree = [
             key: 'dashboards-catalog-producttemplate',
             path: `${APP_PREFIX_PATH}/dashboards/catalog/producttemplate/producttemplate-list`,
             title: 'Product Template',
-            icon: AlignCenterOutlined,
+            icon: ShopOutlined,
             breadcrumb: false,
             submenu: [],
           },
@@ -256,7 +262,7 @@ const dashBoardNavTree = [
             key: 'dashboards-catalog-product',
             path: `${APP_PREFIX_PATH}/dashboards/catalog/product/product-list`,
             title: 'Product',
-            icon: CheckSquareOutlined,
+            icon: ShoppingFilled,
             breadcrumb: false,
             submenu: [],
           },
@@ -337,19 +343,38 @@ const dashBoardNavTree = [
         key: 'dashboards-orders',
         path: `${APP_PREFIX_PATH}/dashboards/orders/orders-list`,
         title: 'Orders',
-        icon: BorderOuterOutlined ,
+        icon: ShoppingCartOutlined ,
         breadcrumb: false,
         submenu: [],
       },
 
       {
         key: 'dashboards-deliverylocation',
-        path: `${APP_PREFIX_PATH}/dashboards/deliverylocation/deliverylocation-list`,
+        path: `${APP_PREFIX_PATH}/dashboards/deliverylocation`,
         title: 'Delivery Location',
         icon: DeliveredProcedureOutlined,
         breadcrumb: false,
-        submenu: [],
+        submenu: [
+          {
+            key: 'dashboards-deliverylocation-deliverylocation',
+            path: `${APP_PREFIX_PATH}/dashboards/deliverylocation/deliverylocation/deliverylocation-list`,
+            title: 'Delivery Locations',
+            icon: DeliveredProcedureOutlined,
+            breadcrumb: false,
+            submenu: [],
+          },
+          {
+            key: 'dashboards-deliverylocation-deliveryzones',
+            path: `${APP_PREFIX_PATH}/dashboards/deliverylocation/deliveryzone/deliveryzones-list`,
+            title: 'Delivery zones',
+            icon: DeliveredProcedureOutlined,
+            breadcrumb: false,
+            submenu: [],
+          },
+          
+        ],
       },
+      
       {
         key: 'dashboards-widget',
         path: `${APP_PREFIX_PATH}/dashboards/widget/widget-list`,
@@ -443,7 +468,7 @@ if (process.env.REACT_APP_SITE_NAME === 'zapkart') {
     key: 'dashboards-catalog-composition',
     path: `${APP_PREFIX_PATH}/dashboards/catalog/composition/composition-list`,
     title: 'Composition',
-    icon: FormatPainterOutlined,
+    icon: ExperimentOutlined,
     breadcrumb: false,
     submenu: [],
   })

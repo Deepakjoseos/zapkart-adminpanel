@@ -21,7 +21,7 @@ const rules = {
   ],
 }
 
-const GeneralField = ({ propsDisplayImages, form }) => (
+const GeneralField = ({ propsDisplayImages, form, mode }) => (
   <Row gutter={16}>
     <Col xs={24} sm={24} md={17}>
       <Card title="Basic Info">
@@ -39,10 +39,48 @@ const GeneralField = ({ propsDisplayImages, form }) => (
         <Form.Item name="tanNumber" label="Tan Number" rules={rules.tanNumber}>
           <Input placeholder="Tan Number" />
         </Form.Item>
-
-        <Form.Item name="email" label="Email">
-          <Input disabled />
+        <Form.Item name="pan" label="PAN" rules={rules.pan}>
+          <Input placeholder="Pan Number" />
         </Form.Item>
+        
+        {mode === 'ADD' ?
+       <>
+          <Form.Item name="status" label="Status" rules={rules.status}>
+            <Select placeholder="Status">
+              <Option value={true}>Active</Option>
+              <Option value={false}>Hold</Option>
+            </Select>
+          </Form.Item>
+           <Form.Item name="emailVerified" label="Emal Verifies" rules={rules.status}>
+           <Select placeholder="Email Verified">
+             <Option value={true}>Yes</Option>
+             <Option value={false}>No</Option>
+           </Select>
+         </Form.Item>
+         <Form.Item name="phone" label="Phone" rules={rules.pan}>
+          <Input placeholder="Phone" />
+        </Form.Item>
+        <Form.Item
+              label="Password"
+              name="password"
+              rules={rules.password}
+            >
+              <Input.Password />
+              </Form.Item>f
+        
+          
+        <Form.Item name="email" label="Email">
+          <Input />
+        </Form.Item>
+        </>
+          : ""}
+
+    {mode=== 'EDIT' ?
+     <Form.Item name="email" label="Email">
+     <Input disabled />
+   </Form.Item> :""}
+       
+
 
         {/* <Form.Item >
           <Input disabled />

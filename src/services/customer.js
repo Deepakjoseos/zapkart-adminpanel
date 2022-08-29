@@ -78,6 +78,18 @@ customerService.updateCustomerPrescription = async function (id, data) {
     console.log(err, 'show-err')
   }
 }
+customerService.addCustomer = async function (data) {
+  try {
+    const res = await fetch({
+      url: `${apiRoute}`,
+      method: 'post',
+      data: data,
+    })
+    return res
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
 
 customerService.addAddress = async function (customerId, data) {
   try {
@@ -91,6 +103,7 @@ customerService.addAddress = async function (customerId, data) {
     console.log(err, 'show-err')
   }
 }
+
 
 customerService.editAddress = async function (customerId, addressId, data) {
   try {

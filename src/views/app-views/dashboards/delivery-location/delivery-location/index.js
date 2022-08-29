@@ -1,8 +1,8 @@
 import React from 'react'
 import { Route, Switch, Redirect } from 'react-router-dom'
-import DeliveryLocationList from './deliveryLocation-list'
+import DeliveryLocationList from './deliverylocation-list'
 import AddDeliveryLocation from './add-deliveryLocation'
-import EditDeliveryLocation from './edit-deliveryLocation'
+import EditDeliveryLocation from './edit-delivery-location'
 // import Orders from './orders'
 
 const DeliveryLocation = (props) => {
@@ -31,3 +31,5 @@ const DeliveryLocation = (props) => {
 }
 
 export default DeliveryLocation
+
+

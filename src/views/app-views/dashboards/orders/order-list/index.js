@@ -62,8 +62,8 @@ const Orders = () => {
   const [selectedStatus, setSelectedStatus] = useState('')
   const [users, setUsers] = useState([])
   const [selectedUserId, setSelectedUserId] = useState(null)
-  const [paymentStatuses, setPaymentStatuses] = useState([])
-  const [customerPrescriptions, setCustomerPrescriptions] = useState([])
+  const[paymentStatuses,setPaymentStatuses]=useState([])
+  const[orderStatuses,setOrderStatuses]= useState([])
 
   useEffect(() => {
     const getOrders = async () => {
@@ -84,15 +84,23 @@ const Orders = () => {
     const fetchConstants = async () => {
       const data = await constantsService.getConstants()
       if (data) {
-        setPaymentStatuses(data.PAYMENT.PAYMENT_STATUS)
+        // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
+        setOrderStatuses( Object.values(data.ORDER['ORDER_STATUS']))
+        setPaymentStatuses(Object.values(data.PAYMENT['PAYMENT_STATUS']))
+
       }
     }
-
+    
+  
     fetchConstants()
     getOrders()
     getCustomers()
     console.log('payment_statuses', paymentStatuses)
   }, [])
+  console.log('order Status',orderStatuses)
+  
+ 
+ 
 
   // const handleShowStatus = (value) => {
   //   if (value !== 'All') {
@@ -119,42 +127,42 @@ const Orders = () => {
     </Menu>
   )
 
-  const orderStatuses = [
-    'Prescriptions Missing',
-    'Pending',
-    'Received',
-    'Confirmed',
-    'Shipping Soon',
-    'Shipped',
-    'Shipment Delayed',
-    'Arriving Early',
-    'Out for Delivery',
-    'Delivery Refused by Customer',
-    'Delivery Rescheduled',
-    'Delivered',
-    'Shipment Failed',
-    'Items damaged during transit',
-    'and being returned back to us',
-    'Payment Failed',
-    'Cancelled',
-    'Attempting Cancellation',
-    'Return Requested',
-    'Return Initiated',
-    'Return Rescheduled',
-    'Return Completed',
-    'Items Returning Back',
-    'Return Delayed',
-    'Return Items Received',
-    'Return Items Verification Failed',
-    'Return Items Verification Completed',
-    'Return Failed',
-    'Return Cancelled',
-    'Refund Initiated',
-    'Refund Delayed',
-    'Refund Completed',
-    'Refund Failed',
-    'Verifying Prescription',
-  ]
+
+  // const orderStatuses = [
+  //   'Prescriptions Missing',
+  //   'Pending',
+  //   'Received',
+  //   'Confirmed',
+  //   'Shipping Soon',
+  //   'Shipped',
+  //   'Shipment Delayed',
+  //   'Arriving Early',
+  //   'Out for Delivery',
+  //   'Delivery Refused by Customer',
+  //   'Delivery Rescheduled',
+  //   'Delivered',
+  //   'Shipment Failed',
+  //   'Items damaged during transit',
+  //   'and being returned back to us',
+  //   'Payment Failed',
+  //   'Cancelled',
+  //   'Attempting Cancellation',
+  //   'Return Requested',
+  //   'Return Initiated',
+  //   'Return Rescheduled',
+  //   'Return Completed',
+  //   'Items Returning Back',
+  //   'Return Delayed',
+  //   'Return Items Received',
+  //   'Return Items Verification Failed',
+  //   'Return Items Verification Completed',
+  //   'Return Failed',
+  //   'Return Cancelled',
+  //   'Refund Initiated',
+  //   'Refund Delayed',
+  //   'Refund Completed',
+  //   'Refund Failed',
+  // ]
 
   const handleOrderStatusChange = async (value, selectedRow) => {
     const updatedOrderStatus = await orderService.updateOrderStatus(
@@ -177,6 +185,7 @@ const Orders = () => {
       // setList(data)
     }
   }
+const handlePaymentStatusChange = () =>{
 
   const getCustomerPrescriptions = async (customerId) => {
     const data = await customerService.getCustomerPrescription(customerId)
@@ -282,7 +291,7 @@ const Orders = () => {
             style={{ width: 150 }}
             onChange={(e) => handleOrderStatusChange(e, row)}
           >
-            {orderStatuses.map((item) => (
+            {orderStatuses?.map((item) => (
               <Option key={item} value={item}>
                 {item}
               </Option>
@@ -293,6 +302,13 @@ const Orders = () => {
       // render: (isUnlimited) => <Flex>{isUnlimited ? 'Yes' : 'No'}</Flex>,
       // sorter: (a, b) => utils.antdTableSorter(a, b, 'approval'),
     },
+    {
+      title:'Payment Status',
+      dataIndex:'payment',
+      render:(payment)=>{
+        return <Flex alignItems='centre'>{payment?.status}</Flex>
+      }
+    },
     // {
     //   title: 'Payment status',
     //   dataIndex: 'status',
@@ -301,9 +317,9 @@ const Orders = () => {
     //       <Select
     //         defaultValue={status}
     //         style={{ width: 150 }}
-    //         onChange={(e) => handleOrderStatusChange(e, row)}
+    //         onChange={(e) => handlePaymentStatusChange(e, row)}
     //       >
-    //         {orderStatuses.map((item) => (
+    //         {paymentStatuses?.map((item) => (
     //           <Option key={item} value={item}>
     //             {item}
     //           </Option>
@@ -314,17 +330,17 @@ const Orders = () => {
     //   // render: (isUnlimited) => <Flex>{isUnlimited ? 'Yes' : 'No'}</Flex>,
     //   // sorter: (a, b) => utils.antdTableSorter(a, b, 'approval'),
     // },
-    {
-      title: 'Payment status',
-      dataIndex: 'payment',
-      render: (payment, record) => (
-        <>
-          {/* <Badge status={getPaymentStatus(record.paymentStatus)} /> */}
-          <span>{payment.completed ? 'Completed' : 'Not Completed'}</span>
-        </>
-      ),
-      // sorter: (a, b) => utils.antdTableSorter(a, b, 'paymentStatus'),
-    },
+    // {
+    //   title: 'Payment status',
+    //   dataIndex: 'payment',
+    //   render: (payment, record) => (
+    //     <>
+    //       {/* <Badge status={getPaymentStatus(record.paymentStatus)} /> */}
+    //       <span>{payment.completed ? 'Completed' : 'Not Completed'}</span>
+    //     </>
+    //   ),
+    //   // sorter: (a, b) => utils.antdTableSorter(a, b, 'paymentStatus'),
+    // },
 
     {
       title: '',
@@ -418,7 +434,7 @@ const Orders = () => {
               placeholder="Status"
             >
               <Option value="">All</Option>
-              {orderStatuses.map((status) => (
+              {orderStatuses?.map((status) => (
                 <Option key={status} value={status}>
                   {status}
                 </Option>
