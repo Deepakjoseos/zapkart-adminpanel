@@ -1,11 +1,6 @@
 import React from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
 
-
-import React from 'react'
-import { Redirect, Route, Switch } from 'react-router-dom'
-import PickupLocation from './pickupLocation'
-import Shipment from './shipment'
 import DeliveryZone from './deliveryzone'
 import DeliveryLocation from './delivery-location'
 

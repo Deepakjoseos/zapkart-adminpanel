@@ -37,7 +37,7 @@ const GeneralField = ({
   form,
   deliveryLocations,
   setIsFinalTrue,
-  isFinalTrue,
+  isFinalTrue,userGroups
 }) => (
   <Card title="Basic Info">
     <Form.Item name="name" label="Name" rules={rules.name}>
@@ -63,16 +63,16 @@ const GeneralField = ({
     </Form.Item>
 
     <Form.Item name="parentId" label="Parent" >
-      <TreeSelect placeholder="Parent"  showSearch searchable drop-down
+      <TreeSelect placeholder="Parent"  showSearch 
               optionFilterProp="children"
               filterOption={(input, option) =>
                 option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }>
-        {deliveryLocations.map((cur) => (
+              } treeData={deliveryLocations} treeDefaultExpandAll>
+         {deliveryLocations.map((cur) => (
           <Option value={cur.id} key={cur.id}>
             {cur.name}
           </Option>
-        ))}
+        ))} 
       </TreeSelect>
     </Form.Item>
   </Card>

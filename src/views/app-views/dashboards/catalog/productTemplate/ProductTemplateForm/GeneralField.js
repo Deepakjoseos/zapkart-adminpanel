@@ -273,7 +273,12 @@ const GeneralField = ({
               </Select>
             </Form.Item>
           )}
+          <Form.Item  name="commission"
+              label="Vendor Commission"
+              rules={rules.commission}>
+                <Input placeholder='Vendor Commission'/>
 
+          </Form.Item>
           {/* <Form.Item
           name="productType"
           label="Product Type"

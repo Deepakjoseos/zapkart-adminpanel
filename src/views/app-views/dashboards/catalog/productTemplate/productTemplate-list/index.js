@@ -116,12 +116,17 @@ const ProductTemplateList = () => {
     if ((selectedBrandId || selectedBrandId) !== 'All')
       query.brandId = selectedBrandId
     query.categoryId = selectedCategoryId
+ 
+
+    query.medicineTypeId=selectedMedicineTypeId
     query.manufacturerId=selectedManufacturerId
     query.prescriptionRequired=selectedPrescriptionrequired
     console.log('medicineTypeId',selectedMedicineTypeId)
     console.log('manufacturerId',selectedManufacturerId)
+    console.log('prescription Required',selectedPrescriptionrequired)
 
-    query.medicineTypeId=selectedMedicineTypeId
+
+
     console.log('query', query)
     const data = await productTemplate.getProductTemplates(query)
     if (data) {
@@ -243,6 +248,11 @@ const ProductTemplateList = () => {
       // sorter: (a, b) => utils.antdTableSorter(a, b, 'brand.name'),
     },
     {
+      title: 'Vendor Commission',
+      dataIndex: 'commission',
+      
+    },
+    {
       title: 'Category',
       dataIndex: 'category',
       render: (category) => <Flex alignItems="center">{category?.name}</Flex>,
@@ -273,7 +283,7 @@ const ProductTemplateList = () => {
       render: (status, row) => {
         return (
           <Select
-            defaultValue={status.charAt(0).toUpperCase() + status.slice(1)}
+            // defaultValue={status.charAt(0).toUpperCase() + status.slice(1)}
             // style={{ width: 120 }}
             onChange={(e) => handleStatusChange(e, row)}
           >
@@ -490,8 +500,8 @@ const ProductTemplateList = () => {
           placeholder="Prescription Required"
         >
           <Option value="">All</Option>
-          <Option value={true}>Yes</Option>
-          <Option value={false}>No</Option>
+          <Option value="Yes">Yes</Option>
+          <Option value="No">No</Option>
           
         </Select>
       </div>

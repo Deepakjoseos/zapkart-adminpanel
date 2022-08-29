@@ -14,6 +14,8 @@ import { useHistory } from 'react-router-dom'
 import utils from 'utils'
 import deliveryLocationService from 'services/deliveryLocation'
 import vendorService from 'services/vendor'
+import deliveryLocation from 'services/deliveryZone'
+import deliveryzoneService from 'services/deliveryZone'
 
 const { Option } = Select
 
@@ -43,10 +45,11 @@ const DeliveryZonesList = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
   const [vendors,setVendors] = useState(null)
   const [selectedVendorId,setSelectedVendorId]= useState(null)
+  const [selectedStatus,setSelectedStatus] = useState(null)
 
   useEffect(() => {
     const getDeliveryZones = async () => {
-      const data = await deliveryLocationService.getDeliveryZones()
+      const data = await deliveryzoneService.getDeliveryZones()
       if (data) {
         setList(data)
         setSearchBackupList(data)
@@ -86,7 +89,9 @@ const DeliveryZonesList = () => {
   )
 
   const addProduct = () => {
+    // history.push(`/app/dashboards/deliverylocation/deliveryzone/add-deliveryzone`)
     history.push(`/app/dashboards/deliverylocation/deliveryzone/add-deliveryzone`)
+
   }
 
   const viewDetails = (row) => {
@@ -121,18 +126,18 @@ const DeliveryZonesList = () => {
 
   const tableColumns = [
     {
-      title: 'Deliverylocation',
+      title: 'DeliveryZone',
       dataIndex: 'name',
       sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
     },
-    {
-      title: 'isFinal',
-      dataIndex: 'isFinal',
-      render: (isFinal) => (
-        <Flex alignItems="center">{isFinal ? 'Yes' : 'No'}</Flex>
-      ),
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'isFinal'),
-    },
+    // {
+    //   title: 'isFinal',
+    //   dataIndex: 'isFinal',
+    //   render: (isFinal) => (
+    //     <Flex alignItems="center">{isFinal ? 'Yes' : 'No'}</Flex>
+    //   ),
+    //   sorter: (a, b) => utils.antdTableSorter(a, b, 'isFinal'),
+    // },
     {
       title: 'Status',
       dataIndex: 'status',
@@ -141,13 +146,13 @@ const DeliveryZonesList = () => {
       ),
       sorter: (a, b) => utils.antdTableSorter(a, b, 'status'),
     },
-    {
-      title: 'Parent',
-      dataIndex: 'parentId',
-      render: (parentId) => (
-        <Flex alignItems="center">{getParentName(parentId)}</Flex>
-      ),
-    },
+    // {
+    //   title: 'Parent',
+    //   dataIndex: 'parentId',
+    //   render: (parentId) => (
+    //     <Flex alignItems="center">{getParentName(parentId)}</Flex>
+    //   ),
+    // },
 
     {
       title: '',
@@ -171,8 +176,9 @@ const DeliveryZonesList = () => {
     const query = {}
     if ((selectedVendorId) !== 'All')
       query.vendorId = selectedVendorId
+      query.status=selectedStatus
   
-    const data = await deliveryLocationService.getDeliveryLocations(query)
+    const data = await deliveryLocation.getDeliveryZones(query)
     if (data) {
       setList(data)
       setSearchBackupList(data)
@@ -210,7 +216,10 @@ const DeliveryZonesList = () => {
       </div>
       <div className="mr-md-3 mb-3">
       <label className='mt-2'>Status</label>
-        <Select
+        <Select  
+        // onChange={(value) => setSelectedStatus(value)}
+          // onSelect={handleQuery}
+          // value={selectedStatus}
           defaultValue="All"
           className="w-100"
           style={{ minWidth: 180 }}

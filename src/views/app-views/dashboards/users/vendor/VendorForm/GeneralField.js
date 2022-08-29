@@ -51,7 +51,7 @@ const GeneralField = ({ propsDisplayImages, form, mode }) => (
               <Option value={false}>Hold</Option>
             </Select>
           </Form.Item>
-           <Form.Item name="emailVerified" label="Emal Verifies" rules={rules.status}>
+           <Form.Item name="emailVerified" label="Emal Verified" rules={rules.status}>
            <Select placeholder="Email Verified">
              <Option value={true}>Yes</Option>
              <Option value={false}>No</Option>
@@ -66,7 +66,7 @@ const GeneralField = ({ propsDisplayImages, form, mode }) => (
               rules={rules.password}
             >
               <Input.Password />
-              </Form.Item>f
+              </Form.Item>
         
           
         <Form.Item name="email" label="Email">

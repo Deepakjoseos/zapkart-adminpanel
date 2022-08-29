@@ -7,6 +7,9 @@ import { singleImageUploader } from 'utils/s3/s3ImageUploader'
 import deliveryLocationService from 'services/deliveryLocation'
 import Utils from 'utils'
 import { useHistory } from 'react-router-dom'
+import deliveryLocation from 'services/deliveryZone'
+import deliveryzoneService from 'services/deliveryZone'
+import vendorService from 'services/vendor'
 import userGroupService from 'services/userGroup'
 
 const { TabPane } = Tabs
@@ -14,7 +17,7 @@ const { TabPane } = Tabs
 const ADD = 'ADD'
 const EDIT = 'EDIT'
 
-const ProductForm = (props) => {
+const DeliveryZoneForm = (props) => {
   const { mode = ADD, param } = props
   const history = useHistory()
 
@@ -22,54 +25,57 @@ const ProductForm = (props) => {
   const [uploadedImg, setImage] = useState(null)
   const [deliveryLocations, setDeliveryLocations] = useState([])
   const [isFinalTrue, setIsFinalTrue] = useState(false)
+  const [vendors,setVendors] = useState([])
   //   const [uploadLoading, setUploadLoading] = useState(false)
   const [submitLoading, setSubmitLoading] = useState(false)
-  const [userGroups,setUserGroups] = useState([])
+  const [userGroups,setUserGroups]=useState([])
+  const getVendors = async () => {
+    const data = await vendorService.getVendors()
+    if (data) {
+      const vendorsList = data.map(cur => {
+        return {
+          ...cur, fullName: `${cur.firstName} ${cur.lastName}`
+        }
+      })
+      setVendors(vendorsList)
+    }
+  }
 
   // For selecting DELIVERY LOCATION PARENT
-  const getDeliveryLocations = async () => {
-    const data = await deliveryLocationService.getDeliveryLocations()
-    console.log(data, 'myyy-data')
+//   const getDeliveryZones = async () => {
+//     const data = await deliveryzoneService.getDeliveryZones()
+//     console.log(data, 'myyy-data')
 
-    if (data) {
-      if (mode === EDIT) {
-        const deliveryLocs = data.filter(
-          (cur) => cur.isFinal !== true && cur.id !== param.id
-        )
-        setDeliveryLocations(deliveryLocs)
-      } else {
-        const deliveryLocs = data.filter((cur) => cur.isFinal !== true)
-        setDeliveryLocations(deliveryLocs)
-      }
-    }
-  }
-  const getUserGroups = async () => {
-    const data = await userGroupService.getUserGroups()
-    if (data) {
-      const availableUserGroups = data.filter(
-        (userGroups) => userGroups.status === 'Active'
-      )
-      setUserGroups(availableUserGroups)
-    }
-  }
+//     if (data) {
+//       if (mode === EDIT) {
+//         const deliveryLocs = data.filter(
+//           (cur) => cur.isFinal !== true && cur.id !== param.id
+//         )
+//         setDeliveryLocations(deliveryLocs)
+//       } else {
+//         const deliveryLocs = data.filter((cur) => cur.isFinal !== true)
+//         setDeliveryLocations(deliveryLocs)
+//       }
+//     }
+//   }
 
-  useEffect(() => {
-    getDeliveryLocations()
-    getUserGroups()
-  }, [])
+
+
+   useEffect(() => {
+    getVendors()
+   }, [])
 
   useEffect(() => {
     if (mode === EDIT) {
-      const fetchDeliveryLocationById = async () => {
+      const fetchDeliveryZOneById = async () => {
         const { id } = param
-        const data = await deliveryLocationService.getDeliveryLocationById(id)
+        const data = await deliveryzoneService.getDeliveryZoneById(id)
         if (data) {
           form.setFieldsValue({
             name: data.name,
             status: data.status,
-            uniqueId: data.uniqueId,
-            isFinal: data.isFinal,
-            parentId: data.parentId,
+            // vendorId:data.vendorId
+            
           })
           setIsFinalTrue(data.isFinal)
         } else {
@@ -79,7 +85,7 @@ const ProductForm = (props) => {
         }
       }
 
-      fetchDeliveryLocationById()
+      fetchDeliveryZOneById()
     }
   }, [form, mode, param, props])
 
@@ -89,21 +95,22 @@ const ProductForm = (props) => {
       .validateFields()
       .then(async (values) => {
         if (mode === ADD) {
-          const created = await deliveryLocationService.createDeliveryLocation(
-            values
+          const created = await deliveryzoneService.createDeliveryZone(
+            values,
+            
           )
           if (created) {
-            message.success(`Created ${values.name} to Delivery Location List`)
+            message.success(`Created ${values.name} to Delivery zones List`)
             history.goBack()
           }
         }
         if (mode === EDIT) {
-          const edited = await deliveryLocationService.editDeliveryLocation(
+          const edited = await deliveryzoneService.editDeliveryZone(
             param.id,
             values
           )
           if (edited) {
-            message.success(`Edited ${values.name} to Delivery Location list`)
+            message.success(`Edited ${values.name} to Delivery zone list`)
             history.goBack()
           }
         }
@@ -138,15 +145,15 @@ const ProductForm = (props) => {
             >
               <h2 className="mb-3">
                 {mode === 'ADD'
-                  ? 'Add New Delivery Location'
-                  : `Edit Delivery Location`}{' '}
+                  ? 'Add New Delivery Zone'
+                  : `Edit Delivery Zone`}{' '}
               </h2>
               <div className="mb-3">
                 <Button
                   className="mr-2"
                   onClick={() =>
                     history.push(
-                      '/app/dashboards/deliverylocation/deliverylocation-list'
+                      '/app/dashboards/deliverylocation/deliveryzone-list'
                     )
                   }
                 >
@@ -169,9 +176,10 @@ const ProductForm = (props) => {
             <TabPane tab="General" key="1">
               <GeneralField
                 form={form}
-                isFinalTrue={isFinalTrue}
-                setIsFinalTrue={setIsFinalTrue}
-                deliveryLocations={deliveryLocations} userGroups={userGroups}
+                vendors={vendors} 
+                // isFinalTrue={isFinalTrue}
+                // setIsFinalTrue={setIsFinalTrue}
+                // deliveryLocations={deliveryLocations}
                 // uploadLoading={uploadLoading}
                 // handleUploadChange={handleUploadChange}
               />
@@ -183,4 +191,4 @@ const ProductForm = (props) => {
   )
 }
 
-export default ProductForm
+export default DeliveryZoneForm

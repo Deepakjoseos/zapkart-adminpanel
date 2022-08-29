@@ -53,12 +53,17 @@ const ProductList = () => {
         console.log(data, 'show-data')
       }
     }
-    const getVendors = async ()=>{
+    const getVendors = async () => {
       const data = await vendorService.getVendors()
-      if(data){
-        setVendors(data)
-      
+      if (data) {
+        const vendorsList = data.map(cur => {
+          return {
+            ...cur, fullName: `${cur.firstName} ${cur.lastName}`
+          }
+        })
+        setVendors(vendorsList)
       }
+    
     }
     getDeliveryLocations()
     getVendors()
@@ -86,12 +91,12 @@ const ProductList = () => {
   )
 
   const addProduct = () => {
-    history.push(`/app/dashboards/deliverylocation/deliverylocation/add-deliverylocation`)
+    history.push(`/app/dashboards/deliverylocation/delivery-location/add-deliverylocation`)
   }
 
   const viewDetails = (row) => {
     history.push(
-      `/app/dashboards/deliverylocation/deliverylocation/edit-deliverylocation/${row.id}`
+      `/app/dashboards/deliverylocation/delivery-location/edit-deliverylocation/${row.id}`
     )
   }
 
@@ -238,7 +243,7 @@ const ProductList = () => {
              <Option value="">All</Option>
             {vendors?.map((vendor) => (
               <Option value={vendor.id}>
-                {vendor?.firstName} {vendor?.lastName}
+                {vendor?.fullName}
               </Option>
             ))}
           </Select>
