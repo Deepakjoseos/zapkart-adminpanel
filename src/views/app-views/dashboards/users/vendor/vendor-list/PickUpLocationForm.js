@@ -38,7 +38,7 @@ const PickupLocationForm = ({
 
                 if (formMode === 'add') {
                     //   const addAddress = await customerService.addAddress(
-                    const addPickupLocation = await vendorService.addPickupLocation(
+                    const addPickupLocation = await vendorService.addPickUpLocation(
                         selectedVendorId,
                         values
                     )
@@ -48,7 +48,8 @@ const PickupLocationForm = ({
                         setViewFormModal(false)
                         form.resetFields()
                     }
-                } else {
+                } 
+                else {
                     const editAddress = await customerService.editAddress(
                         selectedVendorId,
                         selectedFormPickupLocation.id,

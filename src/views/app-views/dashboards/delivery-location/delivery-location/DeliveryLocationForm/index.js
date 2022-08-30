@@ -32,30 +32,41 @@ const ProductForm = (props) => {
     console.log(data, 'myyy-data')
 
     if (data) {
-      if (mode === EDIT) {
-        const deliveryLocs = data.filter(
-          (cur) => cur.isFinal !== true && cur.id !== param.id
-        )
-        setDeliveryLocations(deliveryLocs)
+       if (mode === EDIT) {
+      //   const deliveryLocs = data.filter(
+      //     (cur) => cur.isFinal !== true && cur.id !== param.id
+      //   )
+      //   setDeliveryLocations(deliveryLocs)
+      // } else {
+      //   const deliveryLocs = data.filter((cur) => cur.isFinal !== true)
+      //   setDeliveryLocations(deliveryLocs)
+      // }
+      const restCats = data.filter((cat) => cat.id !== param.id)
+        const list = Utils.createCategoryList(restCats)
+        setDeliveryLocations(list)
       } else {
-        const deliveryLocs = data.filter((cur) => cur.isFinal !== true)
-        setDeliveryLocations(deliveryLocs)
+        const list = Utils.createCategoryList(data)
+        setDeliveryLocations(list)
       }
     }
   }
-  const getUserGroups = async () => {
-    const data = await userGroupService.getUserGroups()
-    if (data) {
-      const availableUserGroups = data.filter(
-        (userGroups) => userGroups.status === 'Active'
-      )
-      setUserGroups(availableUserGroups)
-    }
-  }
+  
+  // const getCategories = async (mode) => {
+  //   const data = await categoryService.getCategories()
+  //   if (data) {
+  //     if (mode === EDIT) {
+  //       const restCats = data.filter((cat) => cat.id !== param.id)
+  //       const list = Utils.createCategoryList(restCats)
+  //       setCategories(list)
+  //     } else {
+  //       const list = Utils.createCategoryList(data)
+  //       setCategories(list)
+  //     }
+  //   }
+  // }
 
   useEffect(() => {
     getDeliveryLocations()
-    getUserGroups()
   }, [])
 
   useEffect(() => {
@@ -146,7 +157,7 @@ const ProductForm = (props) => {
                   className="mr-2"
                   onClick={() =>
                     history.push(
-                      '/app/dashboards/deliverylocation/deliverylocation-list'
+                      '/app/dashboards/deliverylocation/delivery-location/delivery-location-list'
                     )
                   }
                 >
@@ -171,7 +182,7 @@ const ProductForm = (props) => {
                 form={form}
                 isFinalTrue={isFinalTrue}
                 setIsFinalTrue={setIsFinalTrue}
-                deliveryLocations={deliveryLocations} userGroups={userGroups}
+                deliveryLocations={deliveryLocations} 
                 // uploadLoading={uploadLoading}
                 // handleUploadChange={handleUploadChange}
               />
@@ -181,6 +192,6 @@ const ProductForm = (props) => {
       </Form>
     </>
   )
-}
+                }
 
 export default ProductForm

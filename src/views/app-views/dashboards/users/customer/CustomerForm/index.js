@@ -89,8 +89,9 @@ const ProductForm = (props) => {
         status:data?.status,
         password:data?.password,
         emailVerified:data?.emailVerified,
-        groups:data?.groups
+        groups: data?.groups.map((cur)=> cur.id)
       })
+      console.log(data?.groups, 'hgekk')
     } else {
       // history.replace('/app/dashboards/users/customer/customer-list')
     }
@@ -124,16 +125,18 @@ const ProductForm = (props) => {
         const sendingValues = {
           firstName: values.firstName,
           lastName: values.lastName,
+          groups:values.groups,
+
           // email: values.email,
           // phone: values.phone,
-          // status:values.status,
+           status:values.status,
           // password:values.password,
           // emailVerified:values.emailVerified
         }
 
         if (mode === ADD) {
     
-          const created = await customerService.addCustomer(values)
+          const created = await customerService.addCustomer(sendingValues)
           if (created) {
             message.success(`Created Customer Success`)
             history.goBack()

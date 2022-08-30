@@ -74,7 +74,7 @@ const DeliveryZoneForm = (props) => {
           form.setFieldsValue({
             name: data.name,
             status: data.status,
-            // vendorId:data.vendorId
+            vendorId:data.vendorId
             
           })
           setIsFinalTrue(data.isFinal)
@@ -153,7 +153,7 @@ const DeliveryZoneForm = (props) => {
                   className="mr-2"
                   onClick={() =>
                     history.push(
-                      '/app/dashboards/deliverylocation/deliveryzone-list'
+                      '/app/dashboards/deliverylocation/deliveryzone/deliveryzone-list'
                     )
                   }
                 >
@@ -177,6 +177,7 @@ const DeliveryZoneForm = (props) => {
               <GeneralField
                 form={form}
                 vendors={vendors} 
+                mode={mode}
                 // isFinalTrue={isFinalTrue}
                 // setIsFinalTrue={setIsFinalTrue}
                 // deliveryLocations={deliveryLocations}

@@ -152,9 +152,28 @@ const ProductForm = (props) => {
             delete sendingValues.business
           }
         }
-
+        if (displayImage.length !== 0 && displayImage !== null) {
+          const displayImageValue = await singleImageUploader(
+            displayImage[0].originFileObj,
+            displayImage,
+            displayImage[0].url,
+            'profile'
+          )
+          sendingValues.displayImage = displayImageValue
+          console.log('upload',sendingValues.displayImage)
+        } else {
+          sendingValues.displayImage = null
+        }
         if (mode === ADD) {
-          const created = await vendorService.addVendor(values)
+          
+            sendingValues.phone = values.phone
+            sendingValues.password= values.password
+            sendingValues.email=values.email
+            sendingValues.emailVerified=values.emailVerified
+            sendingValues.status=values.status
+          
+        
+          const created = await vendorService.addVendor(sendingValues)
           if (created) {
             message.success(`Created Vendor Success`)
             history.goBack()
@@ -163,17 +182,17 @@ const ProductForm = (props) => {
         if (mode === EDIT) {
           // Checking if image exists
           console.log(sendingValues, 'heyyyy', values)
-          if (displayImage.length !== 0 && displayImage !== null) {
-            const displayImageValue = await singleImageUploader(
-              displayImage[0].originFileObj,
-              displayImage,
-              displayImage[0].url,
-              'profile'
-            )
-            sendingValues.displayImage = displayImageValue
-          } else {
-            sendingValues.displayImage = null
-          }
+          // if (displayImage.length !== 0 && displayImage !== null) {
+          //   const displayImageValue = await singleImageUploader(
+          //     displayImage[0].originFileObj,
+          //     displayImage,
+          //     displayImage[0].url,
+          //     'profile'
+          //   )
+          //   sendingValues.displayImage = displayImageValue
+          // } else {
+          //   sendingValues.displayImage = null
+          // }
 
           const edited = await vendorService.editVendor(param.id, sendingValues)
           if (edited) {
@@ -241,9 +260,9 @@ const ProductForm = (props) => {
                 form={form} mode={mode}
               />
             </TabPane>
-            <TabPane tab="PickUpLocations" key="2">
+            {/* <TabPane tab="PickUpLocations" key="2">
               <ViewPickupLocations pickupLocations={pickupLocations} selectedVendorId={selectedVendorId} refetchData={fetchVendorById}/>
-            </TabPane>
+            </TabPane> */}
           </Tabs>
         </div>
       </Form>

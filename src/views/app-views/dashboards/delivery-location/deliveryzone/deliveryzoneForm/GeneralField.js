@@ -23,13 +23,12 @@ const rules = {
 }
 
 const GeneralField = ({
-  form,
-  deliveryLocations,
-  setIsFinalTrue,
-  isFinalTrue,
+  
   vendors,
-  userGroups
-}) => (
+ mode
+}) => {
+  console.log('mode',mode)
+  return(
   <Card title="Basic Info">
     <Form.Item name="name" label="Name" rules={rules.name}>
       <Input placeholder="Name" />
@@ -41,8 +40,8 @@ const GeneralField = ({
         <Option value="Hold">Hold</Option>
       </Select>
     </Form.Item>
-    <Form.Item name="vendorId" label="Vendor" rules={rules.vendor}>
-          <Select
+      <Form.Item name="vendorId" label="Vendor" rules={rules.vendor} >
+          <Select disabled={mode === 'EDIT' ? true : false}
             showSearch
             optionFilterProp="children"
             filterOption={(input, option) =>
@@ -58,9 +57,12 @@ const GeneralField = ({
             ))}
           </Select>
         </Form.Item>
+   
 
 
   </Card>
-)
+
+  )
+}
 
 export default GeneralField

@@ -31,7 +31,14 @@ const GeneralField = ({ propsDisplayImages, mode, userGroups }) => (
         <Form.Item name="lastName" label="Last Name" rules={rules.lastName}>
           <Input placeholder="Last Name" />
         </Form.Item>
-        {mode === 'EDIT' ? (
+        <Form.Item name="status" label="Status" rules={rules.status}>
+              <Select placeholder="Status">
+                <Option value="Active">Active</Option>
+                <Option value="Hold">Hold</Option>
+              </Select>
+            </Form.Item>
+        {mode === 'EDIT' ?
+
           <Form.Item
             name="email"
             label="Email"
@@ -63,17 +70,8 @@ const GeneralField = ({ propsDisplayImages, mode, userGroups }) => (
             <Form.Item label="Password" name="password" rules={rules.password}>
               <Input.Password />
             </Form.Item>
-            <Form.Item name="status" label="Status" rules={rules.status}>
-              <Select placeholder="Status">
-                <Option value="Active">Active</Option>
-                <Option value="Hold">Hold</Option>
-              </Select>
-            </Form.Item>
-            <Form.Item
-              name="emailVerified"
-              label="Email Verified"
-              rules={rules.status}
-            >
+         
+            <Form.Item name="emailVerified" label="Email Verified" rules={rules.status}>
               <Select placeholder="Email Verified">
                 <Option value={true}>Yes</Option>
                 <Option value={false}>NO</Option>
@@ -87,28 +85,30 @@ const GeneralField = ({ propsDisplayImages, mode, userGroups }) => (
         {/* <Form.Item >
           <Input disabled />
         </Form.Item> */}
-        <Form.Item
-          name="userGroups"
-          label="User Groups"
-          rules={rules.userGroups}
-        >
-          <Select
-            optionFilterProp="children"
-            filterOption={(input, option) =>
-              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-            }
-            mode="multiple"
-            allowClear
-            style={{ width: '100%' }}
-            placeholder="User Groups"
+        {mode == 'EDIT' ?  <Form.Item
+            name="groups"
+            label="User Groups"
+            rules={rules.userGroups}
           >
-            {userGroups.map((group) => (
-              <Option key={group.id} value={group.id}>
-                {group.name}
-              </Option>
-            ))}
-          </Select>
-        </Form.Item>
+            <Select
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              mode="multiple"
+              allowClear
+              style={{ width: '100%' }}
+              placeholder="User Groups"
+            >
+              {userGroups.map((group) => (
+                <Option key={group.id} value={group.id}>
+                  {group.name}
+                </Option>
+              ))}
+            </Select>
+            </Form.Item>:"" }
+       
+
       </Card>
     </Col>
     <Col xs={24} sm={24} md={7}>
