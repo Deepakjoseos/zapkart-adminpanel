@@ -21,7 +21,7 @@ const rules = {
   ],
 }
 
-const GeneralField = ({ propsDisplayImages, mode ,userGroups}) => (
+const GeneralField = ({ propsDisplayImages, mode, userGroups }) => (
   <Row gutter={16}>
     <Col xs={24} sm={24} md={17}>
       <Card title="Basic Info">
@@ -50,9 +50,11 @@ const GeneralField = ({ propsDisplayImages, mode ,userGroups}) => (
               <Input disabled />
             </Form.Item>
           </Form.Item>
-          : ""}
+        ) : (
+          ''
+        )}
 
-        {mode === 'ADD' ?
+        {mode === 'ADD' ? (
           <>
             <Form.Item
               name="email"
@@ -60,16 +62,12 @@ const GeneralField = ({ propsDisplayImages, mode ,userGroups}) => (
               hasFeedback
               validateStatus="success"
             >
-              <Input id="success" placeholder='Email' />
+              <Input id="success" placeholder="Email" />
             </Form.Item>
-            <Form.Item name="phone" label="Phone" placeholder='Phone'>
+            <Form.Item name="phone" label="Phone" placeholder="Phone">
               <Input />
             </Form.Item>
-            <Form.Item
-              label="Password"
-              name="password"
-              rules={rules.password}
-            >
+            <Form.Item label="Password" name="password" rules={rules.password}>
               <Input.Password />
             </Form.Item>
          
@@ -80,9 +78,9 @@ const GeneralField = ({ propsDisplayImages, mode ,userGroups}) => (
               </Select>
             </Form.Item>
           </>
-
-
-          : ""}
+        ) : (
+          ''
+        )}
 
         {/* <Form.Item >
           <Input disabled />
@@ -115,7 +113,12 @@ const GeneralField = ({ propsDisplayImages, mode ,userGroups}) => (
     </Col>
     <Col xs={24} sm={24} md={7}>
       <Card title="Display Image">
-        <Upload listType="picture-card" name="image" {...propsDisplayImages} accept="image/*">
+        <Upload
+          listType="picture-card"
+          name="image"
+          {...propsDisplayImages}
+          accept="image/*"
+        >
           <CustomIcon className="display-3" svg={ImageSvg} />
         </Upload>
       </Card>
