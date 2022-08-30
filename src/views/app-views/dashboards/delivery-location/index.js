@@ -12,11 +12,13 @@ const DeliveryLocations = ({ match }) => {
         from={`${match.url}`}
         to={`${match.url}/delivery-location/delivery-location-list`}
       />
-      <Route path={`${match.url}/delivery-location`} component={DeliveryLocation} />
+      <Route
+        path={`${match.url}/delivery-location`}
+        component={DeliveryLocation}
+      />
       <Route path={`${match.url}/deliveryzone`} component={DeliveryZone} />
     </Switch>
   )
 }
 
 export default DeliveryLocations
-
