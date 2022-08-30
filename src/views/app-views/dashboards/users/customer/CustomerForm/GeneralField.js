@@ -31,6 +31,12 @@ const GeneralField = ({ propsDisplayImages, mode ,userGroups}) => (
         <Form.Item name="lastName" label="Last Name" rules={rules.lastName}>
           <Input placeholder="Last Name" />
         </Form.Item>
+        <Form.Item name="status" label="Status" rules={rules.status}>
+              <Select placeholder="Status">
+                <Option value="Active">Active</Option>
+                <Option value="Hold">Hold</Option>
+              </Select>
+            </Form.Item>
         {mode === 'EDIT' ?
 
           <Form.Item
@@ -66,12 +72,7 @@ const GeneralField = ({ propsDisplayImages, mode ,userGroups}) => (
             >
               <Input.Password />
             </Form.Item>
-            <Form.Item name="status" label="Status" rules={rules.status}>
-              <Select placeholder="Status">
-                <Option value="Active">Active</Option>
-                <Option value="Hold">Hold</Option>
-              </Select>
-            </Form.Item>
+         
             <Form.Item name="emailVerified" label="Email Verified" rules={rules.status}>
               <Select placeholder="Email Verified">
                 <Option value={true}>Yes</Option>
@@ -86,8 +87,8 @@ const GeneralField = ({ propsDisplayImages, mode ,userGroups}) => (
         {/* <Form.Item >
           <Input disabled />
         </Form.Item> */}
-        <Form.Item
-            name="userGroups"
+        {mode == 'EDIT' ?  <Form.Item
+            name="groups"
             label="User Groups"
             rules={rules.userGroups}
           >
@@ -107,7 +108,8 @@ const GeneralField = ({ propsDisplayImages, mode ,userGroups}) => (
                 </Option>
               ))}
             </Select>
-            </Form.Item>
+            </Form.Item>:"" }
+       
 
       </Card>
     </Col>

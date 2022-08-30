@@ -172,6 +172,7 @@ const OrderView = () => {
                   </span>
                   <br />
                   <span>Invoice No: {order?.invoice?.invoiceNo}</span>
+
                   <br />
                   <span>
                     ShippingAddress: {order?.shippingAddress?.addressLine1},{' '}
@@ -179,6 +180,7 @@ const OrderView = () => {
                     {order?.shippingAddress?.stateOrRegion},{' '}
                     {order?.shippingAddress?.country}
                   </span>
+
                   <br />
                   <abbr className="text-dark" title="Phone">
                     Phone:{' '}

@@ -36,65 +36,73 @@ const GeneralField = ({ propsDisplayImages, form, mode }) => (
           <Input placeholder="GST" />
         </Form.Item>
 
-        <Form.Item name="tanNumber" label="Tan Number" rules={rules.tanNumber}>
-          <Input placeholder="Tan Number" />
-        </Form.Item>
-        <Form.Item name="pan" label="PAN" rules={rules.pan}>
-          <Input placeholder="Pan Number" />
-        </Form.Item>
-        
+
+
+
         {mode === 'ADD' ?
-       <>
-          <Form.Item name="status" label="Status" rules={rules.status}>
-            <Select placeholder="Status">
-              <Option value={true}>Active</Option>
-              <Option value={false}>Hold</Option>
-            </Select>
-          </Form.Item>
-           <Form.Item name="emailVerified" label="Emal Verified" rules={rules.status}>
-           <Select placeholder="Email Verified">
-             <Option value={true}>Yes</Option>
-             <Option value={false}>No</Option>
-           </Select>
-         </Form.Item>
-         <Form.Item name="phone" label="Phone" rules={rules.pan}>
-          <Input placeholder="Phone" />
-        </Form.Item>
-        <Form.Item
+          <>
+            <Form.Item name="status" label="Status" rules={rules.status}>
+              <Select placeholder="Status">
+                <Option value="Active">Active</Option>
+                <Option value="Hold">Hold</Option>
+              </Select>
+            </Form.Item>
+            <Form.Item name="emailVerified" label="Emal Verified" rules={rules.status}>
+              <Select placeholder="Email Verified">
+                <Option value={true}>Yes</Option>
+                <Option value={false}>No</Option>
+              </Select>
+            </Form.Item>
+            <Form.Item name="phone" label="Phone" rules={rules.pan}>
+              <Input placeholder="Phone" />
+            </Form.Item>
+            <Form.Item
               label="Password"
               name="password"
               rules={rules.password}
             >
               <Input.Password />
-              </Form.Item>
-        
-          
-        <Form.Item name="email" label="Email">
-          <Input />
-        </Form.Item>
-        </>
+            </Form.Item>
+
+
+            <Form.Item name="email" label="Email">
+              <Input />
+            </Form.Item>
+           
+            <Form.Item name="tanNumber" label="Tan Number" rules={rules.tanNumber}>
+              <Input placeholder="Tan Number" />
+            </Form.Item>
+          </>
           : ""}
 
-    {mode=== 'EDIT' ?
-     <Form.Item name="email" label="Email">
-     <Input disabled />
-   </Form.Item> :""}
-       
+        {mode === 'EDIT' ?
+          <>
+            <Form.Item name="email" label="Email">
+              <Input disabled />
+            </Form.Item>
+
+            {form.getFieldValue('phone') && (
+              <Form.Item
+                hasFeedback
+                validateStatus="success"
+                name="phone"
+                label="Phone"
+              >
+                <Input disabled id="success" />
+              </Form.Item>
+            )}
+          </>
+          : ""}
+
 
 
         {/* <Form.Item >
           <Input disabled />
         </Form.Item> */}
-        {form.getFieldValue('phone') && (
-          <Form.Item
-            hasFeedback
-            validateStatus="success"
-            name="phone"
-            label="Phone"
-          >
-            <Input disabled id="success" />
-          </Form.Item>
-        )}
+         <Form.Item name="pan" label="PAN" rules={rules.pan}>
+              <Input placeholder="Pan Number" />
+            </Form.Item>
+
       </Card>
 
       {/* <Card title="Address">
@@ -130,7 +138,8 @@ const GeneralField = ({ propsDisplayImages, form, mode }) => (
         'business.address.country': data?.business?.address?.country,
         'business.address.phone': data?.business?.address?.phone,
         'business.address.zipcode': data?.business?.address?.zipcode, */}
-      <Card title="Business">
+        
+      {mode === 'EDIT' ? <Card title="Business">
         <Form.Item name="business.name" label="Bussiness Name">
           <Input placeholder="Bussiness Name" />
         </Form.Item>
@@ -159,8 +168,10 @@ const GeneralField = ({ propsDisplayImages, form, mode }) => (
         <Form.Item name="business.address.zipcode" label="Zipcode">
           <Input placeholder="Zipcode" />
         </Form.Item>
-      </Card>
+      </Card> : " "}
+
     </Col>
+
     <Col xs={24} sm={24} md={7}>
       <Card title="Display Image">
         <Upload listType="picture-card" name="image" {...propsDisplayImages} accept="image/*">

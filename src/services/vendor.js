@@ -39,6 +39,18 @@ vendorService.addVendor = async function (data) {
     console.log(err, 'show-err')
   }
 }
+vendorService.addPickUpLocation = async function (data) {
+  try {
+    const res = await fetch({
+      url: `${apiRoute}/pickupLocation/new`,
+      method: 'post',
+      data: data,
+    })
+    return res
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
 vendorService.editVendor = async function (id, data) {
   try {
     const res = await fetch({

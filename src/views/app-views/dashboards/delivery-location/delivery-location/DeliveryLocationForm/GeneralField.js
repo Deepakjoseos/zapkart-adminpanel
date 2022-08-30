@@ -66,13 +66,13 @@ const GeneralField = ({
       <TreeSelect placeholder="Parent"  showSearch 
               optionFilterProp="children"
               filterOption={(input, option) =>
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                option.title.toLowerCase().indexOf(input.toLowerCase()) >= 0
               } treeData={deliveryLocations} treeDefaultExpandAll>
-         {deliveryLocations.map((cur) => (
+         {/* {deliveryLocations.map((cur) => (
           <Option value={cur.id} key={cur.id}>
             {cur.name}
           </Option>
-        ))} 
+        ))}  */}
       </TreeSelect>
     </Form.Item>
   </Card>

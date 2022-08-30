@@ -56,13 +56,18 @@ const DeliveryZonesList = () => {
         console.log(data, 'show-data')
       }
     }
-    const getVendors = async ()=>{
+    const getVendors = async () => {
       const data = await vendorService.getVendors()
-      if(data){
-        setVendors(data)
-      
+      if (data) {
+         const vendorsList = data.map(cur => {
+           return {
+             ...cur, fullName: `${cur.firstName} ${cur.lastName}`
+           }
+         })
+        setVendors(vendorsList)
       }
     }
+  
     getDeliveryZones()
     getVendors()
   }, [])
@@ -119,11 +124,14 @@ const DeliveryZonesList = () => {
 //     }
 //   }
 
-  const getParentName = (parentId) => {
-    const parentName = searchBackupList.find((cur) => cur.id === parentId)
-    return parentName ? parentName.name : ''
-  }
-
+   const getVendorName = (vendorId) => {
+    //  console.log('vendorId',vendorId)
+    //  const vendor= vendors.find(e => e.id  === vendorId);
+    //  console.log('vendor',vendor)
+    //  return vendor?.fullName ? vendor.fullName :"-" 
+    const getVendorName = vendors?.find((cur) => cur.id === vendorId)
+    return getVendorName ? getVendorName.fullName : ''
+   }
   const tableColumns = [
     {
       title: 'DeliveryZone',
@@ -146,13 +154,13 @@ const DeliveryZonesList = () => {
       ),
       sorter: (a, b) => utils.antdTableSorter(a, b, 'status'),
     },
-    // {
-    //   title: 'Parent',
-    //   dataIndex: 'parentId',
-    //   render: (parentId) => (
-    //     <Flex alignItems="center">{getParentName(parentId)}</Flex>
-    //   ),
-    // },
+     {
+       title: 'Vendor',
+       dataIndex: 'vendorId',
+      render: (vendorId) => (
+        <Flex alignItems="center">{getVendorName(vendorId)}</Flex>
+      ),
+     },
 
     {
       title: '',

@@ -225,12 +225,13 @@ const Orders = () => {
     },
 
     {
-      title: 'User Name',
+      title: 'Vendor Name',
       dataIndex: 'userName',
       // sorter: (a, b) => utils.antdTableSorter(a, b, 'totalAmount'),
 
       // render: (items, record) => <div>{items?.length}</div>,
     },
+    
 
     // {
     //   title: 'Products Count',
@@ -263,7 +264,7 @@ const Orders = () => {
       dataIndex: 'createdAt',
       render: (createdAt) => (
         <Flex alignItems="center">
-          {moment(new Date(createdAt * 1000)).format('DD-MM-YYYY')}
+          {moment(new Date(createdAt * 1000)).format('DD-MM-YYYY hh:mm:a')}
         </Flex>
       ),
       sorter: (a, b) => utils.antdTableSorter(a, b, 'createdAt'),

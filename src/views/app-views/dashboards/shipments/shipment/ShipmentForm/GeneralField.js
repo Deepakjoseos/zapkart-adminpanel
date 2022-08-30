@@ -71,7 +71,7 @@ const GeneralField = ({ form }) => {
             rules={rules.shippedByVendor}
           >
             <Select
-              placeholder="Shipped By Vendoratus"
+              placeholder="Shipped By Vendor"
               onChange={(e) => {
                 setShippedByVendor(e)
               }}
