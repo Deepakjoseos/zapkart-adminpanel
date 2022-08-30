@@ -24,13 +24,18 @@ const OrderView = () => {
   const componentRef = useRef()
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
-    onBeforeGetContent: () => {
-      setPrinting(true)
-    },
+    // onBeforeGetContent: () => {
+    //   setPrinting(true)
+    // },
+    // onBeforePrint: () => {
+    //   setPrinting(true)
+    //   setPrintRef(componentRef)
+    // },
 
-    onAfterPrint: () => {
-      setPrinting(false)
-    },
+    // onAfterPrint: () => {
+    //   setPrinting(false)
+    //   setPrintRef(null)
+    // },
   })
 
   console.log(printing, 'ljkshdl')
@@ -161,7 +166,7 @@ const OrderView = () => {
           Print this out!
         </Button>
       </Flex>
-      <div ref={componentRef}>
+      <div>
         <Card>
           <div className="d-md-flex justify-content-md-between">
             <div>
@@ -269,82 +274,29 @@ const OrderView = () => {
                   </Select>
                 )}
               />
-
-              <Column
-                title="Action"
-                render={(_, row) => {
-                  return (
-                    row.status !== 'Cancelled' && (
-                      <Button
-                        type="primary"
-                        onClick={() => cancleOrderItem(row.id)}
-                      >
-                        Cancel Order Item
-                      </Button>
+              {!printing && (
+                <Column
+                  title="Action"
+                  render={(_, row) => {
+                    return (
+                      row.status !== 'Cancelled' && (
+                        <Button
+                          type="primary"
+                          onClick={() => cancleOrderItem(row.id)}
+                        >
+                          Cancel Order Item
+                        </Button>
+                      )
                     )
-                  )
-                }}
-              />
-
-              {/* <Column
-              title="Price"
-              render={(text) => (
-                <NumberFormat
-                  displayType={'text'}
-                  value={(Math.round(text.price * 100) / 100).toFixed(2)}
-                  prefix={'$'}
-                  thousandSeparator={true}
+                  }}
                 />
               )}
-              key="price"
-            /> */}
-              {/* <Column
-              title="Total"
-              render={(text) => (
-                <NumberFormat
-                  displayType={'text'}
-                  value={(
-                    Math.round(text.price * text.quantity * 100) / 100
-                  ).toFixed(2)}
-                  prefix={'$'}
-                  thousandSeparator={true}
-                />
-              )}
-              key="total"
-            /> */}
             </Table>
             <div className="d-flex justify-content-end">
               <div className="text-right ">
-                {/* <div className="border-bottom">
-                <p className="mb-2">
-                  <span>Sub - Total amount: </span>
-                  <NumberFormat
-                    displayType={'text'}
-                    value={(Math.round(this.total() * 100) / 100).toFixed(2)}
-                    prefix={'$'}
-                    thousandSeparator={true}
-                  />
-                  200
-                </p>
-                <p>
-                  vat (10%) :
-                  {(Math.round((this.total() / 100) * 10 * 100) / 100).toFixed(
-                    2
-                  )}
-                </p>
-              </div> */}
                 <h2 className="font-weight-semibold mt-3">
-                  <span className="mr-1">Grand Total: </span>
-                  {/* <NumberFormat
-                  displayType={'text'}
-                  value={(
-                    Math.round(this.total() * 100) / 100 -
-                    (this.total() / 100) * 10
-                  ).toFixed(2)}
-                  prefix={'$'}
-                  thousandSeparator={true}
-                /> */}{' '}
-                  ₹{order?.totalAmount}
+                  <span className="mr-1">Grand Total: </span>₹
+                  {order?.totalAmount}
                 </h2>
               </div>
             </div>
@@ -368,6 +320,141 @@ const OrderView = () => {
           </Button>
         </div> */}
         </Card>
+      </div>
+
+      {/* ------------------------------PRINT SCREEN CONTENTS HERE----------------------------------------------- */}
+
+      {/* PRINT SCREEN CONTENTS */}
+      <div style={{ display: 'none' }}>
+        <div ref={componentRef}>
+          <Card>
+            <div className="d-md-flex justify-content-md-between">
+              <div>
+                <address>
+                  <p>
+                    <span className="font-weight-semibold text-dark font-size-md">
+                      {order?.userName}
+                    </span>
+                    <br />
+                    <span>Invoice No: {order?.invoice?.invoiceNo}</span>
+                    <br />
+                    <span>
+                      ShippingAddress: {order?.shippingAddress?.addressLine1},{' '}
+                      {order?.shippingAddress?.city},{' '}
+                      {order?.shippingAddress?.stateOrRegion},{' '}
+                      {order?.shippingAddress?.country}
+                    </span>
+                    <br />
+                    <abbr className="text-dark" title="Phone">
+                      Phone:{' '}
+                    </abbr>
+                    <span>{order?.shippingAddress?.mobileNumber}</span>
+                    <br />
+                    <abbr className="text-dark" title="Phone">
+                      Address Type:{' '}
+                    </abbr>
+                    <span>{order?.shippingAddress?.addressType}</span>
+                  </p>
+                </address>
+              </div>
+              <div className="mt-3 text-right">
+                <h2 className="mb-1 font-weight-semibold">
+                  Order No: {order?.orderNo}
+                </h2>
+                <p>
+                  Order Date:
+                  {moment(new Date(order?.createdAt * 1000)).format(
+                    'DD-MM-YYYY'
+                  )}
+                  {/* {moment(parseInt(order?.createdAt)).format('YYYY-MM-DD')} */}
+                </p>
+                <p>Status: {order?.status}</p>
+                <p>shipping Charge: {order?.shippingCharge}</p>
+                <p>Payment method : {order?.payment?.type}</p>
+                {order?.transaction ? (
+                  <p>Transaction ID : {order?.transaction?.id}</p>
+                ) : (
+                  ''
+                )}
+                <p>Total Amount: ₹{order?.totalAmount}</p>
+                <address>
+                  <p>
+                    <span className="font-weight-semibold text-dark font-size-md">
+                      Payment Status:{' '}
+                      {order?.payment?.completed
+                        ? 'Completed'
+                        : 'Not Completed'}
+                    </span>
+                    <br />
+                    {/* <span>8626 Maiden Dr. </span>
+                <br />
+                <span>Niagara Falls, New York 14304</span> */}
+                  </p>
+                </address>
+              </div>
+            </div>
+            {order?.prescriptions?.length > 0 && (
+              <>
+                <p>Prescriptions: </p>
+                {order?.prescriptions?.map((cur) => (
+                  <Image width={100} src={cur} />
+                ))}
+              </>
+            )}
+            <div className="mt-4">
+              <Table
+                dataSource={order?.items}
+                pagination={false}
+                className="mb-5"
+              >
+                <Column title="Product" dataIndex="name" key="name" />
+                <Column title="Quantity" dataIndex="quantity" key="quantity" />
+                <Column title="Price" dataIndex="price" key="price" />
+                <Column
+                  title="Vendor"
+                  dataIndex="vendorName"
+                  key="vendorName"
+                />
+                {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+                  <Column
+                    title="Prescription Required"
+                    dataIndex="prescriptionRequired"
+                    key="prescriptionRequired"
+                    render={(presc) => <>{presc ? 'Yes' : 'No'}</>}
+                  />
+                )}
+
+                <Column title="Status" dataIndex="status" key="status" />
+              </Table>
+              <div className="d-flex justify-content-end">
+                <div className="text-right ">
+                  <h2 className="font-weight-semibold mt-3">
+                    <span className="mr-1">Grand Total: </span>₹
+                    {order?.totalAmount}
+                  </h2>
+                </div>
+              </div>
+              {/* <p className="mt-5">
+            <small>
+              In exceptional circumstances, Financial Services can provide an
+              urgent manually processed special cheque. Note, however, that
+              urgent special cheques should be requested only on an emergency
+              basis as manually produced cheques involve duplication of effort
+              and considerable staff resources. Requests need to be supported by
+              a letter explaining the circumstances to justify the special
+              cheque payment
+            </small>
+          </p> */}
+            </div>
+            {/* <hr className="d-print-none" />
+        <div className="text-right d-print-none">
+          <Button type="primary" onClick={() => window.print()}>
+            <PrinterOutlined type="printer" />
+            <span className="ml-1">Print</span>
+          </Button>
+        </div> */}
+          </Card>
+        </div>
       </div>
 
       <Modal
