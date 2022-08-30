@@ -21,7 +21,7 @@ const rules = {
   ],
 }
 
-const GeneralField = ({ propsDisplayImages, mode ,userGroups}) => (
+const GeneralField = ({ propsDisplayImages, mode, userGroups }) => (
   <Row gutter={16}>
     <Col xs={24} sm={24} md={17}>
       <Card title="Basic Info">
@@ -31,8 +31,7 @@ const GeneralField = ({ propsDisplayImages, mode ,userGroups}) => (
         <Form.Item name="lastName" label="Last Name" rules={rules.lastName}>
           <Input placeholder="Last Name" />
         </Form.Item>
-        {mode === 'EDIT' ?
-
+        {mode === 'EDIT' ? (
           <Form.Item
             name="email"
             label="Email"
@@ -44,9 +43,11 @@ const GeneralField = ({ propsDisplayImages, mode ,userGroups}) => (
               <Input disabled />
             </Form.Item>
           </Form.Item>
-          : ""}
+        ) : (
+          ''
+        )}
 
-        {mode === 'ADD' ?
+        {mode === 'ADD' ? (
           <>
             <Form.Item
               name="email"
@@ -54,16 +55,12 @@ const GeneralField = ({ propsDisplayImages, mode ,userGroups}) => (
               hasFeedback
               validateStatus="success"
             >
-              <Input id="success" placeholder='Email' />
+              <Input id="success" placeholder="Email" />
             </Form.Item>
-            <Form.Item name="phone" label="Phone" placeholder='Phone'>
+            <Form.Item name="phone" label="Phone" placeholder="Phone">
               <Input />
             </Form.Item>
-            <Form.Item
-              label="Password"
-              name="password"
-              rules={rules.password}
-            >
+            <Form.Item label="Password" name="password" rules={rules.password}>
               <Input.Password />
             </Form.Item>
             <Form.Item name="status" label="Status" rules={rules.status}>
@@ -72,48 +69,56 @@ const GeneralField = ({ propsDisplayImages, mode ,userGroups}) => (
                 <Option value="Hold">Hold</Option>
               </Select>
             </Form.Item>
-            <Form.Item name="emailVerified" label="Email Verified" rules={rules.status}>
+            <Form.Item
+              name="emailVerified"
+              label="Email Verified"
+              rules={rules.status}
+            >
               <Select placeholder="Email Verified">
                 <Option value={true}>Yes</Option>
                 <Option value={false}>NO</Option>
               </Select>
             </Form.Item>
           </>
-
-
-          : ""}
+        ) : (
+          ''
+        )}
 
         {/* <Form.Item >
           <Input disabled />
         </Form.Item> */}
         <Form.Item
-            name="userGroups"
-            label="User Groups"
-            rules={rules.userGroups}
+          name="userGroups"
+          label="User Groups"
+          rules={rules.userGroups}
+        >
+          <Select
+            optionFilterProp="children"
+            filterOption={(input, option) =>
+              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
+            mode="multiple"
+            allowClear
+            style={{ width: '100%' }}
+            placeholder="User Groups"
           >
-            <Select
-              optionFilterProp="children"
-              filterOption={(input, option) =>
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }
-              mode="multiple"
-              allowClear
-              style={{ width: '100%' }}
-              placeholder="User Groups"
-            >
-              {userGroups.map((group) => (
-                <Option key={group.id} value={group.id}>
-                  {group.name}
-                </Option>
-              ))}
-            </Select>
-            </Form.Item>
-
+            {userGroups.map((group) => (
+              <Option key={group.id} value={group.id}>
+                {group.name}
+              </Option>
+            ))}
+          </Select>
+        </Form.Item>
       </Card>
     </Col>
     <Col xs={24} sm={24} md={7}>
       <Card title="Display Image">
-        <Upload listType="picture-card" name="image" {...propsDisplayImages} accept="image/*">
+        <Upload
+          listType="picture-card"
+          name="image"
+          {...propsDisplayImages}
+          accept="image/*"
+        >
           <CustomIcon className="display-3" svg={ImageSvg} />
         </Upload>
       </Card>
