@@ -135,7 +135,11 @@ const GeneralField = ({
           </Form.Item>
 
           <Form.Item name="valueType" label="Value Type" rules={rules.valueType}>
-          <Select
+          <Select showSearch
+            optionFilterProp="children"
+            filterOption={(input, option) =>
+              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
             style={{ width: 150 }}
           >
             {valueTypes?.map((item) => (
@@ -170,7 +174,11 @@ const GeneralField = ({
             >
               <Select placeholder="Available Type"  onChange={value => {
               setAvailableType(value)
-              }}>
+              }} showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }>
           
             {availableTypes?.map((item) => (
               <Option key={item} value={item}>

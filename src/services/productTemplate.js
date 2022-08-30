@@ -43,8 +43,8 @@ productTemplate.getProductTemplates = async function (query) {
           ||(status && status !==null) ||(manufacturerId && manufacturerId !==null) || (medicineTypeId && medicineTypeId !==null)
           
          
-          ? `${url}&prescriptionRequired=${prescriptionRequired}`
-          : `${url}?prescriptionRequired=${prescriptionRequired}`
+          ? `${url}&prescriptionRequired=${prescriptionRequired === "Yes" ?  true: false}`
+          : `${url}?prescriptionRequired=${prescriptionRequired === "Yes" ?  true: false}`
 
     const res = await fetch({
       url,

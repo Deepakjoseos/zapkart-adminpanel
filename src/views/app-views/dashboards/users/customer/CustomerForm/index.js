@@ -13,7 +13,8 @@ import { useHistory } from 'react-router-dom'
 import customerService from 'services/customer'
 import ViewAddresses from '../customer-list/ViewAddresses'
 import ViewPrescriptions from '../customer-list/ViewPrescriptions'
-import ViewGroups from './ViewGroups'
+import userGroupService from 'services/userGroup'
+
 const { TabPane } = Tabs
 
 const ADD = 'ADD'
@@ -33,6 +34,7 @@ const ProductForm = (props) => {
   const [customers, setCustomers] = useState([])
   const [selectedPrescriptionCustomerId, setSelectedPrescriptionCustomerId] =
   useState(null)
+  const [userGroups,setUserGroups]= useState([])
   const [groupList,setGroupList] = useState([])
   const {
     fileList: fileListDisplayImages,
@@ -41,6 +43,19 @@ const ProductForm = (props) => {
     onRemove: onRemoveDisplayImages,
     setFileList: setFileListDisplayImages,
   } = useUpload(1)
+
+  const getUserGroups = async () => {
+    const data = await userGroupService.getUserGroups()
+    if (data) {
+      const availableUserGroups = data.filter(
+        (userGroups) => userGroups.status === 'Active'
+      )
+      setUserGroups(availableUserGroups)
+    }
+  }
+  useEffect(()=>{
+    getUserGroups()
+  },[])
 
   const fetchCustomerById = async () => {
     const { id } = param
@@ -73,7 +88,8 @@ const ProductForm = (props) => {
         phone: data?.phone,
         status:data?.status,
         password:data?.password,
-        emailVerified:data?.emailVerified
+        emailVerified:data?.emailVerified,
+        groups:data?.groups
       })
     } else {
       // history.replace('/app/dashboards/users/customer/customer-list')
@@ -202,7 +218,7 @@ const ProductForm = (props) => {
         <div className="container">
           <Tabs defaultActiveKey="1" style={{ marginTop: 30 }}>
             <TabPane tab="General" key="1">
-              <GeneralField propsDisplayImages={propsDisplayImages} mode={mode} />
+              <GeneralField propsDisplayImages={propsDisplayImages} mode={mode} userGroups={userGroups} />
             </TabPane>
             {id && (
               <>
@@ -218,11 +234,7 @@ const ProductForm = (props) => {
                     setSelectedPrescriptionCustomerId={setSelectedPrescriptionCustomerId}
                   />
                 </TabPane>
-                <TabPane tab="Groups" key="4">
-                  <ViewGroups
-                   groupList={groupList} selectedCustomerId={selectedCustomerId} refetchData={fetchCustomerById}
-                  />
-                </TabPane>
+                
               </>
             )}
           </Tabs>

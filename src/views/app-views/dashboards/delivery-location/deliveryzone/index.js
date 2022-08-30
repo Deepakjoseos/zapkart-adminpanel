@@ -1,10 +1,9 @@
 import React from 'react'
 import { Route, Switch, Redirect } from 'react-router-dom'
+import AddDeliveryZone from './add-deliveryzone'
 import DeliveryZonesList from './deliveryzone-list'
-// import DeliveryLocationList from './deliverylocation-list'
-// import AddDeliveryLocation from './add-deliveryLocation'
-// import EditDeliveryLocation from './edit-delivery-location'
-// import Orders from './orders'
+import EditDeliveryZone from './edit-deliveryzone'
+
 
 const DeliveryZone = (props) => {
   const { match } = props
@@ -16,12 +15,12 @@ const DeliveryZone = (props) => {
         to={`${match.url}/deliveryzone-list`}
       />
       <Route
-        path={`${match.url}/add-deliveryzone-list`}
-        // component={AddDeliveryLocation}
+        path={`${match.url}/add-deliveryzone`}
+        component={AddDeliveryZone}
       />
       <Route
         path={`${match.url}/edit-deliveryzone/:id`}
-        // component={EditDeliveryLocation}
+        component={EditDeliveryZone}
       />
       <Route
         path={`${match.url}/deliveryzone-list`}

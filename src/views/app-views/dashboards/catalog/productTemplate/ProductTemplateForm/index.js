@@ -183,6 +183,7 @@ const ProductForm = (props) => {
           metaDescription: data.metaDescription,
           keywords: data.keywords,
           tags: data.tags,
+          commission:data.commission,
 
           lengthClass: data.shippingDetail.lengthClass,
           weightClass: data.shippingDetail.weightClass,
@@ -322,6 +323,7 @@ const ProductForm = (props) => {
             metaDescription: values.metaDescription,
             keywords: values.keywords,
             status: values.status,
+            commission:values.commission,
 
             composition: values?.composition?.map((comp) => {
               return { id: comp.id, qty: comp.qty }

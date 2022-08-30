@@ -248,6 +248,11 @@ const ProductTemplateList = () => {
       // sorter: (a, b) => utils.antdTableSorter(a, b, 'brand.name'),
     },
     {
+      title: 'Vendor Commission',
+      dataIndex: 'commission',
+      
+    },
+    {
       title: 'Category',
       dataIndex: 'category',
       render: (category) => <Flex alignItems="center">{category?.name}</Flex>,
@@ -500,8 +505,9 @@ const ProductTemplateList = () => {
           placeholder="Prescription Required"
         >
           <Option value="">All</Option>
-          <Option value={true}>Yes</Option>
-          <Option value={false}>No</Option>
+          <Option value="Yes">Yes</Option>
+          <Option value="No">No</Option>
+          
         </Select>
       </div>
       <div>

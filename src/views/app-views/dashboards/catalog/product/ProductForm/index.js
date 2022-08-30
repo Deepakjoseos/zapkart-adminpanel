@@ -57,7 +57,12 @@ const ProductForm = (props) => {
   const getVendors = async () => {
     const data = await vendorService.getVendors()
     if (data) {
-      setVendors(data)
+      const vendorsList = data.map(cur => {
+        return {
+          ...cur, fullName: `${cur.firstName} ${cur.lastName}`
+        }
+      })
+      setVendors(vendorsList)
     }
   }
 
@@ -96,6 +101,7 @@ const ProductForm = (props) => {
             bulkPrice: data?.bulkPrice,
             productCode: data?.productCode,
             vendorId: data?.userId,
+            commission:data?.commission
           })
           setProductTemplateId(data.productTemplateId)
           setProductBuyType(data.acquirementMethod)
