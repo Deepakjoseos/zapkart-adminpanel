@@ -64,11 +64,12 @@ const ProductTemplateList = () => {
   const [selectedCategoryId, setSelectedCategoryId] = useState(null)
   const [isExcelModalOpen, setIsExcelModalOpen] = useState(false)
   const [excelFile, setExcelFile] = useState(null)
-  const [medicineTypes,setMedicineTypes] = useState([])
-  const[selectedMedicineTypeId,setSelectedMedicineTypeId] = useState(null)
-  const[manufacturers,setManufacturers] = useState([])
-  const[selectedManufacturerId,setSelectedManufacturerId] = useState(null)
-  const [selectedPrescriptionrequired,setSelectedPrescriptionRequired] = useState(null)
+  const [medicineTypes, setMedicineTypes] = useState([])
+  const [selectedMedicineTypeId, setSelectedMedicineTypeId] = useState(null)
+  const [manufacturers, setManufacturers] = useState([])
+  const [selectedManufacturerId, setSelectedManufacturerId] = useState(null)
+  const [selectedPrescriptionrequired, setSelectedPrescriptionRequired] =
+    useState(null)
 
   const getProductTemplates = async () => {
     const data = await productTemplate.getProductTemplates()
@@ -89,8 +90,6 @@ const ProductTemplateList = () => {
     const activeManufacturers = data.filter((item) => item.status === 'Active')
     setManufacturers(activeManufacturers)
   }
-
- 
 
   useEffect(() => {
     const getBrands = async () => {
@@ -116,12 +115,12 @@ const ProductTemplateList = () => {
     if ((selectedBrandId || selectedBrandId) !== 'All')
       query.brandId = selectedBrandId
     query.categoryId = selectedCategoryId
-    query.manufacturerId=selectedManufacturerId
-    query.prescriptionRequired=selectedPrescriptionrequired
-    console.log('medicineTypeId',selectedMedicineTypeId)
-    console.log('manufacturerId',selectedManufacturerId)
+    query.manufacturerId = selectedManufacturerId
+    query.prescriptionRequired = selectedPrescriptionrequired
+    console.log('medicineTypeId', selectedMedicineTypeId)
+    console.log('manufacturerId', selectedManufacturerId)
 
-    query.medicineTypeId=selectedMedicineTypeId
+    query.medicineTypeId = selectedMedicineTypeId
     console.log('query', query)
     const data = await productTemplate.getProductTemplates(query)
     if (data) {
@@ -227,13 +226,19 @@ const ProductTemplateList = () => {
     {
       title: 'Brand',
       dataIndex: 'brand',
-      render: (brand) => <Flex alignItems="center">{brand ? brand?.name : "-"}</Flex>,
+      render: (brand) => (
+        <Flex alignItems="center">{brand ? brand?.name : '-'}</Flex>
+      ),
       sorter: (a, b) => utils.antdTableSorter(a, b, 'brand.name'),
     },
     {
       title: 'Manufacturer',
       dataIndex: 'manufacturer',
-      render: (manufacturer) => <Flex alignItems="center">{manufacturer ?manufacturer?.name : "-"}</Flex>,
+      render: (manufacturer) => (
+        <Flex alignItems="center">
+          {manufacturer ? manufacturer?.name : '-'}
+        </Flex>
+      ),
       sorter: (a, b) => utils.antdTableSorter(a, b, 'brand.name'),
     },
     {
@@ -273,7 +278,7 @@ const ProductTemplateList = () => {
       render: (status, row) => {
         return (
           <Select
-            defaultValue={status.charAt(0).toUpperCase() + status.slice(1)}
+            defaultValue={status?.charAt(0)?.toUpperCase() + status?.slice(1)}
             // style={{ width: 120 }}
             onChange={(e) => handleStatusChange(e, row)}
           >
@@ -388,11 +393,12 @@ const ProductTemplateList = () => {
       </div>
       <div className="mr-md-3 mb-3">
         <label className="mt-2">Brands</label>
-        <Select showSearch
-              optionFilterProp="children"
-              filterOption={(input, option) =>
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }
+        <Select
+          showSearch
+          optionFilterProp="children"
+          filterOption={(input, option) =>
+            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+          }
           className="w-100"
           style={{ minWidth: 180 }}
           onChange={(value) => setSelectedBrandId(value)}
@@ -411,11 +417,12 @@ const ProductTemplateList = () => {
 
       <div className="mr-md-3 mb-3">
         <label className="mt-2">Categories</label>
-        <Select showSearch
-              optionFilterProp="children"
-              filterOption={(input, option) =>
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }
+        <Select
+          showSearch
+          optionFilterProp="children"
+          filterOption={(input, option) =>
+            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+          }
           className="w-100"
           style={{ minWidth: 180 }}
           onChange={(value) => setSelectedCategoryId(value)}
@@ -433,11 +440,12 @@ const ProductTemplateList = () => {
       </div>
       <div className="mr-md-3 mb-3">
         <label className="mt-2">Medicine Types</label>
-        <Select showSearch
-              optionFilterProp="children"
-              filterOption={(input, option) =>
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }
+        <Select
+          showSearch
+          optionFilterProp="children"
+          filterOption={(input, option) =>
+            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+          }
           className="w-100"
           style={{ minWidth: 180 }}
           onChange={(value) => setSelectedMedicineTypeId(value)}
@@ -455,11 +463,12 @@ const ProductTemplateList = () => {
       </div>
       <div className="mr-md-3 mb-3">
         <label className="mt-2">Manufacturers</label>
-        <Select showSearch
-              optionFilterProp="children"
-              filterOption={(input, option) =>
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }
+        <Select
+          showSearch
+          optionFilterProp="children"
+          filterOption={(input, option) =>
+            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+          }
           className="w-100"
           style={{ minWidth: 180 }}
           onChange={(value) => setSelectedManufacturerId(value)}
@@ -477,11 +486,12 @@ const ProductTemplateList = () => {
       </div>
       <div className="mr-md-3 mb-3">
         <label className="mt-2">Presecription Required</label>
-        <Select showSearch
-              optionFilterProp="children"
-              filterOption={(input, option) =>
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }
+        <Select
+          showSearch
+          optionFilterProp="children"
+          filterOption={(input, option) =>
+            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+          }
           className="w-100"
           style={{ minWidth: 180 }}
           onChange={(value) => setSelectedPrescriptionRequired(value)}
@@ -492,7 +502,6 @@ const ProductTemplateList = () => {
           <Option value="">All</Option>
           <Option value={true}>Yes</Option>
           <Option value={false}>No</Option>
-          
         </Select>
       </div>
       <div>
@@ -573,9 +582,14 @@ const ProductTemplateList = () => {
       </Modal>
 
       <div className="table-responsive">
-        <Table scroll={{
+        <Table
+          scroll={{
             x: true,
-          }} columns={tableColumns} dataSource={list} rowKey="id" />
+          }}
+          columns={tableColumns}
+          dataSource={list}
+          rowKey="id"
+        />
       </div>
     </Card>
   )
