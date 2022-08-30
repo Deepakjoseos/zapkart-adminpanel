@@ -170,7 +170,7 @@ const GeneralField = ({
           >
             {vendors.map((vendor) => (
               <Option value={vendor.id}>
-                {vendor?.firstName} {vendor?.lastName}
+                {vendor.fullName}
               </Option>
             ))}
           </Select>
@@ -181,7 +181,7 @@ const GeneralField = ({
           label="deliveryZone"
           rules={rules.deliveryZoneId}
         >
-          <Select placeholder="deliveryZone" showSearch
+          <Select placeholder="deliveryZone" showSearch 
             optionFilterProp="children"
             filterOption={(input, option) =>
               option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
@@ -218,6 +218,13 @@ const GeneralField = ({
           rules={rules.productCode}
         >
           <Input placeholder="Product Code" />
+        </Form.Item>
+        <Form.Item
+          name="commission"
+          label="Vendor Commission"
+          rules={rules.commission}
+        >
+          <Input placeholder="Vendor Commission" />
         </Form.Item>
         {variants?.length > 0 && (
           <Form.Item

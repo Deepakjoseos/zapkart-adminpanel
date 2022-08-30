@@ -350,14 +350,14 @@ const dashBoardNavTree = [
 
       {
         key: 'dashboards-deliverylocation',
-        path: `${APP_PREFIX_PATH}/dashboards/deliverylocation`,
+        path: `${APP_PREFIX_PATH}/dashboards/delivery-location`,
         title: 'Delivery Location',
         icon: DeliveredProcedureOutlined,
         breadcrumb: false,
         submenu: [
           {
             key: 'dashboards-deliverylocation-deliverylocation',
-            path: `${APP_PREFIX_PATH}/dashboards/deliverylocation/deliverylocation/deliverylocation-list`,
+            path: `${APP_PREFIX_PATH}/dashboards/deliverylocation/delivery-location/delivery-location-list`,
             title: 'Delivery Locations',
             icon: DeliveredProcedureOutlined,
             breadcrumb: false,
@@ -365,7 +365,7 @@ const dashBoardNavTree = [
           },
           {
             key: 'dashboards-deliverylocation-deliveryzones',
-            path: `${APP_PREFIX_PATH}/dashboards/deliverylocation/deliveryzone/deliveryzones-list`,
+            path: `${APP_PREFIX_PATH}/dashboards/deliverylocation/deliveryzone/deliveryzone-list`,
             title: 'Delivery zones',
             icon: DeliveredProcedureOutlined,
             breadcrumb: false,

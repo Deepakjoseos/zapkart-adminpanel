@@ -134,11 +134,15 @@ const ProductList = () => {
       setDeliveryZones(deliveryZonesData)
     }
   }
-
   const getVendors = async () => {
-    const vendorsData = await vendorService.getVendors()
-    if (vendorsData) {
-      setVendors(vendorsData)
+    const data = await vendorService.getVendors()
+    if (data) {
+      const vendorsList = data.map(cur => {
+        return {
+          ...cur, fullName: `${cur.firstName} ${cur.lastName}`
+        }
+      })
+      setVendors(vendorsList)
     }
   }
 
@@ -240,7 +244,7 @@ const ProductList = () => {
       sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
     },
     {
-      title: 'Commission',
+      title: 'Vendor Commission',
       dataIndex: 'commission',
       sorter: (a, b) => utils.antdTableSorter(a, b, 'commission'),
     },
@@ -486,7 +490,7 @@ const ProductList = () => {
         <Select showSearch
               optionFilterProp="children"
               filterOption={(input, option) =>
-                option.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
               }
           className="w-100"
           style={{ minWidth: 180 }}
@@ -498,7 +502,7 @@ const ProductList = () => {
           <Option value="">All</Option>
           {vendors?.map((vendor) => (
             <Option value={vendor.id}>
-              {vendor?.firstName} {vendor?.lastName}
+              {vendor.fullName}
             </Option>
           ))}
         </Select>

@@ -75,11 +75,22 @@ const Orders = () => {
         console.log(data, 'show-data')
       }
     }
+    // const getCustomers = async () => {
+    //   const data = await customerService.getCustomers()
+    //   if (data) {
+    //     setUsers(data)
+    //     console.log('users', data)
+    //   }
+    // }
     const getCustomers = async () => {
       const data = await customerService.getCustomers()
       if (data) {
-        setUsers(data)
-        console.log('users', data)
+        const users = data.map(cur => {
+          return {
+            ...cur, fullName: `${cur.firstName} ${cur.lastName}`
+          }
+        })
+        setUsers(users)
       }
     }
     const fetchConstants = async () => {
@@ -454,7 +465,7 @@ const Orders = () => {
               <Option value="">All</Option>
               {users.map((user) => (
                 <Option key={user.id} value={user.id}>
-                  {user.firstName} {user.lastName}
+                  {user.fullName}
                 </Option>
               ))}
             </Select>

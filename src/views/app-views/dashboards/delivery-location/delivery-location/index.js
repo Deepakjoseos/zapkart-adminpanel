@@ -3,7 +3,6 @@ import { Route, Switch, Redirect } from 'react-router-dom'
 import DeliveryLocationList from './deliverylocation-list'
 import AddDeliveryLocation from './add-deliveryLocation'
 import EditDeliveryLocation from './edit-delivery-location'
-// import Orders from './orders'
 
 const DeliveryLocation = (props) => {
   const { match } = props
@@ -12,7 +11,7 @@ const DeliveryLocation = (props) => {
       <Redirect
         exact
         from={`${match.url}`}
-        to={`${match.url}/deliverylocation-list`}
+        to={`${match.url}/delivery-location-list`}
       />
       <Route
         path={`${match.url}/add-deliverylocation`}
@@ -23,7 +22,7 @@ const DeliveryLocation = (props) => {
         component={EditDeliveryLocation}
       />
       <Route
-        path={`${match.url}/deliverylocation-list`}
+        path={`${match.url}/delivery-location-list`}
         component={DeliveryLocationList}
       />
     </Switch>
