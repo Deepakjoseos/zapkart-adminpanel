@@ -4,28 +4,28 @@ const dev = {
   //   API_ENDPOINT_URL: 'https://jsonplaceholder.typicode.com'
   API_ENDPOINT_URL:
     SITE_NAME === 'zapkart'
-      ? 'https://www.ecommerce.riolabz.com/api/v1'
+      ? 'https://ecommercelive.riolabz.com/api/v1'
       : SITE_NAME === 'athathy'
       ? 'https://www.ecommercetest2.riolabz.com/api/v1'
-      : 'https://www.ecommerce.riolabz.com/api/v1',
+      : 'https://ecommercelive.riolabz.com/api/v1',
 }
 
 const prod = {
   API_ENDPOINT_URL:
     SITE_NAME === 'zapkart'
-      ? 'https://www.ecommerce.riolabz.com/api/v1'
+      ? 'https://ecommercelive.riolabz.com/api/v1'
       : SITE_NAME === 'athathy'
       ? 'https://www.ecommercetest2.riolabz.com/api/v1'
-      : 'https://www.ecommerce.riolabz.com/api/v1',
+      : 'https://ecommercelive.riolabz.com/api/v1',
 }
 
 const test = {
   API_ENDPOINT_URL:
     SITE_NAME === 'zapkart'
-      ? 'https://www.ecommerce.riolabz.com/api/v1'
+      ? 'https://ecommercelive.riolabz.com/api/v1'
       : SITE_NAME === 'athathy'
       ? 'https://www.ecommercetest2.riolabz.com/api/v1'
-      : 'https://www.ecommerce.riolabz.com/api/v1',
+      : 'https://ecommercelive.riolabz.com/api/v1',
 }
 
 const getEnv = () => {
