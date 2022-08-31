@@ -234,7 +234,10 @@ const CouponList = () => {
         </div>
       </Flex>
       <div className="table-responsive">
-        <Table columns={tableColumns} dataSource={list} rowKey="id" />
+        <Table scroll={{
+            x: true,
+          }}
+        columns={tableColumns} dataSource={list} rowKey="id" />
       </div>
     </Card>
   )

@@ -178,7 +178,7 @@ const GeneralField = ({
 
         <Form.Item  
           name="deliveryZoneId"
-          label="deliveryZone"
+          label="DeliveryZone"
           rules={rules.deliveryZoneId}
         >
           <Select placeholder="deliveryZone" showSearch 
@@ -194,7 +194,7 @@ const GeneralField = ({
 
         <Form.Item
           name="productTemplateId"
-          label="productTemplate"
+          label="ProductTemplate"
           rules={rules.productTemplateId}
         >
           <Select
@@ -253,12 +253,12 @@ const GeneralField = ({
             <Option value="Hold">Hold</Option>
           </Select>
         </Form.Item>
-        <Form.Item name="qty" label="QTY" rules={rules.qty}>
-          <InputNumber placeholder="QTY" type="number" min={0} max={100000} />
+        <Form.Item name="qty" label="Quantity" rules={rules.qty}>
+          <InputNumber placeholder="Quantity" type="number" min={0} max={100000} />
         </Form.Item>
         <Form.Item
           name="isUnlimited"
-          label="is Unlimited"
+          label="Unlimited"
           rules={rules.isUnlimited}
         >
           <Select placeholder="is Unlimited">
