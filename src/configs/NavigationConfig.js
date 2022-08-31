@@ -343,7 +343,7 @@ const dashBoardNavTree = [
         key: 'dashboards-orders',
         path: `${APP_PREFIX_PATH}/dashboards/orders/orders-list`,
         title: 'Orders',
-        icon: ShoppingCartOutlined ,
+        icon: ShoppingCartOutlined  ,
         breadcrumb: false,
         submenu: [],
       },

@@ -205,8 +205,8 @@ const CustomerList = () => {
         return <>{groups?.map((group)=>{
           <>
           <p>Name:{group.name}</p>
-          <p>Type:{group.type}</p>
-          <p>Status:{group.status}</p>
+          {/* <p>Type:{group.type}</p>
+          <p>Status:{group.status}</p> */}
           </>
         })}
         </>

@@ -80,6 +80,12 @@ const DeliveryZonesList = () => {
           <span className="ml-2">View Details</span>
         </Flex>
       </Menu.Item>
+      <Menu.Item onClick={() => addDeliveryZoneLocation(row)}>
+        <Flex alignItems="center">
+          {/* <EyeOutlined /> */}
+          <span className="ml-2">Add Delivery Zone Location</span>
+        </Flex>
+      </Menu.Item>
       {/* <Menu.Item onClick={() => deleteRow(row)}>
         <Flex alignItems="center">
           <DeleteOutlined />
@@ -123,7 +129,12 @@ const DeliveryZonesList = () => {
 //       }
 //     }
 //   }
+const addDeliveryZoneLocation = (row) => {
+  history.push(
+     `/app/dashboards/deliverylocation/deliveryzone/add-deliveryzone-location/${row.id}`
 
+  )
+}
    const getVendorName = (vendorId) => {
     //  console.log('vendorId',vendorId)
     //  const vendor= vendors.find(e => e.id  === vendorId);

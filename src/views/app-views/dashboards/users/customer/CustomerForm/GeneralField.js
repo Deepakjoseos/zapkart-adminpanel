@@ -50,9 +50,9 @@ const GeneralField = ({ propsDisplayImages, mode, userGroups }) => (
               <Input disabled />
             </Form.Item>
           </Form.Item>
-        ) : (
+        : 
           ''
-        )}
+        }
 
         {mode === 'ADD' ? (
           <>

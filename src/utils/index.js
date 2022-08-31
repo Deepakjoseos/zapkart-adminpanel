@@ -32,7 +32,7 @@ class Utils {
     }
     return route
   }
-
+  
   /**
    * Get accessible color contrast
    * @param {String} hex - Hex color code e.g '#3e82f7'
@@ -244,6 +244,27 @@ class Utils {
       return parsed[parsed.length - 1]
     }
     return ''
+  }
+  static createDeliveryLocationList(locations, parentId = null) {
+    const deliveryList = []
+    let delivery
+    if (parentId == null) {
+      delivery = locations.filter((cat) => !cat?.parentId)
+    } else {
+      delivery = locations.filter((cat) => cat?.parentId === parentId)
+    }
+    // eslint-disable-next-line prefer-const
+    for (let del of delivery) {
+      deliveryList.push({
+        id: del.id,
+        title: del.name,
+        value: del.id,
+        key: del.id,
+        children: this.createDeliveryLocationList(locations, del.id),
+      })
+    }
+
+    return deliveryList
   }
 
   /**

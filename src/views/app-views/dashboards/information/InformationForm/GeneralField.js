@@ -116,7 +116,7 @@ const GeneralField = (props) => (
         <Upload listType="picture-card" name="image" {...props.propsImages}>
           <CustomIcon className="display-3" svg={ImageSvg} />
         </Upload>
-        size: 1495 * 420
+        size: 1495px * 420px
       </Card>
     </Col>
   </Row>
