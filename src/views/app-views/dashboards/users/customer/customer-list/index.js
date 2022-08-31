@@ -7,7 +7,8 @@ import {
   Button,
   Menu,
   Tag,
-  notification,Drawer
+  notification,
+  Drawer,
 } from 'antd'
 // import CustomerListData from 'assets/data/product-list.data.json'
 import {
@@ -15,7 +16,7 @@ import {
   DeleteOutlined,
   SearchOutlined,
   EditOutlined,
-  PlusCircleOutlined
+  PlusCircleOutlined,
 } from '@ant-design/icons'
 import EllipsisDropdown from 'components/shared-components/EllipsisDropdown'
 import Flex from 'components/shared-components/Flex'
@@ -55,9 +56,9 @@ const CustomerList = () => {
   const [customerAddressOpen, setCustomerAddressOpen] = useState(false)
   const [customerAddFormOpen, setCustomerAddFormOpen] = useState(false)
 
-
   const [selectedCustomerId, setSelectedCustomerId] = useState(null)
-  const [selectedPrescriptionCustomerId, setSelectedPrescriptionCustomerId] =    useState(null)
+  const [selectedPrescriptionCustomerId, setSelectedPrescriptionCustomerId] =
+    useState(null)
 
   const getCustomers = async () => {
     const data = await customerService.getCustomers()
@@ -149,10 +150,8 @@ const CustomerList = () => {
   //     }
   //   }
   // }
-  const addCustomer =() =>{
-   
+  const addCustomer = () => {
     history.push(`/app/dashboards/users/customer/add-customer`)
-    
   }
 
   const handleStatusChange = async (value, selectedRow) => {
@@ -201,16 +200,19 @@ const CustomerList = () => {
     {
       title: 'Groups',
       dataIndex: 'groups',
-      render:(groups)=>{
-        return <>{groups?.map((group)=>{
+      render: (groups) => {
+        return (
           <>
-          <p>Name:{group.name}</p>
-          {/* <p>Type:{group.type}</p>
+            {groups?.map((group) => (
+              <>
+                <p>{group.name}</p>
+                {/* <p>Type:{group.type}</p>
           <p>Status:{group.status}</p> */}
+              </>
+            ))}
           </>
-        })}
-        </>
-      }
+        )
+      },
       // sorter: (a, b) => utils.antdTableSorter(a, b, 'lastname'),
     },
     {
