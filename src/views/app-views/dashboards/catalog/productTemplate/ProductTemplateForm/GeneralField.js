@@ -43,12 +43,12 @@ const rules = {
       message: 'Required',
     },
   ],
-  description: [
-    {
-      required: true,
-      message: 'Required',
-    },
-  ],
+  // description: [
+  //   {
+  //     required: true,
+  //     message: 'Required',
+  //   },
+  // ],
 
   categoryId: [
     {
@@ -204,7 +204,7 @@ const GeneralField = ({
           <Form.Item
             name="description"
             label="Description"
-            rules={rules.description}
+            // rules={rules.description}
           >
             <Editor
               placeholder="Write something..."
@@ -477,7 +477,7 @@ const GeneralField = ({
                             name={[field.name, 'qty']}
                             fieldKey={[field.fieldKey, 'qty']}
                           >
-                            <Input placeholder="Qty" />
+                            <Input placeholder="Quantity" />
                           </Form.Item>
                           <MinusCircleOutlined
                             onClick={() => {

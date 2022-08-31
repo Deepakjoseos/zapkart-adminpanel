@@ -398,7 +398,7 @@ const ProductTemplateList = () => {
       </div>
       <div className="mr-md-3 mb-3">
         <label className="mt-2">Brands</label>
-        <Select
+        <Select 
           showSearch
           optionFilterProp="children"
           filterOption={(input, option) =>

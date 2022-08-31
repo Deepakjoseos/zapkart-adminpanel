@@ -87,5 +87,37 @@ deliveryzoneService.editDeliveryZone = async function (id, data) {
     console.log(err, 'show-err')
   }
 }
+deliveryzoneService.addDeliveryLocationZone = async function (
+  deliveryZoneId,
+  deliveryLocationId,
+  vendorId
+) {
+  try {
+    const res = await fetch({
+      url: `/deliveryZones/${deliveryZoneId}/${deliveryLocationId}/${vendorId}/admin`,
+      method: 'post',
+    })
+    return res
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
+
+deliveryzoneService.removeDeliveryLocationZone = async function (
+  deliveryZoneId,
+  deliveryLocationId,
+  vendorId
+) {
+  try {
+    const res = await fetch({
+      url: `/deliveryZones/${deliveryZoneId}/${deliveryLocationId}/${vendorId}/admin`,
+      method: 'delete',
+    })
+    return res
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
+
  
 export default deliveryzoneService

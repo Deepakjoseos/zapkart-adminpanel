@@ -3,6 +3,7 @@ import { Route, Switch, Redirect } from 'react-router-dom'
 import AddDeliveryZone from './add-deliveryzone'
 import DeliveryZonesList from './deliveryzone-list'
 import EditDeliveryZone from './edit-deliveryzone'
+import DeliveryZoneLocation from './add-deliveryzoneLocation'
 
 
 const DeliveryZone = (props) => {
@@ -15,6 +16,10 @@ const DeliveryZone = (props) => {
         to={`${match.url}/deliveryzone-list`}
       />
       <Route
+        path={`${match.url}/add-deliveryzone-location/:id`}
+        component={DeliveryZoneLocation}
+      />
+       <Route
         path={`${match.url}/add-deliveryzone`}
         component={AddDeliveryZone}
       />
