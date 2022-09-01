@@ -30,9 +30,8 @@ const ProductForm = (props) => {
   const [brands, setBrands] = useState([])
   const [userGroups, setUserGroups] = useState([])
   const [users, setUsers] = useState([])
-  const [valueTypes,setValueTypes] = useState([])
-  const[availableTypes,setAvailableTypes] = useState([])
-  
+  const [valueTypes, setValueTypes] = useState([])
+  const [availableTypes, setAvailableTypes] = useState([])
 
   const getCategories = async () => {
     const data = await categoryService.getCategories()
@@ -58,7 +57,8 @@ const ProductForm = (props) => {
     const data = await userGroupService.getUserGroups()
     if (data) {
       const availableUserGroups = data.filter(
-        (userGroups) => userGroups.status === 'Active'
+        (userGroups) =>
+          userGroups.status === 'Active' && userGroups.type === 'Customer'
       )
       setUserGroups(availableUserGroups)
     }
@@ -85,7 +85,7 @@ const ProductForm = (props) => {
     const data = await constantsService.getConstants()
     if (data) {
       // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
-      setValueTypes( Object.values(data.COUPON['VALUE_TYPE']))
+      setValueTypes(Object.values(data.COUPON['VALUE_TYPE']))
       setAvailableTypes(Object.values(data.COUPON['AVAILABLE_TYPE']))
     }
   }
@@ -97,7 +97,6 @@ const ProductForm = (props) => {
     getUsers()
     geProductsTemplate()
     fetchConstants()
-
   }, [])
 
   useEffect(() => {
