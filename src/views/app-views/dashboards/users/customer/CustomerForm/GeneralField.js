@@ -21,8 +21,9 @@ const rules = {
   ],
 }
 
-const GeneralField = ({ propsDisplayImages, mode, userGroups }) => (
-  <Row gutter={16}>
+const GeneralField = ({ propsDisplayImages, mode, userGroups,form, phoneVerified, emailVerified }) => {
+  return (
+    <Row gutter={16}>
     <Col xs={24} sm={24} md={17}>
       <Card title="Basic Info">
         <Form.Item name="firstName" label="First Name" rules={rules.firstName}>
@@ -37,22 +38,32 @@ const GeneralField = ({ propsDisplayImages, mode, userGroups }) => (
                 <Option value="Hold">Hold</Option>
               </Select>
             </Form.Item>
-        {mode === 'EDIT' ?
+            {mode === 'EDIT' ?
+          <>
+       
 
-          <Form.Item
-            name="email"
-            label="Email"
-            hasFeedback
-            validateStatus="success"
-          >
-            <Input disabled id="success" />
-            <Form.Item name="phone" label="Phone">
-              <Input disabled />
+            <Form.Item
+              hasFeedback
+              validateStatus={phoneVerified ? 'success': 'error'}
+              name="phone"
+              label="Phone"
+            >
+              <Input disabled id="success" />
             </Form.Item>
-          </Form.Item>
-        : 
-          ''
-        }
+           
+            <Form.Item
+              hasFeedback
+              validateStatus={emailVerified ? 'success': 'error'}
+              name="email"
+              label="Email"
+            >
+              <Input disabled id="success" />
+            </Form.Item>
+           
+       
+           
+          </>
+          : ""}
 
         {mode === 'ADD' ? (
           <>
@@ -68,10 +79,10 @@ const GeneralField = ({ propsDisplayImages, mode, userGroups }) => (
               <Input />
             </Form.Item>
             <Form.Item label="Password" name="password" rules={rules.password}>
-              <Input.Password />
+              <Input.Password  placeholder='Password'/>
             </Form.Item>
          
-            <Form.Item name="emailVerified" label="Email Verified" rules={rules.status}>
+            <Form.Item name="emailVerified" label="Email Verified" rules={rules.emailVerified}>
               <Select placeholder="Email Verified">
                 <Option value={true}>Yes</Option>
                 <Option value={false}>NO</Option>
@@ -124,6 +135,8 @@ const GeneralField = ({ propsDisplayImages, mode, userGroups }) => (
       </Card>
     </Col>
   </Row>
-)
+  )
+}
+ 
 
 export default GeneralField

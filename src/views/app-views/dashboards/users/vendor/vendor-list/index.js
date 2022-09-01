@@ -207,11 +207,11 @@ const VendorList = () => {
       title: 'Phone',
       dataIndex: 'phone',
     },
-    {
-      title: 'Commission',
-      dataIndex: 'commission',
-      render: (commission) => `${commission}%`,
-    },
+    // {
+    //   title: 'Commission',
+    //   dataIndex: 'commission',
+    //   render: (commission) => `${commission}%`,
+    // },
 
     {
       title: 'Status',

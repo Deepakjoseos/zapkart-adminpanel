@@ -5,7 +5,7 @@ const attributeService = {}
 attributeService.getAttributes = async function () {
   try {
     const res = await fetch({
-      url: '/attributes',
+      url: '/attributes/public',
       method: 'get',
     })
     const data = res.data.filter((cur) => cur.status !== 'Deleted')

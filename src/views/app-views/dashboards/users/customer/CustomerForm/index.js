@@ -36,6 +36,8 @@ const ProductForm = (props) => {
   useState(null)
   const [userGroups,setUserGroups]= useState([])
   const [groupList,setGroupList] = useState([])
+  const [phoneVerified, setPhoneVerified] = useState(false)
+  const [emailVerified, setEmailVerified] = useState(false)
   const {
     fileList: fileListDisplayImages,
     beforeUpload: beforeUploadDisplayImages,
@@ -91,7 +93,10 @@ const ProductForm = (props) => {
         emailVerified:data?.emailVerified,
         groups: data?.groups.map((cur)=> cur.id)
       })
-      console.log(data?.groups, 'hgekk')
+
+      setEmailVerified(data?.emailVerified)
+      setPhoneVerified(data?.phone ? true: false)
+   
     } else {
       // history.replace('/app/dashboards/users/customer/customer-list')
     }
@@ -221,7 +226,7 @@ const ProductForm = (props) => {
         <div className="container">
           <Tabs defaultActiveKey="1" style={{ marginTop: 30 }}>
             <TabPane tab="General" key="1">
-              <GeneralField propsDisplayImages={propsDisplayImages} mode={mode} userGroups={userGroups} />
+              <GeneralField propsDisplayImages={propsDisplayImages} mode={mode} userGroups={userGroups} form={form} emailVerified={emailVerified} phoneVerified={phoneVerified}/>
             </TabPane>
             {id && (
               <>

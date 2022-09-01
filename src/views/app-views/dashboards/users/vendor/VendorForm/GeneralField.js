@@ -21,7 +21,7 @@ const rules = {
   ],
 }
 
-const GeneralField = ({ propsDisplayImages, form, mode }) => (
+const GeneralField = ({ propsDisplayImages, form, mode, emailVerified, phoneVerified }) => (
   <Row gutter={16}>
     <Col xs={24} sm={24} md={17}>
       <Card title="Basic Info">
@@ -68,7 +68,7 @@ const GeneralField = ({ propsDisplayImages, form, mode }) => (
             <Form.Item name="email" label="Email">
               <Input />
             </Form.Item>
-           
+
             <Form.Item name="tanNumber" label="Tan Number" rules={rules.tanNumber}>
               <Input placeholder="Tan Number" />
             </Form.Item>
@@ -77,20 +77,25 @@ const GeneralField = ({ propsDisplayImages, form, mode }) => (
 
         {mode === 'EDIT' ?
           <>
-            <Form.Item name="email" label="Email">
-              <Input disabled />
+
+            <Form.Item
+              hasFeedback
+              validateStatus={phoneVerified ? 'success' : 'error'}
+              name="phone"
+              label="Phone"
+            >
+              <Input disabled id="success" />
             </Form.Item>
 
-            {form.getFieldValue('phone') && (
-              <Form.Item
-                hasFeedback
-                validateStatus="success"
-                name="phone"
-                label="Phone"
-              >
-                <Input disabled id="success" />
-              </Form.Item>
-            )}
+            <Form.Item
+              hasFeedback
+              validateStatus={emailVerified ? 'success' : 'error'}
+              name="email"
+              label="Email"
+            >
+              <Input disabled id="success" />
+            </Form.Item>
+
           </>
           : ""}
 
@@ -99,9 +104,9 @@ const GeneralField = ({ propsDisplayImages, form, mode }) => (
         {/* <Form.Item >
           <Input disabled />
         </Form.Item> */}
-         <Form.Item name="pan" label="PAN" rules={rules.pan}>
-              <Input placeholder="Pan Number" />
-            </Form.Item>
+        <Form.Item name="pan" label="PAN" rules={rules.pan}>
+          <Input placeholder="Pan Number" />
+        </Form.Item>
 
       </Card>
 
@@ -138,7 +143,7 @@ const GeneralField = ({ propsDisplayImages, form, mode }) => (
         'business.address.country': data?.business?.address?.country,
         'business.address.phone': data?.business?.address?.phone,
         'business.address.zipcode': data?.business?.address?.zipcode, */}
-        
+
       {mode === 'EDIT' ? <Card title="Business">
         <Form.Item name="business.name" label="Bussiness Name">
           <Input placeholder="Bussiness Name" />
