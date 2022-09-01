@@ -13,12 +13,12 @@ const rules = {
       message: 'Required',
     },
   ],
-  forwardUrl: [
-    {
-      required: true,
-      message: 'Required',
-    },
-  ],
+  // forwardUrl: [
+  //   {
+  //     required: true,
+  //     message: 'Required',
+  //   },
+  // ],
   image: [
     {
       required: true,
@@ -55,9 +55,9 @@ const GeneralField = ({ propsImages, propsMobileImages }) => (
         <Form.Item
           name="forwardUrl"
           label="Forward Url"
-          rules={rules.forwardUrl}
+          // rules={rules.forwardUrl}
         >
-          <Input placeholder="Name" />
+          <Input placeholder="URL" />
         </Form.Item>
         <Form.Item name="priority" label="Priority" rules={rules.priority}>
           <InputNumber placeholder="Priority" min={0} max={100000} />

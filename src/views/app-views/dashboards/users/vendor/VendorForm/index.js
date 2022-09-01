@@ -25,6 +25,8 @@ const ProductForm = (props) => {
   const [submitLoading, setSubmitLoading] = useState(false)
   const[pickupLocations,setPickUpLocations] = useState(null)
   const [selectedVendorId, setSelectedCustomerId] = useState(null)
+  const [phoneVerified, setPhoneVerified] = useState(false)
+  const [emailVerified, setEmailVerified] = useState(false)
 
 
    const {
@@ -82,6 +84,8 @@ const ProductForm = (props) => {
         'business.address.phone': data?.business?.address?.phone,
         'business.address.zipcode': data?.business?.address?.zipcode,
       })
+      setEmailVerified(data?.emailVerified ? true :false)
+      setPhoneVerified(data?.phone ? true: false)
     } else {
       history.replace('/app/dashboards/users/vendor/vendor-list')
     }
@@ -257,7 +261,7 @@ const ProductForm = (props) => {
             <TabPane tab="General" key="1">
               <GeneralField
                 propsDisplayImages={propsDisplayImages}
-                form={form} mode={mode}
+                form={form} mode={mode} emailVerified={emailVerified} phoneVerified={phoneVerified}
               />
             </TabPane>
             {/* <TabPane tab="PickUpLocations" key="2">

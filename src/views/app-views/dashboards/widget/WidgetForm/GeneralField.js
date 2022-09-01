@@ -56,7 +56,7 @@ const GeneralField = () => {
           </Form.Item>
           <Form.Item
             name="isTitleShow"
-            label="is Title Show"
+            label="Title Show"
             rules={rules.isTitleShow}
           >
             <Select placeholder="is Title Show">

@@ -227,7 +227,7 @@ const ProductList = () => {
           <Option value="Hold">Hold</Option>
         </Select>
       </div>
-      <div className="mr-md-3 mb-3">
+      {/* <div className="mr-md-3 mb-3">
         <label className='mt-2'>Vendors</label>
       <Select showSearch
               optionFilterProp="children"
@@ -247,9 +247,9 @@ const ProductList = () => {
               </Option>
             ))}
           </Select>
-      </div>
+      </div> */}
      
-      <div >
+      {/* <div >
         <Button type="primary" className="mr-1 mt-4" onClick={handleQuery}>
           Filter
         </Button>
@@ -258,7 +258,7 @@ const ProductList = () => {
         <Button type="primary" className="mr-1 mt-4" onClick={handleClearFilter}>
           Clear
         </Button>
-      </div>
+      </div> */}
     </Flex>
   )
 
