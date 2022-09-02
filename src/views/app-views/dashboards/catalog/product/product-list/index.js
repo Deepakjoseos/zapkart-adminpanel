@@ -90,7 +90,7 @@ const ProductList = () => {
     const getBrands = async () => {
       const data = await brandService.getBrands()
       if (data) {
-        setBrands(data)
+        setBrands(data.data)
       }
     }
     const getCategories = async () => {
@@ -137,9 +137,10 @@ const ProductList = () => {
   const getVendors = async () => {
     const data = await vendorService.getVendors()
     if (data) {
-      const vendorsList = data.map(cur => {
+      const vendorsList = data.map((cur) => {
         return {
-          ...cur, fullName: `${cur.firstName} ${cur.lastName}`
+          ...cur,
+          fullName: `${cur.firstName} ${cur.lastName}`,
         }
       })
       setVendors(vendorsList)
@@ -263,7 +264,10 @@ const ProductList = () => {
             <div style={{ color: 'gray', textDecoration: 'line-through' }}>
               {row.mrpPrice}
             </div>{' '}
-            <div><span class="WebRupee">&#x20B9;</span>{price}</div>
+            <div>
+              <span class="WebRupee">&#x20B9;</span>
+              {price}
+            </div>
           </Flex>
         )
       },
@@ -442,11 +446,12 @@ const ProductList = () => {
       </div>
       <div className=" mr-md-3 mb-3">
         <label className="mt-2">Brands</label>
-        <Select showSearch
-              optionFilterProp="children"
-              filterOption={(input, option) =>
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }
+        <Select
+          showSearch
+          optionFilterProp="children"
+          filterOption={(input, option) =>
+            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+          }
           className="w-100"
           style={{ minWidth: 180 }}
           onChange={(value) => setSelectedBrandId(value)}
@@ -465,11 +470,12 @@ const ProductList = () => {
 
       <div className="mr-md-3 mb-3">
         <label className="mt-2">Categories</label>
-        <Select showSearch
-              optionFilterProp="children"
-              filterOption={(input, option) =>
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }
+        <Select
+          showSearch
+          optionFilterProp="children"
+          filterOption={(input, option) =>
+            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+          }
           className="w-100"
           style={{ minWidth: 180 }}
           onChange={(value) => setSelectedCategoryId(value)}
@@ -487,11 +493,12 @@ const ProductList = () => {
       </div>
       <div className="mr-md-3 mb-3">
         <label className="mt-2">Vendors</label>
-        <Select showSearch
-              optionFilterProp="children"
-              filterOption={(input, option) =>
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }
+        <Select
+          showSearch
+          optionFilterProp="children"
+          filterOption={(input, option) =>
+            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+          }
           className="w-100"
           style={{ minWidth: 180 }}
           onChange={(value) => setSelectedVendorId(value)}
@@ -501,19 +508,18 @@ const ProductList = () => {
         >
           <Option value="">All</Option>
           {vendors?.map((vendor) => (
-            <Option value={vendor.id}>
-              {vendor.fullName}
-            </Option>
+            <Option value={vendor.id}>{vendor.fullName}</Option>
           ))}
         </Select>
       </div>
       <div className="mr-md-3 mb-3">
         <label className="mt-2">Approval</label>
-        <Select showSearch
-              optionFilterProp="children"
-              filterOption={(input, option) =>
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }
+        <Select
+          showSearch
+          optionFilterProp="children"
+          filterOption={(input, option) =>
+            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+          }
           className="w-100"
           style={{ minWidth: 180 }}
           onChange={(value) => setSelectedApproval(value)}
@@ -531,11 +537,12 @@ const ProductList = () => {
       {process.env.REACT_APP_SITE_NAME === 'awen' ? (
         <div className="mr-md-3 mb-3">
           <label className="mt-2">Acquirement Method</label>
-          <Select showSearch
-              optionFilterProp="children"
-              filterOption={(input, option) =>
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }
+          <Select
+            showSearch
+            optionFilterProp="children"
+            filterOption={(input, option) =>
+              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
             className="w-100"
             style={{ minWidth: 180 }}
             onChange={(value) => setSelectedacquirementMethod(value)}
@@ -597,10 +604,14 @@ const ProductList = () => {
           </div>
         </div>
         <div className="table-responsive">
-          <Table columns={tableColumns} dataSource={list}
-          scroll={{
-            x: true,
-          }} rowKey="id" />
+          <Table
+            columns={tableColumns}
+            dataSource={list}
+            scroll={{
+              x: true,
+            }}
+            rowKey="id"
+          />
         </div>
       </Card>
 
@@ -676,4 +687,3 @@ const ProductList = () => {
 }
 
 export default ProductList
-

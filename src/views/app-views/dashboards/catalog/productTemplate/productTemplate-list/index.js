@@ -95,7 +95,7 @@ const ProductTemplateList = () => {
     const getBrands = async () => {
       const data = await brandService.getBrands()
       if (data) {
-        setBrands(data)
+        setBrands(data.data)
       }
     }
     const getCategories = async () => {
@@ -250,7 +250,6 @@ const ProductTemplateList = () => {
     {
       title: 'Vendor Commission',
       dataIndex: 'commission',
-      
     },
     {
       title: 'Category',
@@ -398,7 +397,7 @@ const ProductTemplateList = () => {
       </div>
       <div className="mr-md-3 mb-3">
         <label className="mt-2">Brands</label>
-        <Select 
+        <Select
           showSearch
           optionFilterProp="children"
           filterOption={(input, option) =>
@@ -507,7 +506,6 @@ const ProductTemplateList = () => {
           <Option value="">All</Option>
           <Option value="Yes">Yes</Option>
           <Option value="No">No</Option>
-          
         </Select>
       </div>
       <div>
