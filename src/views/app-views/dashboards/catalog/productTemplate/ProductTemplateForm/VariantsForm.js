@@ -53,6 +53,12 @@ const VariantsForm = ({
         message: 'Required',
       },
     ],
+    displayName: [
+      {
+        required: true,
+        message: 'Required',
+      },
+    ],
     description: [
       {
         required: true,
@@ -73,6 +79,7 @@ const VariantsForm = ({
       form.setFieldsValue({
         description: selectedVariant.description,
         name: selectedVariant.name,
+        displayName: selectedVariant.displayName,
         attributes: selectedVariant.attributes.map((attr) => {
           return { attributeId: attr.id, valueId: attr.value.id }
         }),
@@ -195,9 +202,11 @@ const VariantsForm = ({
 
   const getAttributes = async () => {
     const data = await attributeService.getAttributes()
-    const activeAttributes = data.filter((item) => item.status === 'Active')
-    setAttributes(activeAttributes)
-    return activeAttributes
+    if (data) {
+      const activeAttributes = data.filter((item) => item.status === 'Active')
+      setAttributes(activeAttributes)
+      return activeAttributes
+    }
   }
 
   const onSelectAttribute = (attributeId) => {
@@ -286,6 +295,13 @@ const VariantsForm = ({
         <Card title="Variant Info">
           <Form.Item name="name" label="Name" rules={rules.name}>
             <Input placeholder="Name" />
+          </Form.Item>
+          <Form.Item
+            name="displayName"
+            label="Display Name"
+            rules={rules.displayName}
+          >
+            <Input placeholder="Display Name" />
           </Form.Item>
           <Form.Item
             name="description"

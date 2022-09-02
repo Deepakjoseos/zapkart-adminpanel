@@ -42,8 +42,8 @@ const ProductForm = (props) => {
 
   const [maxQty, setMaxQty] = useState(0)
   const [minQty, setMinQty] = useState(0)
-  const [weightClass,setWeightClass] = useState([])
-  const [lengthClass,setLengthClass] = useState([])
+  const [weightClass, setWeightClass] = useState([])
+  const [lengthClass, setLengthClass] = useState([])
 
   const {
     fileList: fileListImages,
@@ -55,7 +55,7 @@ const ProductForm = (props) => {
 
   const getBrands = async () => {
     const data = await brandService.getBrands()
-    const activeBrands = data.filter((item) => item.status === 'Active')
+    const activeBrands = data.data.filter((item) => item.status === 'Active')
     setBrands(activeBrands)
   }
 
@@ -87,22 +87,23 @@ const ProductForm = (props) => {
       getManufacturers()
       getCompositions()
       fetchConstants()
-
     }
   }, [])
 
   const getCategories = async () => {
     const data = await categoryService.getCategories()
-    const activeCategories = data.filter((item) => item.status === 'Active')
-    const treeCatList = Utils.createCategoryList(activeCategories)
-    setCategories(treeCatList)
+    if (data) {
+      const activeCategories = data?.filter((item) => item?.status === 'Active')
+      const treeCatList = Utils.createCategoryList(activeCategories)
+      setCategories(treeCatList)
+    }
   }
- 
+
   const fetchConstants = async () => {
     const data = await constantsService.getConstants()
     if (data) {
       // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
-      setWeightClass( Object.values(data.GENERAL['WEIGHT_CLASS']))
+      setWeightClass(Object.values(data.GENERAL['WEIGHT_CLASS']))
       setLengthClass(Object.values(data.GENERAL['LENGTH_CLASS']))
     }
   }
@@ -183,7 +184,7 @@ const ProductForm = (props) => {
           metaDescription: data.metaDescription,
           keywords: data.keywords,
           tags: data.tags,
-          commission:data.commission,
+          commission: data.commission,
 
           lengthClass: data.shippingDetail.lengthClass,
           weightClass: data.shippingDetail.weightClass,
@@ -323,7 +324,7 @@ const ProductForm = (props) => {
             metaDescription: values.metaDescription,
             keywords: values.keywords,
             status: values.status,
-            commission:values.commission,
+            commission: values.commission,
 
             composition: values?.composition?.map((comp) => {
               return { id: comp.id, qty: comp.qty }

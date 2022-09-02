@@ -44,9 +44,7 @@ import {
   ShoppingFilled,
   ShopOutlined,
   FileImageOutlined,
-  SafetyCertificateOutlined
-  
-  
+  SafetyCertificateOutlined,
 } from '@ant-design/icons'
 import { APP_PREFIX_PATH, AUTH_PREFIX_PATH } from 'configs/AppConfig'
 
@@ -222,7 +220,7 @@ const dashBoardNavTree = [
         key: 'dashboards-catalog',
         path: `${APP_PREFIX_PATH}/dashboards/catalog`,
         title: 'Catalog',
-         icon: AppstoreOutlined,
+        icon: AppstoreOutlined,
         breadcrumb: false,
         submenu: [
           {
@@ -326,7 +324,7 @@ const dashBoardNavTree = [
         path: `${APP_PREFIX_PATH}/dashboards/information/information-list`,
         title: 'Information',
         // icon: DotChartOutlined,
-        icon:InfoCircleOutlined ,
+        icon: InfoCircleOutlined,
         breadcrumb: false,
         submenu: [],
       },
@@ -343,7 +341,7 @@ const dashBoardNavTree = [
         key: 'dashboards-orders',
         path: `${APP_PREFIX_PATH}/dashboards/orders/orders-list`,
         title: 'Orders',
-        icon: ShoppingCartOutlined  ,
+        icon: ShoppingCartOutlined,
         breadcrumb: false,
         submenu: [],
       },
@@ -371,10 +369,9 @@ const dashBoardNavTree = [
             breadcrumb: false,
             submenu: [],
           },
-          
         ],
       },
-      
+
       {
         key: 'dashboards-widget',
         path: `${APP_PREFIX_PATH}/dashboards/widget/widget-list`,

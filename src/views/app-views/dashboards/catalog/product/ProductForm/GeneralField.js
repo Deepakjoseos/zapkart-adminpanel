@@ -169,23 +169,24 @@ const GeneralField = ({
             }}
           >
             {vendors.map((vendor) => (
-              <Option value={vendor.id}>
-                {vendor.fullName}
-              </Option>
+              <Option value={vendor.id}>{vendor.fullName}</Option>
             ))}
           </Select>
         </Form.Item>
 
-        <Form.Item  
+        <Form.Item
           name="deliveryZoneId"
           label="DeliveryZone"
           rules={rules.deliveryZoneId}
         >
-          <Select placeholder="deliveryZone" showSearch 
+          <Select
+            placeholder="deliveryZone"
+            showSearch
             optionFilterProp="children"
             filterOption={(input, option) =>
               option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-            }>
+            }
+          >
             {deliveryZones.map((deliveryZone) => (
               <Option value={deliveryZone.id}>{deliveryZone.name}</Option>
             ))}
@@ -212,24 +213,16 @@ const GeneralField = ({
           </Select>
         </Form.Item>
 
-        <Form.Item
-          name="productCode"
-          label="productCode"
-          rules={rules.productCode}
-        >
-          <Input placeholder="Product Code" />
-        </Form.Item>
-        <Form.Item
-          name="commission"
-          label="Vendor Commission"
-          rules={rules.commission}
-        >
-          <Input placeholder="Vendor Commission" />
-        </Form.Item>
         {variants?.length > 0 && (
           <Form.Item
             name="productVariantId"
             label="productVariant"
+            rules={[
+              {
+                required: variants?.length > 0 ? true : false,
+                message: 'Product Template Have Variants. Please Select One',
+              },
+            ]}
             // rules={rules.productVariantId}
           >
             <Select
@@ -247,6 +240,21 @@ const GeneralField = ({
           </Form.Item>
         )}
 
+        <Form.Item
+          name="productCode"
+          label="productCode"
+          rules={rules.productCode}
+        >
+          <Input placeholder="Product Code" />
+        </Form.Item>
+        <Form.Item
+          name="commission"
+          label="Vendor Commission"
+          rules={rules.commission}
+        >
+          <Input placeholder="Vendor Commission" />
+        </Form.Item>
+
         <Form.Item name="status" label="Status" rules={rules.status}>
           <Select placeholder="Status">
             <Option value="Active">Active</Option>
@@ -254,7 +262,12 @@ const GeneralField = ({
           </Select>
         </Form.Item>
         <Form.Item name="qty" label="Quantity" rules={rules.qty}>
-          <InputNumber placeholder="Quantity" type="number" min={0} max={100000} />
+          <InputNumber
+            placeholder="Quantity"
+            type="number"
+            min={0}
+            max={100000}
+          />
         </Form.Item>
         <Form.Item
           name="isUnlimited"
