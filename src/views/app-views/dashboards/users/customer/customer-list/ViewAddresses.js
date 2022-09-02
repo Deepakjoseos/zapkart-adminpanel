@@ -90,7 +90,7 @@ const ViewAddresses = ({
           >
             {'City: ' + address.city} <br />
             {'Country:' + address.country} <br />
-            {'line1: ' + address.line1} <br />
+            {'address: ' + address.line1} <br />
             {'Phone: ' + address.phone} <br />
             {'State: ' + address.state} <br />
             {'Zipcode: ' + address.zipcode}

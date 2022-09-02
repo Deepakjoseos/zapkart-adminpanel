@@ -127,6 +127,9 @@ const AddressForm = ({
         <Row gutter={16}>
           <Col xs={24} sm={24} md={24}>
             <Card>
+            <Form.Item name="line1" label="Address" rules={rules.line1}>
+                <Input.TextArea rows={4} placeholder="Address" />
+              </Form.Item>
               <Form.Item name="city" label="City" rules={rules.city}>
                 <Input placeholder="City" />
               </Form.Item>
@@ -139,9 +142,7 @@ const AddressForm = ({
               <Form.Item name="zipcode" label="Zipcode" rules={rules.zipcode}>
                 <Input placeholder="Zipcode" />
               </Form.Item>
-              <Form.Item name="line1" label="Line 1" rules={rules.line1}>
-                <Input.TextArea rows={4} placeholder="Line 1" />
-              </Form.Item>
+             
               <Flex justifyContent="end">
                 <Button
                   type="primary"
