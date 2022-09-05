@@ -3,9 +3,12 @@ import fetch from 'auth/FetchInterceptor'
 const brandService = {}
 const api = `/brands`
 
-brandService.getBrands = async function (paginationQuery = '', query = '') {
+brandService.getBrands = async function (
+  paginationQuery = '',
+  filterQuery = ''
+) {
   try {
-    let url = `${api}?${paginationQuery}&${query}`
+    let url = `${api}?${paginationQuery}&${filterQuery}`
     const res = await fetch({
       url,
       method: 'get',
