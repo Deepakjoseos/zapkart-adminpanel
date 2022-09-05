@@ -296,9 +296,7 @@ const VariantsForm = ({
           <Form.Item name="name" label="Name" rules={rules.name}>
             <Input placeholder="Name" />
           </Form.Item>
-          <Form.Item name="displayName" label="Display Name" rules={rules.name}>
-            <Input placeholder="Display Name" />
-          </Form.Item>
+
           <Form.Item
             name="displayName"
             label="Display Name"

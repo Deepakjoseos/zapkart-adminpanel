@@ -81,7 +81,6 @@ const BrandList = () => {
 
     if (data) {
       setList(data.data)
-
       // Pagination
       setPagination({
         ...paginationParams.pagination,
@@ -164,7 +163,7 @@ const BrandList = () => {
     }
   }
 
-  // Pagination
+  // Reset Pagination
   const resetPagination = () => ({
     ...pagination,
     current: 1,
@@ -254,11 +253,7 @@ const BrandList = () => {
         </Col>
         <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item name="status" label="Status">
-            <Select
-              className="w-100"
-              style={{ minWidth: 180 }}
-              placeholder="Status"
-            >
+            <Select className="w-100" placeholder="Status">
               <Option value="">All</Option>
               <Option value="Active">Active</Option>
               <Option value="Hold">Hold</Option>
