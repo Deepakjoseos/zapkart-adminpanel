@@ -2,18 +2,14 @@ import fetch from 'auth/FetchInterceptor'
 
 const deliveryLocation = {}
 const api = '/deliverylocations'
-deliveryLocation.getDeliveryLocations = async function (query) {
+deliveryLocation.getDeliveryLocations = async function (paginationQuery = '', query = '') {
   try {
-    let url = `${api}`
-    const vendorId = query?.vendorId
-    if(vendorId)
-    url= `${api}?vendorId=${vendorId}`;
+    let url = `${api}?${paginationQuery}&${query}`
     const res = await fetch({
       url,
       method: 'get',
     })
-    const data = res.data.filter((cur) => cur.status !== 'Deleted')
-    return data
+    return res
   } catch (err) {
     console.log(err, 'show-err')
   }

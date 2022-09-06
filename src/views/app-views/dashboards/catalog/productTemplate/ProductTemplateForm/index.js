@@ -92,8 +92,8 @@ const ProductForm = (props) => {
 
   const getCategories = async () => {
     const data = await categoryService.getCategories()
-    if (data) {
-      const activeCategories = data?.filter((item) => item?.status === 'Active')
+    if (data.data) {
+      const activeCategories = data.data?.filter((item) => item?.status === 'Active')
       const treeCatList = Utils.createCategoryList(activeCategories)
       setCategories(treeCatList)
     }

@@ -3,18 +3,14 @@ import fetch from 'auth/FetchInterceptor'
 const informationService = {}
 const apiRoute = '/information'
 
-informationService.getInformations = async function (query) {
-  let url = `${apiRoute}`
-    const orderByPriority = query?.orderByPriority
-    if(orderByPriority)
-    url= `${apiRoute}?orderByPriority=${orderByPriority}`;
+informationService.getInformations = async function (paginationQuery = '', query = '') {
   try {
+    let url = `${apiRoute}?${paginationQuery}&${query}`
     const res = await fetch({
       url,
       method: 'get',
     })
-    const data = res.data.filter((cur) => cur.status !== 'Deleted')
-    return data
+    return res
   } catch (err) {
     console.log(err, 'show-err')
   }

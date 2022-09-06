@@ -1,16 +1,31 @@
-import React, { useEffect, useState } from 'react'
-import { Card, Table, Select, Input, Button, Menu, Tag } from 'antd'
-// import MedicineTypeListData from 'assets/data/product-list.data.json'
+import React, { useEffect, useRef, useState } from 'react'
+import {
+  Card,
+  Table,
+  Select,
+  Input,
+  Button,
+  Menu,
+  Tag,
+  Form,
+  Row,
+  Col,
+} from 'antd'
+// import BrandListData from 'assets/data/product-list.data.json'
 import {
   EyeOutlined,
   DeleteOutlined,
   SearchOutlined,
   PlusCircleOutlined,
 } from '@ant-design/icons'
+import AvatarStatus from 'components/shared-components/AvatarStatus'
 import EllipsisDropdown from 'components/shared-components/EllipsisDropdown'
 import Flex from 'components/shared-components/Flex'
 import { useHistory } from 'react-router-dom'
+import qs from 'qs'
 import utils from 'utils'
+import brandService from 'services/brand'
+import _ from 'lodash'
 import medicineTypeService from 'services/medicineType'
 
 const { Option } = Select
@@ -34,23 +49,63 @@ const getStockStatus = (status) => {
 }
 const MedicineTypeList = () => {
   let history = useHistory()
-
+  const [form] = Form.useForm()
+  
   const [list, setList] = useState([])
-  const [searchBackupList, setSearchBackupList] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
-  const [selectedRowKeys, setSelectedRowKeys] = useState([])
-
-  useEffect(() => {
-    const getMedicineTypes = async () => {
-      const data = await medicineTypeService.getMedicineTypes()
-      if (data) {
-        setList(data)
-        setSearchBackupList(data)
-        console.log(data, 'show-data')
-      }
+  
+  // Added for Pagination
+  const [loading, setLoading] = useState(false)
+  const [filterEnabled, setFilterEnabled] = useState(false)
+  
+  // pagination
+  const [pagination, setPagination] = useState({
+    current: 1,
+    pageSize: 10,
+  })
+  
+  // Changed here for pagination
+  const getMedicineTypes = async (paginationParams = {}, filterParams) => {
+    setLoading(true)
+    const data = await medicineTypeService.getMedicineTypes(
+      qs.stringify(getPaginationParams(paginationParams)),
+      qs.stringify(filterParams)
+    )
+  
+    if (data) {
+      setList(data.data)
+  
+      // Pagination
+      setPagination({
+        ...paginationParams.pagination,
+        total: data.total,
+      })
+      setLoading(false)
     }
-    getMedicineTypes()
+  }
+  
+  useEffect(() => {
+    getMedicineTypes({
+      pagination,
+    })
   }, [])
+  
+  // pagination generator
+  const getPaginationParams = (params) => ({
+    limit: params.pagination?.pageSize,
+    page: params.pagination?.current,
+    // ...params,
+  })
+  
+  // On pagination Change
+  const handleTableChange = (newPagination) => {
+    getMedicineTypes(
+      {
+        pagination: newPagination,
+      },
+      filterEnabled ? _.pickBy(form.getFieldsValue(), _.identity) : {}
+    )
+  }
 
   const dropdownMenu = (row) => (
     <Menu>
@@ -128,53 +183,80 @@ const MedicineTypeList = () => {
     },
   ]
 
-  const onSearch = (e) => {
-    const value = e.currentTarget.value
-    const searchArray = e.currentTarget.value ? list : searchBackupList
-    const data = utils.wildCardSearch(searchArray, value)
-    setList(data)
-    setSelectedRowKeys([])
+  const resetPagination = () => ({
+    ...pagination,
+    current: 1,
+    pageSize: 10,
+  })
+
+  // Filter Submit
+  const handleFilterSubmit = async () => {
+    setPagination(resetPagination())
+
+    form
+      .validateFields()
+      .then(async (values) => {
+        setFilterEnabled(true)
+        // Removing falsy Values from values
+        const sendingValues = _.pickBy(values, _.identity)
+        getMedicineTypes({ pagination: resetPagination() }, sendingValues)
+      })
+      .catch((info) => {
+        console.log('info', info)
+        setFilterEnabled(false)
+      })
   }
 
-  const handleShowStatus = (value) => {
-    if (value !== 'All') {
-      const key = 'status'
-      const data = utils.filterArray(searchBackupList, key, value)
-      setList(data)
-    } else {
-      setList(searchBackupList)
-    }
-  }
+  // Clear Filter
+  const handleClearFilter = async () => {
+    form.resetFields()
 
-  const filters = () => (
-    <Flex className="mb-1" mobileFlex={false}>
-      <div className="mr-md-3 mb-3">
-        <Input
-          placeholder="Search"
-          prefix={<SearchOutlined />}
-          onChange={(e) => onSearch(e)}
-        />
-      </div>
-      <div className="mb-3">
-        <Select
-          defaultValue="All"
-          className="w-100"
-          style={{ minWidth: 180 }}
-          onChange={handleShowStatus}
-          placeholder="Status"
-        >
-          <Option value="All">All</Option>
-          <Option value="Active">Active</Option>
-          <Option value="Hold">Hold</Option>
-        </Select>
-      </div>
-    </Flex>
+    setPagination(resetPagination())
+    getMedicineTypes({ pagination: resetPagination() }, {})
+    setFilterEnabled(false)
+  }
+  const filtersComponent = () => (
+    <Form
+      layout="vertical"
+      form={form}
+      name="filter_form"
+      className="ant-advanced-search-form"
+    >
+      <Row gutter={8} align="bottom">
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="search" label="Search">
+            <Input placeholder="Search" prefix={<SearchOutlined />} />
+          </Form.Item>
+        </Col>
+        
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="status" label="Status">
+            <Select className="w-100" placeholder="Status">
+              <Option value="">All</Option>
+              <Option value="Active">Active</Option>
+              <Option value="Hold">Hold</Option>
+            </Select>
+          </Form.Item>
+        </Col>
+    
+        <Col className="mb-4">
+          <Button type="primary" onClick={handleFilterSubmit}>
+            Filter
+          </Button>
+        </Col>
+        <Col className="mb-4">
+          <Button type="primary" onClick={handleClearFilter}>
+            Clear
+          </Button>
+        </Col>
+      </Row>
+    </Form>
   )
 
   return (
     <Card>
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
-        {filters()}
+        {filtersComponent()}
         <div>
           <Button
             onClick={addProduct}
@@ -187,7 +269,9 @@ const MedicineTypeList = () => {
         </div>
       </Flex>
       <div className="table-responsive">
-        <Table columns={tableColumns} dataSource={list} rowKey="id" />
+        <Table columns={tableColumns} dataSource={list} rowKey="id" pagination={pagination}
+        loading={loading}
+        onChange={handleTableChange}/>
       </div>
     </Card>
   )

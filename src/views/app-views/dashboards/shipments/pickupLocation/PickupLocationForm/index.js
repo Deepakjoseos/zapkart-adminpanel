@@ -8,6 +8,7 @@ import shipmentService from 'services/shipment'
 import { useHistory } from 'react-router-dom'
 import Shipment from '..'
 import moment from 'moment'
+import vendorService from 'services/vendor'
 
 const { TabPane } = Tabs
 
@@ -21,6 +22,21 @@ const ShipmentForm = (props) => {
   const [form] = Form.useForm()
 
   const [submitLoading, setSubmitLoading] = useState(false)
+  const [vendors,setVendors]= useState([])
+  const getVendors = async () => {
+    const data = await vendorService.getVendors()
+    if (data) {
+      const vendorsList = data.map(cur => {
+        return {
+          ...cur, fullName: `${cur.firstName} ${cur.lastName}`
+        }
+      })
+      setVendors(vendorsList)
+    }
+  }
+  useEffect(()=>{
+    getVendors()
+  })
 
   // useEffect(() => {
   //   if (mode === EDIT) {
@@ -163,7 +179,7 @@ const ShipmentForm = (props) => {
         <div className="container">
           <Tabs defaultActiveKey="1" style={{ marginTop: 30 }}>
             <TabPane tab="General" key="1">
-              <GeneralField form={form} />
+              <GeneralField form={form} vendors={vendors}/>
             </TabPane>
           </Tabs>
         </div>

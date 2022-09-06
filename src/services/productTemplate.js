@@ -3,61 +3,72 @@ import fetch from 'auth/FetchInterceptor'
 const productTemplate = {}
 const api = 'producttemplates'
 
-productTemplate.getProductTemplates = async function (query) {
-  try {
-    let url = `${api}`
-    const brandId = query?.brandId
-    const categoryId = query?.categoryId
-    const status = query?.status
-    const manufacturerId = query?.manufacturerId
-    const medicineTypeId= query?.medicineTypeId
-    const prescriptionRequired = query?.prescriptionRequired
-    if (brandId) url = `${url}?brandId=${brandId}`
-    if (categoryId)
-      url =
-        brandId && brandId !== null
-          ? `${url}&categoryId=${categoryId}`
-          : `${url}?categoryId=${categoryId}`
-    if (status)
-      url =
-        (brandId && brandId !== null) || (categoryId && categoryId !== null)
-          ? `${url}&status=${status}`
-          : `${url}?status=${status}`
+// productTemplate.getProductTemplates = async function (query) {
+//   try {
+//     let url = `${api}`
+//     const brandId = query?.brandId
+//     const categoryId = query?.categoryId
+//     const status = query?.status
+//     const manufacturerId = query?.manufacturerId
+//     const medicineTypeId= query?.medicineTypeId
+//     const prescriptionRequired = query?.prescriptionRequired
+//     if (brandId) url = `${url}?brandId=${brandId}`
+//     if (categoryId)
+//       url =
+//         brandId && brandId !== null
+//           ? `${url}&categoryId=${categoryId}`
+//           : `${url}?categoryId=${categoryId}`
+//     if (status)
+//       url =
+//         (brandId && brandId !== null) || (categoryId && categoryId !== null)
+//           ? `${url}&status=${status}`
+//           : `${url}?status=${status}`
 
-          if (manufacturerId)
-          url =
-            (brandId && brandId !== null) || (categoryId && categoryId !== null)
-            || (status && status !==null)
-              ? `${url}&manufacturerId=${manufacturerId}`
-              : `${url}?manufacturerId=${manufacturerId}`
-          if(medicineTypeId)
-          url = 
-          (brandId && brandId !== null) || (categoryId && categoryId !== null) 
-          ||(status && status !==null) ||(manufacturerId && manufacturerId !==null)
-          ? `${url}&medicineTypeId=${medicineTypeId}`
-          : `${url}?medicineTypeId=${medicineTypeId}`
+//           if (manufacturerId)
+//           url =
+//             (brandId && brandId !== null) || (categoryId && categoryId !== null)
+//             || (status && status !==null)
+//               ? `${url}&manufacturerId=${manufacturerId}`
+//               : `${url}?manufacturerId=${manufacturerId}`
+//           if(medicineTypeId)
+//           url = 
+//           (brandId && brandId !== null) || (categoryId && categoryId !== null) 
+//           ||(status && status !==null) ||(manufacturerId && manufacturerId !==null)
+//           ? `${url}&medicineTypeId=${medicineTypeId}`
+//           : `${url}?medicineTypeId=${medicineTypeId}`
 
-          if(prescriptionRequired)
-          url = 
-          (brandId && brandId !== null) || (categoryId && categoryId !== null) 
-          ||(status && status !==null) ||(manufacturerId && manufacturerId !==null) || (medicineTypeId && medicineTypeId !==null)
+//           if(prescriptionRequired)
+//           url = 
+//           (brandId && brandId !== null) || (categoryId && categoryId !== null) 
+//           ||(status && status !==null) ||(manufacturerId && manufacturerId !==null) || (medicineTypeId && medicineTypeId !==null)
           
          
-          ? `${url}&prescriptionRequired=${prescriptionRequired === "Yes" ?  true: false}`
-          : `${url}?prescriptionRequired=${prescriptionRequired === "Yes" ?  true: false}`
+//           ? `${url}&prescriptionRequired=${prescriptionRequired === "Yes" ?  true: false}`
+//           : `${url}?prescriptionRequired=${prescriptionRequired === "Yes" ?  true: false}`
 
+//     const res = await fetch({
+//       url,
+//       method: 'get',
+//     })
+
+//     const data = res.data.filter((cur) => cur.status !== 'Deleted')
+//     return data
+//   } catch (err) {
+//     console.log(err, 'show-err')
+//   }
+// }
+productTemplate.getProductTemplates = async function (paginationQuery = '', query = '') {
+  try {
+    let url = `${api}?${paginationQuery}&${query}`
     const res = await fetch({
       url,
       method: 'get',
     })
-
-    const data = res.data.filter((cur) => cur.status !== 'Deleted')
-    return data
+    return res
   } catch (err) {
     console.log(err, 'show-err')
   }
 }
-
 productTemplate.deleteProductTemplate = async function (id) {
   try {
     const res = await fetch({

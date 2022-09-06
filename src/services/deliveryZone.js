@@ -2,39 +2,14 @@ import fetch from 'auth/FetchInterceptor'
 
 const deliveryzoneService = {}
 const api='/deliveryzones/public'
-deliveryzoneService.getDeliveryZones = async function (query) {
-  // try {
-  //   const res = await fetch({
-  //     url: `/deliveryzones/public?${
-  //       vendorId && `vendorId=${vendorId}`
-  //     }&status=Active`,
-  //     method: 'get',
-  //   })
-  //   return res.data
-  // } catch (err) {
-  //   console.log(err, 'show-err')
-  // }
-
+deliveryzoneService.getDeliveryZones = async function (paginationQuery = '', query = '') {
   try {
-    let url = `${api}`
-  
-     const status = query?.status
-    const vendorId = query?.vendorId
-    
-    if (vendorId) url = `${url}?vendorId=${vendorId}`
-
-      if (status)
-     url =
-       vendorId && vendorId !== null
-         ? `${url}&status=${status}`
-         : `${url}?status=${status}`
-   
-
+    let url = `${api}?${paginationQuery}&${query}`
     const res = await fetch({
       url,
       method: 'get',
     })
-    return res.data
+    return res
   } catch (err) {
     console.log(err, 'show-err')
   }

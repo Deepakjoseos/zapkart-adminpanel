@@ -3,7 +3,7 @@ import { PrinterOutlined } from '@ant-design/icons'
 import { Card, Table, Button, Select, notification, Image, Modal } from 'antd'
 import { invoiceData } from '../../../pages/invoice/invoiceData'
 import NumberFormat from 'react-number-format'
-import { useParams } from 'react-router-dom'
+import { useParams,Link } from 'react-router-dom'
 import orderService from 'services/orders'
 import ShipmentCreateForm from './ShipmentCreateForm'
 import Flex from 'components/shared-components/Flex'
@@ -185,6 +185,17 @@ const OrderView = () => {
                     {order?.shippingAddress?.stateOrRegion},{' '}
                     {order?.shippingAddress?.country}
                   </span>
+                  {/* <span>
+                  {
+      title: 'OrderNo',
+      dataIndex: 'orderNo',
+      render: (text, record) => (
+        <Link to={`/app/dashboards/orders/order-view/${record.id}`}>
+          {text}
+        </Link>
+      ),
+    },
+                  </span> */}
 
                   <br />
                   <abbr className="text-dark" title="Phone">
@@ -217,6 +228,8 @@ const OrderView = () => {
                 ''
               )}
               <p>Total Amount: ₹{order?.totalAmount}</p>
+              <p>Order Date: {moment(new Date(order?.createdAt * 1000)).format('DD-MM-YYYY hh:mm:a')}
+              </p>
               <address>
                 <p>
                   <span className="font-weight-semibold text-dark font-size-md">
@@ -245,10 +258,12 @@ const OrderView = () => {
               pagination={false}
               className="mb-5"
             >
+             <Column title="ShipmentId" dataIndex="shipmentId" key="shipmentId" render={(text) => <Link to={`/app/dashboards/shipments/shipment-view/${text}`}> {text}</Link>}  />
               <Column title="Product" dataIndex="name" key="name" />
               <Column title="Quantity" dataIndex="quantity" key="quantity" />
               <Column title="Price" dataIndex="price" key="price" />
-              <Column title="Vendor" dataIndex="vendorName" key="vendorName" />
+              <Column title="Customer" dataIndex="vendorName" key="vendorName" />
+
               {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
                 <Column
                   title="Prescription Required"

@@ -1,15 +1,16 @@
 import fetch from 'auth/FetchInterceptor'
 
 const attributeService = {}
+let apiRoute= '/attributes'
 
-attributeService.getAttributes = async function () {
+attributeService.getAttributes = async function (paginationQuery = '', query = '') {
   try {
+    let url = `${apiRoute}?${paginationQuery}&${query}`
     const res = await fetch({
-      url: '/attributes/public',
+      url,
       method: 'get',
     })
-    const data = res.data.filter((cur) => cur.status !== 'Deleted')
-    return data
+    return res
   } catch (err) {
     console.log(err, 'show-err')
   }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import {
   Card,
   Table,
@@ -7,29 +7,31 @@ import {
   Button,
   Menu,
   Tag,
-  Modal,
-  notification,
-  message,
+  Form,
+  Row,
+  Col,Modal,notification
 } from 'antd'
-// import ProductTemplateListData from 'assets/data/product-list.data.json'
+// import BrandListData from 'assets/data/product-list.data.json'
 import {
   EyeOutlined,
   DeleteOutlined,
   SearchOutlined,
-  PlusCircleOutlined,
-  FileAddOutlined,
-  DownloadOutlined,
+  PlusCircleOutlined,FileAddOutlined,DownloadOutlined
 } from '@ant-design/icons'
 import AvatarStatus from 'components/shared-components/AvatarStatus'
 import EllipsisDropdown from 'components/shared-components/EllipsisDropdown'
 import Flex from 'components/shared-components/Flex'
 import { useHistory } from 'react-router-dom'
+import qs from 'qs'
 import utils from 'utils'
-import productTemplate from 'services/productTemplate'
 import brandService from 'services/brand'
+import _, { get } from 'lodash'
+import Label from 'views/app-views/components/data-display/timeline/Label'
+import productTemplate from 'services/productTemplate'
+import manufacturerService from 'services/manufacturer'
 import categoryService from 'services/category'
 import medicineTypeService from 'services/medicineType'
-import manufacturerService from 'services/manufacturer'
+
 
 const { Option } = Select
 
@@ -53,32 +55,103 @@ const getStockStatus = (status) => {
 const ProductTemplateList = () => {
   let history = useHistory()
   const fileInputRef = React.useRef(null)
+  const [form] = Form.useForm()
 
   const [list, setList] = useState([])
-  const [searchBackupList, setSearchBackupList] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
+
+  // Added for Pagination
+  const [loading, setLoading] = useState(false)
+  const [filterEnabled, setFilterEnabled] = useState(false)
+
+  // pagination
+  const [pagination, setPagination] = useState({
+    current: 1,
+    pageSize: 10,
+  })
+
+  // Changed here for pagination
+  const getProductTemplates = async (paginationParams = {}, filterParams) => {
+    setLoading(true)
+    const data = await productTemplate.getProductTemplates(
+      qs.stringify(getPaginationParams(paginationParams)),
+      qs.stringify(filterParams)
+    )
+
+    if (data) {
+      setList(data.data)
+
+      // Pagination
+      setPagination({
+        ...paginationParams.pagination,
+        total: data.total,
+      })
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    getProductTemplates({
+      pagination,
+    })
+    const getBrands = async () => {
+      const data = await brandService.getBrands()
+      if (data) {
+        setBrands(data.data)
+      }
+    }
+    const getCategories = async () => {
+      const data = await categoryService.getCategories()
+      if (data) {
+        setCategories(data.data)
+      }
+    }
+    getBrands()
+    getCategories()
+    getMedicineTypes()
+    getManufacturers()
+
+  }, [])
+
+  // pagination generator
+  const getPaginationParams = (params) => ({
+    limit: params.pagination?.pageSize,
+    page: params.pagination?.current,
+    // ...params,
+  })
+
+  // On pagination Change
+  const handleTableChange = (newPagination) => {
+    getProductTemplates(
+      {
+        pagination: newPagination,
+      },
+      filterEnabled ? _.pickBy(form.getFieldsValue(), _.identity) : {}
+    )
+  }
+  // const [searchBackupList, setSearchBackupList] = useState([])
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
   const [brands, setBrands] = useState([])
   const [categories, setCategories] = useState([])
-  const [selectedBrandId, setSelectedBrandId] = useState(null)
-  const [selectedCategoryId, setSelectedCategoryId] = useState(null)
+  // const [selectedBrandId, setSelectedBrandId] = useState(null)
+  // const [selectedCategoryId, setSelectedCategoryId] = useState(null)
   const [isExcelModalOpen, setIsExcelModalOpen] = useState(false)
   const [excelFile, setExcelFile] = useState(null)
   const [medicineTypes, setMedicineTypes] = useState([])
-  const [selectedMedicineTypeId, setSelectedMedicineTypeId] = useState(null)
+  // const [selectedMedicineTypeId, setSelectedMedicineTypeId] = useState(null)
   const [manufacturers, setManufacturers] = useState([])
-  const [selectedManufacturerId, setSelectedManufacturerId] = useState(null)
-  const [selectedPrescriptionrequired, setSelectedPrescriptionRequired] =
-    useState(null)
+  // const [selectedManufacturerId, setSelectedManufacturerId] = useState(null)
+  // const [selectedPrescriptionrequired, setSelectedPrescriptionRequired] =
+  useState(null)
 
-  const getProductTemplates = async () => {
-    const data = await productTemplate.getProductTemplates()
-    if (data) {
-      setList(data)
-      setSearchBackupList(data)
-      console.log(data, 'show-data')
-    }
-  }
+  // const getProductTemplates = async () => {
+  //   const data = await productTemplate.getProductTemplates()
+  //   if (data) {
+  //     setList(data)
+  //     setSearchBackupList(data)
+  //     console.log(data, 'show-data')
+  //   }
+  // }
   const getMedicineTypes = async () => {
     const data = await medicineTypeService.getMedicineTypes()
     const activeMedicineTypes = data.filter((item) => item.status === 'Active')
@@ -92,55 +165,25 @@ const ProductTemplateList = () => {
   }
 
   useEffect(() => {
-    const getBrands = async () => {
-      const data = await brandService.getBrands()
-      if (data) {
-        setBrands(data.data)
-      }
-    }
-    const getCategories = async () => {
-      const data = await categoryService.getCategories()
-      if (data) {
-        setCategories(data)
-      }
-    }
-    getProductTemplates()
-    getBrands()
-    getCategories()
-    getMedicineTypes()
-    getManufacturers()
+    // const getBrands = async () => {
+    //   const data = await brandService.getBrands()
+    //   if (data) {
+    //     setBrands(data.data)
+    //   }
+    // }
+    // const getCategories = async () => {
+    //   const data = await categoryService.getCategories()
+    //   if (data) {
+    //     setCategories(data.data)
+    //   }
+    // }
+    // getProductTemplates()
+    // getBrands()
+    // getCategories()
+    // getMedicineTypes()
+    // getManufacturers()
   }, [])
-  const handleQuery = async () => {
-    const query = {}
-    if ((selectedBrandId || selectedBrandId) !== 'All')
-      query.brandId = selectedBrandId
-    query.categoryId = selectedCategoryId
-    query.manufacturerId = selectedManufacturerId
-    query.prescriptionRequired = selectedPrescriptionrequired
-    console.log('medicineTypeId', selectedMedicineTypeId)
-    console.log('manufacturerId', selectedManufacturerId)
 
-    query.medicineTypeId = selectedMedicineTypeId
-    console.log('query', query)
-    const data = await productTemplate.getProductTemplates(query)
-    if (data) {
-      setList(data)
-      setSearchBackupList(data)
-    }
-  }
-
-  const handleClearFilter = async () => {
-    setSelectedBrandId(null)
-    setSelectedCategoryId(null)
-    setSelectedMedicineTypeId(null)
-    setSelectedManufacturerId(null)
-    setSelectedPrescriptionRequired(null)
-    const data = await productTemplate.getProductTemplates({})
-    if (data) {
-      setList(data)
-      setSearchBackupList(data)
-    }
-  }
   const dropdownMenu = (row) => (
     <Menu>
       <Menu.Item onClick={() => viewDetails(row)}>
@@ -191,21 +234,23 @@ const ProductTemplateList = () => {
     }
   }
 
+
   const handleStatusChange = async (value, selectedRow) => {
     const sendingValues = {
       ...selectedRow,
       categoryId: selectedRow.category.id,
       status: value,
     }
-
-    const edited = await productTemplate.editProductTemplate(
-      selectedRow.id,
-      sendingValues
-    )
-    if (edited) {
-      message.success(`Status Edited Successfully:  ${selectedRow.name}`)
-    }
   }
+
+  //   const edited = await productTemplate.editProductTemplate(
+  //     selectedRow.id,
+  //     sendingValues
+  //   )
+  //   if (edited) {
+  //     message.success(`Status Edited Successfully:  ${selectedRow.name}`)
+  //   }
+  // }
   const tableColumns = [
     {
       title: 'Product Template',
@@ -326,25 +371,56 @@ const ProductTemplateList = () => {
         ),
       }
     )
+  } const resetPagination = () => ({
+    ...pagination,
+    current: 1,
+    pageSize: 10,
+  })
+
+  // Filter Submit
+  const handleFilterSubmit = async () => {
+    setPagination(resetPagination())
+
+    form
+      .validateFields()
+      .then(async (values) => {
+        setFilterEnabled(true)
+        // Removing falsy Values from values
+        const sendingValues = _.pickBy(values, _.identity)
+        getProductTemplates({ pagination: resetPagination() }, sendingValues)
+      })
+      .catch((info) => {
+        console.log('info', info)
+        setFilterEnabled(false)
+      })
   }
 
-  const onSearch = (e) => {
-    const value = e.currentTarget.value
-    const searchArray = e.currentTarget.value ? list : searchBackupList
-    const data = utils.wildCardSearch(searchArray, value)
-    setList(data)
-    setSelectedRowKeys([])
+  // Clear Filter
+  const handleClearFilter = async () => {
+    form.resetFields()
+
+    setPagination(resetPagination())
+    getProductTemplates({ pagination: resetPagination() }, {})
+    setFilterEnabled(false)
   }
 
-  const handleShowStatus = (value) => {
-    if (value !== 'All') {
-      const key = 'status'
-      const data = utils.filterArray(searchBackupList, key, value)
-      setList(data)
-    } else {
-      setList(searchBackupList)
-    }
-  }
+  // const onSearch = (e) => {
+  //   const value = e.currentTarget.value
+  //   const searchArray = e.currentTarget.value ? list : searchBackupList
+  //   const data = utils.wildCardSearch(searchArray, value)
+  //   setList(data)
+  //   setSelectedRowKeys([])
+  // }
+
+  // const handleShowStatus = (value) => {
+  //   if (value !== 'All') {
+  //     const key = 'status'
+  //     const data = utils.filterArray(searchBackupList, key, value)
+  //     setList(data)
+  //   } else {
+  //     setList(searchBackupList)
+  //   }
+  // }
 
   const handleExcelUpload = (e) => {
     let file = e.target.files[0]
@@ -367,37 +443,135 @@ const ProductTemplateList = () => {
       notification.success({
         message: 'Product Excel File Uploaded',
       })
-      getProductTemplates()
+      getProductTemplates(pagination)
     }
   }
 
-  const filters = () => (
-    <Flex className="mb-1 flex-wrap" mobileFlex={false}>
-      <div className="mr-md-3 mb-3">
-        <label className="mt-2">Search</label>
-        <Input
-          placeholder="Search"
-          prefix={<SearchOutlined />}
-          onChange={(e) => onSearch(e)}
-        />
-      </div>
-      <div className="mr-md-3 mb-3">
-        <label className="mt-2">Status</label>
-        <Select
-          defaultValue="All"
-          className="w-100"
-          style={{ minWidth: 180 }}
-          onChange={handleShowStatus}
-          placeholder="Status"
-        >
-          <Option value="All">All</Option>
-          <Option value="Active">Active</Option>
-          <Option value="Hold">Hold</Option>
-        </Select>
-      </div>
-      <div className="mr-md-3 mb-3">
-        <label className="mt-2">Brands</label>
-        <Select
+  const filtersComponent = () => (
+    <Form
+      layout="vertical"
+      form={form}
+      name="filter_form"
+      className="ant-advanced-search-form"
+    >
+      <Row gutter={8} align="bottom">
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="search" label="Search">
+            <Input placeholder="Search" prefix={<SearchOutlined />} />
+          </Form.Item>
+        </Col>
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="status" label="Status">
+            <Select
+              className="w-100"
+              style={{ minWidth: 180 }}
+              placeholder="Status"
+            >
+              <Option value="">All</Option>
+              <Option value="Active">Active</Option>
+              <Option value="Hold">Hold</Option>
+            </Select>
+          </Form.Item>
+        </Col>
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="brandId" label="Brands">
+            <Select
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              className="w-100"
+              style={{ minWidth: 180 }}
+              // onChange={(value) => setSelectedBrandId(value)}
+              // onSelect={handleQuery}
+              placeholder="Brands"
+            // value={selectedBrandId}
+            >
+              <Option value="">All</Option>
+              {brands.map((brand) => (
+                <Option key={brand.id} value={brand.id}>
+                  {brand.name}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </Col>
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="categoryId" label="Categories">
+            <Select
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              className="w-100"
+              style={{ minWidth: 180 }}
+              // onChange={(value) => setSelectedBrandId(value)}
+              // onSelect={handleQuery}
+              placeholder="Categories"
+            // value={selectedBrandId}
+            >
+              <Option value="">All</Option>
+              {categories.map((category) => (
+                <Option key={category.id} value={category.id}>
+                  {category.name}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </Col>
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="medicineTypeId" label="Medicine Types">
+            <Select
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              className="w-100"
+              style={{ minWidth: 180 }}
+              // onChange={(value) => setSelectedBrandId(value)}
+              // onSelect={handleQuery}
+              placeholder="Medicine Types"
+            // value={selectedBrandId}
+            >
+              <Option value="">All</Option>
+              {medicineTypes.map((medicineType) => (
+                <Option key={medicineType.id} value={medicineType.id}>
+                  {medicineType.name}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </Col>
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="manufactureId" label="Manufactures">
+            <Select
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              className="w-100"
+              style={{ minWidth: 180 }}
+              // onChange={(value) => setSelectedBrandId(value)}
+              // onSelect={handleQuery}
+              placeholder="Manufacturers"
+            // value={selectedBrandId}
+            >
+              <Option value="">All</Option>
+              {manufacturers.map((manufacturer) => (
+                <Option key={manufacturer.id} value={manufacturer.id}>
+                  {manufacturer.name}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </Col>
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="prescriptionRequired" label="Prescription Required">
+          <Select
           showSearch
           optionFilterProp="children"
           filterOption={(input, option) =>
@@ -405,130 +579,38 @@ const ProductTemplateList = () => {
           }
           className="w-100"
           style={{ minWidth: 180 }}
-          onChange={(value) => setSelectedBrandId(value)}
+          // onChange={(value) => setSelectedPrescriptionRequired(value)}
           // onSelect={handleQuery}
-          placeholder="Brand"
-          value={selectedBrandId}
-        >
-          <Option value="">All</Option>
-          {brands.map((brand) => (
-            <Option key={brand.id} value={brand.id}>
-              {brand.name}
-            </Option>
-          ))}
-        </Select>
-      </div>
-
-      <div className="mr-md-3 mb-3">
-        <label className="mt-2">Categories</label>
-        <Select
-          showSearch
-          optionFilterProp="children"
-          filterOption={(input, option) =>
-            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-          }
-          className="w-100"
-          style={{ minWidth: 180 }}
-          onChange={(value) => setSelectedCategoryId(value)}
-          // onSelect={handleQuery}
-          value={selectedCategoryId}
-          placeholder="Category"
-        >
-          <Option value="">All</Option>
-          {categories.map((category) => (
-            <Option key={category.id} value={category.id}>
-              {category.name}
-            </Option>
-          ))}
-        </Select>
-      </div>
-      <div className="mr-md-3 mb-3">
-        <label className="mt-2">Medicine Types</label>
-        <Select
-          showSearch
-          optionFilterProp="children"
-          filterOption={(input, option) =>
-            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-          }
-          className="w-100"
-          style={{ minWidth: 180 }}
-          onChange={(value) => setSelectedMedicineTypeId(value)}
-          // onSelect={handleQuery}
-          value={selectedMedicineTypeId}
-          placeholder="Medicine Types"
-        >
-          <Option value="">All</Option>
-          {medicineTypes.map((medicineType) => (
-            <Option key={medicineType.id} value={medicineType.id}>
-              {medicineType.name}
-            </Option>
-          ))}
-        </Select>
-      </div>
-      <div className="mr-md-3 mb-3">
-        <label className="mt-2">Manufacturers</label>
-        <Select
-          showSearch
-          optionFilterProp="children"
-          filterOption={(input, option) =>
-            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-          }
-          className="w-100"
-          style={{ minWidth: 180 }}
-          onChange={(value) => setSelectedManufacturerId(value)}
-          // onSelect={handleQuery}
-          value={selectedManufacturerId}
-          placeholder="Manufacturers"
-        >
-          <Option value="">All</Option>
-          {manufacturers.map((man) => (
-            <Option key={man.id} value={man.id}>
-              {man.name}
-            </Option>
-          ))}
-        </Select>
-      </div>
-      <div className="mr-md-3 mb-3">
-        <label className="mt-2">Presecription Required</label>
-        <Select
-          showSearch
-          optionFilterProp="children"
-          filterOption={(input, option) =>
-            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-          }
-          className="w-100"
-          style={{ minWidth: 180 }}
-          onChange={(value) => setSelectedPrescriptionRequired(value)}
-          // onSelect={handleQuery}
-          value={selectedPrescriptionrequired}
+          // value={selectedPrescriptionrequired}
           placeholder="Prescription Required"
         >
           <Option value="">All</Option>
           <Option value="Yes">Yes</Option>
           <Option value="No">No</Option>
         </Select>
-      </div>
-      <div>
-        <Button type="primary" className="mr-2 mt-4 " onClick={handleQuery}>
-          Filter
-        </Button>
-      </div>
-      <div>
-        <Button
-          type="primary"
-          className="mr-2 mt-4"
-          onClick={handleClearFilter}
-        >
-          Clear
-        </Button>
-      </div>
-    </Flex>
+          </Form.Item>
+        </Col>
+
+
+        
+    <Col className="mb-4">
+          <Button type="primary" onClick={handleFilterSubmit}>
+            Filter
+          </Button>
+        </Col>
+        <Col className="mb-4">
+          <Button type="primary" onClick={handleClearFilter}>
+            Clear
+          </Button>
+        </Col>
+      </Row>
+    </Form>
   )
 
   return (
     <Card>
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
-        {filters()}
+        {filtersComponent()}
       </Flex>
       <div className="mr-2 d-flex justify-content-between">
         <Button
@@ -592,8 +674,11 @@ const ProductTemplateList = () => {
           }}
           columns={tableColumns}
           dataSource={list}
-          rowKey="id"
+          rowKey="id" pagination={pagination}
+          loading={loading}
+          onChange={handleTableChange}
         />
+        
       </div>
     </Card>
   )
