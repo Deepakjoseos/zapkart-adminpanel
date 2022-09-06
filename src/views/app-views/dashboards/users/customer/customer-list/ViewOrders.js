@@ -9,6 +9,8 @@ import {Link} from 'react-router-dom'
 import orderService from 'services/orders'
 import moment from 'moment'
 import EllipsisDropdown from 'components/shared-components/EllipsisDropdown'
+import constantsService from 'services/constants'
+const {Option} = Select
 
 
 
@@ -23,8 +25,20 @@ const ViewOrders = ({
     //   const [viewFormModal, setViewFormModal] = useState(false)
     //   const [formMode, setFormMode] = useState('add')
     //   const [selectedFormAddress, setSelectedFormAddress] = useState({})
-    const [ordersList, setOrdersList] = useState([])
+    // const [ordersList, setOrdersList] = useState([])
     const [orders, setOrders] = useState([])
+    const [orderStatuses, setOrderStatuses] = useState([])
+    // const [paymentStatuses, setPaymentStatuses] = useState([])
+
+
+    const fetchConstants = async () => {
+      const data = await constantsService.getConstants()
+      if (data) {
+        // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
+        setOrderStatuses(Object.values(data.ORDER['ORDER_STATUS']))
+        // setPaymentStatuses(Object.values(data.PAYMENT['PAYMENT_STATUS']))
+      }
+    }
   
     //   const onDeleteAddress = async (addressId) => {
     //     const customerDelete = await customerService.deleteAddress(
@@ -41,18 +55,39 @@ const ViewOrders = ({
     //   }
     useEffect(() => {
         getOrders()
+        fetchConstants()
         // findCustomerOrders()
     }, [selectedCustomerId])
     const getOrders = async () => {
       const data = await orderService.getOrders({userId:selectedCustomerId})
       if (data) {
-          setOrders(data.data)
+          setOrders(data)
           //   setSearchBackupList(data)
-          console.log(data.data, 'show-data')
+          console.log(data, 'show-data')
       }
   }
 
+   const handleOrderStatusChange = async (value, selectedRow) => {
+     const updatedOrderStatus = await orderService.updateOrderStatus(
+       selectedRow.id,
+       value
+     )
 
+     if (updatedOrderStatus) {
+       notification.success({ message: 'Order Status Updated' })
+
+        // const objKey = 'id'
+        // let data = list
+        // data = utils.updateArrayRow(
+        //   data,
+        //   objKey,
+        //   selectedRow.id,
+        //   'approval',
+        //   value
+        // )
+        // setList(data)
+     }
+   }
     // const tableColumns = [
     //     {
     //         title: 'City',
@@ -111,16 +146,16 @@ const ViewOrders = ({
           sorter: (a, b) => utils.antdTableSorter(a, b, 'shippingCharge'),
           // render: (items, record) => <div>{items?.length}</div>,
         },
-        {
-          title: 'Order Date',
-          dataIndex: 'createdAt',
-          render: (createdAt) => (
-            <Flex alignItems="center">
-              {moment(new Date(createdAt * 1000)).format('DD-MM-YYYY hh:mm:a')}
-            </Flex>
-          ),
-          sorter: (a, b) => utils.antdTableSorter(a, b, 'createdAt'),
-        },
+        // {
+        //   title: 'Order Date',
+        //   dataIndex: 'createdAt',
+        //   render: (createdAt) => (
+        //     <Flex alignItems="center">
+        //       {moment(new Date(createdAt * 1000)).format('DD-MM-YYYY hh:mm:a')}
+        //     </Flex>
+        //   ),
+        //   sorter: (a, b) => utils.antdTableSorter(a, b, 'createdAt'),
+        // },
         // {
         //   title: 'Date',
         //   dataIndex: 'date',
@@ -140,27 +175,28 @@ const ViewOrders = ({
         //   sorter: (a, b) => utils.antdTableSorter(a, b, 'orderStatus'),
         // },
     
-        // {
-        //   title: 'Order status',
-        //   dataIndex: 'status',
-        //   render: (status, row) => {
-        //     return (
-        //       <Select
-        //         defaultValue={status}
-        //         style={{ width: 150 }}
-        //         onChange={(e) => handleOrderStatusChange(e, row)}
-        //       >
-        //         {orderStatuses?.map((item) => (
-        //           <Option key={item} value={item}>
-        //             {item}
-        //           </Option>
-        //         ))}
-        //       </Select>
-        //     )
-        //   },
-        //   // render: (isUnlimited) => <Flex>{isUnlimited ? 'Yes' : 'No'}</Flex>,
-        //   // sorter: (a, b) => utils.antdTableSorter(a, b, 'approval'),
-        // },
+          {
+            title: 'Order status',
+            dataIndex: 'status',
+            render: (status, row) => {
+              return (
+                <Select
+                  defaultValue={status}
+                  style={{ width: 150 }}
+                  onChange={(e) => handleOrderStatusChange(e, row)}
+                >
+                  {orderStatuses?.map((item) => (
+                    <Option key={item} value={item}>
+                      {item}
+                    </Option>
+                  ))}
+                </Select>
+              )
+            },
+            //  render: (isUnlimited) => <Flex>{isUnlimited ? 'Yes' : 'No'}</Flex>,
+            //  sorter: (a, b) => utils.antdTableSorter(a, b, 'approval'),
+          },
+          
         {
           title: 'Payment Status',
           dataIndex: 'payment',
@@ -230,7 +266,7 @@ const ViewOrders = ({
           x: true,
         }}
         columns={tableColumns}
-        dataSource={ordersList}
+        dataSource={orders}
         rowKey="id"
       
       />

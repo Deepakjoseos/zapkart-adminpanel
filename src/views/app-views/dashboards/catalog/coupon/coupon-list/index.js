@@ -306,16 +306,15 @@ const CouponList = () => {
           </Form.Item>
         </Col>
        
-        <Col className="mb-4">
+        <Col className="mb-4 ml-5">
           <Button type="primary" onClick={handleFilterSubmit}>
             Filter
           </Button>
-        </Col>
-        <Col className="mb-4">
-          <Button type="primary" onClick={handleClearFilter}>
+          <Button  className="ml-1" type="primary" onClick={handleClearFilter}>
             Clear
           </Button>
         </Col>
+       
       </Row>
     </Form>
   )

@@ -91,6 +91,8 @@ const Orders = () => {
       setUsers(users)
     }
   }
+
+
   const fetchConstants = async () => {
     const data = await constantsService.getConstants()
     if (data) {
@@ -495,11 +497,11 @@ const Orders = () => {
           </Form.Item>
         </Col>
     
-        <Col className="mb-4">
+        <Col className="mb-4 ml-2">
           <Button type="primary" onClick={handleFilterSubmit}>
             Filter
           </Button>
-          <Button className='ml-2' type="primary" onClick={handleClearFilter}>
+          <Button  className="ml-1" type="primary" onClick={handleClearFilter}>
             Clear
           </Button>
         </Col>

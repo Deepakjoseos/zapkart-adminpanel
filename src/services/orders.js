@@ -4,6 +4,7 @@ import fetch from 'auth/FetchInterceptor'
 const orderService = {}
 
 const api = '/order/admin/view_all'
+
 orderService.getOrders = async function (paginationQuery = '', query = '') {
   try {
     let url = `${api}?${paginationQuery}&${query}`
@@ -14,7 +15,38 @@ orderService.getOrders = async function (paginationQuery = '', query = '') {
     return res
   } catch (err) {
     console.log(err, 'show-err')
-  }}
+  }
+}
+// orderService.getOrders = async function (query) {
+//   try {
+//     let url = `${api}`
+//     const status = query?.status
+//     const userId = query?.userId
+//     const limit = query?.limit
+
+//     if (status) url = `${url}?status=${status}`
+//     if (userId)
+//       url =
+//         status && status !== null
+//           ? `${url}&userId=${userId}`
+//           : `${url}?userId=${userId}`
+
+//     if (limit)
+//       url =
+//         (status && status !== null) || (userId && userId !== null)
+//           ? `${url}&limit=${limit}`
+//           : `${url}?limit=${limit}`
+
+//     const res = await fetch({
+//       url,
+//       method: 'get',
+//     })
+//     const data = res.data.filter((cur) => cur.status !== 'Deleted')
+//     return data
+//   } catch (err) {
+//     console.log(err, 'show-err')
+//   }
+// }
 
 orderService.getOrderById = async function (id) {
   try {
