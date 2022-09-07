@@ -36,7 +36,7 @@ const ShipmentForm = (props) => {
   }
   useEffect(()=>{
     getVendors()
-  })
+  },[])
 
   // useEffect(() => {
   //   if (mode === EDIT) {

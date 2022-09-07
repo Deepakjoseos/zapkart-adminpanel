@@ -15,7 +15,7 @@ const Shipment = (props) => {
       <Route path={`${match.url}/add-shipment`} component={AddShipment} />
       <Route path={`${match.url}/edit-shipment/:id`} component={EditShiment} />
       <Route path={`${match.url}/shipment-list`} component={ShipmentList} />
-      <Route path={`${match.url}/oshipment-view/:id`} component={ShipmentView} />
+      <Route path={`${match.url}/shipment-view/:id`} component={ShipmentView} />
 
       {/* <Route path={`${match.url}/orders`} component={Orders} /> */}
     </Switch>

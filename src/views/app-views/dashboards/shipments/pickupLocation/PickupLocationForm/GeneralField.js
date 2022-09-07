@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Input, Row, Col, Card, Form,Select } from 'antd'
+import { Input, Row, Col, Card, Form,Select, InputNumber } from 'antd'
 const {Option} = Select
 
 const GeneralField = ({ form ,vendors}) => {
@@ -115,6 +115,20 @@ const GeneralField = ({ form ,vendors}) => {
         <Col span={24}>
           <Form.Item name="address_2" label="Address 2">
             <Input.TextArea rows={4} placeholder="Address 2" />
+          </Form.Item>
+        </Col>
+      </Row>
+      <Row gutter={16}>
+        <Col span={24}>
+          <Form.Item name="lat" label="Lattitude">
+            <InputNumber  placeholder="Lattitude" />
+          </Form.Item>
+        </Col>
+      </Row>
+      <Row gutter={16}>
+        <Col span={24}>
+          <Form.Item name="long" label="Longitude">
+            <InputNumber  placeholder="Longitude" />
           </Form.Item>
         </Col>
       </Row>

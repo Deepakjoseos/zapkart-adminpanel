@@ -61,19 +61,19 @@ const ProductForm = (props) => {
 
   const getMedicineTypes = async () => {
     const data = await medicineTypeService.getMedicineTypes()
-    const activeMedicineTypes = data.filter((item) => item.status === 'Active')
+    const activeMedicineTypes = data.data.filter((item) => item.status === 'Active')
     setMedicineTypes(activeMedicineTypes)
   }
 
   const getManufacturers = async () => {
-    const data = await manufacturerService.getManufacturer()
-    const activeManufacturers = data.filter((item) => item.status === 'Active')
+    const data = await manufacturerService.getManufacturers()
+    const activeManufacturers = data.data.filter((item) => item.status === 'Active')
     setManufacturers(activeManufacturers)
   }
 
   const getCompositions = async () => {
     const data = await compositionService.getCompositions()
-    const activeCompositions = data.filter((item) => item.status === 'Active')
+    const activeCompositions = data.data.filter((item) => item.status === 'Active')
     setCompositions(activeCompositions)
     return activeCompositions
   }

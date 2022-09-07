@@ -258,7 +258,7 @@ const OrderView = () => {
               pagination={false}
               className="mb-5"
             >
-             <Column title="ShipmentId" dataIndex="shipmentId" key="shipmentId" render={(text) => <Link to={`/app/dashboards/shipments/shipment-view/${text}`}> {text}</Link>}  />
+             <Column title="ShipmentId" dataIndex="shipmentId" key="shipmentId" render={(text) => <Link to={`/app/dashboards/shipments/shipment/shipment-view/${text}`}> {text}</Link>}  />
               <Column title="Product" dataIndex="name" key="name" />
               <Column title="Quantity" dataIndex="quantity" key="quantity" />
               <Column title="Price" dataIndex="price" key="price" />
