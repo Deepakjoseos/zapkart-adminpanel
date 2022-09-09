@@ -81,7 +81,7 @@ shipmentService.getPickupLocations = async function () {
 shipmentService.createPickupLocation = async function (data) {
   try {
     const res = await fetch({
-      url: `${apiRoute}/pickupLocations/new`,
+      url: `/vendors/pickuplocation/new/${data.vendorId}`,
       method: 'post',
       data,
     })

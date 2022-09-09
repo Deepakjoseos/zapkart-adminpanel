@@ -186,8 +186,10 @@ export const DefaultDashboard = () => {
   }
 
   const getOrders = async () => {
-    const orders = await orderService.getOrders({ limit: 5 })
-    setRecentTransactionData(orders?.slice(0, 5))
+    const orders = await orderService.getOrders("","limit=5")
+    console.log('orders',orders)
+    setRecentTransactionData(orders?.data)
+   
   }
 
   const getStatics = async () => {

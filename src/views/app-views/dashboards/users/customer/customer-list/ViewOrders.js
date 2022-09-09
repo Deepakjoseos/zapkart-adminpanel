@@ -1,15 +1,35 @@
-import { Button, Card, Drawer, notification, Table, Typography,Select } from 'antd'
+import React, { useEffect, useRef, useState } from 'react'
+import {
+  Card,
+  Table,
+  Select,
+  Input,
+  Button,
+  Menu,
+  Tag,
+  Form,
+  Row,
+  Col,notification
+} from 'antd'
+// import BrandListData from 'assets/data/product-list.data.json'
+import {
+  EyeOutlined,
+  DeleteOutlined,
+  SearchOutlined,
+  PlusCircleOutlined,
+} from '@ant-design/icons'
+import AvatarStatus from 'components/shared-components/AvatarStatus'
+import EllipsisDropdown from 'components/shared-components/EllipsisDropdown'
 import Flex from 'components/shared-components/Flex'
-import React, { useEffect, useState } from 'react'
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
-import AddressForm from './AddressForm'
-import customerService from 'services/customer'
+import qs from 'qs'
 import utils from 'utils'
-import {Link} from 'react-router-dom'
+import brandService from 'services/brand'
+import _ from 'lodash'
+import { useHistory, Link } from 'react-router-dom'
+import constantsService from 'services/constants'
 import orderService from 'services/orders'
 import moment from 'moment'
-import EllipsisDropdown from 'components/shared-components/EllipsisDropdown'
-import constantsService from 'services/constants'
+
 const {Option} = Select
 
 
@@ -28,6 +48,14 @@ const ViewOrders = ({
     // const [ordersList, setOrdersList] = useState([])
     const [orders, setOrders] = useState([])
     const [orderStatuses, setOrderStatuses] = useState([])
+    // Added for Pagination
+  const [loading, setLoading] = useState(false)
+  const [filterEnabled, setFilterEnabled] = useState(false)
+  const [pagination, setPagination] = useState({
+    current: 1,
+    pageSize: 10,
+  })
+  
     // const [paymentStatuses, setPaymentStatuses] = useState([])
 
 
@@ -58,14 +86,48 @@ const ViewOrders = ({
         fetchConstants()
         // findCustomerOrders()
     }, [selectedCustomerId])
-    const getOrders = async () => {
-      const data = await orderService.getOrders({userId:selectedCustomerId})
-      if (data) {
-          setOrders(data)
-          //   setSearchBackupList(data)
-          console.log(data, 'show-data')
-      }
+  //   const getOrders = async () => {
+  //     const data = await orderService.getOrders(paginationParams = {},`userId=${selectedCustomerId}`)
+  //     if (data) {
+  //         setOrders(data)
+  //         //   setSearchBackupList(data)
+  //         console.log(data, 'show-data')
+  //     }
+  // }
+  const getOrders = async (paginationParams = {}, filterParams={userId:selectedCustomerId}) => {
+    setLoading(true)
+    const data = await orderService.getOrders(
+      qs.stringify(getPaginationParams(paginationParams)),
+      qs.stringify(filterParams)
+    )
+  
+    if (data) {
+      setOrders(data.data)
+  
+      // Pagination
+      setPagination({
+        ...paginationParams.pagination,
+        total: data.total,
+      })
+      setLoading(false)
+    }
   }
+  
+  useEffect(() => {
+    getOrders({
+      pagination,
+    })
+    // getVendors()
+    fetchConstants()
+    getOrders()
+  }, [])
+  
+  // pagination generator
+  const getPaginationParams = (params) => ({
+    limit: params.pagination?.pageSize,
+    page: params.pagination?.current,
+    // ...params,
+  })
 
    const handleOrderStatusChange = async (value, selectedRow) => {
      const updatedOrderStatus = await orderService.updateOrderStatus(
@@ -146,6 +208,16 @@ const ViewOrders = ({
           sorter: (a, b) => utils.antdTableSorter(a, b, 'shippingCharge'),
           // render: (items, record) => <div>{items?.length}</div>,
         },
+        {
+          title: 'Order Date',
+          dataIndex: 'createdAt',
+          render: (createdAt) => (
+               <Flex alignItems="center">
+                 {moment(new Date(createdAt * 1000)).format('DD-MM-YYYY hh:mm:a')}
+               </Flex>
+             ),
+          // render: (items, record) => <div>{items?.length}</div>,
+        },
         // {
         //   title: 'Order Date',
         //   dataIndex: 'createdAt',
@@ -178,21 +250,21 @@ const ViewOrders = ({
           {
             title: 'Order status',
             dataIndex: 'status',
-            render: (status, row) => {
-              return (
-                <Select
-                  defaultValue={status}
-                  style={{ width: 150 }}
-                  onChange={(e) => handleOrderStatusChange(e, row)}
-                >
-                  {orderStatuses?.map((item) => (
-                    <Option key={item} value={item}>
-                      {item}
-                    </Option>
-                  ))}
-                </Select>
-              )
-            },
+            // render: (status, row) => {
+            //   return (
+            //     <Select
+            //       defaultValue={status}
+            //       style={{ width: 150 }}
+            //       onChange={(e) => handleOrderStatusChange(e, row)}
+            //     >
+            //       {orderStatuses?.map((item) => (
+            //         <Option key={item} value={item}>
+            //           {item}
+            //         </Option>
+            //       ))}
+            //     </Select>
+            //   )
+            // },
             //  render: (isUnlimited) => <Flex>{isUnlimited ? 'Yes' : 'No'}</Flex>,
             //  sorter: (a, b) => utils.antdTableSorter(a, b, 'approval'),
           },

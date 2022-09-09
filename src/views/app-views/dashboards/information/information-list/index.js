@@ -175,6 +175,8 @@ const InformationList = () => {
     {
       title: 'Description',
       dataIndex: 'description',
+      render:	(description)	=>			<div dangerouslySetInnerHTML={{ __html: description}} />
+
     },
     {
       title: 'Priority',
