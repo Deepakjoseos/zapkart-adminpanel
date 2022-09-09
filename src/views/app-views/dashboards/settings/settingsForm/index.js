@@ -39,7 +39,10 @@ const[setmode,setMode]=useState('')
             instagramUrl: data.instagramUrl,
             twitterUrl: data.twitterUrl,
             vendorCommission:data.vendorCommission,
-            deliveryCharges: data.deliveryCharges
+            deliveryCharges: data.deliveryCharges,
+            metaTitle: data.metaTitle,
+            metaDescription: data.metaDescription,
+            metakeywords: data.metakeywords,
           })
         
         setSettings(data)

@@ -41,7 +41,7 @@ import deliveryLocation from 'services/deliveryLocation'
     const getDeliveryLocations = async () => {
       const data = await deliveryLocation.getDeliveryLocations()
       if (data) {
-        const onlyActiveDeliveryLocations = data.filter(
+        const onlyActiveDeliveryLocations = data.data.filter(
           (cur) => cur.status !== 'Hold'
         )
         if (id) {

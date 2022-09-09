@@ -14,6 +14,7 @@ import customerService from 'services/customer'
 import ViewAddresses from '../customer-list/ViewAddresses'
 import ViewPrescriptions from '../customer-list/ViewPrescriptions'
 import userGroupService from 'services/userGroup'
+import ViewOrders from '../customer-list/ViewOrders'
 
 const { TabPane } = Tabs
 
@@ -115,6 +116,7 @@ const ProductForm = (props) => {
     onChange: onChangeDisplayImages,
     fileList: fileListDisplayImages,
   }
+
 
   useEffect(() => {
     setDisplayImage(fileListDisplayImages)
@@ -241,6 +243,13 @@ const ProductForm = (props) => {
                     selectedPrescriptionCustomerId={selectedPrescriptionCustomerId}
                     setSelectedPrescriptionCustomerId={setSelectedPrescriptionCustomerId}
                   />
+                </TabPane>
+                <TabPane tab="Orders" key="4">
+                  {/* <Orders
+                    selectedPrescriptionCustomerId={selectedPrescriptionCustomerId}
+                    setSelectedPrescriptionCustomerId={setSelectedPrescriptionCustomerId}
+                  /> */}
+                  <ViewOrders selectedCustomerId={selectedCustomerId} />
                 </TabPane>
                 
               </>

@@ -1,6 +1,17 @@
-import React, { useEffect, useState } from 'react'
-import { Card, Table, Select, Input, Button, Menu, Tag } from 'antd'
-// import CouponListData from 'assets/data/product-list.data.json'
+import React, { useEffect, useRef, useState } from 'react'
+import {
+  Card,
+  Table,
+  Select,
+  Input,
+  Button,
+  Menu,
+  Tag,
+  Form,
+  Row,
+  Col,
+} from 'antd'
+// import BrandListData from 'assets/data/product-list.data.json'
 import {
   EyeOutlined,
   DeleteOutlined,
@@ -10,9 +21,11 @@ import {
 import AvatarStatus from 'components/shared-components/AvatarStatus'
 import EllipsisDropdown from 'components/shared-components/EllipsisDropdown'
 import Flex from 'components/shared-components/Flex'
-import NumberFormat from 'react-number-format'
 import { useHistory } from 'react-router-dom'
+import qs from 'qs'
 import utils from 'utils'
+import brandService from 'services/brand'
+import _ from 'lodash'
 import couponService from 'services/coupon'
 import moment from 'moment'
 
@@ -37,23 +50,63 @@ const getStockStatus = (status) => {
 }
 const CouponList = () => {
   let history = useHistory()
-
+  const [form] = Form.useForm()
+  
   const [list, setList] = useState([])
-  const [searchBackupList, setSearchBackupList] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
-  const [selectedRowKeys, setSelectedRowKeys] = useState([])
-
-  useEffect(() => {
-    const getCoupons = async () => {
-      const data = await couponService.getCoupons()
-      if (data) {
-        setList(data)
-        setSearchBackupList(data)
-        console.log(data, 'show-data')
-      }
+  
+  // Added for Pagination
+  const [loading, setLoading] = useState(false)
+  const [filterEnabled, setFilterEnabled] = useState(false)
+  
+  // pagination
+  const [pagination, setPagination] = useState({
+    current: 1,
+    pageSize: 10,
+  })
+  
+  // Changed here for pagination
+  const getCoupons = async (paginationParams = {}, filterParams) => {
+    setLoading(true)
+    const data = await couponService.getCoupons(
+      qs.stringify(getPaginationParams(paginationParams)),
+      qs.stringify(filterParams)
+    )
+  
+    if (data) {
+      setList(data.data)
+  
+      // Pagination
+      setPagination({
+        ...paginationParams.pagination,
+        total: data.total,
+      })
+      setLoading(false)
     }
-    getCoupons()
+  }
+  
+  useEffect(() => {
+    getCoupons({
+      pagination,
+    })
   }, [])
+  
+  // pagination generator
+  const getPaginationParams = (params) => ({
+    limit: params.pagination?.pageSize,
+    page: params.pagination?.current,
+    // ...params,
+  })
+  
+  // On pagination Change
+  const handleTableChange = (newPagination) => {
+    getCoupons(
+      {
+        pagination: newPagination,
+      },
+      filterEnabled ? _.pickBy(form.getFieldsValue(), _.identity) : {}
+    )
+  }
 
   const dropdownMenu = (row) => (
     <Menu>
@@ -103,6 +156,39 @@ const CouponList = () => {
     }
   }
 
+ // Pagination
+  const resetPagination = () => ({
+    ...pagination,
+    current: 1,
+    pageSize: 10,
+  })
+
+  // Filter Submit
+  const handleFilterSubmit = async () => {
+    setPagination(resetPagination())
+
+    form
+      .validateFields()
+      .then(async (values) => {
+        setFilterEnabled(true)
+        // Removing falsy Values from values
+        const sendingValues = _.pickBy(values, _.identity)
+        getCoupons({ pagination: resetPagination() }, sendingValues)
+      })
+      .catch((info) => {
+        console.log('info', info)
+        setFilterEnabled(false)
+      })
+  }
+
+  // Clear Filter
+  const handleClearFilter = async () => {
+    form.resetFields()
+
+    setPagination(resetPagination())
+    getCoupons({ pagination: resetPagination() }, {})
+    setFilterEnabled(false)
+  }
   const tableColumns = [
     {
       title: 'Coupon',
@@ -175,53 +261,68 @@ const CouponList = () => {
     },
   ]
 
-  const onSearch = (e) => {
-    const value = e.currentTarget.value
-    const searchArray = e.currentTarget.value ? list : searchBackupList
-    const data = utils.wildCardSearch(searchArray, value)
-    setList(data)
-    setSelectedRowKeys([])
-  }
+  // const onSearch = (e) => {
+  //   const value = e.currentTarget.value
+  //   const searchArray = e.currentTarget.value ? list : searchBackupList
+  //   const data = utils.wildCardSearch(searchArray, value)
+  //   setList(data)
+  //   setSelectedRowKeys([])
+  // }
 
-  const handleShowStatus = (value) => {
-    if (value !== 'All') {
-      const key = 'status'
-      const data = utils.filterArray(searchBackupList, key, value)
-      setList(data)
-    } else {
-      setList(searchBackupList)
-    }
-  }
+  // const handleShowStatus = (value) => {
+  //   if (value !== 'All') {
+  //     const key = 'status'
+  //     const data = utils.filterArray(searchBackupList, key, value)
+  //     setList(data)
+  //   } else {
+  //     setList(searchBackupList)
+  //   }
+  // }
 
-  const filters = () => (
-    <Flex className="mb-1" mobileFlex={false}>
-      <div className="mr-md-3 mb-3">
-        <Input
-          placeholder="Search"
-          prefix={<SearchOutlined />}
-          onChange={(e) => onSearch(e)}
-        />
-      </div>
-      <div className="mb-3">
-        <Select
-          defaultValue="All"
-          className="w-100"
-          style={{ minWidth: 180 }}
-          onChange={handleShowStatus}
-          placeholder="Status"
-        >
-          <Option value="All">All</Option>
-          <Option value="Active">Active</Option>
-          <Option value="Hold">Hold</Option>
-        </Select>
-      </div>
-    </Flex>
+  const filtersComponent = () => (
+    <Form
+      layout="vertical"
+      form={form}
+      name="filter_form"
+      className="ant-advanced-search-form"
+    >
+      <Row gutter={8} align="bottom">
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="search" label="Search">
+            <Input placeholder="Search" prefix={<SearchOutlined />} />
+          </Form.Item>
+        </Col>
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="status" label="Status">
+            <Select
+              className="w-100"
+              style={{ minWidth: 180 }}
+              placeholder="Status"
+            >
+              <Option value="">All</Option>
+              <Option value="Active">Active</Option>
+              <Option value="Hold">Hold</Option>
+            </Select>
+          </Form.Item>
+        </Col>
+       
+        <Col className="mb-4 ml-5">
+          <Button type="primary" onClick={handleFilterSubmit}>
+            Filter
+          </Button>
+          <Button  className="ml-1" type="primary" onClick={handleClearFilter}>
+            Clear
+          </Button>
+        </Col>
+       
+      </Row>
+    </Form>
   )
 
   return (
     <Card>
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
-        {filters()}
+        {filtersComponent()}
         <div>
           <Button
             onClick={addProduct}
@@ -237,7 +338,9 @@ const CouponList = () => {
         <Table scroll={{
             x: true,
           }}
-        columns={tableColumns} dataSource={list} rowKey="id" />
+        columns={tableColumns} dataSource={list} rowKey="id" pagination={pagination}
+        loading={loading}
+        onChange={handleTableChange}/>
       </div>
     </Card>
   )

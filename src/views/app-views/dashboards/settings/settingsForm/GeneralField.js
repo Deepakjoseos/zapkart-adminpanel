@@ -216,6 +216,33 @@ const GeneralField = ({ setmode }) => {
         </div>
 
       </Card>
+      <Card title="SEO">
+          <Form.Item name="metaTitle" label="Meta Title">
+            <Input placeholder="Meta Title" />
+          </Form.Item>
+          <Form.Item name="metaDescription" label="Meta Description">
+            <Input placeholder="Meta Description" />
+          </Form.Item>
+          {/* <Form.Item name="keywords" label="Keywords">
+            <Input placeholder="Keywords" />
+          </Form.Item> */}
+          <Form.Item name="metakeywords" label="Meta Keywords">
+            <Select
+              dropdownStyle={{ display: 'none' }}
+              mode="tags"
+              style={{
+                width: '100%',
+              }}
+              placeholder="Keywords"
+            ></Select>
+          </Form.Item>
+          {/* <Form.Item name="slug" label="Slug" rules={rules.slug}>
+            <Input placeholder="Slug" />
+          </Form.Item> */}
+         
+        
+        </Card>
+      
 
     </>
     //   </Col>

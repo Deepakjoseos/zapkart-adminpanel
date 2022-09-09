@@ -33,7 +33,7 @@ import {
   UserOutlined,
 } from '@ant-design/icons'
 import utils from 'utils'
-import { withRouter } from 'react-router-dom'
+import { withRouter,Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import customerService from 'services/customer'
 import orderService from 'services/orders'
@@ -120,20 +120,11 @@ const tableColumns = [
   {
     title: 'OrderNo',
     dataIndex: 'orderNo',
-    key: 'orderNo',
-    // render: (text, record) => (
-    //   <div className="d-flex align-items-center">
-    //     <Avatar
-    //       size={30}
-    //       className="font-size-sm"
-    //       icon={<UserOutlined />}
-    //       // style={{ backgroundColor: record.avatarColor }}
-    //     >
-    //       {/* {utils.getNameInitial(text)} */}
-    //     </Avatar>
-    //     <span className="ml-2">{text}</span>
-    //   </div>
-    // ),
+    render: (text, record) => (
+      <Link to={`/app/dashboards/orders/order-view/${record.id}`}>
+        {text}
+      </Link>
+    ),
   },
   {
     title: 'User Name',

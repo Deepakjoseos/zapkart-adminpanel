@@ -7,29 +7,30 @@ import {
   Button,
   Menu,
   Tag,
-  notification,
-  Modal,
+  Form,
+  Row,
+  Col,Modal,notification
 } from 'antd'
-
+// import BrandListData from 'assets/data/product-list.data.json'
 import {
   EyeOutlined,
   DeleteOutlined,
   SearchOutlined,
-  PlusCircleOutlined,
-  FileAddOutlined,
-  DownloadOutlined,
+  PlusCircleOutlined,FileAddOutlined,DownloadOutlined
 } from '@ant-design/icons'
+import AvatarStatus from 'components/shared-components/AvatarStatus'
 import EllipsisDropdown from 'components/shared-components/EllipsisDropdown'
 import Flex from 'components/shared-components/Flex'
 import { useHistory } from 'react-router-dom'
+import qs from 'qs'
 import utils from 'utils'
+import brandService from 'services/brand'
+import _, { get } from 'lodash'
+import Label from 'views/app-views/components/data-display/timeline/Label'
 import productService from 'services/product'
+import categoryService from 'services/category'
 import DeliveryZoneService from 'services/deliveryZone'
 import vendorService from 'services/vendor'
-import brandService from 'services/brand'
-import { get } from 'lodash'
-import categoryService from 'services/category'
-import Label from 'views/app-views/components/data-display/timeline/Label'
 
 const { Option } = Select
 
@@ -51,13 +52,22 @@ const getStockStatus = (status) => {
   return null
 }
 const ProductList = () => {
-  let history = useHistory()
   const fileInputRef = useRef(null)
 
   const [list, setList] = useState([])
   const [searchBackupList, setSearchBackupList] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
+
+  let history = useHistory()
+  const [form] = Form.useForm()
+  
+  
+  // Added for Pagination
+  const [loading, setLoading] = useState(false)
+  const [filterEnabled, setFilterEnabled] = useState(false)
+  
+
 
   const [isExcelModalOpen, setIsExcelModalOpen] = useState(false)
   const [deliveryZones, setDeliveryZones] = useState([])
@@ -67,11 +77,35 @@ const ProductList = () => {
   const [vendors, setVendors] = useState([])
   const [brands, setBrands] = useState([])
   const [categories, setCategories] = useState([])
-  const [selectedBrandId, setSelectedBrandId] = useState(null)
-  const [selectedCategoryId, setSelectedCategoryId] = useState(null)
-  const [selectedVendorId, setSelectedVendorId] = useState(null)
-  const [selectedApproval, setSelectedApproval] = useState('')
-  const [selectedacquirementMethod, setSelectedacquirementMethod] = useState('')
+  const [pagination, setPagination] = useState({
+    current: 1,
+    pageSize: 10,
+  })
+  
+  // Changed here for pagination
+  const getProducts = async (paginationParams = {}, filterParams) => {
+    setLoading(true)
+    const data = await productService.getProducts(
+      qs.stringify(getPaginationParams(paginationParams)),
+      qs.stringify(filterParams)
+    )
+  
+    if (data) {
+      setList(data.data)
+  
+      // Pagination
+      setPagination({
+        ...paginationParams.pagination,
+        total: data.total,
+      })
+      setLoading(false)
+    }
+  }
+  // const [selectedBrandId, setSelectedBrandId] = useState(null)
+  // const [selectedCategoryId, setSelectedCategoryId] = useState(null)
+  // const [selectedVendorId, setSelectedVendorId] = useState(null)
+  // const [selectedApproval, setSelectedApproval] = useState('')
+  // const [selectedacquirementMethod, setSelectedacquirementMethod] = useState('')
 
   // const getDeliveryZoneName = (id) => {
   //   const deliveryZoneName = await DeliveryZoneService.getDeliveryZoneById(id)
@@ -79,14 +113,17 @@ const ProductList = () => {
   // }
 
   useEffect(() => {
-    const getProducts = async () => {
-      const data = await productService.getProducts()
-      if (data) {
-        setList(data)
-        setSearchBackupList(data)
-        console.log(data, 'show-data')
-      }
-    }
+    // const getProducts = async () => {
+    //   const data = await productService.getProducts()
+    //   if (data) {
+    //     setList(data)
+    //     setSearchBackupList(data)
+    //     console.log(data, 'show-data')
+    //   }
+    // }
+    getProducts({
+      pagination,
+    })
     const getBrands = async () => {
       const data = await brandService.getBrands()
       if (data) {
@@ -96,16 +133,30 @@ const ProductList = () => {
     const getCategories = async () => {
       const data = await categoryService.getCategories()
       if (data) {
-        setCategories(data)
+        setCategories(data.data)
       }
     }
-    getProducts()
+    // getProducts()
     getBrands()
     getCategories()
     getVendors()
     console.log('vendors', vendors)
   }, [])
-
+  const getPaginationParams = (params) => ({
+    limit: params.pagination?.pageSize,
+    page: params.pagination?.current,
+    // ...params,
+  })
+  
+  // On pagination Change
+  const handleTableChange = (newPagination) => {
+    getProducts(
+      {
+        pagination: newPagination,
+      },
+      filterEnabled ? _.pickBy(form.getFieldsValue(), _.identity) : {}
+    )
+  }
   const dropdownMenu = (row) => (
     <Menu>
       <Menu.Item onClick={() => viewDetails(row)}>
@@ -374,78 +425,112 @@ const ProductList = () => {
     })
   }
 
-  const onSearch = (e) => {
-    const value = e.currentTarget.value
-    const searchArray = searchBackupList
-    const data = utils.wildCardSearch(searchArray, value)
-    setList(data)
-    setSelectedRowKeys([])
+  // const onSearch = (e) => {
+  //   const value = e.currentTarget.value
+  //   const searchArray = searchBackupList
+  //   const data = utils.wildCardSearch(searchArray, value)
+  //   setList(data)
+  //   setSelectedRowKeys([])
+  // }
+
+  // const handleShowStatus = (value) => {
+  //   if (value !== 'All') {
+  //     const key = 'status'
+  //     const data = utils.filterArray(searchBackupList, key, value)
+  //     setList(data)
+  //   } else {
+  //     setList(searchBackupList)
+  //   }
+  // }
+  // const handleQuery = async () => {
+  //   const query = {}
+  //   if ((selectedBrandId || selectedBrandId) !== 'All')
+  //     query.brandId = selectedBrandId
+  //   query.categoryId = selectedCategoryId
+  //   query.vendorId = selectedVendorId
+  //   query.approval = selectedApproval
+  //   query.acquirementMethod = selectedacquirementMethod
+  //   console.log('query', query)
+  //   const data = await productService.getProducts(query)
+  //   if (data) {
+  //     setList(data)
+  //     setSearchBackupList(data)
+  //   }
+  // }
+
+  // const handleClearFilter = async () => {
+  //   setSelectedBrandId(null)
+  //   setSelectedCategoryId(null)
+  //   setSelectedApproval(null)
+  //   setSelectedacquirementMethod(null)
+  //   setSelectedVendorId(null)
+
+  //   const data = await productService.getProducts({})
+  //   if (data) {
+  //     setList(data)
+  //     setSearchBackupList(data)
+  //   }
+  // }
+  const resetPagination = () => ({
+    ...pagination,
+    current: 1,
+    pageSize: 10,
+  })
+
+  // Filter Submit
+  const handleFilterSubmit = async () => {
+    setPagination(resetPagination())
+
+    form
+      .validateFields()
+      .then(async (values) => {
+        setFilterEnabled(true)
+        // Removing falsy Values from values
+        const sendingValues = _.pickBy(values, _.identity)
+        getProducts({ pagination: resetPagination() }, sendingValues)
+      })
+      .catch((info) => {
+        console.log('info', info)
+        setFilterEnabled(false)
+      })
   }
 
-  const handleShowStatus = (value) => {
-    if (value !== 'All') {
-      const key = 'status'
-      const data = utils.filterArray(searchBackupList, key, value)
-      setList(data)
-    } else {
-      setList(searchBackupList)
-    }
-  }
-  const handleQuery = async () => {
-    const query = {}
-    if ((selectedBrandId || selectedBrandId) !== 'All')
-      query.brandId = selectedBrandId
-    query.categoryId = selectedCategoryId
-    query.vendorId = selectedVendorId
-    query.approval = selectedApproval
-    query.acquirementMethod = selectedacquirementMethod
-    console.log('query', query)
-    const data = await productService.getProducts(query)
-    if (data) {
-      setList(data)
-      setSearchBackupList(data)
-    }
-  }
-
+  // Clear Filter
   const handleClearFilter = async () => {
-    setSelectedBrandId(null)
-    setSelectedCategoryId(null)
-    setSelectedApproval(null)
-    setSelectedacquirementMethod(null)
-    setSelectedVendorId(null)
+    form.resetFields()
 
-    const data = await productService.getProducts({})
-    if (data) {
-      setList(data)
-      setSearchBackupList(data)
-    }
+    setPagination(resetPagination())
+    getProducts({ pagination: resetPagination() }, {})
+    setFilterEnabled(false)
   }
-  const filters = () => (
-    <Flex flexWrap="wrap" className="mb-1" mobileFlex={false}>
-      <div className="mr-md-3 mb-3">
-        <label className="mt-2">Search</label>
-        <Input
-          placeholder="Search"
-          prefix={<SearchOutlined />}
-          onChange={(e) => onSearch(e)}
-        />
-      </div>
-      <div className="mr-md-3 mb-3">
-        <label className="mt-2">Status</label>
-        <Select
-          defaultValue="All"
-          className="w-100"
-          style={{ minWidth: 180 }}
-          onChange={handleShowStatus}
-          placeholder="Status"
-        >
-          <Option value="All">All</Option>
-          <Option value="Active">Active</Option>
-          <Option value="Hold">Hold</Option>
-        </Select>
-      </div>
-      <div className=" mr-md-3 mb-3">
-        <label className="mt-2">Brands</label>
+  const filtersComponent = () => (
+    <Form
+      layout="vertical"
+      form={form}
+      name="filter_form"
+      className="ant-advanced-search-form"
+    >
+      <Row gutter={8} align="bottom">
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="search" label="Search">
+            <Input placeholder="Search" prefix={<SearchOutlined />} />
+          </Form.Item>
+        </Col>
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="status" label="Status">
+            <Select
+              className="w-100"
+              style={{ minWidth: 180 }}
+              placeholder="Status"
+            >
+              <Option value="">All</Option>
+              <Option value="Active">Active</Option>
+              <Option value="Hold">Hold</Option>
+            </Select>
+          </Form.Item>
+        </Col>
+        <Col md={6} sm={24} xs={24} lg={6}>
+        <Form.Item name="brandId" label="Brands">
         <Select
           showSearch
           optionFilterProp="children"
@@ -454,10 +539,10 @@ const ProductList = () => {
           }
           className="w-100"
           style={{ minWidth: 180 }}
-          onChange={(value) => setSelectedBrandId(value)}
+          // onChange={(value) => setSelectedBrandId(value)}
           // onSelect={handleQuery}
-          placeholder="Brand"
-          value={selectedBrandId}
+          placeholder="Brands"
+          // value={selectedBrandId}
         >
           <Option value="">All</Option>
           {brands.map((brand) => (
@@ -466,10 +551,10 @@ const ProductList = () => {
             </Option>
           ))}
         </Select>
-      </div>
-
-      <div className="mr-md-3 mb-3">
-        <label className="mt-2">Categories</label>
+          </Form.Item>
+        </Col>
+        <Col md={6} sm={24} xs={24} lg={6}>
+        <Form.Item name="categoryId" label="Categories">
         <Select
           showSearch
           optionFilterProp="children"
@@ -478,10 +563,10 @@ const ProductList = () => {
           }
           className="w-100"
           style={{ minWidth: 180 }}
-          onChange={(value) => setSelectedCategoryId(value)}
+          // onChange={(value) => setSelectedBrandId(value)}
           // onSelect={handleQuery}
-          value={selectedCategoryId}
-          placeholder="Category"
+          placeholder="Categories"
+          // value={selectedBrandId}
         >
           <Option value="">All</Option>
           {categories.map((category) => (
@@ -490,10 +575,12 @@ const ProductList = () => {
             </Option>
           ))}
         </Select>
-      </div>
-      <div className="mr-md-3 mb-3">
-        <label className="mt-2">Vendors</label>
-        <Select
+          </Form.Item>
+        </Col>
+        
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="vendorId" label="Vendors">
+          <Select
           showSearch
           optionFilterProp="children"
           filterOption={(input, option) =>
@@ -501,9 +588,9 @@ const ProductList = () => {
           }
           className="w-100"
           style={{ minWidth: 180 }}
-          onChange={(value) => setSelectedVendorId(value)}
+          // onChange={(value) => setSelectedVendorId(value)}
           // onSelect={handleQuery}
-          value={selectedVendorId}
+          // value={selectedVendorId}
           placeholder="Vendor"
         >
           <Option value="">All</Option>
@@ -511,10 +598,11 @@ const ProductList = () => {
             <Option value={vendor.id}>{vendor.fullName}</Option>
           ))}
         </Select>
-      </div>
-      <div className="mr-md-3 mb-3">
-        <label className="mt-2">Approval</label>
-        <Select
+          </Form.Item>
+        </Col>
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="approval" label="Approval Method">
+          <Select
           showSearch
           optionFilterProp="children"
           filterOption={(input, option) =>
@@ -522,9 +610,9 @@ const ProductList = () => {
           }
           className="w-100"
           style={{ minWidth: 180 }}
-          onChange={(value) => setSelectedApproval(value)}
+          // onChange={(value) => setSelectedApproval(value)}
           // onSelect={handleQuery}
-          value={selectedApproval}
+          // value={selectedApproval}
           placeholder="Approval Method"
         >
           <Option value="">All</Option>
@@ -533,56 +621,209 @@ const ProductList = () => {
           <Option value="On Hold">On Hold</Option>
           <Option value="Rejected">Rejected</Option>
         </Select>
-      </div>
-      {process.env.REACT_APP_SITE_NAME === 'awen' ? (
-        <div className="mr-md-3 mb-3">
-          <label className="mt-2">Acquirement Method</label>
+          </Form.Item>
+          </Col>
+          <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="acquirementMethod" label="Acquirement Method">
           <Select
-            showSearch
-            optionFilterProp="children"
-            filterOption={(input, option) =>
-              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-            }
-            className="w-100"
-            style={{ minWidth: 180 }}
-            onChange={(value) => setSelectedacquirementMethod(value)}
-            // onSelect={handleQuery}
-            value={selectedacquirementMethod}
-            placeholder="AcquirementMethod"
-          >
-            <Option value="">All</Option>
+          showSearch
+          optionFilterProp="children"
+          filterOption={(input, option) =>
+            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+          }
+          className="w-100"
+          style={{ minWidth: 180 }}
+          // onChange={(value) => setSelectedApproval(value)}
+          // onSelect={handleQuery}
+          // value={selectedApproval}
+          placeholder="Acquirement Method"
+        >
+           <Option value="">All</Option>
             <Option value="Rent">Rent</Option>
             <Option value="Lend">Lend</Option>
             <Option value="Purchase">Purchase</Option>
             <Option value="Giveaway">Giveaway</Option>
-          </Select>
-        </div>
-      ) : (
-        ''
-      )}
+        </Select>
+          </Form.Item>
+          </Col>
 
-      <div>
-        <Button type="primary" className="mr-1 mt-4" onClick={handleQuery}>
-          Filter
-        </Button>
-      </div>
-      <div>
-        <Button
-          type="primary"
-          className="mr-1 mt-4"
-          onClick={handleClearFilter}
-        >
-          Clear
-        </Button>
-      </div>
-    </Flex>
+        <Col className="mb-4">
+          <Button type="primary" onClick={handleFilterSubmit}>
+            Filter
+          </Button>
+        </Col>
+        <Col className="mb-4">
+          <Button type="primary" onClick={handleClearFilter}>
+            Clear
+          </Button>
+        </Col>
+      </Row>
+    </Form>
   )
+
+  // const filters = () => (
+  //   <Flex flexWrap="wrap" className="mb-1" mobileFlex={false}>
+  //     <div className="mr-md-3 mb-3">
+  //       <label className="mt-2">Search</label>
+  //       <Input
+  //         placeholder="Search"
+  //         prefix={<SearchOutlined />}
+  //         onChange={(e) => onSearch(e)}
+  //       />
+  //     </div>
+  //     <div className="mr-md-3 mb-3">
+  //       <label className="mt-2">Status</label>
+  //       <Select
+  //         defaultValue="All"
+  //         className="w-100"
+  //         style={{ minWidth: 180 }}
+  //         onChange={handleShowStatus}
+  //         placeholder="Status"
+  //       >
+  //         <Option value="All">All</Option>
+  //         <Option value="Active">Active</Option>
+  //         <Option value="Hold">Hold</Option>
+  //       </Select>
+  //     </div>
+  //     <div className=" mr-md-3 mb-3">
+  //       <label className="mt-2">Brands</label>
+  //       <Select
+  //         showSearch
+  //         optionFilterProp="children"
+  //         filterOption={(input, option) =>
+  //           option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+  //         }
+  //         className="w-100"
+  //         style={{ minWidth: 180 }}
+  //         onChange={(value) => setSelectedBrandId(value)}
+  //         // onSelect={handleQuery}
+  //         placeholder="Brand"
+  //         value={selectedBrandId}
+  //       >
+  //         <Option value="">All</Option>
+  //         {brands.map((brand) => (
+  //           <Option key={brand.id} value={brand.id}>
+  //             {brand.name}
+  //           </Option>
+  //         ))}
+  //       </Select>
+  //     </div>
+
+  //     <div className="mr-md-3 mb-3">
+  //       <label className="mt-2">Categories</label>
+  //       <Select
+  //         showSearch
+  //         optionFilterProp="children"
+  //         filterOption={(input, option) =>
+  //           option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+  //         }
+  //         className="w-100"
+  //         style={{ minWidth: 180 }}
+  //         onChange={(value) => setSelectedCategoryId(value)}
+  //         // onSelect={handleQuery}
+  //         value={selectedCategoryId}
+  //         placeholder="Category"
+  //       >
+  //         <Option value="">All</Option>
+  //         {categories.map((category) => (
+  //           <Option key={category.id} value={category.id}>
+  //             {category.name}
+  //           </Option>
+  //         ))}
+  //       </Select>
+  //     </div>
+  //     <div className="mr-md-3 mb-3">
+  //       <label className="mt-2">Vendors</label>
+  //       <Select
+  //         showSearch
+  //         optionFilterProp="children"
+  //         filterOption={(input, option) =>
+  //           option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+  //         }
+  //         className="w-100"
+  //         style={{ minWidth: 180 }}
+  //         onChange={(value) => setSelectedVendorId(value)}
+  //         // onSelect={handleQuery}
+  //         value={selectedVendorId}
+  //         placeholder="Vendor"
+  //       >
+  //         <Option value="">All</Option>
+  //         {vendors?.map((vendor) => (
+  //           <Option value={vendor.id}>{vendor.fullName}</Option>
+  //         ))}
+  //       </Select>
+  //     </div>
+  //     <div className="mr-md-3 mb-3">
+  //       <label className="mt-2">Approval</label>
+  //       <Select
+  //         showSearch
+  //         optionFilterProp="children"
+  //         filterOption={(input, option) =>
+  //           option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+  //         }
+  //         className="w-100"
+  //         style={{ minWidth: 180 }}
+  //         onChange={(value) => setSelectedApproval(value)}
+  //         // onSelect={handleQuery}
+  //         value={selectedApproval}
+  //         placeholder="Approval Method"
+  //       >
+  //         <Option value="">All</Option>
+  //         <Option value="Pending">Pending</Option>
+  //         <Option value="Approved">Approved</Option>
+  //         <Option value="On Hold">On Hold</Option>
+  //         <Option value="Rejected">Rejected</Option>
+  //       </Select>
+  //     </div>
+  //     {process.env.REACT_APP_SITE_NAME === 'awen' ? (
+  //       <div className="mr-md-3 mb-3">
+  //         <label className="mt-2">Acquirement Method</label>
+  //         <Select
+  //           showSearch
+  //           optionFilterProp="children"
+  //           filterOption={(input, option) =>
+  //             option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+  //           }
+  //           className="w-100"
+  //           style={{ minWidth: 180 }}
+  //           onChange={(value) => setSelectedacquirementMethod(value)}
+  //           // onSelect={handleQuery}
+  //           value={selectedacquirementMethod}
+  //           placeholder="AcquirementMethod"
+  //         >
+  //           <Option value="">All</Option>
+  //           <Option value="Rent">Rent</Option>
+  //           <Option value="Lend">Lend</Option>
+  //           <Option value="Purchase">Purchase</Option>
+  //           <Option value="Giveaway">Giveaway</Option>
+  //         </Select>
+  //       </div>
+  //     ) : (
+  //       ''
+  //     )}
+
+  //     <div>
+  //       <Button type="primary" className="mr-1 mt-4" onClick={handleQuery}>
+  //         Filter
+  //       </Button>
+  //     </div>
+  //     <div>
+  //       <Button
+  //         type="primary"
+  //         className="mr-1 mt-4"
+  //         onClick={handleClearFilter}
+  //       >
+  //         Clear
+  //       </Button>
+  //     </div>
+  //   </Flex>
+  // )
 
   return (
     <>
       <Card>
         <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
-          {filters()}
+          {filtersComponent()}
         </Flex>
         <div className="mr-2 d-flex justify-content-between">
           <Button
@@ -610,7 +851,9 @@ const ProductList = () => {
             scroll={{
               x: true,
             }}
-            rowKey="id"
+            rowKey="id"  pagination={pagination}
+            loading={loading}
+            onChange={handleTableChange}
           />
         </div>
       </Card>

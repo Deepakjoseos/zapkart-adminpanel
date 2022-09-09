@@ -1,6 +1,17 @@
-import React, { useEffect, useState } from 'react'
-import { Card, Table, Select, Input, Button, Menu, Tag } from 'antd'
-// import ProductListData from 'assets/data/product-list.data.json'
+import React, { useEffect, useRef, useState } from 'react'
+import {
+  Card,
+  Table,
+  Select,
+  Input,
+  Button,
+  Menu,
+  Tag,
+  Form,
+  Row,
+  Col,
+} from 'antd'
+// import BrandListData from 'assets/data/product-list.data.json'
 import {
   EyeOutlined,
   DeleteOutlined,
@@ -11,9 +22,13 @@ import AvatarStatus from 'components/shared-components/AvatarStatus'
 import EllipsisDropdown from 'components/shared-components/EllipsisDropdown'
 import Flex from 'components/shared-components/Flex'
 import { useHistory } from 'react-router-dom'
+import qs from 'qs'
 import utils from 'utils'
+import brandService from 'services/brand'
+import _ from 'lodash'
 import deliveryLocationService from 'services/deliveryLocation'
 import vendorService from 'services/vendor'
+import deliveryLocation from 'services/deliveryLocation'
 
 const { Option } = Select
 
@@ -36,23 +51,72 @@ const getStockStatus = (status) => {
 }
 const ProductList = () => {
   let history = useHistory()
-
+  const [form] = Form.useForm()
+  
   const [list, setList] = useState([])
-  const [searchBackupList, setSearchBackupList] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
+  
+  // Added for Pagination
+  const [loading, setLoading] = useState(false)
+  const [filterEnabled, setFilterEnabled] = useState(false)
+  
+  // pagination
+  const [pagination, setPagination] = useState({
+    current: 1,
+    pageSize: 10,
+  })
+
+  const [searchBackupList, setSearchBackupList] = useState([])
+  
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
   const [vendors,setVendors] = useState(null)
   const [selectedVendorId,setSelectedVendorId]= useState(null)
 
-  useEffect(() => {
-    const getDeliveryLocations = async () => {
-      const data = await deliveryLocationService.getDeliveryLocations()
-      if (data) {
-        setList(data)
-        setSearchBackupList(data)
-        console.log(data, 'show-data')
-      }
+ 
+  
+  // Changed here for pagination
+  const getDeliveryLocations = async (paginationParams = {}, filterParams) => {
+    setLoading(true)
+    const data = await deliveryLocation.getDeliveryLocations(
+      qs.stringify(getPaginationParams(paginationParams)),
+      qs.stringify(filterParams)
+    )
+  
+    if (data) {
+      setList(data.data)
+  
+      // Pagination
+      setPagination({
+        ...paginationParams.pagination,
+        total: data.total,
+      })
+      setLoading(false)
     }
+  }
+  
+  useEffect(() => {
+    getDeliveryLocations({
+      pagination,
+    })
+    getVendors()
+  }, [])
+  
+  // pagination generator
+  const getPaginationParams = (params) => ({
+    limit: params.pagination?.pageSize,
+    page: params.pagination?.current,
+    // ...params,
+  })
+  
+  // On pagination Change
+  const handleTableChange = (newPagination) => {
+    getDeliveryLocations(
+      {
+        pagination: newPagination,
+      },
+      filterEnabled ? _.pickBy(form.getFieldsValue(), _.identity) : {}
+    )
+  }
     const getVendors = async () => {
       const data = await vendorService.getVendors()
       if (data) {
@@ -65,9 +129,7 @@ const ProductList = () => {
       }
     
     }
-    getDeliveryLocations()
-    getVendors()
-  }, [])
+    
 
   const dropdownMenu = (row) => (
     <Menu>
@@ -165,107 +227,79 @@ const ProductList = () => {
     },
   ]
 
-  const onSearch = (e) => {
-    const value = e.currentTarget.value
-    const searchArray = e.currentTarget.value ? list : searchBackupList
-    const data = utils.wildCardSearch(searchArray, value)
-    setList(data)
-    setSelectedRowKeys([])
-  }
-  const handleQuery = async () => {
-    const query = {}
-    if ((selectedVendorId) !== 'All')
-      query.vendorId = selectedVendorId
-  
-    const data = await deliveryLocationService.getDeliveryLocations(query)
-    if (data) {
-      setList(data)
-      setSearchBackupList(data)
-    }
+  const resetPagination = () => ({
+    ...pagination,
+    current: 1,
+    pageSize: 10,
+  })
+
+  // Filter Submit
+  const handleFilterSubmit = async () => {
+    setPagination(resetPagination())
+
+    form
+      .validateFields()
+      .then(async (values) => {
+        setFilterEnabled(true)
+        // Removing falsy Values from values
+        const sendingValues = _.pickBy(values, _.identity)
+        getDeliveryLocations({ pagination: resetPagination() }, sendingValues)
+      })
+      .catch((info) => {
+        console.log('info', info)
+        setFilterEnabled(false)
+      })
   }
 
+  // Clear Filter
   const handleClearFilter = async () => {
-    setSelectedVendorId(null)
+    form.resetFields()
 
-    const data = await deliveryLocationService.getDeliveryLocations({})
-    if (data) {
-      setList(data)
-      setSearchBackupList(data)
-    }
+    setPagination(resetPagination())
+    getDeliveryLocations({ pagination: resetPagination() }, {})
+    setFilterEnabled(false)
   }
-  const handleShowStatus = (value) => {
-    if (value !== 'All') {
-      const key = 'status'
-      const data = utils.filterArray(searchBackupList, key, value)
-      setList(data)
-    } else {
-      setList(searchBackupList)
-    }
-  }
-
-  const filters = () => (
-    <Flex className="mb-1" mobileFlex={false}>
-      <div className="mr-md-3 mb-3">
-      <label className='mt-2'>Search</label>
-        <Input
-          placeholder="Search"
-          prefix={<SearchOutlined />}
-          onChange={(e) => onSearch(e)}
-        />
-      </div>
-      <div className="mr-md-3 mb-3">
-      <label className='mt-2'>Status</label>
-        <Select
-          defaultValue="All"
-          className="w-100"
-          style={{ minWidth: 180 }}
-          onChange={handleShowStatus}
-          placeholder="Status"
-        >
-          <Option value="All">All</Option>
-          <Option value="Active">Active</Option>
-          <Option value="Hold">Hold</Option>
-        </Select>
-      </div>
-      {/* <div className="mr-md-3 mb-3">
-        <label className='mt-2'>Vendors</label>
-      <Select showSearch
-              optionFilterProp="children"
-              filterOption={(input, option) =>
-                option.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }
-          className="w-100"
-          style={{ minWidth: 180 }}
-          onChange={(value) => setSelectedVendorId(value)}
-          // onSelect={handleQuery}
-          value={selectedVendorId}
-          placeholder="Vendor">
-             <Option value="">All</Option>
-            {vendors?.map((vendor) => (
-              <Option value={vendor.id}>
-                {vendor?.fullName}
-              </Option>
-            ))}
-          </Select>
-      </div> */}
-     
-      {/* <div >
-        <Button type="primary" className="mr-1 mt-4" onClick={handleQuery}>
-          Filter
-        </Button>
-      </div>
-      <div>
-        <Button type="primary" className="mr-1 mt-4" onClick={handleClearFilter}>
-          Clear
-        </Button>
-      </div> */}
-    </Flex>
+  const filtersComponent = () => (
+    <Form
+      layout="vertical"
+      form={form}
+      name="filter_form"
+      className="ant-advanced-search-form"
+    >
+      <Row gutter={8} align="bottom">
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="search" label="Search">
+            <Input placeholder="Search" prefix={<SearchOutlined />} />
+          </Form.Item>
+        </Col>
+        
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="status" label="Status">
+            <Select className="w-100" placeholder="Status">
+              <Option value="">All</Option>
+              <Option value="Active">Active</Option>
+              <Option value="Hold">Hold</Option>
+            </Select>
+          </Form.Item>
+        </Col>
+    
+        <Col className="mb-4">
+          <Button type="primary" onClick={handleFilterSubmit}>
+            Filter
+          </Button>
+        </Col>
+        <Col className="mb-4">
+          <Button type="primary" onClick={handleClearFilter}>
+            Clear
+          </Button>
+        </Col>
+      </Row>
+    </Form>
   )
-
   return (
     <Card>
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
-        {filters()}
+        {filtersComponent()}
        
       </Flex>
       <div>
@@ -279,7 +313,9 @@ const ProductList = () => {
           </Button>
         </div>
       <div className="table-responsive">
-        <Table columns={tableColumns} dataSource={list} rowKey="id" />
+        <Table columns={tableColumns} dataSource={list} rowKey="id" pagination={pagination}
+        loading={loading}
+        onChange={handleTableChange}/>
       </div>
     </Card>
   )

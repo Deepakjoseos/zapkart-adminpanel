@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { Input, Row, Col, Card, Form } from 'antd'
+import { Input, Row, Col, Card, Form,Select } from 'antd'
+const {Option} = Select
 
-const GeneralField = ({ form }) => {
+const GeneralField = ({ form ,vendors}) => {
   return (
     <Card>
       <Row gutter={16}>
@@ -115,6 +116,28 @@ const GeneralField = ({ form }) => {
           <Form.Item name="address_2" label="Address 2">
             <Input.TextArea rows={4} placeholder="Address 2" />
           </Form.Item>
+        </Col>
+      </Row>
+      <Row gutter={16}>
+        <Col span={24}>
+        <Form.Item name="vendorId" label="Vendor"  >
+          <Select
+          //  disabled={mode === 'EDIT' ? true : false}
+            showSearch
+            optionFilterProp="children"
+            filterOption={(input, option) =>
+              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
+            placeholder="Vendor"
+        
+          >
+            {vendors.map((vendor) => (
+              <Option value={vendor.id}>
+                {vendor.fullName}
+              </Option>
+            ))}
+          </Select>
+        </Form.Item>
         </Col>
       </Row>
     </Card>
