@@ -82,8 +82,8 @@ const OrderCreate = () => {
 
   const getProducts = async () => {
     const data = await productService.getProducts({ status: 'Active' })
-    if (data) {
-      const productList = data.map((product) => {
+    if (data.data) {
+      const productList = data.data.map((product) => {
         return {
           ...product,
           productname: product?.variant?.name

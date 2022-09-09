@@ -5,6 +5,12 @@ import Flex from 'components/shared-components/Flex'
 import GeneralField from './GeneralField'
 import medicineTypeService from 'services/medicineType'
 import { useHistory } from 'react-router-dom'
+import useUpload from 'hooks/useUpload'
+import { singleImageUploader } from 'utils/s3/s3ImageUploader'
+import Utils from 'utils'
+
+
+
 
 const { TabPane } = Tabs
 
@@ -16,7 +22,21 @@ const ProductForm = (props) => {
   const history = useHistory()
 
   const [form] = Form.useForm()
-  const [submitLoading, setSubmitLoading] = useState(false)
+   // For Image Upload
+   const [uploadedImg, setImage] = useState(null)
+   const [submitLoading, setSubmitLoading] = useState(false)
+// For Image upload
+const {
+  fileList: fileListImages,
+  beforeUpload: beforeUploadImages,
+  onChange: onChangeImages,
+  onRemove: onRemoveImages,
+  setFileList: setFileListImages,
+} = useUpload(1) // useUpload(1, 'multiple') or useUpload(1)
+
+  useEffect(() => {
+    setImage(fileListImages)
+  }, [fileListImages])
 
   useEffect(() => {
     if (mode === EDIT) {
@@ -24,6 +44,21 @@ const ProductForm = (props) => {
         const { id } = param
         const data = await medicineTypeService.getMedicineTypeById(id)
         if (data) {
+          // For Image upload
+          let himg = []
+          if (data.image) {
+            himg = [
+              {
+                uid: Math.random() * 1000,
+                name: Utils.getBaseName(data.image),
+                url: data.image,
+                thumbUrl: data.image,
+              },
+            ]
+
+            setImage(himg)
+            setFileListImages(himg)
+          }
           form.setFieldsValue({
             name: data.name,
             status: data.status,
@@ -38,6 +73,18 @@ const ProductForm = (props) => {
       fetchMedicineTypeById()
     }
   }, [form, mode, param, props])
+  const propsImages = {
+    multiple: false,
+    beforeUpload: beforeUploadImages,
+    onRemove: onRemoveImages,
+    onChange: onChangeImages,
+    fileList: fileListImages,
+  }
+
+  // Image Upload
+  useEffect(() => {
+    setImage(fileListImages)
+  }, [fileListImages])
 
   const onFinish = async () => {
     setSubmitLoading(true)
@@ -45,6 +92,27 @@ const ProductForm = (props) => {
       .validateFields()
       .then(async (values) => {
         if (mode === ADD) {
+          if (uploadedImg.length !== 0 && uploadedImg !== null) {
+            console.log('uploadedImg', uploadedImg)
+            // We will upload image to S3 and get the image url
+            const imgValue = await singleImageUploader(
+              uploadedImg[0].originFileObj,
+              uploadedImg,
+              uploadedImg[0].url,
+              'medicineType'
+            )
+
+            //  append image url to values object
+            values.image = imgValue
+
+            const created = await medicineTypeService.createMedicineType(values)
+            if (created) {
+              message.success(`Created ${values.name} to Meddicine type list`)
+              history.goBack()
+            }
+          } else {
+            message.error('Please upload image')
+          }
           const created = await medicineTypeService.createMedicineType(values)
           if (created) {
             message.success(`Created ${values.name} to Medicine Type list`)
@@ -52,13 +120,27 @@ const ProductForm = (props) => {
           }
         }
         if (mode === EDIT) {
-          const edited = await medicineTypeService.editMedicineType(
-            param.id,
-            values
-          )
-          if (edited) {
-            message.success(`Edited ${values.name} to Medicine Type list`)
-            history.goBack()
+          // Checking if image exists
+          if (uploadedImg.length !== 0 && uploadedImg !== null) {
+            console.log('uploadedImg', uploadedImg)
+            // We will upload image to S3 and get the image url
+            const imgValue = await singleImageUploader(
+              uploadedImg[0].originFileObj,
+              uploadedImg,
+              uploadedImg[0].url,
+              'medicineType'
+            )
+
+            //  append image url to values object
+            values.image = imgValue
+
+            const edited = await medicineTypeService.editMedicineType()
+            if (edited) {
+              message.success(`Edited ${values.name} to medicineType list`)
+              history.goBack()
+            }
+          } else {
+            message.error('Please upload image')
           }
         }
         setSubmitLoading(false)
@@ -120,7 +202,7 @@ const ProductForm = (props) => {
         <div className="container">
           <Tabs defaultActiveKey="1" style={{ marginTop: 30 }}>
             <TabPane tab="General" key="1">
-              <GeneralField />
+              <GeneralField  propsImages={propsImages}/>
             </TabPane>
           </Tabs>
         </div>

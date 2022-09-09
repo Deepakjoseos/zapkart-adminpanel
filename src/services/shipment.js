@@ -145,12 +145,14 @@ shipmentService.checkIfDeliverable = async function (data) {
 
 // Generate Api's
 shipmentService.generateAwb = async function (data) {
+  console.log('data',data)
   try {
     const res = await fetch({
       url: `${apiRoute}/generateAwb`,
       method: 'post',
       data,
     })
+
     return res
   } catch (err) {
     console.log(err, 'show-err')

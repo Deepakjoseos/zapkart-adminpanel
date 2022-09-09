@@ -1,8 +1,10 @@
-import { Button, Card, Col, Form, Input, message, Modal, Row } from 'antd'
+import { Button, Card, Col, Form, Input, message, Modal, Row, Select } from 'antd'
 import PageHeaderAlt from 'components/layout-components/PageHeaderAlt'
 import Flex from 'components/shared-components/Flex'
 import React, { useEffect, useState } from 'react'
 import customerService from 'services/customer'
+import constantsService from 'services/constants'
+const { Option } = Select
 
 const AddressForm = ({
   formMode,
@@ -16,9 +18,23 @@ const AddressForm = ({
 }) => {
   const [form] = Form.useForm()
   const [submitLoading, setSubmitLoading] = useState(false)
+  const [state, setStates] = useState([])
 
   const rules = {}
+  const fetchConstants = async () => {
+    const data = await constantsService.getConstants()
+    if (data) {
+      // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
+        console.log( Object.values(data.GENERAL.STATES['INDIA']), 'constanttyys')
+          console.log('data',data)
 
+       setStates(Object.values(data.GENERAL.STATES['INDIA']))
+      // setPaymentStatuses(Object.values(data.PAYMENT['PAYMENT_STATUS']))
+    }
+  }
+useEffect(()=>{
+fetchConstants()
+},[])
   useEffect(() => {
     if (formMode === 'edit') {
       selectedFormAddress && form.setFieldsValue(selectedFormAddress)
@@ -127,14 +143,24 @@ const AddressForm = ({
         <Row gutter={16}>
           <Col xs={24} sm={24} md={24}>
             <Card>
-            <Form.Item name="line1" label="Address" rules={rules.line1}>
+              <Form.Item name="line1" label="Address" rules={rules.line1}>
                 <Input.TextArea rows={4} placeholder="Address" />
               </Form.Item>
               <Form.Item name="city" label="City" rules={rules.city}>
                 <Input placeholder="City" />
               </Form.Item>
               <Form.Item name="state" label="State" rules={rules.state}>
-                <Input placeholder="State" />
+                {/* <Input placeholder="State" /> */}
+                <Select placeholder="State"
+                  style={{ width: 150 }}
+                // onChange={(e) => handleOrderStatusChange(e, row)}
+                >
+                  {state?.map((item) => (
+                    <Option key={item} value={item}>
+                      {item}
+                    </Option>
+                  ))}
+                </Select>
               </Form.Item>
               <Form.Item name="phone" label="Phone" rules={rules.phone}>
                 <Input type="tel" placeholder="Phone" />
@@ -142,7 +168,7 @@ const AddressForm = ({
               <Form.Item name="zipcode" label="Zipcode" rules={rules.zipcode}>
                 <Input placeholder="Zipcode" />
               </Form.Item>
-             
+
               <Flex justifyContent="end">
                 <Button
                   type="primary"

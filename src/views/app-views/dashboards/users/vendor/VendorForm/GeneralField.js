@@ -19,6 +19,12 @@ const rules = {
       message: 'Required',
     },
   ],
+  drugLicense: [
+    {
+      required: true,
+      message: 'Required',
+    },
+  ],
 }
 
 const GeneralField = ({ propsDisplayImages, form, mode, emailVerified, phoneVerified }) => (
@@ -35,7 +41,9 @@ const GeneralField = ({ propsDisplayImages, form, mode, emailVerified, phoneVeri
         <Form.Item name="gst" label="GST" rules={rules.gst}>
           <Input placeholder="GST" />
         </Form.Item>
-
+        <Form.Item name="drugLicense" label="Drug License Number" rules={rules.drugLicense}>
+          <Input placeholder="Drug License Number" />
+        </Form.Item>
 
 
 

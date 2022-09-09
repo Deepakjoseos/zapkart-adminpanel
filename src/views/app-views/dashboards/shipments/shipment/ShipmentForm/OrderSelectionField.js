@@ -11,8 +11,8 @@ const OrderSelectionField = ({ form, fields, remove, add }) => {
 
   const getOrders = async () => {
     const data = await orderService.getOrders()
-    if (data) {
-      setOrders(data)
+    if (data.data) {
+      setOrders(data.data)
     }
   }
 

@@ -45,6 +45,7 @@ import {
   ShopOutlined,
   FileImageOutlined,
   SafetyCertificateOutlined,
+  MoneyCollectOutlined
 } from '@ant-design/icons'
 import { APP_PREFIX_PATH, AUTH_PREFIX_PATH } from 'configs/AppConfig'
 
@@ -404,6 +405,14 @@ const dashBoardNavTree = [
             submenu: [],
           },
         ],
+      },
+      {
+        key: 'dashboards-tax-category',
+        path: `${APP_PREFIX_PATH}/dashboards/tax-category-list`,
+        title: 'Tax Category',
+        icon: MoneyCollectOutlined ,
+        breadcrumb: false,
+        submenu: [],
       },
       {
         key: 'dashboards-settings',
