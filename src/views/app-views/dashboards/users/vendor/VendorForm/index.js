@@ -44,7 +44,7 @@ const ProductForm = (props) => {
 
       setPickUpLocations(data.pickupLocations)
       let himg = []
-      if (data.displayImage) {
+      if (data.image) {
         himg = [
           {
             uid: Math.random() * 1000,
@@ -66,6 +66,7 @@ const ProductForm = (props) => {
         gst: data?.gst,
         tanNumber: data?.tanNumber,
         pan:data?.pan,
+        drugLicense:data?.drugLicense,
 
         // address:
         'address.line1': data?.address?.line1,
@@ -122,6 +123,7 @@ const ProductForm = (props) => {
           tanNumber: values.tanNumber,
           pan: values.pan,
           gst: values.gst,
+          drugLicense:values.drugLicense,
           address: {
             line1: values['address.line1'],
             city: values['address.city'],

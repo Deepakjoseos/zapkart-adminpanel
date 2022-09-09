@@ -32,18 +32,7 @@ const ViewAddresses = ({
       refetchData()
     }
   }
-  const tableColumns = [
-    {
-      title: 'City',
-      dataIndex: 'city',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'city'),
-    },
-    {
-      title: 'Country',
-      dataIndex: 'country',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'country'),
-    },
-  ]
+
 
 
   return (
