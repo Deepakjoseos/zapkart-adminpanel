@@ -218,7 +218,7 @@ const GeneralField = ({
           </Form.Item>
           <Form.Item name="status" label="Status" rules={rules.status}>
             <Select placeholder="Status">
-              {statuses.map((item) => (
+              {statuses?.map((item) => (
                 <Option key={item.id} value={item}>
                   {item}
                 </Option>
