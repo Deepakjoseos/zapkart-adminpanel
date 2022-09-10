@@ -18,6 +18,7 @@ import medicineTypeService from 'services/medicineType'
 import manufacturerService from 'services/manufacturer'
 import compositionService from 'services/composition'
 import constantsService from 'services/constants'
+import taxCategoryService from 'services/TaxCategory'
 const { TabPane } = Tabs
 
 const ADD = 'ADD'
@@ -44,6 +45,7 @@ const ProductForm = (props) => {
   const [minQty, setMinQty] = useState(0)
   const [weightClass, setWeightClass] = useState([])
   const [lengthClass, setLengthClass] = useState([])
+  const[taxCtegories,setTaxCategories]=useState([])
 
   const {
     fileList: fileListImages,
@@ -58,7 +60,14 @@ const ProductForm = (props) => {
     const activeBrands = data.data.filter((item) => item.status === 'Active')
     setBrands(activeBrands)
   }
+  const getTaxCategories = async () => {
+    const data = await taxCategoryService.getTaxCategories()
+    if (data) {
+      setTaxCategories(data)
 
+     
+    }
+  }
   const getMedicineTypes = async () => {
     const data = await medicineTypeService.getMedicineTypes()
     const activeMedicineTypes = data.data.filter((item) => item.status === 'Active')
@@ -81,6 +90,7 @@ const ProductForm = (props) => {
   useEffect(() => {
     getBrands()
     getCategories()
+    getTaxCategories()
 
     if (process.env.REACT_APP_SITE_NAME === 'zapkart') {
       getMedicineTypes()
@@ -175,6 +185,7 @@ const ProductForm = (props) => {
           allowedPaymentTypes: data.allowedPaymentTypes,
           returnable: data.returnable,
           brandId: data?.brand?.id,
+          taxCategoryId:data?.taxCategoryId,
           description: data.description,
           returnPeriod: data.returnPeriod,
           allowedQuantityPerOrder: data.allowedQuantityPerOrder,
@@ -304,6 +315,7 @@ const ProductForm = (props) => {
         if (process.env.REACT_APP_SITE_NAME === 'zapkart') {
           sendingValues = {
             brandId: values.brandId,
+            taxCategoryId:values.taxCategoryId,
             categoryId: values.categoryId,
             name: values.name,
             description: values.description,
@@ -359,6 +371,7 @@ const ProductForm = (props) => {
             categoryId: values.categoryId,
             name: values.name,
             description: values.description,
+            taxCategoryId:values.taxCategoryId,
             // productType: values.productType,
             allowedPaymentTypes: values.allowedPaymentTypes,
             returnable: values.returnable,
@@ -528,6 +541,7 @@ const ProductForm = (props) => {
                 minQty={minQty}
                 weightClass={weightClass}
                 lengthClass={lengthClass}
+                taxCategories={taxCtegories}
               />
             </TabPane>
             {mode === EDIT && (

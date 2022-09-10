@@ -10,6 +10,15 @@ import { useHistory } from 'react-router-dom'
 import vendorService from 'services/vendor'
 import ViewPickupLocations from '../vendor-list/ViewPickUpLocations'
 
+// const getAllPickUpLocations = async ()=>{
+//   const data = await shipmentService.getAllPickUpLocations()
+//   if(data){
+//     setPickUpLocations(data)
+//   }
+//  }
+// useEffect(()=>{
+// getAllPickUpLocations()
+// })
 const { TabPane } = Tabs
 
 const ADD = 'ADD'
@@ -23,7 +32,7 @@ const ProductForm = (props) => {
   const [form] = Form.useForm()
   const [displayImage, setDisplayImage] = useState(null)
   const [submitLoading, setSubmitLoading] = useState(false)
-  const[pickupLocations,setPickUpLocations] = useState(null)
+  const[pickupLocation,setPickUpLocation] = useState(null)
   const [selectedVendorId, setSelectedCustomerId] = useState(null)
   const [phoneVerified, setPhoneVerified] = useState(false)
   const [emailVerified, setEmailVerified] = useState(false)
@@ -36,13 +45,13 @@ const ProductForm = (props) => {
      onRemove: onRemoveDisplayImages,
      setFileList: setFileListDisplayImages,
    } = useUpload(1)
-
+  
   const fetchVendorById = async () => {
     const { id } = param
     const data = await vendorService.getVendorById(id)
     if (data) {
 
-      setPickUpLocations(data.pickupLocations)
+      setPickUpLocation(data.pickupLocations)
       let himg = []
       if (data.image) {
         himg = [
@@ -264,6 +273,7 @@ const ProductForm = (props) => {
               <GeneralField
                 propsDisplayImages={propsDisplayImages}
                 form={form} mode={mode} emailVerified={emailVerified} phoneVerified={phoneVerified}
+               
               />
             </TabPane>
             {/* <TabPane tab="PickUpLocations" key="2">

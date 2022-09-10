@@ -408,7 +408,7 @@ const dashBoardNavTree = [
       },
       {
         key: 'dashboards-tax-category',
-        path: `${APP_PREFIX_PATH}/dashboards/tax-category-list`,
+        path: `${APP_PREFIX_PATH}/dashboards/tax-category`,
         title: 'Tax Category',
         icon: MoneyCollectOutlined ,
         breadcrumb: false,

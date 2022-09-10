@@ -175,7 +175,8 @@ const GeneralField = ({
   setMinQty,
   minQty,
   weightClass,
-  lengthClass
+  lengthClass,
+  taxCategories
 }) => {
   const [image, setImage] = useState(false)
 
@@ -231,6 +232,22 @@ const GeneralField = ({
               {brands.map((brand) => (
                 <Option key={brand.id} value={brand.id}>
                   {brand.name}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item name="taxCategoryId" label="Tax Category">
+            <Select
+              placeholder="Tax Category"
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+            >
+              {taxCategories.map((item) => (
+                <Option key={item.id} value={item.id}>
+                  {item.name}
                 </Option>
               ))}
             </Select>
