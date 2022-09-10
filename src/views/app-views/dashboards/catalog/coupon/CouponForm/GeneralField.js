@@ -118,7 +118,8 @@ const GeneralField = ({
   users,
   userGroups,
   valueTypes,
-  availableTypes
+  availableTypes,
+  statuses
 }) => {
   const [availableType,setAvailableType] = useState(null)
   console.log('availableType',availableType)
@@ -315,8 +316,11 @@ const GeneralField = ({
 
           <Form.Item name="status" label="Status" rules={rules.status}>
             <Select placeholder="Status">
-              <Option value="Active">Active</Option>
-              <Option value="Hold">Hold</Option>
+            {statuses.map((item) => (
+                <Option key={item.id} value={item}>
+                  {item}
+                </Option>
+              ))}
             </Select>
           </Form.Item>
         </Card>

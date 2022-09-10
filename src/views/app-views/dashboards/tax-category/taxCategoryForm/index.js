@@ -14,6 +14,7 @@ import { useHistory } from 'react-router-dom'
 import { get } from 'lodash'
 import { useSelector } from 'react-redux'
 import taxCategoryService from 'services/TaxCategory'
+import constantsService from 'services/constants'
 // import Registrations from '../../registration/list-registration/index'
 
 const { TabPane } = Tabs
@@ -37,10 +38,21 @@ const TaxCategoryForm = (props) => {
   const { user } = useSelector((state) => state.auth)
   const [currentParticipant,setCurrentParticipant] = useState()
   const [registrations,setRegistrations]= useState([])
+  const [statuses,setStatuses]= useState([])
   
 
   useEffect(() => {
    console.log('mode',mode)
+   const fetchConstants = async () => {
+    const data = await constantsService.getConstants()
+    if (data) {
+      // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
+
+      setStatuses(Object.values(data.GENERAL['STATUS']))
+
+    }
+  }
+  fetchConstants()
     if (mode === EDIT) {
 
       const fetchTaxCategoryById = async () => {
@@ -182,7 +194,7 @@ const TaxCategoryForm = (props) => {
             <TabPane tab="General" key="1">
               <GeneralField
                 
-                mode={mode}
+                mode={mode} statuses={statuses}
            
               />
             </TabPane>

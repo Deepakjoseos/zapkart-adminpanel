@@ -9,6 +9,7 @@ import Utils from 'utils'
 import { useHistory } from 'react-router-dom'
 import vendorService from 'services/vendor'
 import ViewPickupLocations from '../vendor-list/ViewPickUpLocations'
+import constantsService from 'services/constants'
 
 // const getAllPickUpLocations = async ()=>{
 //   const data = await shipmentService.getAllPickUpLocations()
@@ -36,6 +37,7 @@ const ProductForm = (props) => {
   const [selectedVendorId, setSelectedCustomerId] = useState(null)
   const [phoneVerified, setPhoneVerified] = useState(false)
   const [emailVerified, setEmailVerified] = useState(false)
+  const [statuses,setStatuses] = useState([])
 
 
    const {
@@ -45,7 +47,18 @@ const ProductForm = (props) => {
      onRemove: onRemoveDisplayImages,
      setFileList: setFileListDisplayImages,
    } = useUpload(1)
-  
+   const fetchConstants = async () => {
+    const data = await constantsService.getConstants()
+    if (data) {
+      // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
+
+      setStatuses(Object.values(data.GENERAL['STATUS']))
+
+    }
+  }
+  useEffect(()=>{
+   fetchConstants()
+  },[])
   const fetchVendorById = async () => {
     const { id } = param
     const data = await vendorService.getVendorById(id)

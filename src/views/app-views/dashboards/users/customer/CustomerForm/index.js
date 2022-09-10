@@ -15,7 +15,7 @@ import ViewAddresses from '../customer-list/ViewAddresses'
 import ViewPrescriptions from '../customer-list/ViewPrescriptions'
 import userGroupService from 'services/userGroup'
 import ViewOrders from '../customer-list/ViewOrders'
-
+import constantsService from 'services/constants'
 const { TabPane } = Tabs
 
 const ADD = 'ADD'
@@ -39,6 +39,7 @@ const ProductForm = (props) => {
   const [groupList,setGroupList] = useState([])
   const [phoneVerified, setPhoneVerified] = useState(false)
   const [emailVerified, setEmailVerified] = useState(false)
+  const [statuses,setStatuses] = useState([])
   const {
     fileList: fileListDisplayImages,
     beforeUpload: beforeUploadDisplayImages,
@@ -56,8 +57,18 @@ const ProductForm = (props) => {
       setUserGroups(availableUserGroups)
     }
   }
+  const fetchConstants = async () => {
+    const data = await constantsService.getConstants()
+    if (data) {
+      // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
+
+      setStatuses(Object.values(data.GENERAL['STATUS']))
+
+    }
+  }
   useEffect(()=>{
     getUserGroups()
+    fetchConstants()
   },[])
 
   const fetchCustomerById = async () => {
@@ -228,7 +239,7 @@ const ProductForm = (props) => {
         <div className="container">
           <Tabs defaultActiveKey="1" style={{ marginTop: 30 }}>
             <TabPane tab="General" key="1">
-              <GeneralField propsDisplayImages={propsDisplayImages} mode={mode} userGroups={userGroups} form={form} emailVerified={emailVerified} phoneVerified={phoneVerified}/>
+              <GeneralField propsDisplayImages={propsDisplayImages} mode={mode} userGroups={userGroups} form={form} emailVerified={emailVerified} phoneVerified={phoneVerified} statuses={statuses}/>
             </TabPane>
             {id && (
               <>

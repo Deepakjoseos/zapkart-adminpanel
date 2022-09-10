@@ -1,5 +1,5 @@
 import React from 'react'
-import { Input, Row, Col, Card, Form, Upload, InputNumber, Select,TreeSelect} from 'antd'
+import { Input, Row, Col, Card, Form, Upload, InputNumber, Select, TreeSelect } from 'antd'
 import { ImageSvg } from 'assets/svg/icon'
 import CustomIcon from 'components/util-components/CustomIcon'
 
@@ -13,7 +13,7 @@ const rules = {
       message: 'Required',
     },
   ],
- 
+
   status: [
     {
       required: true,
@@ -23,44 +23,48 @@ const rules = {
 }
 
 const GeneralField = ({
-  
+
   vendors,
- mode
+  mode,
+  statuses
 }) => {
-  console.log('mode',mode)
-  return(
-  <Card title="Basic Info">
-    <Form.Item name="name" label="Name" rules={rules.name}>
-      <Input placeholder="Name" />
-    </Form.Item>
- 
-    <Form.Item name="status" label="Status" rules={rules.status}>
-      <Select placeholder="Status">
-        <Option value="Active">Active</Option>
-        <Option value="Hold">Hold</Option>
-      </Select>
-    </Form.Item>
+  console.log('mode', mode)
+  return (
+    <Card title="Basic Info">
+      <Form.Item name="name" label="Name" rules={rules.name}>
+        <Input placeholder="Name" />
+      </Form.Item>
+
+      <Form.Item name="status" label="Status" rules={rules.status}>
+        <Select placeholder="Status">
+          {statuses.map((item) => (
+            <Option key={item.id} value={item}>
+              {item}
+            </Option>
+          ))}
+        </Select>
+      </Form.Item>
       <Form.Item name="vendorId" label="Vendor" rules={rules.vendor} >
-          <Select disabled={mode === 'EDIT' ? true : false}
-            showSearch
-            optionFilterProp="children"
-            filterOption={(input, option) =>
-              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-            }
-            placeholder="Vendor"
-        
-          >
-            {vendors.map((vendor) => (
-              <Option value={vendor.id}>
-                {vendor.fullName}
-              </Option>
-            ))}
-          </Select>
-        </Form.Item>
-   
+        <Select disabled={mode === 'EDIT' ? true : false}
+          showSearch
+          optionFilterProp="children"
+          filterOption={(input, option) =>
+            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+          }
+          placeholder="Vendor"
+
+        >
+          {vendors.map((vendor) => (
+            <Option value={vendor.id}>
+              {vendor.fullName}
+            </Option>
+          ))}
+        </Select>
+      </Form.Item>
 
 
-  </Card>
+
+    </Card>
 
   )
 }

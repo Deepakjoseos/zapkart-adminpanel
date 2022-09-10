@@ -33,7 +33,7 @@ const rules = {
   ],
 }
 
-const GeneralField = (props) => (
+const GeneralField = ({propsImages,statuses}) => (
   <Row gutter={16}>
     <Col xs={24} sm={24} md={17}>
       <Card title="Basic Info">
@@ -51,15 +51,18 @@ const GeneralField = (props) => (
 
         <Form.Item name="status" label="Status" rules={rules.status}>
           <Select placeholder="Status">
-            <Option value="Active">Active</Option>
-            <Option value="Hold">Hold</Option>
+          {statuses.map((item) => (
+                <Option key={item.id} value={item}>
+                  {item}
+                </Option>
+              ))}
           </Select>
         </Form.Item>
       </Card>
     </Col>
     <Col xs={24} sm={24} md={7}>
       <Card title="Media">
-        <Upload listType="picture-card" name="image" {...props.propsImages} accept="image/*">
+        <Upload listType="picture-card" name="image" {...propsImages} accept="image/*">
           <CustomIcon className="display-3" svg={ImageSvg} />
         </Upload>
         size: 100px * 100px

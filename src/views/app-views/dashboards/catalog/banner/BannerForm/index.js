@@ -8,7 +8,7 @@ import { singleImageUploader } from 'utils/s3/s3ImageUploader'
 import BannerService from 'services/banner'
 import Utils from 'utils'
 import { useHistory } from 'react-router-dom'
-
+import constantsService from 'services/constants'
 const { TabPane } = Tabs
 
 const ADD = 'ADD'
@@ -22,6 +22,7 @@ const ProductForm = (props) => {
   const [uploadedImg, setImage] = useState(null)
   const [uploadedMobileImg, setMobileImg] = useState(null)
   const [submitLoading, setSubmitLoading] = useState(false)
+  const [statuses,setStatuses]= useState([])
 
   // Normal Image
   const {
@@ -41,7 +42,18 @@ const ProductForm = (props) => {
     setFileList: setFileListMobileImages,
   } = useUpload(1)
 
+
+  const fetchConstants = async () => {
+    const data = await constantsService.getConstants()
+    if (data) {
+      // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
+
+      setStatuses(Object.values(data.GENERAL['STATUS']))
+
+    }
+  }
   useEffect(() => {
+    fetchConstants()
     if (mode === EDIT) {
       const fetchBannerById = async () => {
         const { id } = param
@@ -249,7 +261,7 @@ const ProductForm = (props) => {
                 // uploadLoading={uploadLoading}
                 // handleUploadChange={handleUploadChange}
                 propsImages={propsImages}
-                propsMobileImages={propsMobileImages}
+                propsMobileImages={propsMobileImages} statuses={statuses}
               />
             </TabPane>
           </Tabs>

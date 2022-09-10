@@ -69,7 +69,7 @@ const rules = {
   ],
 }
 
-const GeneralField = ({ form, tempConstants }) => {
+const GeneralField = ({ form, tempConstants,statusess }) => {
   console.log('constants',tempConstants)
   return (
     <Row gutter={16}>
@@ -98,8 +98,11 @@ const GeneralField = ({ form, tempConstants }) => {
 
           <Form.Item name="status" label="Status" rules={rules.status}>
             <Select placeholder="Status">
-              <Option value="Active">Active</Option>
-              <Option value="Hold">Hold</Option>
+            {statuses.map((item) => (
+                <Option key={item.id} value={item}>
+                  {item}
+                </Option>
+              ))}
             </Select>
           </Form.Item>
         </Card>

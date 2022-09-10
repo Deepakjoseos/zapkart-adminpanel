@@ -11,6 +11,7 @@ import deliveryLocation from 'services/deliveryZone'
 import deliveryzoneService from 'services/deliveryZone'
 import vendorService from 'services/vendor'
 import userGroupService from 'services/userGroup'
+import constantsService from 'services/constants'
 
 const { TabPane } = Tabs
 
@@ -29,6 +30,7 @@ const DeliveryZoneForm = (props) => {
   //   const [uploadLoading, setUploadLoading] = useState(false)
   const [submitLoading, setSubmitLoading] = useState(false)
   const [userGroups,setUserGroups]=useState([])
+  const [statuses,setStatuses] = useState([])
   const getVendors = async () => {
     const data = await vendorService.getVendors()
     if (data) {
@@ -58,11 +60,20 @@ const DeliveryZoneForm = (props) => {
 //       }
 //     }
 //   }
+const fetchConstants = async () => {
+  const data = await constantsService.getConstants()
+  if (data) {
+    // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
 
+    setStatuses(Object.values(data.GENERAL['STATUS']))
+
+  }
+}
 
 
    useEffect(() => {
     getVendors()
+    fetchConstants()
    }, [])
 
   useEffect(() => {

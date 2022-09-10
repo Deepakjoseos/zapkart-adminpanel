@@ -9,6 +9,7 @@ import brandService from 'services/brand'
 import Utils from 'utils'
 import { useHistory } from 'react-router-dom'
 import slugify from 'slugify'
+import constantsService from 'services/constants'
 
 const { TabPane } = Tabs
 
@@ -24,7 +25,7 @@ const ProductForm = (props) => {
   // For Image Upload
   const [uploadedImg, setImage] = useState(null)
   const [submitLoading, setSubmitLoading] = useState(false)
-
+  const [statuses, setStatuses] = useState([])
   // For Image upload
   const {
     fileList: fileListImages,
@@ -34,7 +35,17 @@ const ProductForm = (props) => {
     setFileList: setFileListImages,
   } = useUpload(1) // useUpload(1, 'multiple') or useUpload(1)
 
+  const fetchConstants = async () => {
+    const data = await constantsService.getConstants()
+    if (data) {
+      // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
+
+      setStatuses(Object.values(data.GENERAL['STATUS']))
+
+    }
+  }
   useEffect(() => {
+    fetchConstants()
     if (mode === EDIT) {
       const fetchBrandById = async () => {
         const { id } = param
@@ -202,7 +213,7 @@ const ProductForm = (props) => {
                 uploadedImg={uploadedImg}
                 // uploadLoading={uploadLoading}
                 // handleUploadChange={handleUploadChange}
-                propsImages={propsImages}
+                propsImages={propsImages} statuses={statuses}
                 form={form}
               />
             </TabPane>

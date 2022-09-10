@@ -8,6 +8,7 @@ import { useHistory } from 'react-router-dom'
 import useUpload from 'hooks/useUpload'
 import { singleImageUploader } from 'utils/s3/s3ImageUploader'
 import Utils from 'utils'
+import constantsService from 'services/constants'
 
 
 
@@ -19,30 +20,44 @@ const EDIT = 'EDIT'
 
 const ProductForm = (props) => {
   const { mode = ADD, param } = props
+  
+
   const history = useHistory()
 
   const [form] = Form.useForm()
    // For Image Upload
    const [uploadedImg, setImage] = useState(null)
    const [submitLoading, setSubmitLoading] = useState(false)
+
+   const [statuses,setStatuses] = useState([])
+   const fetchConstants = async () => {
+    const data = await constantsService.getConstants()
+    if (data) {
+      // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
+
+      setStatuses(Object.values(data.GENERAL['STATUS']))
+
+    }
+  }
 // For Image upload
-const {
-  fileList: fileListImages,
-  beforeUpload: beforeUploadImages,
-  onChange: onChangeImages,
-  onRemove: onRemoveImages,
-  setFileList: setFileListImages,
-} = useUpload(1) // useUpload(1, 'multiple') or useUpload(1)
+  const {
+    fileList: fileListImages,
+    beforeUpload: beforeUploadImages,
+    onChange: onChangeImages,
+    onRemove: onRemoveImages,
+    setFileList: setFileListImages,
+  } = useUpload(1) // useUpload(1, 'multiple') or useUpload(1)
+
 
   useEffect(() => {
     setImage(fileListImages)
   }, [fileListImages])
 
   useEffect(() => {
+    fetchConstants()
     if (mode === EDIT) {
       const fetchMedicineTypeById = async () => {
-        const { id } = param
-        const data = await medicineTypeService.getMedicineTypeById(id)
+        const data = await medicineTypeService.getMedicineTypeById(param.id)
         if (data) {
           // For Image upload
           let himg = []
@@ -73,6 +88,8 @@ const {
       fetchMedicineTypeById()
     }
   }, [form, mode, param, props])
+
+    // Image Upload
   const propsImages = {
     multiple: false,
     beforeUpload: beforeUploadImages,
@@ -80,8 +97,7 @@ const {
     onChange: onChangeImages,
     fileList: fileListImages,
   }
-
-  // Image Upload
+//Image Upload
   useEffect(() => {
     setImage(fileListImages)
   }, [fileListImages])
@@ -107,7 +123,7 @@ const {
 
             const created = await medicineTypeService.createMedicineType(values)
             if (created) {
-              message.success(`Created ${values.name} to Meddicine type list`)
+              message.success(`Created ${values.name} to Medicine type list`)
               history.goBack()
             }
           } else {
@@ -134,7 +150,7 @@ const {
             //  append image url to values object
             values.image = imgValue
 
-            const edited = await medicineTypeService.editMedicineType()
+            const edited = await medicineTypeService.editMedicineType(param.id,values)
             if (edited) {
               message.success(`Edited ${values.name} to medicineType list`)
               history.goBack()
@@ -202,7 +218,7 @@ const {
         <div className="container">
           <Tabs defaultActiveKey="1" style={{ marginTop: 30 }}>
             <TabPane tab="General" key="1">
-              <GeneralField  propsImages={propsImages}/>
+              <GeneralField  propsImages={propsImages} statuses={statuses}/>
             </TabPane>
           </Tabs>
         </div>
