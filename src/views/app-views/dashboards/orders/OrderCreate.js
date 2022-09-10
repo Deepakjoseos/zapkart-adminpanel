@@ -217,7 +217,18 @@ const OrderCreate = () => {
   // Checkout Events
   useEffect(() => {
     if (isCheckoutEvenStarted && requestId) {
-      const baseurl = 'https://www.ecommerce.riolabz.com'
+      let baseurl;
+
+      if(process.env.REACT_APP_SITE_NAME === 'athathy') {
+        baseurl = 'https://www.ecommercetest2.riolabz.com'
+      } else {
+        if(process.env.NODE_ENV === 'development') {
+          baseurl = 'https://www.ecommerce.riolabz.com'
+        } else if (process.env.NODE_ENV === 'production') {
+          baseurl = 'https://ecommercelive.riolabz.com'
+        }
+      }
+
       const customerId = selectedCustomer.id
 
       console.log(customerId, 'sgvcdgjh')
