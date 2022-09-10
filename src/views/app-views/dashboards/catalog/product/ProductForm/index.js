@@ -10,6 +10,7 @@ import deliveryZoneService from 'services/deliveryZone'
 import Utils from 'utils'
 import { useHistory } from 'react-router-dom'
 import vendorService from 'services/vendor'
+import constantsService from 'services/constants'
 
 const { TabPane } = Tabs
 
@@ -31,6 +32,7 @@ const ProductForm = (props) => {
   //   const [uploadLoading, setUploadLoading] = useState(false)
   const [submitLoading, setSubmitLoading] = useState(false)
   const [productBuyType, setProductBuyType] = useState(null)
+  const [statuses,setStatuses] = useState([])
 
   // // For selecting DELIVERY LOCATION PARENT
   // const getDeliveryLocations = async () => {
@@ -54,6 +56,15 @@ const ProductForm = (props) => {
   //   getDeliveryLocations()
   // }, [])
 
+  const fetchConstants = async () => {
+    const data = await constantsService.getConstants()
+    if (data) {
+      // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
+
+      setStatuses(Object.values(data.GENERAL['STATUS']))
+
+    }
+  }
   const getVendors = async () => {
     const data = await vendorService.getVendors()
     if (data) {
@@ -82,6 +93,7 @@ const ProductForm = (props) => {
   }
 
   useEffect(() => {
+    fetchConstants()
     if (mode === EDIT) {
       const fetchProductById = async () => {
         const { id } = param
@@ -225,6 +237,7 @@ const ProductForm = (props) => {
                 setProductBuyType={setProductBuyType}
                 vendors={vendors}
                 getDeliveryZones={getDeliveryZones}
+                statuses={statuses}
                 // subscriptionPrice={subscriptionPrice}
                 // bulkPrice={bulkPrice}
                 // isFinalTrue={isFinalTrue}

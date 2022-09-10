@@ -46,6 +46,8 @@ const ProductForm = (props) => {
   const [weightClass, setWeightClass] = useState([])
   const [lengthClass, setLengthClass] = useState([])
   const[taxCtegories,setTaxCategories]=useState([])
+  const [paymentTypes,setPaymenTypes] = useState([])
+  const [statuses,setStatuses] = useState([])
 
   const {
     fileList: fileListImages,
@@ -96,8 +98,9 @@ const ProductForm = (props) => {
       getMedicineTypes()
       getManufacturers()
       getCompositions()
-      fetchConstants()
+    
     }
+    fetchConstants()
   }, [])
 
   const getCategories = async () => {
@@ -115,6 +118,9 @@ const ProductForm = (props) => {
       // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
       setWeightClass(Object.values(data.GENERAL['WEIGHT_CLASS']))
       setLengthClass(Object.values(data.GENERAL['LENGTH_CLASS']))
+      setPaymenTypes(Object.values(data.GENERAL['PAYMENT_TYPE']))
+      setStatuses(Object.values(data.GENERAL['STATUS']))
+
     }
   }
 
@@ -542,6 +548,8 @@ const ProductForm = (props) => {
                 weightClass={weightClass}
                 lengthClass={lengthClass}
                 taxCategories={taxCtegories}
+                paymentTypes={paymentTypes}
+                statuses={statuses}
               />
             </TabPane>
             {mode === EDIT && (

@@ -176,7 +176,9 @@ const GeneralField = ({
   minQty,
   weightClass,
   lengthClass,
-  taxCategories
+  taxCategories,
+  paymentTypes,
+  statuses
 }) => {
   const [image, setImage] = useState(false)
 
@@ -216,8 +218,11 @@ const GeneralField = ({
           </Form.Item>
           <Form.Item name="status" label="Status" rules={rules.status}>
             <Select placeholder="Status">
-              <Option value="Active">Active</Option>
-              <Option value="Hold">Hold</Option>
+              {statuses.map((item) => (
+                <Option key={item.id} value={item}>
+                  {item}
+                </Option>
+              ))}
             </Select>
           </Form.Item>
           <Form.Item name="brandId" label="Brand">
@@ -354,12 +359,11 @@ const GeneralField = ({
               style={{ width: '100%' }}
               placeholder="Allowed Payment Types"
             >
-              <Option key="Cod" value="Cod">
-                Cod
-              </Option>
-              <Option key="Online" value="Online">
-                Online
-              </Option>
+             {paymentTypes.map((item) => (
+                <Option key={item} value={item}>
+                  {item}
+                </Option>
+              ))}
             </Select>
           </Form.Item>
           <Form.Item

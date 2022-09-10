@@ -11,6 +11,7 @@ import categoryService from 'services/category'
 import { PlusOutlined } from '@ant-design/icons';
 import { Input, Tag } from 'antd';
 import { TweenOneGroup } from 'rc-tween-one';
+import constantsService from 'services/constants'
 
 const { TabPane } = Tabs
 
@@ -27,6 +28,7 @@ const ProductForm = (props) => {
   const [submitLoading, setSubmitLoading] = useState(false)
   const [categories, setCategories] = useState([])
   const [children, setChildren] = useState([])
+  const [statuses,setStatuses]= useState([])
 
   const {
     fileList: fileListImages,
@@ -36,28 +38,16 @@ const ProductForm = (props) => {
     setFileList: setFileListImages,
   } = useUpload(1)
 
+  const fetchConstants = async () => {
+    const data = await constantsService.getConstants()
+    if (data) {
+      // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
 
-  // const createCategoryList = (categories, parentId = null) => {
-  //   const categoryList = []
-  //   let category
-  //   if (parentId == null) {
-  //     category = categories.filter((cat) => !cat?.parentId)
-  //   } else {
-  //     category = categories.filter((cat) => cat?.parentId === parentId)
-  //   }
-  //   // eslint-disable-next-line prefer-const
-  //   for (let cate of category) {
-  //     categoryList.push({
-  //       id: cate.id,
-  //       title: cate.name,
-  //       value: cate.id,
-  //       key: cate.id,
-  //       children: createCategoryList(categories, cate.id),
-  //     })
-  //   }
+      setStatuses(Object.values(data.GENERAL['STATUS']))
 
-  //   return categoryList
-  // }
+    }
+  }
+  
 
   const getCategories = async (mode) => {
     const data = await categoryService.getCategories()
@@ -79,6 +69,7 @@ const ProductForm = (props) => {
 
   };
   useEffect(() => {
+    fetchConstants()
     if (mode === EDIT) {
 
       getCategories(EDIT)
@@ -252,7 +243,7 @@ const ProductForm = (props) => {
                 categories={categories}
                 // uploadLoading={uploadLoading}
                 // handleUploadChange={handleUploadChange}
-                propsImages={propsImages} handleChange={handleChange}
+                propsImages={propsImages} handleChange={handleChange} statuses={statuses}
               />
             </TabPane>
           </Tabs>

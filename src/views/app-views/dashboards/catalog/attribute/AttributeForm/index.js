@@ -7,6 +7,7 @@ import GeneralField from './GeneralField'
 import attributeService from 'services/attribute'
 import { useHistory } from 'react-router-dom'
 import AddAttributeValue from './add-attributevalue'
+import constantsService from 'services/constants'
 
 const { TabPane } = Tabs
 
@@ -21,12 +22,25 @@ const AttributeForm = (props) => {
   const [attributeOptions, setAttributeOptions] = useState([])
   //   const [uploadLoading, setUploadLoading] = useState(false)
   const [submitLoading, setSubmitLoading] = useState(false)
+  const [statuses,setStatuses]= useState([])
 
   const handleDeleteAttributeOption = (id) => {
     const optionClone = [...attributeOptions]
     const arr = optionClone.filter((item) => item.id !== id)
     setAttributeOptions(arr)
   }
+  const fetchConstants = async () => {
+    const data = await constantsService.getConstants()
+    if (data) {
+      // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
+
+      setStatuses(Object.values(data.GENERAL['STATUS']))
+
+    }
+  }
+  useEffect(()=>{
+    fetchConstants()
+  })
 
   const handleAddAttributeOption = (e) => {
     const newId = shortid.generate()
@@ -186,7 +200,7 @@ const AttributeForm = (props) => {
                 handleAttributeOptionValueChange={
                   handleAttributeOptionValueChange
                 }
-                attributeOptions={attributeOptions}
+                attributeOptions={attributeOptions} statuses={statuses}
               />
             </TabPane>
             {mode === EDIT && (

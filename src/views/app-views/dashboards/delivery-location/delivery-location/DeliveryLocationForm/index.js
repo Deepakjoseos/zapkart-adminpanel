@@ -8,6 +8,7 @@ import deliveryLocationService from 'services/deliveryLocation'
 import Utils from 'utils'
 import { useHistory } from 'react-router-dom'
 import userGroupService from 'services/userGroup'
+import constantsService from 'services/constants'
 
 const { TabPane } = Tabs
 
@@ -25,7 +26,17 @@ const ProductForm = (props) => {
   //   const [uploadLoading, setUploadLoading] = useState(false)
   const [submitLoading, setSubmitLoading] = useState(false)
   const [userGroups,setUserGroups] = useState([])
+  const [statuses,setStatuses]=useState([])
 
+  const fetchConstants = async () => {
+    const data = await constantsService.getConstants()
+    if (data) {
+      // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
+
+      setStatuses(Object.values(data.GENERAL['STATUS']))
+
+    }
+  }
   // For selecting DELIVERY LOCATION PARENT
   const getDeliveryLocations = async () => {
     const data = await deliveryLocationService.getDeliveryLocations()
@@ -67,6 +78,7 @@ const ProductForm = (props) => {
 
   useEffect(() => {
     getDeliveryLocations()
+    fetchConstants()
   }, [])
 
   useEffect(() => {
@@ -183,6 +195,7 @@ const ProductForm = (props) => {
                 isFinalTrue={isFinalTrue}
                 setIsFinalTrue={setIsFinalTrue}
                 deliveryLocations={deliveryLocations} 
+                statuses={statuses}
                 // uploadLoading={uploadLoading}
                 // handleUploadChange={handleUploadChange}
               />

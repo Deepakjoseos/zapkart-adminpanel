@@ -40,7 +40,7 @@ const rules = {
   ],
 }
 
-const GeneralField = (props) => (
+const GeneralField = ({form,propsImages,statuses}) => (
   <Row gutter={16}>
     <Col xs={24} sm={24} md={17}>
       <Card title="Basic Info">
@@ -54,8 +54,8 @@ const GeneralField = (props) => (
         >
           <Editor
             placeholder="Write something..."
-            editorHtml={props.form.getFieldValue('description') || ''}
-            onChange={(e) => props.form.setFieldsValue({ description: e })}
+            editorHtml={form.getFieldValue('description') || ''}
+            onChange={(e) => form.setFieldsValue({ description: e })}
             name="description"
           />
         </Form.Item>
@@ -70,8 +70,12 @@ const GeneralField = (props) => (
 
         <Form.Item name="status" label="Status" rules={rules.status}>
           <Select placeholder="Status">
-            <Option value="Active">Active</Option>
-            <Option value="Hold">Hold</Option>
+                {statuses.map((item) => (
+                <Option key={item.id} value={item}>
+                  {item}
+                </Option>
+              ))}
+
           </Select>
         </Form.Item>
       </Card>
@@ -113,7 +117,7 @@ const GeneralField = (props) => (
     </Col>
     <Col xs={24} sm={24} md={7}>
       <Card title="Media">
-        <Upload listType="picture-card" name="image" {...props.propsImages}>
+        <Upload listType="picture-card" name="image" {...propsImages}>
           <CustomIcon className="display-3" svg={ImageSvg} />
         </Upload>
         size: 1495px * 420px

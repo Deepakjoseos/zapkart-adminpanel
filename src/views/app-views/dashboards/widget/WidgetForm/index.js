@@ -12,6 +12,7 @@ import productTemplate from 'services/productTemplate'
 import moment from 'moment'
 import WidgetField from './WidgetField'
 import { uuid } from 'uuidv4'
+import constantsService from 'services/constants'
 
 const { TabPane } = Tabs
 
@@ -28,8 +29,18 @@ const WidgetForm = (props) => {
   const [listItems, setListItems] = useState([])
   const [isStaticProviderSelected, setIsStaticProviderSelected] =
     useState(false)
+ const [statuses,setStatuses]= useState([])
+ const fetchConstants = async () => {
+  const data = await constantsService.getConstants()
+  if (data) {
+    // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
 
+    setStatuses(Object.values(data.GENERAL['STATUS']))
+
+  }
+}
   useEffect(() => {
+    fetchConstants()
     if (mode === EDIT) {
       const fetchWidgetById = async () => {
         const { id } = param
@@ -81,7 +92,7 @@ const WidgetForm = (props) => {
   }, [listItems])
 
   const getRestListTypesItemsForDisplaying = (listingTypeItems) => {
-    const restListTypesItems = listingTypeItems.filter(
+    const restListTypesItems = listingTypeItems?.data?.filter(
       ({ id: id1 }) => !listItems?.some(({ id: id2 }) => id2 === id1)
     )
 
@@ -286,7 +297,7 @@ const WidgetForm = (props) => {
         <div className="container">
           <Tabs defaultActiveKey="1" style={{ marginTop: 30 }}>
             <TabPane tab="General" key="1">
-              <GeneralField />
+              <GeneralField statuses={statuses}/>
             </TabPane>
             <TabPane tab="Widget" key="2">
               <WidgetField

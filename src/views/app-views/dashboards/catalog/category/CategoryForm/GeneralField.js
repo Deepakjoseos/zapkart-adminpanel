@@ -53,7 +53,7 @@ const rules = {
   ],
 }
 
-const GeneralField = ({ propsImages, categories, handleChange, form }) => {
+const GeneralField = ({ propsImages, categories, handleChange, form,statuses }) => {
   const generateSlugFromName = (value) => {
     const slug = slugify(value)
     form.setFieldsValue({ slug })
@@ -104,8 +104,11 @@ const GeneralField = ({ propsImages, categories, handleChange, form }) => {
 
           <Form.Item name="status" label="Status" rules={rules.status}>
             <Select placeholder="Status">
-              <Option value="Active">Active</Option>
-              <Option value="Hold">Hold</Option>
+            {statuses.map((item) => (
+                <Option key={item.id} value={item}>
+                  {item}
+                </Option>
+              ))}
             </Select>
           </Form.Item>
         </Card>

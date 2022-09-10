@@ -6,6 +6,7 @@ import GeneralField from './GeneralField'
 import templateService from 'services/template'
 import { useHistory } from 'react-router-dom'
 import constantsService from 'services/constants'
+import { PresetStatusColorTypes } from 'antd/lib/_util/colors'
 
 const { TabPane } = Tabs
 
@@ -21,12 +22,14 @@ const TemplateForm = (props) => {
   const [submitLoading, setSubmitLoading] = useState(false)
   const [tempConstants, setTempConstants] = useState({})
   const [editorRender, setEditorRender] = useState(false)
+  const[statuses,setStatuses] = useState([])
 
   useEffect(() => {
     const fetchConstants = async () => {
       const data = await constantsService.getConstants()
       if (data) {
         setTempConstants(data.TEMPLATE)
+        setStatuses(Object.values(data.GENERAL['STATUS']))
       }
     }
 
@@ -160,7 +163,7 @@ const TemplateForm = (props) => {
         <div className="container">
           <Tabs defaultActiveKey="1" style={{ marginTop: 30 }}>
             <TabPane tab="General" key="1">
-              <GeneralField tempConstants={tempConstants} form={form} />
+              <GeneralField tempConstants={tempConstants} form={form}  statusess={PresetStatusColorTypes}/>
             </TabPane>
           </Tabs>
         </div>
