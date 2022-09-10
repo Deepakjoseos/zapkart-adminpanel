@@ -68,7 +68,7 @@ const ProductForm = (props) => {
 
   const getProductTemplates = async () => {
     const data = await productTemplateService.getProductTemplates()
-    const activeProductTemplates = data.filter((cur) => cur.status === 'Active')
+    const activeProductTemplates = data.data.filter((cur) => cur.status === 'Active')
     if (activeProductTemplates) {
       setTemplates(activeProductTemplates)
     }
@@ -77,7 +77,7 @@ const ProductForm = (props) => {
   const getDeliveryZones = async (vendorId) => {
     const data = await deliveryZoneService.getDeliveryZones(vendorId)
     if (data) {
-      setDeliveryZones(data)
+      setDeliveryZones(data.data)
     }
   }
 

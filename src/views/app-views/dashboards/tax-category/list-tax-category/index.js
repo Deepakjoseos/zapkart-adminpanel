@@ -78,35 +78,13 @@ const TaxCategoryList = () => {
 
   const dropdownMenu = (row) => (
     <Menu>
-      <Menu.Item onClick={() => editUserRedirect(row.id)}>
+      <Menu.Item onClick={() => editTaxCategory(row.id)}>
         <Flex alignItems="center">
           <EditOutlined />
-          <span className="ml-2">Edit User</span>
+          <span className="ml-2">Edit Tax Category</span>
         </Flex>
       </Menu.Item>
-      {/* <Menu.Item
-        onClick={() => {
-          setSelectedViewAddress(row.address)
-          setSelectedCustomerId(row.id)
-          setCustomerAddressOpen(true)
-        }}
-      >
-        <Flex alignItems="center">
-          <EyeOutlined />
-          <span className="ml-2">View Address</span>
-        </Flex>
-      </Menu.Item> */}
-      {/* <Menu.Item
-        onClick={() => {
-          setSelectedPrescriptionCustomerId(row.id)
-        }}
-      >
-        <Flex alignItems="center">
-          <EyeOutlined />
-          <span className="ml-2">View Prescriptions</span>
-        </Flex>
-      </Menu.Item> */}
-      {/* <Menu.Item onClick={() => deleteRow(row)}>
+      <Menu.Item onClick={() => deleteRow(row)}>
         <Flex alignItems="center">
           <DeleteOutlined />
           <span className="ml-2">
@@ -115,16 +93,32 @@ const TaxCategoryList = () => {
               : 'Delete'}
           </span>
         </Flex>
-      </Menu.Item> */}
+      </Menu.Item>
+     
     </Menu>
   )
 
-  // const addProduct = () => {
-  //   history.push(`/app/dashboards/users/usergroup/add-usergroup`)
-  // }
+  const deleteRow = async (row) => {
+    const resp = await taxCategoryService.deleteTaxCategory(row.id)
 
-  const editUserRedirect = (id) => {
-    history.push(`/app/dashboards/users/customer/edit-customer/${id}`)
+    if (resp) {
+      const objKey = 'id'
+      let data = list
+      if (selectedRows.length > 1) {
+        selectedRows.forEach((elm) => {
+          data = utils.deleteArrayRow(data, objKey, elm.id)
+          setList(data)
+          setSelectedRows([])
+        })
+      } else {
+        data = utils.deleteArrayRow(data, objKey, row.id)
+        setList(data)
+      }
+    }
+  }
+
+  const editTaxCategory = (id) => {
+    history.push(`/app/dashboards/tax-category/edit-tax-category/${id}`)
   }
 
   // const deleteRow = async (row) => {
@@ -145,44 +139,28 @@ const TaxCategoryList = () => {
   //     }
   //   }
   // }
-  const addCustomer = () => {
-    history.push(`/app/dashboards/users/customer/add-customer`)
+  const addTaxCategory = () => {
+    history.push(`/app/dashboards/tax-category/add-tax-category`)
   }
 
 
 
   const tableColumns = [
-    // {
-    //   title: 'Customer',
-    //   dataIndex: 'firstName',
-    //   render: (_, record) => (
-    //     <div className="d-flex">
-    //       <AvatarStatus
-    //         size={60}
-    //         type="square"
-    //         src={record.displayImage}
-    //         name={record.firstName}
-    //       />
-    //     </div>
-    //   ),
-    //   sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
-    // },
-    // {
-    //   title: 'Status',
-    //   dataIndex: 'status',
-    //   sorter: (a, b) => utils.antdTableSorter(a, b, 'status'),
-    // },
     {
-      title: 'Groups',
-      dataIndex: 'groups',
-      render: (groups) => {
+      title:'Name',
+      dataIndex:'name'
+    },
+    {
+      title: 'Same State',
+      dataIndex: 'sameState',
+      render: (sameState) => {
         return (
           <>
-            {groups?.map((group) => (
+            {sameState?.map((item) => (
               <>
-                <p>{group.name}</p>
-                {/* <p>Type:{group.type}</p>
-          <p>Status:{group.status}</p> */}
+                <p>Type:{item.type}</p>
+                <p>Percent:{item.percent}</p>
+               
               </>
             ))}
           </>
@@ -191,22 +169,32 @@ const TaxCategoryList = () => {
       // sorter: (a, b) => utils.antdTableSorter(a, b, 'lastname'),
     },
     {
-      title: 'Email',
-      dataIndex: 'email',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'email'),
-    },
-    {
-      title: 'Phone',
-      dataIndex: 'phone',
-    },
-    {
-        title: 'Status',
-        dataIndex: 'status',
-        render: (status) => (
-          <Flex alignItems="center">{getStockStatus(status)}</Flex>
-        ),
-        sorter: (a, b) => utils.antdTableSorter(a, b, 'status'),
+      title: 'Non Same State',
+      dataIndex: 'nonSameState',
+      render: (nonSameState) => {
+        return (
+          <>
+            {nonSameState?.map((item) => (
+              <>
+                <p>Type:{item.type}</p>
+                <p>Percent:{item.percent}</p>
+               
+              </>
+            ))}
+          </>
+        )
       },
+      // sorter: (a, b) => utils.antdTableSorter(a, b, 'lastname'),
+    },
+ 
+    {
+      title: 'Status',
+      dataIndex: 'status',
+      render: (status) => (
+        <Flex alignItems="center">{getStockStatus(status)}</Flex>
+      ),
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'status'),
+    },
     {
       title: '',
       dataIndex: 'actions',
@@ -267,31 +255,19 @@ const TaxCategoryList = () => {
         {filters()}
         <div>
           <Button
-            onClick={addCustomer}
+            onClick={addTaxCategory}
             type="primary"
             icon={<PlusCircleOutlined />}
             block
           >
-            Add Customer
+            Add Tax Category
           </Button>
         </div>
       </Flex>
       <div className="table-responsive">
         <Table columns={tableColumns} dataSource={list} rowKey="id" />
 
-        {/* <ViewAddresses
-          selectedViewAddress={selectedViewAddress}
-          setSelectedViewAddress={setSelectedViewAddress}
-          setCustomerAddressOpen={setCustomerAddressOpen}
-          customerAddressOpen={customerAddressOpen}
-          selectedCustomerId={selectedCustomerId}
-          refetchData={getCustomers}
-        />
-        
-        <ViewPrescriptions
-          selectedPrescriptionCustomerId={selectedPrescriptionCustomerId}
-          setSelectedPrescriptionCustomerId={setSelectedPrescriptionCustomerId}
-        /> */}
+       
       </div>
     </Card>
   )

@@ -19,6 +19,7 @@ const AddressForm = ({
   const [form] = Form.useForm()
   const [submitLoading, setSubmitLoading] = useState(false)
   const [state, setStates] = useState([])
+  const [country,setCountries]=useState([])
 
   const rules = {}
   const fetchConstants = async () => {
@@ -29,6 +30,7 @@ const AddressForm = ({
           console.log('data',data)
 
        setStates(Object.values(data.GENERAL.STATES['INDIA']))
+       setCountries(Object.values(data.GENERAL.COUNTRIES))
       // setPaymentStatuses(Object.values(data.PAYMENT['PAYMENT_STATUS']))
     }
   }
@@ -49,7 +51,6 @@ fetchConstants()
       .validateFields()
       .then(async (values) => {
         console.log(values, 'values')
-        values.country = 'India'
 
         if (formMode === 'add') {
           const addAddress = await customerService.addAddress(
@@ -105,40 +106,7 @@ fetchConstants()
           status: 'Hold',
         }}
       >
-        {/* <PageHeaderAlt className="border-bottom" overlap>
-          <div className="container">
-            <Flex
-              className="py-2"
-              mobileFlex={false}
-              justifyContent="between"
-              alignItems="center"
-            >
-              <h2 className="mb-3">
-                {formMode === 'add' ? 'Add Address' : `Edit Address`}
-              </h2>
-              <div className="mb-3">
-                <Button
-                  className="mr-2"
-                  onClick={() => {
-                    setViewFormModal(false)
-                    setSelectedFormAddress({})
-                    setFormMode('add')
-                  }}
-                >
-                  Discard
-                </Button>
-                <Button
-                  type="primary"
-                  //   onClick={() => onFinish()}
-                  htmlType="submit"
-                  loading={submitLoading}
-                >
-                  {formMode === 'add' ? 'Add' : `Save`}
-                </Button>
-              </div>
-            </Flex>
-          </div>
-        </PageHeaderAlt> */}
+       
 
         <Row gutter={16}>
           <Col xs={24} sm={24} md={24}>
@@ -152,10 +120,23 @@ fetchConstants()
               <Form.Item name="state" label="State" rules={rules.state}>
                 {/* <Input placeholder="State" /> */}
                 <Select placeholder="State"
-                  style={{ width: 150 }}
+                  style={{ width: 430 }}
                 // onChange={(e) => handleOrderStatusChange(e, row)}
                 >
                   {state?.map((item) => (
+                    <Option key={item} value={item}>
+                      {item}
+                    </Option>
+                  ))}
+                </Select>
+              </Form.Item>
+              <Form.Item name="country" label="Country" rules={rules.country}>
+                {/* <Input placeholder="State" /> */}
+                <Select placeholder="Country"
+                  style={{ width: 430 }}
+                // onChange={(e) => handleOrderStatusChange(e, row)}
+                >
+                  {country?.map((item) => (
                     <Option key={item} value={item}>
                       {item}
                     </Option>

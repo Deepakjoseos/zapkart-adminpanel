@@ -27,7 +27,7 @@ const rules = {
   ],
 }
 
-const GeneralField = ({ propsDisplayImages, form, mode, emailVerified, phoneVerified }) => (
+const GeneralField = ({ propsDisplayImages, form, mode, emailVerified, phoneVerified,pickupLocations }) => (
   <Row gutter={16}>
     <Col xs={24} sm={24} md={17}>
       <Card title="Basic Info">
