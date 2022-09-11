@@ -22,6 +22,7 @@ const rules = {
 }
 
 const GeneralField = ({ propsDisplayImages, mode, userGroups,form, phoneVerified, emailVerified,statuses}) => {
+ 
   return (
     <Row gutter={16}>
     <Col xs={24} sm={24} md={17}>

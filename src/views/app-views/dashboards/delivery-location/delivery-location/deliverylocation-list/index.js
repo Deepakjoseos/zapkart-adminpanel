@@ -182,8 +182,12 @@ const ProductList = () => {
   }
 
   const getParentName = (parentId) => {
-    const parentName = searchBackupList.find((cur) => cur.id === parentId)
-    return parentName ? parentName.name : ''
+    // const parentName = searchBackupList.find((cur) => cur.id === parentId)
+    // return parentName ? parentName.name : ''
+    // const parent = deliveryLocation.getDeliveryLocationById(parentId)
+    // console.log('parent,',parent)
+      
+    
   }
 
   const tableColumns = [

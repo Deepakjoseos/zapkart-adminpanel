@@ -286,7 +286,7 @@ const ProductForm = (props) => {
               <GeneralField
                 propsDisplayImages={propsDisplayImages}
                 form={form} mode={mode} emailVerified={emailVerified} phoneVerified={phoneVerified}
-               
+               statuses={statuses}
               />
             </TabPane>
             {/* <TabPane tab="PickUpLocations" key="2">

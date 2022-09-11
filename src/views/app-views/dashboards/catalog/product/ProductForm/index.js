@@ -11,6 +11,9 @@ import Utils from 'utils'
 import { useHistory } from 'react-router-dom'
 import vendorService from 'services/vendor'
 import constantsService from 'services/constants'
+import shipmentService from 'services/shipment'
+import qs from 'qs'
+import utils from 'utils'
 
 const { TabPane } = Tabs
 
@@ -33,6 +36,10 @@ const ProductForm = (props) => {
   const [submitLoading, setSubmitLoading] = useState(false)
   const [productBuyType, setProductBuyType] = useState(null)
   const [statuses,setStatuses] = useState([])
+  const[pickupLocations,setPickupLocations] = useState([])
+  const [selectedVendorId,setSelectedVendorId]=useState(null)
+  
+  // const [deliveryZones,setDeliveryZones] = useState([])
 
   // // For selecting DELIVERY LOCATION PARENT
   // const getDeliveryLocations = async () => {
@@ -65,6 +72,12 @@ const ProductForm = (props) => {
 
     }
   }
+  const getPickupLocations = async ()=>{
+    const data= await shipmentService.getPickupLocations()
+    if(data){
+      setPickupLocations(data)
+    }
+  }
   const getVendors = async () => {
     const data = await vendorService.getVendors()
     if (data) {
@@ -85,12 +98,7 @@ const ProductForm = (props) => {
     }
   }
 
-  const getDeliveryZones = async (vendorId) => {
-    const data = await deliveryZoneService.getDeliveryZones(vendorId)
-    if (data) {
-      setDeliveryZones(data.data)
-    }
-  }
+ 
 
   useEffect(() => {
     fetchConstants()
@@ -98,6 +106,7 @@ const ProductForm = (props) => {
       const fetchProductById = async () => {
         const { id } = param
         const data = await productService.getProductById(id)
+
         if (data) {
           form.setFieldsValue({
             productTemplateId: data.productTemplateId,
@@ -113,11 +122,14 @@ const ProductForm = (props) => {
             bulkPrice: data?.bulkPrice,
             productCode: data?.productCode,
             vendorId: data?.userId,
-            commission:data?.commission
+            commission:data?.commission,
+            hsn:data?.hsn,
+
           })
+          setSelectedVendorId(data?.userId)
           setProductTemplateId(data.productTemplateId)
           setProductBuyType(data.acquirementMethod)
-          getDeliveryZones(data.userId)
+          getDeliveryZones()
 
           // const subscriptionPrice = data.subscriptionPrice.map((item) => {
           //   return {
@@ -141,6 +153,37 @@ const ProductForm = (props) => {
     // getDeliveryZones()
   }, [form, mode, param, props])
 
+  // const getDeliveryZones = async () => {
+  //   const data = await deliveryZoneService.getDeliveryZones({vendorId:selectedVendorId})
+  //   if (data) {
+  //     setDeliveryZones(data.data)
+  //   }
+  // }  // pagination generator
+  const getPaginationParams = (params) => ({
+    limit: params.pagination?.pageSize,
+    page: params.pagination?.current,
+    // ...params,
+  })
+
+  const getDeliveryZones = async (paginationParams = {}, filterParams={vendorId:selectedVendorId}) => {
+    // setLoading(true)
+    console.log('selectedVendorId',selectedVendorId)
+    const data = await deliveryZoneService.getDeliveryZones(
+      qs.stringify(getPaginationParams(paginationParams)),
+      qs.stringify(filterParams)
+    )
+  
+    if (data) {
+      setDeliveryZones(data.data)
+  
+      // // Pagination
+      // setPagination({
+      //   ...paginationParams.pagination,
+      //   total: data.total,
+      // })
+      // setLoading(false)
+    }
+  }
   console.log(productBuyType, 'productBuyType')
 
   const onFinish = async () => {

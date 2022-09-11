@@ -262,7 +262,7 @@ const OrderView = () => {
               <Column title="Product" dataIndex="name" key="name" />
               <Column title="Quantity" dataIndex="quantity" key="quantity" />
               <Column title="Price" dataIndex="price" key="price" />
-              <Column title="Customer" dataIndex="vendorName" key="vendorName" />
+              <Column title="Vendor" dataIndex="vendorName" key="vendorName" />
 
               {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
                 <Column

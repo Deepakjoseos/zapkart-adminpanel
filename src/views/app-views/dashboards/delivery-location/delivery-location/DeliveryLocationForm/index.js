@@ -52,7 +52,7 @@ const ProductForm = (props) => {
       //   const deliveryLocs = data.filter((cur) => cur.isFinal !== true)
       //   setDeliveryLocations(deliveryLocs)
       // }
-      const restCats = data.filter((cat) => cat.id !== param.id)
+      const restCats = data.data.filter((cat) => cat.id !== param.id)
         const list = Utils.createCategoryList(restCats)
         setDeliveryLocations(list)
       } else {

@@ -189,10 +189,7 @@ const addDeliveryZoneLocation = (row) => {
   )
 }
    const getVendorName = (vendorId) => {
-    //  console.log('vendorId',vendorId)
-    //  const vendor= vendors.find(e => e.id  === vendorId);
-    //  console.log('vendor',vendor)
-    //  return vendor?.fullName ? vendor.fullName :"-" 
+
     const getVendorName = vendors?.find((cur) => cur.id === vendorId)
     return getVendorName ? getVendorName.fullName : ''
    }
