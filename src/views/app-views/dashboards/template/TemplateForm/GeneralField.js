@@ -69,7 +69,7 @@ const rules = {
   ],
 }
 
-const GeneralField = ({ form, tempConstants,statusess }) => {
+const GeneralField = ({ form, tempConstants,statuses}) => {
   console.log('constants',tempConstants)
   return (
     <Row gutter={16}>

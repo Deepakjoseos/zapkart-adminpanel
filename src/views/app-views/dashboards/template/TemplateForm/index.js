@@ -163,7 +163,7 @@ const TemplateForm = (props) => {
         <div className="container">
           <Tabs defaultActiveKey="1" style={{ marginTop: 30 }}>
             <TabPane tab="General" key="1">
-              <GeneralField tempConstants={tempConstants} form={form}  statusess={PresetStatusColorTypes}/>
+              <GeneralField tempConstants={tempConstants} form={form}  statuses={statuses}/>
             </TabPane>
           </Tabs>
         </div>
