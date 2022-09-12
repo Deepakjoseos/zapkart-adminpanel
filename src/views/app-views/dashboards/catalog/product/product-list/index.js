@@ -292,14 +292,18 @@ const ProductList = () => {
   const tableColumns = [
     {
       title: 'Product',
-      dataIndex: 'name',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
+      
+      render:(_,row)=>{
+        return(
+        <Flex flexDirection="column" justifyContent="center">
+
+           {row.name}{row.variant?  (row.variant.name) :"" }
+      </Flex>  
+        )
+      }
+      // sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
     },
-    {
-      title: 'Vendor Commission',
-      dataIndex: 'commission',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'commission'),
-    },
+
 
     // {
     //   title: 'MRP Price',
@@ -345,21 +349,7 @@ const ProductList = () => {
         )
       },
     },
-    // {
-    //   title: 'DeliveryZone',
-    //   dataIndex: 'deliveryZone',
-    //   render: (deliveryZone) => {
-    //     return <Flex>{deliveryZone.name}</Flex>
-    //   },
-    // },
-    {
-      title: 'Variant',
-      dataIndex: 'variant',
-      render: (variant) => {
-        return <Flex>{variant?.name}</Flex>
-      },
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'deliveryZoneId'),
-    },
+
     {
       title: 'QTY',
       dataIndex: 'qty',
@@ -368,6 +358,14 @@ const ProductList = () => {
     {
       title: 'Vendor',
       dataIndex: 'username',
+      render:(_,row)=>{
+        return(
+        <Flex flexDirection="column" justifyContent="center">
+           {row.username} 
+           ({  row.commission + '%'} )
+      </Flex>  
+        )
+      }
     },
     {
       title: 'Approval',

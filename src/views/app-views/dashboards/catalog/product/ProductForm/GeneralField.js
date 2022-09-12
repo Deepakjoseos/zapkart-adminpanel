@@ -124,9 +124,12 @@ const GeneralField = ({
   statuses
   // subscriptionPrice,
   // bulkPrice,
-}) => {
+}) => 
+{
+
   console.log(productTemplates, 'plss')
-  const [variants, setVariants] = useState([])
+  const [variants, setVariants] = useState([]) 
+  const [selectedVendorId,setSelectedVendorId]= useState(null)
 
   const getVariants = (id) => {
     const curTemp = productTemplates.find((cur) => cur.id === id)
@@ -154,8 +157,14 @@ const GeneralField = ({
   return (
     <>
       <Card title="Basic Info">
+
+
+        <Form.Item name="hsn" label="HSN">
+          <Input placeholder='HSN'/>
+
+        </Form.Item>
         <Form.Item name="vendorId" label="Vendor" rules={rules.vendor}>
-          <Select
+          <Select 
             showSearch
             optionFilterProp="children"
             filterOption={(input, option) =>
@@ -163,7 +172,7 @@ const GeneralField = ({
             }
             placeholder="Vendor"
             onChange={(e) => {
-              getDeliveryZones(e)
+              getDeliveryZones("", {vendorId:e})
               form.setFieldsValue({
                 deliveryZoneId: '',
               })

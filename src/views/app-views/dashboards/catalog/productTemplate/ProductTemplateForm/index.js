@@ -192,7 +192,7 @@ const ProductForm = (props) => {
           returnable: data.returnable,
           brandId: data?.brand?.id,
           taxCategoryId:data?.taxCategoryId,
-          description: data.description,
+          description: data?.description,
           returnPeriod: data.returnPeriod,
           allowedQuantityPerOrder: data.allowedQuantityPerOrder,
           minQty: data.minQty,

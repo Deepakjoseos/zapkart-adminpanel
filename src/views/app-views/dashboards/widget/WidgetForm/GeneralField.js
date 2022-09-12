@@ -59,7 +59,7 @@ const GeneralField = ({statuses}) => {
             label="Title Show"
             rules={rules.isTitleShow}
           >
-            <Select placeholder="is Title Show">
+            <Select placeholder=" Title Show">
               <Option value={true}>Yes</Option>
               <Option value={false}>No</Option>
             </Select>

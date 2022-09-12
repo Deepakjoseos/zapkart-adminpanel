@@ -161,6 +161,16 @@ const MedicineTypeList = () => {
     {
       title: 'Medicine Type',
       dataIndex: 'name',
+      render: (_, record) => (
+        <div className="d-flex">
+          <AvatarStatus
+            size={60}
+            type="square"
+            src={record.image}
+            name={record.name}
+          />
+        </div>
+      ),
       sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
     },
 
