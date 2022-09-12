@@ -184,7 +184,10 @@ const ProductList = () => {
   const getParentName = (parentId) => {
     // const parentName = searchBackupList.find((cur) => cur.id === parentId)
     // return parentName ? parentName.name : ''
-    // const parent = deliveryLocation.getDeliveryLocationById(parentId)
+    const parent = deliveryLocation.getDeliveryLocationById(parentId)
+    if(parent){
+      return parent?.name
+    }
     // console.log('parent,',parent)
       
     

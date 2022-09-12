@@ -41,6 +41,13 @@ const getStockStatus = (status) => {
   if (status === 'Hold') {
     return (
       <>
+        <Tag color="orange">Hold</Tag>
+      </>
+    )
+  }
+  if (status === 'Deleted') {
+    return (
+      <>
         <Tag color="red">Hold</Tag>
       </>
     )

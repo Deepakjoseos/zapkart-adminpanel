@@ -9,14 +9,14 @@ import {
   Tag,
   Form,
   Row,
-  Col,Modal,notification
+  Col, Modal, notification
 } from 'antd'
 // import BrandListData from 'assets/data/product-list.data.json'
 import {
   EyeOutlined,
   DeleteOutlined,
   SearchOutlined,
-  PlusCircleOutlined,FileAddOutlined,DownloadOutlined
+  PlusCircleOutlined, FileAddOutlined, DownloadOutlined
 } from '@ant-design/icons'
 import AvatarStatus from 'components/shared-components/AvatarStatus'
 import EllipsisDropdown from 'components/shared-components/EllipsisDropdown'
@@ -61,12 +61,12 @@ const ProductList = () => {
 
   let history = useHistory()
   const [form] = Form.useForm()
-  
-  
+
+
   // Added for Pagination
   const [loading, setLoading] = useState(false)
   const [filterEnabled, setFilterEnabled] = useState(false)
-  
+
 
 
   const [isExcelModalOpen, setIsExcelModalOpen] = useState(false)
@@ -81,7 +81,7 @@ const ProductList = () => {
     current: 1,
     pageSize: 10,
   })
-  
+
   // Changed here for pagination
   const getProducts = async (paginationParams = {}, filterParams) => {
     setLoading(true)
@@ -89,10 +89,10 @@ const ProductList = () => {
       qs.stringify(getPaginationParams(paginationParams)),
       qs.stringify(filterParams)
     )
-  
+
     if (data) {
       setList(data.data)
-  
+
       // Pagination
       setPagination({
         ...paginationParams.pagination,
@@ -147,7 +147,7 @@ const ProductList = () => {
     page: params.pagination?.current,
     // ...params,
   })
-  
+
   // On pagination Change
   const handleTableChange = (newPagination) => {
     getProducts(
@@ -292,13 +292,12 @@ const ProductList = () => {
   const tableColumns = [
     {
       title: 'Product',
-      
-      render:(_,row)=>{
-        return(
-        <Flex flexDirection="column" justifyContent="center">
 
-           {row.name}{row.variant?  (row.variant.name) :"" }
-      </Flex>  
+      render: (_, row) => {
+        return (
+          <Flex flexDirection="column" justifyContent="center">
+
+            {row.name}{row?.variant && `(${row.variant.name})`}      </Flex>
         )
       }
       // sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
@@ -358,12 +357,12 @@ const ProductList = () => {
     {
       title: 'Vendor',
       dataIndex: 'username',
-      render:(_,row)=>{
-        return(
-        <Flex flexDirection="column" justifyContent="center">
-           {row.username} 
-           ({  row.commission + '%'} )
-      </Flex>  
+      render: (_, row) => {
+        return (
+          <Flex flexDirection="column" justifyContent="center">
+            {row.username}{row?.commission &&  `(${row.commission+ '%'})` }
+       
+          </Flex>
         )
       }
     },
@@ -528,122 +527,122 @@ const ProductList = () => {
           </Form.Item>
         </Col>
         <Col md={6} sm={24} xs={24} lg={6}>
-        <Form.Item name="brandId" label="Brands">
-        <Select
-          showSearch
-          optionFilterProp="children"
-          filterOption={(input, option) =>
-            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-          }
-          className="w-100"
-          style={{ minWidth: 180 }}
-          // onChange={(value) => setSelectedBrandId(value)}
-          // onSelect={handleQuery}
-          placeholder="Brands"
-          // value={selectedBrandId}
-        >
-          <Option value="">All</Option>
-          {brands.map((brand) => (
-            <Option key={brand.id} value={brand.id}>
-              {brand.name}
-            </Option>
-          ))}
-        </Select>
+          <Form.Item name="brandId" label="Brands">
+            <Select
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              className="w-100"
+              style={{ minWidth: 180 }}
+              // onChange={(value) => setSelectedBrandId(value)}
+              // onSelect={handleQuery}
+              placeholder="Brands"
+            // value={selectedBrandId}
+            >
+              <Option value="">All</Option>
+              {brands.map((brand) => (
+                <Option key={brand.id} value={brand.id}>
+                  {brand.name}
+                </Option>
+              ))}
+            </Select>
           </Form.Item>
         </Col>
         <Col md={6} sm={24} xs={24} lg={6}>
-        <Form.Item name="categoryId" label="Categories">
-        <Select
-          showSearch
-          optionFilterProp="children"
-          filterOption={(input, option) =>
-            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-          }
-          className="w-100"
-          style={{ minWidth: 180 }}
-          // onChange={(value) => setSelectedBrandId(value)}
-          // onSelect={handleQuery}
-          placeholder="Categories"
-          // value={selectedBrandId}
-        >
-          <Option value="">All</Option>
-          {categories.map((category) => (
-            <Option key={category.id} value={category.id}>
-              {category.name}
-            </Option>
-          ))}
-        </Select>
+          <Form.Item name="categoryId" label="Categories">
+            <Select
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              className="w-100"
+              style={{ minWidth: 180 }}
+              // onChange={(value) => setSelectedBrandId(value)}
+              // onSelect={handleQuery}
+              placeholder="Categories"
+            // value={selectedBrandId}
+            >
+              <Option value="">All</Option>
+              {categories.map((category) => (
+                <Option key={category.id} value={category.id}>
+                  {category.name}
+                </Option>
+              ))}
+            </Select>
           </Form.Item>
         </Col>
-        
+
         <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item name="vendorId" label="Vendors">
-          <Select
-          showSearch
-          optionFilterProp="children"
-          filterOption={(input, option) =>
-            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-          }
-          className="w-100"
-          style={{ minWidth: 180 }}
-          // onChange={(value) => setSelectedVendorId(value)}
-          // onSelect={handleQuery}
-          // value={selectedVendorId}
-          placeholder="Vendor"
-        >
-          <Option value="">All</Option>
-          {vendors?.map((vendor) => (
-            <Option value={vendor.id}>{vendor.fullName}</Option>
-          ))}
-        </Select>
+            <Select
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              className="w-100"
+              style={{ minWidth: 180 }}
+              // onChange={(value) => setSelectedVendorId(value)}
+              // onSelect={handleQuery}
+              // value={selectedVendorId}
+              placeholder="Vendor"
+            >
+              <Option value="">All</Option>
+              {vendors?.map((vendor) => (
+                <Option value={vendor.id}>{vendor.fullName}</Option>
+              ))}
+            </Select>
           </Form.Item>
         </Col>
         <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item name="approval" label="Approval Method">
-          <Select
-          showSearch
-          optionFilterProp="children"
-          filterOption={(input, option) =>
-            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-          }
-          className="w-100"
-          style={{ minWidth: 180 }}
-          // onChange={(value) => setSelectedApproval(value)}
-          // onSelect={handleQuery}
-          // value={selectedApproval}
-          placeholder="Approval Method"
-        >
-          <Option value="">All</Option>
-          <Option value="Pending">Pending</Option>
-          <Option value="Approved">Approved</Option>
-          <Option value="On Hold">On Hold</Option>
-          <Option value="Rejected">Rejected</Option>
-        </Select>
+            <Select
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              className="w-100"
+              style={{ minWidth: 180 }}
+              // onChange={(value) => setSelectedApproval(value)}
+              // onSelect={handleQuery}
+              // value={selectedApproval}
+              placeholder="Approval Method"
+            >
+              <Option value="">All</Option>
+              <Option value="Pending">Pending</Option>
+              <Option value="Approved">Approved</Option>
+              <Option value="On Hold">On Hold</Option>
+              <Option value="Rejected">Rejected</Option>
+            </Select>
           </Form.Item>
-          </Col>
-          <Col md={6} sm={24} xs={24} lg={6}>
+        </Col>
+        <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item name="acquirementMethod" label="Acquirement Method">
-          <Select
-          showSearch
-          optionFilterProp="children"
-          filterOption={(input, option) =>
-            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-          }
-          className="w-100"
-          style={{ minWidth: 180 }}
-          // onChange={(value) => setSelectedApproval(value)}
-          // onSelect={handleQuery}
-          // value={selectedApproval}
-          placeholder="Acquirement Method"
-        >
-           <Option value="">All</Option>
-            <Option value="Rent">Rent</Option>
-            <Option value="Lend">Lend</Option>
-            <Option value="Purchase">Purchase</Option>
-            <Option value="Giveaway">Giveaway</Option>
-        </Select>
+            <Select
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              className="w-100"
+              style={{ minWidth: 180 }}
+              // onChange={(value) => setSelectedApproval(value)}
+              // onSelect={handleQuery}
+              // value={selectedApproval}
+              placeholder="Acquirement Method"
+            >
+              <Option value="">All</Option>
+              <Option value="Rent">Rent</Option>
+              <Option value="Lend">Lend</Option>
+              <Option value="Purchase">Purchase</Option>
+              <Option value="Giveaway">Giveaway</Option>
+            </Select>
           </Form.Item>
-          </Col>
+        </Col>
 
         <Col className="mb-4">
           <Button type="primary" onClick={handleFilterSubmit}>
@@ -849,7 +848,7 @@ const ProductList = () => {
             scroll={{
               x: true,
             }}
-            rowKey="id"  pagination={pagination}
+            rowKey="id" pagination={pagination}
             loading={loading}
             onChange={handleTableChange}
           />

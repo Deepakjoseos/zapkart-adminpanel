@@ -100,7 +100,7 @@ const GeneralField = ({ propsDisplayImages, mode, userGroups,form, phoneVerified
         {/* <Form.Item >
           <Input disabled />
         </Form.Item> */}
-        {mode == 'EDIT' ?  <Form.Item
+        {mode === 'EDIT' ?  <Form.Item
             name="groups"
             label="User Groups"
             rules={rules.userGroups}

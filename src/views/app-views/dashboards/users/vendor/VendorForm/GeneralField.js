@@ -27,7 +27,7 @@ const rules = {
   ],
 }
 
-const GeneralField = ({ propsDisplayImages, form, mode, emailVerified, phoneVerified,pickupLocations,statuses }) => (
+const GeneralField = ({ propsDisplayImages, form, mode, emailVerified, phoneVerified,pickupLocations,statuses,userGroups }) => (
   <Row gutter={16}>
     <Col xs={24} sm={24} md={17}>
       <Card title="Basic Info">
@@ -185,9 +185,34 @@ const GeneralField = ({ propsDisplayImages, form, mode, emailVerified, phoneVeri
         <Form.Item name="business.address.zipcode" label="Zipcode">
           <Input placeholder="Zipcode" />
         </Form.Item>
+
+        <Form.Item
+            name="groups"
+            label="User Groups"
+            rules={rules.userGroups}
+          >
+            <Select
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              mode="multiple"
+              allowClear
+              style={{ width: '100%' }}
+              placeholder="User Groups"
+            >
+              {userGroups.map((group) => (
+                <Option key={group.id} value={group.id}>
+                  {group.name}
+                </Option>
+              ))}
+            </Select>
+            </Form.Item>
       </Card> : " "}
+        
 
     </Col>
+   
 
     <Col xs={24} sm={24} md={7}>
       <Card title="Display Image">

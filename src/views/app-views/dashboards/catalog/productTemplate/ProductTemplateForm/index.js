@@ -128,6 +128,8 @@ const ProductForm = (props) => {
     const { id } = param
     const data = await productTemplateService.getProductTemplateById(id)
     if (data) {
+      console.log('data',data)
+
       const images = data?.images?.map((cur, i) => {
         return {
           uid: i + Math.random() * 10,
@@ -191,7 +193,7 @@ const ProductForm = (props) => {
           allowedPaymentTypes: data.allowedPaymentTypes,
           returnable: data.returnable,
           brandId: data?.brand?.id,
-          taxCategoryId:data?.taxCategoryId,
+          taxCategoryId:data?.taxCategory?.id,
           description: data?.description,
           returnPeriod: data.returnPeriod,
           allowedQuantityPerOrder: data.allowedQuantityPerOrder,
@@ -202,6 +204,7 @@ const ProductForm = (props) => {
           keywords: data.keywords,
           tags: data.tags,
           commission: data.commission,
+          
 
           lengthClass: data.shippingDetail.lengthClass,
           weightClass: data.shippingDetail.weightClass,
@@ -222,7 +225,7 @@ const ProductForm = (props) => {
           productType: data.productType,
           medicineTypeId: data.medicineTypeId,
           medicinePackaging: data.medicinePackaging,
-          manufacturerId: data.manufacturerId,
+          manufacturerId: data.manufacturer?.id,
           composition: data.composition,
 
           // productType =============> 'Medicine'
@@ -246,7 +249,7 @@ const ProductForm = (props) => {
           allowedPaymentTypes: data.allowedPaymentTypes,
           returnable: data.returnable,
           brandId: data?.brand?.id,
-          description: data.description,
+          description: data?.description,
           returnPeriod: data.returnPeriod,
           allowedQuantityPerOrder: data.allowedQuantityPerOrder,
           minQty: data.minQty,
@@ -321,7 +324,7 @@ const ProductForm = (props) => {
         if (process.env.REACT_APP_SITE_NAME === 'zapkart') {
           sendingValues = {
             brandId: values.brandId,
-            taxCategoryId:values.taxCategoryId,
+            taxCategoryId:values.taxCategory?.id,
             categoryId: values.categoryId,
             name: values.name,
             description: values.description,
@@ -334,7 +337,7 @@ const ProductForm = (props) => {
             priority: values.priority,
             medicineTypeId: values.medicineTypeId,
             medicinePackaging: values.medicinePackaging,
-            manufacturerId: values.manufacturerId,
+            // manufacturerId: values.manufacturerId,
             minQty: values.minQty,
             slug: values.slug,
             tags: values.tags,
@@ -377,7 +380,7 @@ const ProductForm = (props) => {
             categoryId: values.categoryId,
             name: values.name,
             description: values.description,
-            taxCategoryId:values.taxCategoryId,
+            taxCategoryId:values.taxCategory?.id,
             // productType: values.productType,
             allowedPaymentTypes: values.allowedPaymentTypes,
             returnable: values.returnable,

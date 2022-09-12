@@ -215,6 +215,7 @@ const GeneralField = ({
               onChange={(e) => form.setFieldsValue({ description: e })}
               name="description"
             />
+            
           </Form.Item>
           <Form.Item name="status" label="Status" rules={rules.status}>
             <Select placeholder="Status">
