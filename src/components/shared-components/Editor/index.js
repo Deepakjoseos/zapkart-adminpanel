@@ -5,7 +5,27 @@ import React, { useEffect, useState } from 'react'
 // import { notification } from 'antd'
 // import './index.css';
 
+const loadScript = (src) => {
+  return new Promise((resolve) => {
+    const script = document.createElement('script')
+    script.src = src
+    script.onload = () => {
+      resolve(true)
+    }
+
+    script.onerror = () => {
+      resolve(false)
+    }
+    document.body.appendChild(script)
+  })
+}
+
+
 export default function Editor(props) {
+
+  
+
+
   window.tinymce.dom.Event.domLoaded = true
   const { editorHtml, placeholder, onChange, name } = props
   const [textarea, settextarea] = useState(false)
@@ -157,13 +177,13 @@ export default function Editor(props) {
         // },
       })
 
-      window.tinymce.activeEditor.on('change', () => {
+      window?.tinymce?.activeEditor?.on('change', () => {
         onChange(window.tinymce.activeEditor.getContent())
         console.log('the-content', window.tinymce.activeEditor.getContent())
       })
-    }, 1000)
+    }, 2000)
 
-    return () => window.tinymce.remove(`.${name}`)
+    return () => window?.tinymce?.remove(`.${name}`)
   }, [])
 
   return (

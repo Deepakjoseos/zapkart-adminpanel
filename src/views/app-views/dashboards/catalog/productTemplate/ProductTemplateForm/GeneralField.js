@@ -178,7 +178,8 @@ const GeneralField = ({
   lengthClass,
   taxCategories,
   paymentTypes,
-  statuses
+  statuses,
+  
 }) => {
   const [image, setImage] = useState(false)
 
@@ -217,6 +218,8 @@ const GeneralField = ({
             />
 
           </Form.Item>
+
+
           <Form.Item name="status" label="Status" rules={rules.status}>
             <Select placeholder="Status">
               <Option value="Active">Active</Option>
