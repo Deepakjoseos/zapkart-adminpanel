@@ -29,6 +29,7 @@ deliveryLocation.deleteDeliveryLocation = async function (id) {
 }
 
 deliveryLocation.getDeliveryLocationById = async function (id) {
+  console.log('parentidservice',id)
   try {
     const res = await fetch({
       url: `/deliverylocations/${id}`,

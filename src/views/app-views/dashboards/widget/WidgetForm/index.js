@@ -13,6 +13,7 @@ import moment from 'moment'
 import WidgetField from './WidgetField'
 import { uuid } from 'uuidv4'
 import constantsService from 'services/constants'
+import mainBannerService from 'services/MainBanner'
 
 const { TabPane } = Tabs
 
@@ -100,7 +101,7 @@ const WidgetForm = (props) => {
   }
 
   const addKeyIndexFieldToItems = (items) => {
-    console.log(items, 'ss')
+    console.log(items, 'itemsmain bana')
     const addKeyFieldToArray = items.map((cur, i) => {
       return { ...cur, key: cur.id, index: cur.id }
     })
@@ -129,6 +130,21 @@ const WidgetForm = (props) => {
     if (banners) {
       // Removes same list values brands
       const restListTypesItems = getRestListTypesItemsForDisplaying(banners)
+
+      // Add key and index field to items
+      const listTypeProvider = addKeyIndexFieldToItems(restListTypesItems)
+
+      setListItemsProvider(listTypeProvider)
+      setIsStaticProviderSelected(false)
+    }
+  }
+  const fetchMainBanner = async () => {
+    const mainBanners = await mainBannerService.getMainBanners()
+    console.log('mainBanners',mainBanners)
+
+    if (mainBanners) {
+      // Removes same list values brands
+      const restListTypesItems = getRestListTypesItemsForDisplaying(mainBanners)
 
       // Add key and index field to items
       const listTypeProvider = addKeyIndexFieldToItems(restListTypesItems)
@@ -176,7 +192,7 @@ const WidgetForm = (props) => {
       case 'Banner':
         return fetchBanner()
       case 'MainBanner':
-        return fetchBanner()
+        return fetchMainBanner()
       case 'Categories':
         return fetchCategories()
       case 'ProductTemplates':

@@ -145,11 +145,11 @@ const ProductForm = (props) => {
           lastName: values.lastName,
           groups:values.groups,
 
-          // email: values.email,
-          // phone: values.phone,
+          email: values.email,
+           phone: values.phone,
            status:values.status,
-          // password:values.password,
-          // emailVerified:values.emailVerified
+           password:values.password,
+          emailVerified:values.emailVerified
         }
 
         if (mode === ADD) {

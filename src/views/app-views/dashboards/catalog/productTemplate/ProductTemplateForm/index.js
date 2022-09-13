@@ -324,7 +324,7 @@ const ProductForm = (props) => {
         if (process.env.REACT_APP_SITE_NAME === 'zapkart') {
           sendingValues = {
             brandId: values.brandId,
-            taxCategoryId:values.taxCategory?.id,
+            taxCategoryId:values.taxCategoryId,
             categoryId: values.categoryId,
             name: values.name,
             description: values.description,

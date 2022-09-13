@@ -65,11 +65,8 @@ const GeneralField = ({ propsImages, propsMobileImages,statuses }) => (
 
         <Form.Item name="status" label="Status" rules={rules.status}>
           <Select placeholder="Status">
-          {statuses.map((item) => (
-                <Option key={item.id} value={item}>
-                  {item}
-                </Option>
-              ))}
+            <Option value="Active">Active</Option>
+            <Option value="Hold"></Option>Hold
           </Select>
         </Form.Item>
       </Card>

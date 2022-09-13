@@ -26,6 +26,7 @@ import customerService from 'services/customer'
 import AvatarStatus from 'components/shared-components/AvatarStatus'
 import { groupList } from 'views/app-views/pages/profile/profileData'
 import taxCategoryService from 'services/TaxCategory'
+import constantsService from 'services/constants'
 
 const { Option } = Select
 
@@ -56,6 +57,7 @@ const TaxCategoryList = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
   const [customerAddressOpen, setCustomerAddressOpen] = useState(false)
   const [customerAddFormOpen, setCustomerAddFormOpen] = useState(false)
+  const [statuses, setStatuses] = useState([])
 
   const [selectedCustomerId, setSelectedCustomerId] = useState(null)
   const [selectedPrescriptionCustomerId, setSelectedPrescriptionCustomerId] =
@@ -68,12 +70,22 @@ const TaxCategoryList = () => {
       setSearchBackupList(data)
       console.log(selectedViewAddress, 'show-data')
 
-     
+
+    }
+  }
+  const fetchConstants = async () => {
+    const data = await constantsService.getConstants()
+    if (data) {
+      // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
+
+      setStatuses(Object.values(data.GENERAL['STATUS']))
+
     }
   }
 
   useEffect(() => {
     getTaxCategories()
+    fetchConstants()
   }, [])
 
   const dropdownMenu = (row) => (
@@ -94,7 +106,7 @@ const TaxCategoryList = () => {
           </span>
         </Flex>
       </Menu.Item>
-     
+
     </Menu>
   )
 
@@ -147,8 +159,8 @@ const TaxCategoryList = () => {
 
   const tableColumns = [
     {
-      title:'Name',
-      dataIndex:'name'
+      title: 'Name',
+      dataIndex: 'name'
     },
     {
       title: 'Same State',
@@ -160,7 +172,7 @@ const TaxCategoryList = () => {
               <>
                 <p>Type:{item.type}</p>
                 <p>Percent:{item.percent}</p>
-               
+
               </>
             ))}
           </>
@@ -178,7 +190,7 @@ const TaxCategoryList = () => {
               <>
                 <p>Type:{item.type}</p>
                 <p>Percent:{item.percent}</p>
-               
+
               </>
             ))}
           </>
@@ -186,7 +198,7 @@ const TaxCategoryList = () => {
       },
       // sorter: (a, b) => utils.antdTableSorter(a, b, 'lastname'),
     },
- 
+
     {
       title: 'Status',
       dataIndex: 'status',
@@ -235,15 +247,16 @@ const TaxCategoryList = () => {
       </div>
       <div className="mb-3">
         <Select
-          defaultValue="All"
           className="w-100"
           style={{ minWidth: 180 }}
-          onChange={handleShowStatus}
           placeholder="Status"
         >
-          <Option value="All">All</Option>
-          <Option value="Active">Active</Option>
-          <Option value="Hold">Hold</Option>
+          <Option value="">All</Option>
+          {statuses.map((item) => (
+            <Option key={item.id} value={item}>
+              {item}
+            </Option>
+          ))}
         </Select>
       </div>
     </Flex>
@@ -267,7 +280,7 @@ const TaxCategoryList = () => {
       <div className="table-responsive">
         <Table columns={tableColumns} dataSource={list} rowKey="id" />
 
-       
+
       </div>
     </Card>
   )

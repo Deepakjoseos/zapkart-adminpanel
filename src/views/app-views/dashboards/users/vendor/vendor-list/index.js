@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { Card, Table, Select, Input, Menu, Tag, notification,Modal,Button } from 'antd'
-import { EyeOutlined, SearchOutlined,PlusCircleOutlined } from '@ant-design/icons'
+import { Card, Table, Select, Input, Menu, Tag, notification, Modal, Button } from 'antd'
+import { EyeOutlined, SearchOutlined, PlusCircleOutlined } from '@ant-design/icons'
 import EllipsisDropdown from 'components/shared-components/EllipsisDropdown'
 import Flex from 'components/shared-components/Flex'
 import { useHistory } from 'react-router-dom'
 import utils from 'utils'
 import vendorService from 'services/vendor'
 import AvatarStatus from 'components/shared-components/AvatarStatus'
-
+import constantsService from 'services/constants'
 const { Option } = Select
 
 const getStockStatus = (status) => {
@@ -33,8 +33,9 @@ const VendorList = () => {
   const [list, setList] = useState([])
   const [searchBackupList, setSearchBackupList] = useState([])
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
-  const [pickUpLocations,setPickUpLocations]= useState([])
+  const [pickUpLocations, setPickUpLocations] = useState([])
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [statuses, setStatuses] = useState([])
 
 
   useEffect(() => {
@@ -47,12 +48,13 @@ const VendorList = () => {
       }
     }
     getVendors()
+    fetchConstants()
   }, [])
 
   const viewDetails = (row) => {
     history.push(`/app/dashboards/users/vendor/edit-vendor/${row.id}`)
   }
-  const addVendor = ()=>{
+  const addVendor = () => {
     history.push(`/app/dashboards/users/vendor/add-vendor`)
 
   }
@@ -121,7 +123,15 @@ const VendorList = () => {
   //     }
   //   }
   // }
+  const fetchConstants = async () => {
+    const data = await constantsService.getConstants()
+    if (data) {
+      // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
 
+      setStatuses(Object.values(data.GENERAL['STATUS']))
+
+    }
+  }
   const handleStatusChange = async (value, selectedRow) => {
     const updatedProductApproval = await vendorService.editVendorStatus(
       selectedRow.id,
@@ -143,38 +153,39 @@ const VendorList = () => {
       // setList(data)
     }
   }
-  const pickUpLocationsColumns= [
+  const pickUpLocationsColumns = [
     {
-      
-        title: 'Name',
-        dataIndex: 'name',
-        sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
-      },
-      {
-      
-        title: 'City',
-        dataIndex: 'city',
-        sorter: (a, b) => utils.antdTableSorter(a, b, 'city'),
-      },
-      {
-      
-        title: 'State',
-        dataIndex: 'state',
-        sorter: (a, b) => utils.antdTableSorter(a, b, 'state'),
-      },
-      {
-      
-        title: 'Country',
-        dataIndex: 'country',
-        sorter: (a, b) => utils.antdTableSorter(a, b, 'country'),
-      },
-      {
-      
-        title: 'Pin Code',
-        dataIndex: 'pin_code',
-        sorter: (a, b) => utils.antdTableSorter(a, b, 'pin_code'),
-      },
-    
+
+      title: 'Name',
+      dataIndex: 'name',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
+    },
+    {
+
+      title: 'City',
+      dataIndex: 'city',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'city'),
+    },
+    {
+
+      title: 'State',
+      dataIndex: 'state',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'state'),
+    },
+    {
+
+      title: 'Country',
+      dataIndex: 'country',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'country'),
+    },
+
+    {
+
+      title: 'Pin Code',
+      dataIndex: 'pin_code',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'pin_code'),
+    },
+
   ]
 
   const tableColumns = [
@@ -206,6 +217,24 @@ const VendorList = () => {
     {
       title: 'Phone',
       dataIndex: 'phone',
+    },
+    {
+      title: 'Groups',
+      dataIndex: 'groups',
+      render: (groups) => {
+        return (
+          <>
+            {groups?.map((group) => (
+              <>
+                <p>{group.name}</p>
+                {/* <p>Type:{group.type}</p>
+          <p>Status:{group.status}</p> */}
+              </>
+            ))}
+          </>
+        )
+      },
+      // sorter: (a, b) => utils.antdTableSorter(a, b, 'lastname'),
     },
     // {
     //   title: 'Commission',
@@ -275,15 +304,16 @@ const VendorList = () => {
       </div>
       <div className="mb-3">
         <Select
-          defaultValue="All"
           className="w-100"
           style={{ minWidth: 180 }}
-          onChange={handleShowStatus}
           placeholder="Status"
         >
-          <Option value="All">All</Option>
-          <Option value="Active">Active</Option>
-          <Option value="Hold">Hold</Option>
+          <Option value="">All</Option>
+          {statuses.map((item) => (
+            <Option key={item.id} value={item}>
+              {item}
+            </Option>
+          ))}
         </Select>
       </div>
     </Flex>
@@ -291,31 +321,31 @@ const VendorList = () => {
 
   return (
     <>
-    <Card>
-      <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
-        {filters()}
-        <div>
-          <Button
-            onClick={addVendor}
-            type="primary"
-            icon={<PlusCircleOutlined />}
-            block
-          >
-            Add Vendor
-          </Button>
-        </div>
-      </Flex>
-      <div className="table-responsive">
-        <Table columns={tableColumns} dataSource={list} rowKey="id" />
+      <Card>
+        <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
+          {filters()}
+          <div>
+            <Button
+              onClick={addVendor}
+              type="primary"
+              icon={<PlusCircleOutlined />}
+              block
+            >
+              Add Vendor
+            </Button>
+          </div>
+        </Flex>
+        <div className="table-responsive">
+          <Table columns={tableColumns} dataSource={list} rowKey="id" />
 
-        {/* <ViewAddresses
+          {/* <ViewAddresses
           selectedViewAddress={selectedViewAddress}
           setSelectedViewAddress={setSelectedViewAddress}
         /> */}
-      </div>
-    </Card>
-    <Modal title="Basic Modal" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
-    <Table columns={pickUpLocationsColumns} dataSource={pickUpLocations} />
+        </div>
+      </Card>
+      <Modal title="Basic Modal" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+        <Table columns={pickUpLocationsColumns} dataSource={pickUpLocations} />
 
       </Modal>
     </>

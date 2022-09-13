@@ -27,6 +27,7 @@ import AvatarStatus from 'components/shared-components/AvatarStatus'
 import { groupList } from 'views/app-views/pages/profile/profileData'
 import taxCategoryService from 'services/TaxCategory'
 import mainBannerService from 'services/MainBanner'
+import constantsService from 'services/constants'
 
 const { Option } = Select
 
@@ -54,19 +55,30 @@ const MainBannerList = () => {
   const [searchBackupList, setSearchBackupList] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
+  const [statuses, setStatuses] = useState([])
 
   const getMainBanners = async () => {
     const data = await mainBannerService.getMainBanners()
     if (data) {
-      setList(data)
-      setSearchBackupList(data)
+      setList(data.data)
+      setSearchBackupList(data.data)
 
-     
+
+    }
+  }
+  const fetchConstants = async () => {
+    const data = await constantsService.getConstants()
+    if (data) {
+      // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
+
+      setStatuses(Object.values(data.GENERAL['STATUS']))
+
     }
   }
 
   useEffect(() => {
     getMainBanners()
+    fetchConstants()
   }, [])
 
   const dropdownMenu = (row) => (
@@ -87,7 +99,7 @@ const MainBannerList = () => {
           </span>
         </Flex>
       </Menu.Item>
-     
+
     </Menu>
   )
 
@@ -140,38 +152,38 @@ const MainBannerList = () => {
 
   const tableColumns = [
     {
-        title: 'Main Banner',
-        dataIndex: 'name',
-        render: (_, record) => (
-          <div className="d-flex">
-            <AvatarStatus
-              size={60}
-              type="square"
-              src={record.image}
-              name={record.name}
-            />
-          </div>
-        ),
-        sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
-      },
-      {
-        title: 'Forward Url',
-        dataIndex: 'forwardUrl',
-        sorter: (a, b) => utils.antdTableSorter(a, b, 'forwardUrl'),
-      },
-      {
-        title: 'Priority',
-        dataIndex: 'priority',
-        sorter: (a, b) => utils.antdTableSorter(a, b, 'priority'),
-      },
-      {
-        title: 'Status',
-        dataIndex: 'status',
-        render: (status) => (
-          <Flex alignItems="center">{getStockStatus(status)}</Flex>
-        ),
-        sorter: (a, b) => utils.antdTableSorter(a, b, 'status'),
-      },
+      title: 'Main Banner',
+      dataIndex: 'name',
+      render: (_, record) => (
+        <div className="d-flex">
+          <AvatarStatus
+            size={60}
+            type="square"
+            src={record.image}
+            name={record.name}
+          />
+        </div>
+      ),
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
+    },
+    {
+      title: 'Forward Url',
+      dataIndex: 'forwardUrl',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'forwardUrl'),
+    },
+    {
+      title: 'Priority',
+      dataIndex: 'priority',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'priority'),
+    },
+    {
+      title: 'Status',
+      dataIndex: 'status',
+      render: (status) => (
+        <Flex alignItems="center">{getStockStatus(status)}</Flex>
+      ),
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'status'),
+    },
     {
       title: '',
       dataIndex: 'actions',
@@ -211,17 +223,20 @@ const MainBannerList = () => {
         />
       </div>
       <div className="mb-3">
+
         <Select
-          defaultValue="All"
           className="w-100"
           style={{ minWidth: 180 }}
-          onChange={handleShowStatus}
           placeholder="Status"
         >
-          <Option value="All">All</Option>
-          <Option value="Active">Active</Option>
-          <Option value="Hold">Hold</Option>
+          <Option value="">All</Option>
+          {statuses.map((item) => (
+            <Option key={item.id} value={item}>
+              {item}
+            </Option>
+          ))}
         </Select>
+
       </div>
     </Flex>
   )
@@ -244,7 +259,7 @@ const MainBannerList = () => {
       <div className="table-responsive">
         <Table columns={tableColumns} dataSource={list} rowKey="id" />
 
-       
+
       </div>
     </Card>
   )
