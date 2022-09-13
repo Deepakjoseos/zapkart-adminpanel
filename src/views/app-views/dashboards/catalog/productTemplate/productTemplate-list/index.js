@@ -46,7 +46,14 @@ const getStockStatus = (status) => {
   if (status === 'Hold') {
     return (
       <>
-        <Tag color="red">Hold</Tag>
+        <Tag color="orange">Hold</Tag>
+      </>
+    )
+  }
+  if (status === 'Deleted') {
+    return (
+      <>
+        <Tag color="red">Deleted</Tag>
       </>
     )
   }
@@ -337,7 +344,10 @@ const ProductTemplateList = () => {
               <Tag color="green">Active</Tag>
             </Option>
             <Option value="Hold">
-              <Tag color="red">Hold</Tag>
+              <Tag color="orange">Hold</Tag>
+            </Option>
+            <Option value="Deleted">
+              <Tag color="red">Deleted</Tag>
             </Option>
           </Select>
         )
