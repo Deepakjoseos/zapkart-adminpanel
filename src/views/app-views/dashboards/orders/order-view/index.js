@@ -219,8 +219,8 @@ const OrderView = () => {
                 {moment(new Date(order?.createdAt * 1000)).format('DD-MM-YYYY')}
                 {/* {moment(parseInt(order?.createdAt)).format('YYYY-MM-DD')} */}
               </p>
-              <p>Status: {order?.status}</p>
-              <p>shipping Charge: {order?.shippingCharge}</p>
+              {/* <p>Status: {order?.status}</p> */}
+              {/* <p>shipping Charge: {order?.shippingCharge}</p> */}
               <p>Payment method : {order?.payment?.type}</p>
               {order?.transaction ? (
                 <p>Transaction ID : {order?.transaction?.id}</p>
@@ -258,7 +258,7 @@ const OrderView = () => {
               pagination={false}
               className="mb-5"
             >
-             <Column title="ShipmentId" dataIndex="shipmentId" key="shipmentId" render={(text) => <Link to={`/app/dashboards/shipments/shipment/shipment-view/${text}`}> {text}</Link>}  />
+             <Column title="Shipment" dataIndex="shipmentId" key="shipmentId" render={(text) => <Link to={`/app/dashboards/shipments/shipment/shipment-view/${text}`}> {text}</Link>}  />
               <Column title="Product" dataIndex="name" key="name" />
               <Column title="Quantity" dataIndex="quantity" key="quantity" />
               <Column title="Price" dataIndex="price" key="price" />
@@ -311,6 +311,10 @@ const OrderView = () => {
             </Table>
             <div className="d-flex justify-content-end">
               <div className="text-right ">
+              <span className='mr-1'>shipping Charge: {order?.shippingCharge}
+</span>
+<span className='mr-1'>Coupon Code: {order?.coupon}
+</span>
                 <h2 className="font-weight-semibold mt-3">
                   <span className="mr-1">Grand Total: </span>₹
                   {order?.totalAmount}
@@ -386,7 +390,6 @@ const OrderView = () => {
                   {/* {moment(parseInt(order?.createdAt)).format('YYYY-MM-DD')} */}
                 </p>
                 <p>Status: {order?.status}</p>
-                <p>shipping Charge: {order?.shippingCharge}</p>
                 <p>Payment method : {order?.payment?.type}</p>
                 {order?.transaction ? (
                   <p>Transaction ID : {order?.transaction?.id}</p>
@@ -446,6 +449,8 @@ const OrderView = () => {
               <div className="d-flex justify-content-end">
                 <div className="text-right ">
                   <h2 className="font-weight-semibold mt-3">
+
+
                     <span className="mr-1">Grand Total: </span>₹
                     {order?.totalAmount}
                   </h2>

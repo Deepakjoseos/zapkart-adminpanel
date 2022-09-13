@@ -292,15 +292,15 @@ const Orders = () => {
 
       // render: (items, record) => <div>{items?.length}</div>,
     },
-    {
-      title: 'Shipping Charge',
-      dataIndex: 'shippingCharge',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'shippingCharge'),
-      // render: (items, record) => <div>{items?.length}</div>,
-    },
+    // {
+    //   title: 'Shipping Charge',
+    //   dataIndex: 'shippingCharge',
+    //   sorter: (a, b) => utils.antdTableSorter(a, b, 'shippingCharge'),
+    //   // render: (items, record) => <div>{items?.length}</div>,
+    // },
     {
       title: 'Order Date',
-      dataIndex: 'createdAt',
+      dataIndex: 'createdAt', 
       render: (createdAt) => (
         <Flex alignItems="center">
           {moment(new Date(createdAt * 1000)).format('DD-MM-YYYY hh:mm:a')}
@@ -473,7 +473,7 @@ const Orders = () => {
           </Form.Item>
         </Col>
         <Col md={6} sm={24} xs={24} lg={6}>
-          <Form.Item name="customerId" label="Customers">
+          <Form.Item name="userId" label="Customers">
           <Select
               showSearch
               optionFilterProp="children"

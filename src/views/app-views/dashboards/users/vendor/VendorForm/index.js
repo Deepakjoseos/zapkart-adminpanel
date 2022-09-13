@@ -10,6 +10,7 @@ import { useHistory } from 'react-router-dom'
 import vendorService from 'services/vendor'
 import ViewPickupLocations from '../vendor-list/ViewPickUpLocations'
 import constantsService from 'services/constants'
+import userGroupService from 'services/userGroup'
 
 // const getAllPickUpLocations = async ()=>{
 //   const data = await shipmentService.getAllPickUpLocations()
@@ -38,6 +39,7 @@ const ProductForm = (props) => {
   const [phoneVerified, setPhoneVerified] = useState(false)
   const [emailVerified, setEmailVerified] = useState(false)
   const [statuses,setStatuses] = useState([])
+  const [groupList,setGroupList] = useState([])
 
 
    const {
@@ -47,6 +49,15 @@ const ProductForm = (props) => {
      onRemove: onRemoveDisplayImages,
      setFileList: setFileListDisplayImages,
    } = useUpload(1)
+   const getUserGroups = async () => {
+    const data = await userGroupService.getUserGroups()
+    if (data) {
+      const availableUserGroups = data.filter(
+        (userGroups) => userGroups.type === 'Vendor'
+      )
+      setGroupList(availableUserGroups)
+    }
+  }
    const fetchConstants = async () => {
     const data = await constantsService.getConstants()
     if (data) {
@@ -58,6 +69,7 @@ const ProductForm = (props) => {
   }
   useEffect(()=>{
    fetchConstants()
+   getUserGroups()
   },[])
   const fetchVendorById = async () => {
     const { id } = param
@@ -89,6 +101,8 @@ const ProductForm = (props) => {
         tanNumber: data?.tanNumber,
         pan:data?.pan,
         drugLicense:data?.drugLicense,
+        groups: data?.groups.map((cur)=> cur.id),
+
 
         // address:
         'address.line1': data?.address?.line1,
@@ -146,6 +160,7 @@ const ProductForm = (props) => {
           pan: values.pan,
           gst: values.gst,
           drugLicense:values.drugLicense,
+          groups:values.groups,
           address: {
             line1: values['address.line1'],
             city: values['address.city'],
@@ -286,7 +301,7 @@ const ProductForm = (props) => {
               <GeneralField
                 propsDisplayImages={propsDisplayImages}
                 form={form} mode={mode} emailVerified={emailVerified} phoneVerified={phoneVerified}
-               statuses={statuses}
+               statuses={statuses} userGroups={groupList}
               />
             </TabPane>
             {/* <TabPane tab="PickUpLocations" key="2">
