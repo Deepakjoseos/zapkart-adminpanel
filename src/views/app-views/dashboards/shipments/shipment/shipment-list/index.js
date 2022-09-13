@@ -21,10 +21,11 @@ import AvatarStatus from 'components/shared-components/AvatarStatus'
 import EllipsisDropdown from 'components/shared-components/EllipsisDropdown'
 import Flex from 'components/shared-components/Flex'
 import NumberFormat from 'react-number-format'
-import { useHistory,Link } from 'react-router-dom'
+import { useHistory, Link } from 'react-router-dom'
 import utils from 'utils'
 import shipmentService from 'services/shipment'
 import CheckIfDeliverable from './CheckIfDeliverable'
+import constantsService from 'services/constants'
 
 const { Option } = Select
 
@@ -60,6 +61,7 @@ const ShipmentList = () => {
   const [searchBackupList, setSearchBackupList] = useState([])
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
   const [checkIfDeliverableOpen, setCheckIfDeliverableOpen] = useState(false)
+  const [statuses, setStatuses] = useState([])
 
   // Getting Brands List to display in the table
   const getShipments = async () => {
@@ -121,9 +123,19 @@ const ShipmentList = () => {
       // getShipments()
     }
   }
+  const fetchConstants = async () => {
+    const data = await constantsService.getConstants()
+    if (data) {
+      // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
+
+      setStatuses(Object.values(data.GENERAL['STATUS']))
+
+    }
+  }
 
   useEffect(() => {
     getShipments()
+    fetchConstants()
   }, [])
 
   // Dropdown menu for each row
@@ -199,6 +211,13 @@ const ShipmentList = () => {
   // Antd Table Columns
   const tableColumns = [
     {
+      title: 'ShipmentId',
+      dataIndex: 'id',
+      render: (text) => <Link to={`/app/dashboards/shipments/shipment/shipment-view/${text}`}>
+        {text}
+      </Link>
+    },
+    {
       title: 'Shipment',
       dataIndex: 'items',
       render: (_, record) => (
@@ -208,8 +227,9 @@ const ShipmentList = () => {
               <div>
                 <span>OrderId:</span>
                 <Link to={`/app/dashboards/orders/order-view/${item.orderId}`}>
-                   {item?.orderId}
+                  {item?.orderId}
                 </Link>
+
               </div>
               <div>Products: {item?.items?.map((cur) => `${cur.name}, `)}</div>
             </>
@@ -292,15 +312,16 @@ const ShipmentList = () => {
       </div>
       <div className="mb-3">
         <Select
-          defaultValue="All"
           className="w-100"
           style={{ minWidth: 180 }}
-          onChange={handleShowStatus}
           placeholder="Status"
         >
-          <Option value="All">All</Option>
-          <Option value="Active">Active</Option>
-          <Option value="Hold">Hold</Option>
+          <Option value="">All</Option>
+          {statuses.map((item) => (
+            <Option key={item.id} value={item}>
+              {item}
+            </Option>
+          ))}
         </Select>
       </div>
     </Flex>

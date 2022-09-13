@@ -1,5 +1,5 @@
 import React from 'react'
-import { Input, Row, Col, Card, Form, Select,Upload } from 'antd'
+import { Input, Row, Col, Card, Form, Select, Upload } from 'antd'
 import CustomIcon from 'components/util-components/CustomIcon'
 import { ImageSvg } from 'assets/svg/icon'
 
@@ -22,9 +22,9 @@ const rules = {
   ],
 }
 
-const GeneralField = ({props,propsImages,statuses}) => (
+const GeneralField = ({ props, propsImages, statuses }) => (
   <Row gutter={16}>
-    <Col xs={24} sm={24} md={24}>
+    <Col xs={24} sm={24} md={17}>
       <Card title="Basic Info">
         <Form.Item name="name" label="Name" rules={rules.name}>
           <Input placeholder="Name" />
@@ -32,11 +32,8 @@ const GeneralField = ({props,propsImages,statuses}) => (
 
         <Form.Item name="status" label="Status" rules={rules.status}>
           <Select placeholder="Status">
-          {statuses?.map((item) => (
-                <Option key={item.id} value={item}>
-                  {item}
-                </Option>
-              ))}
+            <Option value="Active">Active</Option>
+            <Option value="Hold"></Option>Hold
           </Select>
         </Form.Item>
       </Card>

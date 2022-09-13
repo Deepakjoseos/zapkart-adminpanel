@@ -203,7 +203,7 @@ const VariantsForm = ({
   const getAttributes = async () => {
     const data = await attributeService.getAttributes()
     if (data) {
-      const activeAttributes = data.filter((item) => item.status === 'Active')
+      const activeAttributes = data.data.filter((item) => item.status === 'Active')
       setAttributes(activeAttributes)
       return activeAttributes
     }

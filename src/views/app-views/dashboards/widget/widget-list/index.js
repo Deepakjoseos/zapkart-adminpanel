@@ -14,6 +14,7 @@ import { useHistory } from 'react-router-dom'
 import utils from 'utils'
 import widgetService from 'services/widget'
 import moment from 'moment'
+import constantsService from 'services/constants'
 
 const { Option } = Select
 
@@ -41,7 +42,8 @@ const WidegetList = () => {
   const [searchBackupList, setSearchBackupList] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
-  const [selectedOrder,setSelectedorder] = useState(null)
+  const [selectedOrder, setSelectedorder] = useState(null)
+  const [statuses, setStatuses] = useState([])
 
   useEffect(() => {
     const getWidgets = async () => {
@@ -53,6 +55,7 @@ const WidegetList = () => {
       }
     }
     getWidgets()
+    fetchConstants()
   }, [])
 
   const dropdownMenu = (row) => (
@@ -84,6 +87,15 @@ const WidegetList = () => {
     history.push(`/app/dashboards/widget/edit-widget/${row.id}`)
   }
 
+  const fetchConstants = async () => {
+    const data = await constantsService.getConstants()
+    if (data) {
+      // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
+
+      setStatuses(Object.values(data.GENERAL['STATUS']))
+
+    }
+  }
   const deleteRow = async (row) => {
     const resp = await widgetService.deleteWidget(row.id)
 
@@ -203,7 +215,7 @@ const WidegetList = () => {
   const filters = () => (
     <Flex className="mb-1" mobileFlex={false}>
       <div className="mr-md-3 mb-3">
-      <label className="mt-2">Search</label>
+        <label className="mt-2">Search</label>
 
         <Input
           placeholder="Search"
@@ -212,34 +224,35 @@ const WidegetList = () => {
         />
       </div>
       <div className="mr-md-3 mb-3">
-      <label className="mt-2">Status</label>
-
+        <label className="mt-2">Status</label>
         <Select
-          defaultValue="All"
           className="w-100"
           style={{ minWidth: 180 }}
-          onChange={handleShowStatus}
           placeholder="Status"
         >
-          <Option value="All">All</Option>
-          <Option value="Active">Active</Option>
-          <Option value="Hold">Hold</Option>
+          <Option value="">All</Option>
+          {statuses.map((item) => (
+            <Option key={item.id} value={item}>
+              {item}
+            </Option>
+          ))}
         </Select>
+
       </div>
       <div className="mr-md-3 mb-3">
-      <label className="mt-2">Order By Priority</label>
-      <Select
+        <label className="mt-2">Order By Priority</label>
+        <Select
           className="w-100"
           style={{ minWidth: 180 }}
           onChange={(value) => setSelectedorder(value)}
           // onSelect={handleQuery}
           value={selectedOrder}
           placeholder="OrderBy Priority">
-            
-             <Option value="">All</Option>
-             <Option value="true">Yes</Option>
-             <Option value="false">No</Option>
-          </Select>
+
+          <Option value="">All</Option>
+          <Option value="true">Yes</Option>
+          <Option value="false">No</Option>
+        </Select>
       </div>
       <div >
         <Button type="primary" className="mr-2 mt-4 " onClick={handleQuery}>
@@ -258,18 +271,18 @@ const WidegetList = () => {
     <Card>
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
         {filters()}
-        
+
       </Flex>
       <div>
-          <Button
-            onClick={addProduct}
-            type="primary"
-            icon={<PlusCircleOutlined />}
-        
-          >
-            Add Widget
-          </Button>
-        </div>
+        <Button
+          onClick={addProduct}
+          type="primary"
+          icon={<PlusCircleOutlined />}
+
+        >
+          Add Widget
+        </Button>
+      </div>
       <div className="table-responsive">
         <Table columns={tableColumns} dataSource={list} rowKey="id" />
       </div>

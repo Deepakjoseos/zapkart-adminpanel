@@ -9,7 +9,7 @@ import {
   Tag,
   Form,
   Row,
-  Col,notification
+  Col, notification
 } from 'antd'
 // import BrandListData from 'assets/data/product-list.data.json'
 import {
@@ -65,16 +65,17 @@ const Orders = () => {
   const [paymentStatuses, setPaymentStatuses] = useState([])
   const [orderStatuses, setOrderStatuses] = useState([])
   const [customerPrescriptions, setCustomerPrescriptions] = useState([])
+  const [statuses, setStatuses] = useState([])
   let history = useHistory()
   const [form] = Form.useForm()
-  
+
   const [list, setList] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
-  
+
   // Added for Pagination
   const [loading, setLoading] = useState(false)
   const [filterEnabled, setFilterEnabled] = useState(false)
-  
+
   // pagination
   const [pagination, setPagination] = useState({
     current: 1,
@@ -99,6 +100,7 @@ const Orders = () => {
       // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
       setOrderStatuses(Object.values(data.ORDER['ORDER_STATUS']))
       setPaymentStatuses(Object.values(data.PAYMENT['PAYMENT_STATUS']))
+      setStatuses(Object.values(data.GENERAL['STATUS']))
     }
   }
   const getOrders = async (paginationParams = {}, filterParams) => {
@@ -107,10 +109,10 @@ const Orders = () => {
       qs.stringify(getPaginationParams(paginationParams)),
       qs.stringify(filterParams)
     )
-  
+
     if (data) {
       setList(data.data)
-  
+
       // Pagination
       setPagination({
         ...paginationParams.pagination,
@@ -119,7 +121,7 @@ const Orders = () => {
       setLoading(false)
     }
   }
-  
+
   useEffect(() => {
     getOrders({
       pagination,
@@ -128,14 +130,14 @@ const Orders = () => {
     fetchConstants()
     getCustomers()
   }, [])
-  
+
   // pagination generator
   const getPaginationParams = (params) => ({
     limit: params.pagination?.pageSize,
     page: params.pagination?.current,
     // ...params,
   })
-  
+
   // On pagination Change
   const handleTableChange = (newPagination) => {
     getOrders(
@@ -145,7 +147,7 @@ const Orders = () => {
       filterEnabled ? _.pickBy(form.getFieldsValue(), _.identity) : {}
     )
   }
-  
+
   console.log('order Status', orderStatuses)
 
   // const handleShowStatus = (value) => {
@@ -230,7 +232,7 @@ const Orders = () => {
       // setList(data)
     }
   }
-  const handlePaymentStatusChange = () => {}
+  const handlePaymentStatusChange = () => { }
 
   const getCustomerPrescriptions = async (customerId) => {
     const data = await customerService.getCustomerPrescription(customerId)
@@ -263,6 +265,7 @@ const Orders = () => {
       ),
     },
 
+
     {
       title: 'Customer Name',
       dataIndex: 'userName',
@@ -270,7 +273,7 @@ const Orders = () => {
 
       // render: (items, record) => <div>{items?.length}</div>,
     },
-    
+
 
     // {
     //   title: 'Products Count',
@@ -292,12 +295,12 @@ const Orders = () => {
 
       // render: (items, record) => <div>{items?.length}</div>,
     },
-    {
-      title: 'Shipping Charge',
-      dataIndex: 'shippingCharge',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'shippingCharge'),
-      // render: (items, record) => <div>{items?.length}</div>,
-    },
+    // {
+    //   title: 'Shipping Charge',
+    //   dataIndex: 'shippingCharge',
+    //   sorter: (a, b) => utils.antdTableSorter(a, b, 'shippingCharge'),
+    //   // render: (items, record) => <div>{items?.length}</div>,
+    // },
     {
       title: 'Order Date',
       dataIndex: 'createdAt',
@@ -462,19 +465,28 @@ const Orders = () => {
             <Input placeholder="Search" prefix={<SearchOutlined />} />
           </Form.Item>
         </Col>
-        
+
         <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item name="status" label="Status">
-            <Select className="w-100" placeholder="Status">
+
+            <Select
+              className="w-100"
+              style={{ minWidth: 180 }}
+              placeholder="Status"
+            >
               <Option value="">All</Option>
-              <Option value="Active">Active</Option>
-              <Option value="Hold">Hold</Option>
+              {statuses.map((item) => (
+                <Option key={item.id} value={item}>
+                  {item}
+                </Option>
+              ))}
             </Select>
+
           </Form.Item>
         </Col>
         <Col md={6} sm={24} xs={24} lg={6}>
-          <Form.Item name="customerId" label="Customers">
-          <Select
+          <Form.Item name="userId" label="Customers">
+            <Select
               showSearch
               optionFilterProp="children"
               filterOption={(input, option) =>
@@ -496,25 +508,25 @@ const Orders = () => {
             </Select>
           </Form.Item>
         </Col>
-    
+
         <Col className="mb-4 ml-2">
           <Button type="primary" onClick={handleFilterSubmit}>
             Filter
           </Button>
-          <Button  className="ml-1" type="primary" onClick={handleClearFilter}>
+          <Button className="ml-1" type="primary" onClick={handleClearFilter}>
             Clear
           </Button>
         </Col>
-       
+
       </Row>
     </Form>
   )
 
   return (
     <Card>
-       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
+      <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
         {filtersComponent()}
-      {/* <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
+        {/* <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
         <Flex className="mb-1" mobileFlex={false}>
           <div className="mr-md-3 mb-3">
             <label className="mt-2"> Search</label>
@@ -595,9 +607,9 @@ const Orders = () => {
               ))}
             </Select>
           </div> */}
-          </Flex>
-        {/* </Flex> */}
-      {/* </Flex> */} 
+      </Flex>
+      {/* </Flex> */}
+      {/* </Flex> */}
       <div>
         <Button
           onClick={() => history.push('/app/dashboards/orders/create-order')}
@@ -613,18 +625,18 @@ const Orders = () => {
             x: true,
           }} pagination={pagination}
           loading={loading}
-          onChange={handleTableChange} 
+          onChange={handleTableChange}
           columns={tableColumns}
           dataSource={list}
           rowKey="id"
-          // rowSelection={{
-          //   selectedRowKeys: selectedRowKeys,
-          //   type: 'checkbox',
-          //   preserveSelectedRowKeys: false,
-          //   ...rowSelection,
-          // }}
+        // rowSelection={{
+        //   selectedRowKeys: selectedRowKeys,
+        //   type: 'checkbox',
+        //   preserveSelectedRowKeys: false,
+        //   ...rowSelection,
+        // }}
         />
-        
+
       </div>
     </Card>
   )

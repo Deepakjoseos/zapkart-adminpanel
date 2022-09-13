@@ -46,7 +46,7 @@ const rules = {
   ],
 }
 
-const GeneralField = ({statuses}) => {
+const GeneralField = ({ statuses }) => {
   return (
     <Row gutter={16}>
       <Col xs={24} sm={24} md={17}>
@@ -56,10 +56,10 @@ const GeneralField = ({statuses}) => {
           </Form.Item>
           <Form.Item
             name="isTitleShow"
-            label="Title Show"
+            label="Show Title"
             rules={rules.isTitleShow}
           >
-            <Select placeholder="is Title Show">
+            <Select placeholder="Show Title">
               <Option value={true}>Yes</Option>
               <Option value={false}>No</Option>
             </Select>
@@ -69,12 +69,10 @@ const GeneralField = ({statuses}) => {
           </Form.Item>
 
           <Form.Item name="status" label="Status" rules={rules.status}>
+
             <Select placeholder="Status">
-            {statuses.map((item) => (
-                <Option key={item.id} value={item}>
-                  {item}
-                </Option>
-              ))}
+              <Option value="Active">Active</Option>
+              <Option value="Hold">Hold</Option>
             </Select>
           </Form.Item>
 

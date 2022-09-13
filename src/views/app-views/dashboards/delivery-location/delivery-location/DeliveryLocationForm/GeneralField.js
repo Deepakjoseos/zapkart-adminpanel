@@ -1,5 +1,5 @@
 import React from 'react'
-import { Input, Row, Col, Card, Form, Upload, InputNumber, Select,TreeSelect} from 'antd'
+import { Input, Row, Col, Card, Form, Upload, InputNumber, Select, TreeSelect } from 'antd'
 import { ImageSvg } from 'assets/svg/icon'
 import CustomIcon from 'components/util-components/CustomIcon'
 
@@ -37,7 +37,7 @@ const GeneralField = ({
   form,
   deliveryLocations,
   setIsFinalTrue,
-  isFinalTrue,userGroups,statuses
+  isFinalTrue, userGroups, statuses
 }) => (
   <Card title="Basic Info">
     <Form.Item name="name" label="Name" rules={rules.name}>
@@ -57,22 +57,18 @@ const GeneralField = ({
 
     <Form.Item name="status" label="Status" rules={rules.status}>
       <Select placeholder="Status">
-      {statuses.map((item) => (
-                <Option key={item.id} value={item}>
-                  {item}
-                </Option>
-              ))}
-
+        <Option value="Active">Active</Option>
+        <Option value="Hold"></Option>Hold
       </Select>
     </Form.Item>
 
     <Form.Item name="parentId" label="Parent" >
-      <TreeSelect placeholder="Parent"  showSearch 
-              optionFilterProp="children"
-              filterOption={(input, option) =>
-                option.title.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              } treeData={deliveryLocations} treeDefaultExpandAll>
-         {/* {deliveryLocations.map((cur) => (
+      <TreeSelect placeholder="Parent" showSearch
+        optionFilterProp="children"
+        filterOption={(input, option) =>
+          option.title.toLowerCase().indexOf(input.toLowerCase()) >= 0
+        } treeData={deliveryLocations} treeDefaultExpandAll>
+        {/* {deliveryLocations.map((cur) => (
           <Option value={cur.id} key={cur.id}>
             {cur.name}
           </Option>

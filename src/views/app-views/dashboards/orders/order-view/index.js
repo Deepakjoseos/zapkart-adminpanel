@@ -3,7 +3,7 @@ import { PrinterOutlined } from '@ant-design/icons'
 import { Card, Table, Button, Select, notification, Image, Modal } from 'antd'
 import { invoiceData } from '../../../pages/invoice/invoiceData'
 import NumberFormat from 'react-number-format'
-import { useParams,Link } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 import orderService from 'services/orders'
 import ShipmentCreateForm from './ShipmentCreateForm'
 import Flex from 'components/shared-components/Flex'
@@ -176,7 +176,7 @@ const OrderView = () => {
                     {order?.userName}
                   </span>
                   <br />
-                  <span>Invoice No: {order?.invoice?.invoiceNo}</span>
+                  {/* <span>Invoice No: {order?.invoice?.invoiceNo}</span> */}
 
                   <br />
                   <span>
@@ -184,6 +184,8 @@ const OrderView = () => {
                     {order?.shippingAddress?.city},{' '}
                     {order?.shippingAddress?.stateOrRegion},{' '}
                     {order?.shippingAddress?.country}
+                    {order?.shippingAddress?.uniqueId}
+
                   </span>
                   {/* <span>
                   {
@@ -219,8 +221,8 @@ const OrderView = () => {
                 {moment(new Date(order?.createdAt * 1000)).format('DD-MM-YYYY')}
                 {/* {moment(parseInt(order?.createdAt)).format('YYYY-MM-DD')} */}
               </p>
-              <p>Status: {order?.status}</p>
-              <p>shipping Charge: {order?.shippingCharge}</p>
+              {/* <p>Status: {order?.status}</p> */}
+              {/* <p>shipping Charge: {order?.shippingCharge}</p> */}
               <p>Payment method : {order?.payment?.type}</p>
               {order?.transaction ? (
                 <p>Transaction ID : {order?.transaction?.id}</p>
@@ -257,13 +259,27 @@ const OrderView = () => {
               dataSource={order?.items}
               pagination={false}
               className="mb-5"
+              scroll={{
+                x: true,
+              }}
             >
-             <Column title="ShipmentId" dataIndex="shipmentId" key="shipmentId" render={(text) => <Link to={`/app/dashboards/shipments/shipment/shipment-view/${text}`}> {text}</Link>}  />
-              <Column title="Product" dataIndex="name" key="name" />
-              <Column title="Quantity" dataIndex="quantity" key="quantity" />
-              <Column title="Price" dataIndex="price" key="price" />
-              <Column title="Customer" dataIndex="vendorName" key="vendorName" />
+              {/* <Column title="SN" dataIndex="name" key="name" /> */}
+              <Column title="Shipment" dataIndex="shipmentId" key="shipmentId" render={(text) => text ? <Link to={`/app/dashboards/shipments/shipment/shipment-view/${text}`}> {text}</Link>:"Shipment not available"} />
+             
+              <Column title="Product Name" dataIndex="name" key="name" />
+              <Column title="HSN" dataIndex="hsn" key="hsn" />
+              <Column title="BATCH" dataIndex="batchNumber" key="batchNumber" />
+              <Column title="EXP" dataIndex="expiryDate" key="expiryDate" />
+              <Column title="QTY" dataIndex="quantity" key="quantity" />
+              <Column title="MRP" dataIndex="basePrice" key="basePrice" />
+              <Column title="DISC" dataIndex="discount" key="discount" />
+              <Column title="TAXABLE" dataIndex="taxableAmount" key="taxableAmount" />
+              <Column title="SGST" dataIndex="sgst" key="sgst" />
+              <Column title="CGST" dataIndex="cgst" key="cgst" />
+              <Column title="AMOUNT" dataIndex="price" key="price" />
 
+              <Column title="Vendor" dataIndex="vendorName" key="vendorName" />
+    
               {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
                 <Column
                   title="Prescription Required"
@@ -311,6 +327,15 @@ const OrderView = () => {
             </Table>
             <div className="d-flex justify-content-end">
               <div className="text-right ">
+                <span className='mr-1'>shipping Charge: {order?.shippingCharge}
+                </span>
+                <div>
+                {order?.couponCode ? <div className='mr-1'>Coupon Code: {order?.couponCode}
+                </div> :""}
+                
+                {order?.discount ? <div className='mr-1'>Discount Amount(-): {order?.discount}
+                </div> :""}
+                                </div>
                 <h2 className="font-weight-semibold mt-3">
                   <span className="mr-1">Grand Total: </span>₹
                   {order?.totalAmount}
@@ -353,7 +378,7 @@ const OrderView = () => {
                       {order?.userName}
                     </span>
                     <br />
-                    <span>Invoice No: {order?.invoice?.invoiceNo}</span>
+                    {/* <span>Invoice No: {order?.invoice?.invoiceNo}</span> */}
                     <br />
                     <span>
                       ShippingAddress: {order?.shippingAddress?.addressLine1},{' '}
@@ -386,7 +411,6 @@ const OrderView = () => {
                   {/* {moment(parseInt(order?.createdAt)).format('YYYY-MM-DD')} */}
                 </p>
                 <p>Status: {order?.status}</p>
-                <p>shipping Charge: {order?.shippingCharge}</p>
                 <p>Payment method : {order?.payment?.type}</p>
                 {order?.transaction ? (
                   <p>Transaction ID : {order?.transaction?.id}</p>
@@ -446,6 +470,8 @@ const OrderView = () => {
               <div className="d-flex justify-content-end">
                 <div className="text-right ">
                   <h2 className="font-weight-semibold mt-3">
+
+
                     <span className="mr-1">Grand Total: </span>₹
                     {order?.totalAmount}
                   </h2>

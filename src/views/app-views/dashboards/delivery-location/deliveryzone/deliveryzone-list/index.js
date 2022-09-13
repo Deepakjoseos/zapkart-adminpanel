@@ -30,7 +30,7 @@ import deliveryLocationService from 'services/deliveryLocation'
 import vendorService from 'services/vendor'
 import deliveryLocation from 'services/deliveryZone'
 import deliveryzoneService from 'services/deliveryZone'
-
+import constantsService from 'services/constants'
 const { Option } = Select
 
 const getStockStatus = (status) => {
@@ -60,6 +60,7 @@ const DeliveryZonesList = () => {
   // Added for Pagination
   const [loading, setLoading] = useState(false)
   const [filterEnabled, setFilterEnabled] = useState(false)
+  const [statuses,setStatuses] = useState([])
   
   // pagination
   const [pagination, setPagination] = useState({
@@ -82,7 +83,15 @@ const DeliveryZonesList = () => {
       setVendors(vendorsList)
     }
   }
-
+  const fetchConstants = async () => {
+    const data = await constantsService.getConstants()
+    if (data) {
+      // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
+  
+      setStatuses(Object.values(data.GENERAL['STATUS']))
+  
+    }
+  }
   const getDeliveryZones = async (paginationParams = {}, filterParams) => {
     setLoading(true)
     const data = await deliveryzoneService.getDeliveryZones(
@@ -107,6 +116,7 @@ const DeliveryZonesList = () => {
       pagination,
     })
     getVendors()
+    fetchConstants()
   }, [])
   
   // pagination generator
@@ -189,10 +199,7 @@ const addDeliveryZoneLocation = (row) => {
   )
 }
    const getVendorName = (vendorId) => {
-    //  console.log('vendorId',vendorId)
-    //  const vendor= vendors.find(e => e.id  === vendorId);
-    //  console.log('vendor',vendor)
-    //  return vendor?.fullName ? vendor.fullName :"-" 
+
     const getVendorName = vendors?.find((cur) => cur.id === vendorId)
     return getVendorName ? getVendorName.fullName : ''
    }
@@ -285,10 +292,17 @@ const addDeliveryZoneLocation = (row) => {
         
         <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item name="status" label="Status">
-            <Select className="w-100" placeholder="Status">
+            <Select
+              className="w-100"
+              style={{ minWidth: 180 }}
+              placeholder="Status"
+            >
               <Option value="">All</Option>
-              <Option value="Active">Active</Option>
-              <Option value="Hold">Hold</Option>
+            {statuses.map((item) => (
+                <Option key={item.id} value={item}>
+                  {item}
+                </Option>
+              ))}
             </Select>
           </Form.Item>
         </Col>

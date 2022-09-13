@@ -415,6 +415,14 @@ const dashBoardNavTree = [
         submenu: [],
       },
       {
+        key: 'dashboards-main-banner',
+        path: `${APP_PREFIX_PATH}/dashboards/main-banner`,
+        title: 'Main Banner',
+        icon: FileImageOutlined ,
+        breadcrumb: false,
+        submenu: [],
+      },
+      {
         key: 'dashboards-settings',
         path: `${APP_PREFIX_PATH}/dashboards/settings`,
         title: 'Settings',

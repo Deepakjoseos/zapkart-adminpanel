@@ -25,6 +25,8 @@ import utils from 'utils'
 import customerService from 'services/customer'
 import AvatarStatus from 'components/shared-components/AvatarStatus'
 import { groupList } from 'views/app-views/pages/profile/profileData'
+import taxCategoryService from 'services/TaxCategory'
+import mainBannerService from 'services/MainBanner'
 import constantsService from 'services/constants'
 
 const { Option } = Select
@@ -46,36 +48,22 @@ const getStockStatus = (status) => {
   }
   return null
 }
-const CustomerList = () => {
+const MainBannerList = () => {
   let history = useHistory()
 
   const [list, setList] = useState([])
   const [searchBackupList, setSearchBackupList] = useState([])
-  const [selectedViewAddress, setSelectedViewAddress] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
-  const [customerAddressOpen, setCustomerAddressOpen] = useState(false)
-  const [customerAddFormOpen, setCustomerAddFormOpen] = useState(false)
-
-  const [selectedCustomerId, setSelectedCustomerId] = useState(null)
-  const [selectedPrescriptionCustomerId, setSelectedPrescriptionCustomerId] =
-    useState(null)
   const [statuses, setStatuses] = useState([])
 
-  const getCustomers = async () => {
-    const data = await customerService.getCustomers()
+  const getMainBanners = async () => {
+    const data = await mainBannerService.getMainBanners()
     if (data) {
-      setList(data)
-      setSearchBackupList(data)
-      console.log(selectedViewAddress, 'show-data')
+      setList(data.data)
+      setSearchBackupList(data.data)
 
-      if (selectedCustomerId) {
-        data?.forEach((cur) => {
-          if (cur.id === selectedCustomerId) {
-            setSelectedViewAddress(cur.address)
-          }
-        })
-      }
+
     }
   }
   const fetchConstants = async () => {
@@ -87,42 +75,21 @@ const CustomerList = () => {
 
     }
   }
+
   useEffect(() => {
-    getCustomers()
+    getMainBanners()
     fetchConstants()
   }, [])
 
   const dropdownMenu = (row) => (
     <Menu>
-      <Menu.Item onClick={() => editUserRedirect(row.id)}>
+      <Menu.Item onClick={() => editMainBanner(row.id)}>
         <Flex alignItems="center">
           <EditOutlined />
-          <span className="ml-2">Edit User</span>
+          <span className="ml-2">View Details</span>
         </Flex>
       </Menu.Item>
-      {/* <Menu.Item
-        onClick={() => {
-          setSelectedViewAddress(row.address)
-          setSelectedCustomerId(row.id)
-          setCustomerAddressOpen(true)
-        }}
-      >
-        <Flex alignItems="center">
-          <EyeOutlined />
-          <span className="ml-2">View Address</span>
-        </Flex>
-      </Menu.Item> */}
-      {/* <Menu.Item
-        onClick={() => {
-          setSelectedPrescriptionCustomerId(row.id)
-        }}
-      >
-        <Flex alignItems="center">
-          <EyeOutlined />
-          <span className="ml-2">View Prescriptions</span>
-        </Flex>
-      </Menu.Item> */}
-      {/* <Menu.Item onClick={() => deleteRow(row)}>
+      <Menu.Item onClick={() => deleteRow(row)}>
         <Flex alignItems="center">
           <DeleteOutlined />
           <span className="ml-2">
@@ -131,16 +98,32 @@ const CustomerList = () => {
               : 'Delete'}
           </span>
         </Flex>
-      </Menu.Item> */}
+      </Menu.Item>
+
     </Menu>
   )
 
-  // const addProduct = () => {
-  //   history.push(`/app/dashboards/users/usergroup/add-usergroup`)
-  // }
+  const deleteRow = async (row) => {
+    const resp = await mainBannerService.deleteMainBanner(row.id)
 
-  const editUserRedirect = (id) => {
-    history.push(`/app/dashboards/users/customer/edit-customer/${id}`)
+    if (resp) {
+      const objKey = 'id'
+      let data = list
+      if (selectedRows.length > 1) {
+        selectedRows.forEach((elm) => {
+          data = utils.deleteArrayRow(data, objKey, elm.id)
+          setList(data)
+          setSelectedRows([])
+        })
+      } else {
+        data = utils.deleteArrayRow(data, objKey, row.id)
+        setList(data)
+      }
+    }
+  }
+
+  const editMainBanner = (id) => {
+    history.push(`/app/dashboards/main-banner/edit-main-banner/${id}`)
   }
 
   // const deleteRow = async (row) => {
@@ -161,102 +144,45 @@ const CustomerList = () => {
   //     }
   //   }
   // }
-  const addCustomer = () => {
-    history.push(`/app/dashboards/users/customer/add-customer`)
+  const addMainBanner = () => {
+    history.push(`/app/dashboards/main-banner/add-main-banner`)
   }
 
-  const handleStatusChange = async (value, selectedRow) => {
-    const updatedProductApproval = await customerService.ediCustomerStatus(
-      selectedRow.id,
-      { status: value }
-    )
 
-    if (updatedProductApproval) {
-      notification.success({ message: 'Customer Status Updated' })
-
-      // const objKey = 'id'
-      // let data = list
-      // data = utils.updateArrayRow(
-      //   data,
-      //   objKey,
-      //   selectedRow.id,
-      //   'approval',
-      //   value
-      // )
-      // setList(data)
-    }
-  }
 
   const tableColumns = [
     {
-      title: 'Customer',
-      dataIndex: 'firstName',
+      title: 'Main Banner',
+      dataIndex: 'name',
       render: (_, record) => (
         <div className="d-flex">
           <AvatarStatus
             size={60}
             type="square"
-            src={record.displayImage}
-            name={record.firstName}
+            src={record.image}
+            name={record.name}
           />
         </div>
       ),
       sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
     },
     {
-      title: 'Last Name',
-      dataIndex: 'lastName',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'lastname'),
-    },
-
-    {
-      title: 'Email',
-      dataIndex: 'email',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'email'),
+      title: 'Forward Url',
+      dataIndex: 'forwardUrl',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'forwardUrl'),
     },
     {
-      title: 'Phone',
-      dataIndex: 'phone',
-    },
-    {
-      title: 'Groups',
-      dataIndex: 'groups',
-      render: (groups) => {
-        return (
-          <>
-            {groups?.map((group) => (
-              <>
-                <p>{group.name}</p>
-                {/* <p>Type:{group.type}</p>
-          <p>Status:{group.status}</p> */}
-              </>
-            ))}
-          </>
-        )
-      },
-      // sorter: (a, b) => utils.antdTableSorter(a, b, 'lastname'),
+      title: 'Priority',
+      dataIndex: 'priority',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'priority'),
     },
     {
       title: 'Status',
       dataIndex: 'status',
-      render: (status, row) => {
-        return (
-          <Select
-            defaultValue={status.charAt(0).toUpperCase() + status.slice(1)}
-            // style={{ width: 120 }}
-            onChange={(e) => handleStatusChange(e, row)}
-          >
-            <Option value="Active">
-              <Tag color="green">Active</Tag>
-            </Option>
-            <Option value="Blocked">
-              <Tag color="red">Blocked</Tag>
-            </Option>
-          </Select>
-        )
-      },
-      // render: (isUnlimited) => <Flex>{isUnlimited ? 'Yes' : 'No'}</Flex>,
-      // sorter: (a, b) => utils.antdTableSorter(a, b, 'approval'),
+      render: (status) => (
+        <Flex alignItems="center">{getStockStatus(status)}</Flex>
+      ),
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'status'),
     },
     {
       title: '',
@@ -297,6 +223,7 @@ const CustomerList = () => {
         />
       </div>
       <div className="mb-3">
+
         <Select
           className="w-100"
           style={{ minWidth: 180 }}
@@ -309,6 +236,7 @@ const CustomerList = () => {
             </Option>
           ))}
         </Select>
+
       </div>
     </Flex>
   )
@@ -319,34 +247,22 @@ const CustomerList = () => {
         {filters()}
         <div>
           <Button
-            onClick={addCustomer}
+            onClick={addMainBanner}
             type="primary"
             icon={<PlusCircleOutlined />}
             block
           >
-            Add Customer
+            Add Main Banner
           </Button>
         </div>
       </Flex>
       <div className="table-responsive">
         <Table columns={tableColumns} dataSource={list} rowKey="id" />
 
-        {/* <ViewAddresses
-          selectedViewAddress={selectedViewAddress}
-          setSelectedViewAddress={setSelectedViewAddress}
-          setCustomerAddressOpen={setCustomerAddressOpen}
-          customerAddressOpen={customerAddressOpen}
-          selectedCustomerId={selectedCustomerId}
-          refetchData={getCustomers}
-        />
-        
-        <ViewPrescriptions
-          selectedPrescriptionCustomerId={selectedPrescriptionCustomerId}
-          setSelectedPrescriptionCustomerId={setSelectedPrescriptionCustomerId}
-        /> */}
+
       </div>
     </Card>
   )
 }
 
-export default CustomerList
+export default MainBannerList

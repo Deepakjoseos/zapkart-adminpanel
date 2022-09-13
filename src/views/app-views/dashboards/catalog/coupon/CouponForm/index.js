@@ -37,7 +37,7 @@ const ProductForm = (props) => {
   const getCategories = async () => {
     const data = await categoryService.getCategories()
     if (data) {
-      const availableCategories = data.filter(
+      const availableCategories = data.data.filter(
         (category) => category.status === 'Active'
       )
       setCategories(availableCategories)
@@ -47,10 +47,10 @@ const ProductForm = (props) => {
   const getBrands = async () => {
     const data = await brandService.getBrands()
     if (data) {
-      const availableBrands = data.filter(
+      const availableBrands = data.data.filter(
         (category) => category.status === 'Active'
       )
-      setBrands(data)
+      setBrands(availableBrands)
     }
   }
 
@@ -76,7 +76,7 @@ const ProductForm = (props) => {
   const geProductsTemplate = async () => {
     const data = await productTemplateService.getProductTemplates()
     if (data) {
-      const availableProductTemplates = data.filter(
+      const availableProductTemplates = data.data.filter(
         (productTemplate) => productTemplate.status === 'Active'
       )
       setProductsTemplate(availableProductTemplates)

@@ -48,15 +48,15 @@ const ProductForm = (props) => {
     setFileList: setFileListDisplayImages,
   } = useUpload(1)
 
-  const getUserGroups = async () => {
-    const data = await userGroupService.getUserGroups()
-    if (data) {
-      const availableUserGroups = data.filter(
-        (userGroups) => userGroups.status === 'Active'
-      )
-      setUserGroups(availableUserGroups)
-    }
-  }
+   const getUserGroups = async () => {
+     const data = await userGroupService.getUserGroups()
+     if (data) {
+       const availableUserGroups = data.filter(
+         (userGroups) => userGroups.type === 'Customer'
+       )
+       setGroupList(availableUserGroups)
+     }
+   }
   const fetchConstants = async () => {
     const data = await constantsService.getConstants()
     if (data) {
@@ -67,7 +67,7 @@ const ProductForm = (props) => {
     }
   }
   useEffect(()=>{
-    getUserGroups()
+   getUserGroups()
     fetchConstants()
   },[])
 
@@ -79,7 +79,7 @@ const ProductForm = (props) => {
       setAddressList(data.address)
       setSelectedCustomerId(data.id)
       setSelectedPrescriptionCustomerId(data.id)
-      setGroupList(data.groups)
+      // setGroupList(data.groups)
       let himg = []
       if (data.displayImage) {
         himg = [
@@ -145,11 +145,11 @@ const ProductForm = (props) => {
           lastName: values.lastName,
           groups:values.groups,
 
-          // email: values.email,
-          // phone: values.phone,
+          email: values.email,
+           phone: values.phone,
            status:values.status,
-          // password:values.password,
-          // emailVerified:values.emailVerified
+           password:values.password,
+          emailVerified:values.emailVerified
         }
 
         if (mode === ADD) {
@@ -239,7 +239,7 @@ const ProductForm = (props) => {
         <div className="container">
           <Tabs defaultActiveKey="1" style={{ marginTop: 30 }}>
             <TabPane tab="General" key="1">
-              <GeneralField propsDisplayImages={propsDisplayImages} mode={mode} userGroups={userGroups} form={form} emailVerified={emailVerified} phoneVerified={phoneVerified} statuses={statuses}/>
+              <GeneralField propsDisplayImages={propsDisplayImages} mode={mode} userGroups={groupList} form={form} emailVerified={emailVerified} phoneVerified={phoneVerified} statuses={statuses}/>
             </TabPane>
             {id && (
               <>

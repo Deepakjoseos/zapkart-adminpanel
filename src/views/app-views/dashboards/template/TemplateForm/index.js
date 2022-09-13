@@ -50,12 +50,15 @@ const TemplateForm = (props) => {
             listingType: data.listingType,
             emailSubject: data.email.subject,
             emailContent: data.email.content,
+            emailStatus:data.email.status,
 
             smsTemplateId: data.sms.templateId,
             smsContent: data.sms.content,
+            smsStatus:data.sms.status,
 
             fcmTitle: data.fcm.title,
             fcmDescription: data.fcm.description,
+            fcmStatus:data.fcm.status
           })
           setEditorRender(true)
         } else {
@@ -74,20 +77,24 @@ const TemplateForm = (props) => {
       .then(async (values) => {
         const sendingValues = {
           name: values.name,
+          status: values.status,
+
           listingType: values.listingType,
           email: {
             subject: values.emailSubject,
             content: values.emailContent,
+            status:values.emailStatus
           },
           sms: {
             templateId: values.smsTemplateId,
             content: values.smsContent,
+            status:values.smsStatus
           },
           fcm: {
             title: values.fcmTitle,
             description: values.fcmDescription,
+            status:values.fcmStatus
           },
-          status: values.status,
         }
 
         if (mode === ADD) {
@@ -163,7 +170,7 @@ const TemplateForm = (props) => {
         <div className="container">
           <Tabs defaultActiveKey="1" style={{ marginTop: 30 }}>
             <TabPane tab="General" key="1">
-              <GeneralField tempConstants={tempConstants} form={form}  statusess={PresetStatusColorTypes}/>
+              <GeneralField tempConstants={tempConstants} form={form}  statuses={statuses}/>
             </TabPane>
           </Tabs>
         </div>

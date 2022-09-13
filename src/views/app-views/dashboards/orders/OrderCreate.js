@@ -23,6 +23,7 @@ import PrescriptionSelector from './PrescriptionSelector'
 import orderService from 'services/orders'
 import { EventSourcePolyfill } from 'event-source-polyfill'
 import OrderComplete from './OrderComplete'
+import qs from 'qs'
 
 const OrderCreate = () => {
   const { Option } = Select
@@ -46,6 +47,7 @@ const OrderCreate = () => {
   const [paymentLoading, setPaymentLoading] = useState(false)
   const [razorpayItems, setRazorpayItems] = useState(null)
   const [availablePaymentMethods, setAvailablePaymentMethods] = useState([])
+  const [loading,setLoading] = useState([])
 
   const rules = {
     name: [
@@ -78,22 +80,45 @@ const OrderCreate = () => {
         message: 'Required',
       },
     ],
-  }
+  } 
 
-  const getProducts = async () => {
-    const data = await productService.getProducts({ status: 'Active' })
-    if (data.data) {
-      const productList = data.data.map((product) => {
-        return {
-          ...product,
-          productname: product?.variant?.name
-            ? product?.variant?.name
-            : product?.name,
-        }
-      })
-      setProducts(productList)
-    }
+  // const getProducts = (paginationParams = {}, filterParams={userId:selectedCustomerId}) => {
+  //   const data = await productService.getProducts()
+  //   if (data.data) {
+  //     const productList = data.data.map((product) => {
+  //       return {
+  //         ...product,
+  //         productname: product?.variant?.name
+  //           ? product?.variant?.name
+  //           : product?.name,
+  //       }
+  //     })
+  //     setProducts(productList)
+  //   }
+  const getPaginationParams = (params) => ({
+    limit: params.pagination?.pageSize,
+    page: params.pagination?.current,
+    // ...params,
+  })
+    const getProducts = async (paginationParams = {}, filterParams={status:'Active',approval:'Approved'}) => {
+      setLoading(true)
+      const data = await productService.getProducts(
+        qs.stringify(getPaginationParams(paginationParams)),
+        qs.stringify(filterParams)
+      )
+    
+      if (data) {
+        const productList = data.data.map((product) => {
+          return {
+            ...product,
+            productname: product?.variant?.name
+              ? product?.variant?.name
+              : product?.name,
+          }
+        })
+        setProducts(productList)
   }
+}
 
   const getCustomers = async () => {
     const data = await customerService.getCustomers()

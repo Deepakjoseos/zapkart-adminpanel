@@ -27,7 +27,7 @@ const rules = {
   ],
 }
 
-const GeneralField = ({ propsDisplayImages, form, mode, emailVerified, phoneVerified,pickupLocations,statuses }) => (
+const GeneralField = ({ propsDisplayImages, form, mode, emailVerified, phoneVerified, pickupLocations, statuses, userGroups }) => (
   <Row gutter={16}>
     <Col xs={24} sm={24} md={17}>
       <Card title="Basic Info">
@@ -44,6 +44,28 @@ const GeneralField = ({ propsDisplayImages, form, mode, emailVerified, phoneVeri
         <Form.Item name="drugLicense" label="Drug License Number" rules={rules.drugLicense}>
           <Input placeholder="Drug License Number" />
         </Form.Item>
+        <Form.Item
+          name="groups"
+          label="User Groups"
+          rules={rules.userGroups}
+        >
+          <Select
+            optionFilterProp="children"
+            filterOption={(input, option) =>
+              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
+            mode="multiple"
+            allowClear
+            style={{ width: '100%' }}
+            placeholder="User Groups"
+          >
+            {userGroups.map((group) => (
+              <Option key={group.id} value={group.id}>
+                {group.name}
+              </Option>
+            ))}
+          </Select>
+        </Form.Item>
 
 
 
@@ -51,12 +73,8 @@ const GeneralField = ({ propsDisplayImages, form, mode, emailVerified, phoneVeri
           <>
             <Form.Item name="status" label="Status" rules={rules.status}>
               <Select placeholder="Status">
-              {statuses.map((item) => (
-                <Option key={item.id} value={item}>
-                  {item}
-                </Option>
-              ))}
-
+                <Option value="Active">Active</Option>
+                <Option value="Hold">Hold</Option>
               </Select>
             </Form.Item>
             <Form.Item name="emailVerified" label="Emal Verified" rules={rules.status}>
@@ -156,38 +174,43 @@ const GeneralField = ({ propsDisplayImages, form, mode, emailVerified, phoneVeri
         'business.address.phone': data?.business?.address?.phone,
         'business.address.zipcode': data?.business?.address?.zipcode, */}
 
-      {mode === 'EDIT' ? <Card title="Business">
-        <Form.Item name="business.name" label="Bussiness Name">
-          <Input placeholder="Bussiness Name" />
-        </Form.Item>
-        <br />
-        <h4>Bussiness Address</h4>
-        <Form.Item name="business.address.line1" label="Line1">
-          <Input placeholder="Line1" />
-        </Form.Item>
+      {mode === 'EDIT' ?
+        <Card title="Business">
+          <Form.Item name="business.name" label="Bussiness Name">
+            <Input placeholder="Bussiness Name" />
+          </Form.Item>
+          <br />
+          <h4>Bussiness Address</h4>
+          <Form.Item name="business.address.line1" label="Line1">
+            <Input placeholder="Line1" />
+          </Form.Item>
 
-        <Form.Item name="business.address.city" label="City">
-          <Input placeholder="City" />
-        </Form.Item>
+          <Form.Item name="business.address.city" label="City">
+            <Input placeholder="City" />
+          </Form.Item>
 
-        <Form.Item name="business.address.state" label="State">
-          <Input placeholder="State" />
-        </Form.Item>
+          <Form.Item name="business.address.state" label="State">
+            <Input placeholder="State" />
+          </Form.Item>
 
-        <Form.Item name="business.address.country" label="Country">
-          <Input placeholder="Country" />
-        </Form.Item>
+          <Form.Item name="business.address.country" label="Country">
+            <Input placeholder="Country" />
+          </Form.Item>
 
-        <Form.Item name="business.address.phone" label="Phone">
-          <Input placeholder="Phone" />
-        </Form.Item>
+          <Form.Item name="business.address.phone" label="Phone">
+            <Input placeholder="Phone" />
+          </Form.Item>
 
-        <Form.Item name="business.address.zipcode" label="Zipcode">
-          <Input placeholder="Zipcode" />
-        </Form.Item>
-      </Card> : " "}
+          <Form.Item name="business.address.zipcode" label="Zipcode">
+            <Input placeholder="Zipcode" />
+          </Form.Item>
+
+
+        </Card> : " "}
+
 
     </Col>
+
 
     <Col xs={24} sm={24} md={7}>
       <Card title="Display Image">

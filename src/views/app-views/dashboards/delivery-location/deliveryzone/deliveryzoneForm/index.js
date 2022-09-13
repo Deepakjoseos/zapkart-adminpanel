@@ -189,6 +189,7 @@ const fetchConstants = async () => {
                 form={form}
                 vendors={vendors} 
                 mode={mode}
+                statuses={statuses}
                 // isFinalTrue={isFinalTrue}
                 // setIsFinalTrue={setIsFinalTrue}
                 // deliveryLocations={deliveryLocations}

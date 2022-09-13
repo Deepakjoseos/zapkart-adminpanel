@@ -13,7 +13,19 @@ const rules = {
       message: 'Required',
     },
   ],
+  // forwardUrl: [
+  //   {
+  //     required: true,
+  //     message: 'Required',
+  //   },
+  // ],
   image: [
+    {
+      required: true,
+      message: 'Required',
+    },
+  ],
+  mobileImage: [
     {
       required: true,
       message: 'Required',
@@ -33,20 +45,22 @@ const rules = {
   ],
 }
 
-const GeneralField = ({propsImages,statuses}) => (
+const GeneralField = ({ propsImages, propsMobileImages,statuses }) => (
   <Row gutter={16}>
     <Col xs={24} sm={24} md={17}>
       <Card title="Basic Info">
-        <Form.Item name="name" label="Manufacturer name" rules={rules.name}>
-          <Input placeholder="Manufacturer Name" />
+        <Form.Item name="name" label="Name" rules={rules.name}>
+          <Input placeholder="Name" />
+        </Form.Item>
+        <Form.Item
+          name="forwardUrl"
+          label="Forward Url"
+          // rules={rules.forwardUrl}
+        >
+          <Input placeholder="URL" />
         </Form.Item>
         <Form.Item name="priority" label="Priority" rules={rules.priority}>
-          <InputNumber
-            placeholder="Priority"
-            size="large"
-            min={0}
-            max={100000}
-          />
+          <InputNumber placeholder="Priority" min={0} max={100000} />
         </Form.Item>
 
         <Form.Item name="status" label="Status" rules={rules.status}>
@@ -58,11 +72,16 @@ const GeneralField = ({propsImages,statuses}) => (
       </Card>
     </Col>
     <Col xs={24} sm={24} md={7}>
-      <Card title="Media">
+      <Card title="Image">
         <Upload listType="picture-card" name="image" {...propsImages} accept="image/*">
           <CustomIcon className="display-3" svg={ImageSvg} />
         </Upload>
-        size: 100px * 100px
+        size: 450px * 255px
+      </Card>
+      <Card title="Mobile Image">
+        <Upload listType="picture-card" name="image" {...propsMobileImages}>
+          <CustomIcon className="display-3" svg={ImageSvg} />
+        </Upload>
       </Card>
     </Col>
   </Row>

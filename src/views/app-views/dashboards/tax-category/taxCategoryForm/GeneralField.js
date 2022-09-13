@@ -42,7 +42,7 @@ const rules = {
 }
 
 const GeneralField = ({
-    mode,statuses
+    mode, statuses
 }) => {
     const [image, setImage] = useState(false)
 
@@ -55,12 +55,8 @@ const GeneralField = ({
                     </Form.Item>
                     <Form.Item label="Status" name="status">
                         <Select placeholder="Status">
-                            {statuses.map((item) => (
-                                <Option key={item.id} value={item}>
-                                    {item}
-                                </Option>
-                            ))}
-
+                            <Option value="Active">Active</Option>
+                            <Option value="Hold"></Option>Hold
                         </Select>
                     </Form.Item>
                     <p>Same State</p>
