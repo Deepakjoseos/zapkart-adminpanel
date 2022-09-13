@@ -12,6 +12,7 @@ import Flex from 'components/shared-components/Flex'
 import { useHistory } from 'react-router-dom'
 import utils from 'utils'
 import templateService from 'services/template'
+import constantsService from 'services/constants'
 
 const { Option } = Select
 
@@ -39,7 +40,16 @@ const TemplateList = () => {
   const [searchBackupList, setSearchBackupList] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
-
+  const [statuses,setStatuses] = useState([])
+  const fetchConstants = async () => {
+    const data = await constantsService.getConstants()
+    if (data) {
+      // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
+  
+      setStatuses(Object.values(data.GENERAL['STATUS']))
+  
+    }
+  }
   useEffect(() => {
     const getTemplates = async () => {
       const data = await templateService.getTemplates()
@@ -50,6 +60,7 @@ const TemplateList = () => {
       }
     }
     getTemplates()
+    fetchConstants()
   }, [])
 
   const dropdownMenu = (row) => (
@@ -157,17 +168,18 @@ const TemplateList = () => {
         />
       </div>
       <div className="mb-3">
-        <Select
-          defaultValue="All"
-          className="w-100"
-          style={{ minWidth: 180 }}
-          onChange={handleShowStatus}
-          placeholder="Status"
-        >
-          <Option value="All">All</Option>
-          <Option value="Active">Active</Option>
-          <Option value="Hold">Hold</Option>
-        </Select>
+      <Select
+              className="w-100"
+              style={{ minWidth: 180 }}
+              placeholder="Status"
+            >
+              <Option value="">All</Option>
+            {statuses.map((item) => (
+                <Option key={item.id} value={item}>
+                  {item}
+                </Option>
+              ))}
+            </Select>
       </div>
     </Flex>
   )

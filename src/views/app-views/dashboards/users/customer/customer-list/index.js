@@ -25,6 +25,7 @@ import utils from 'utils'
 import customerService from 'services/customer'
 import AvatarStatus from 'components/shared-components/AvatarStatus'
 import { groupList } from 'views/app-views/pages/profile/profileData'
+import constantsService from 'services/constants'
 
 const { Option } = Select
 
@@ -59,6 +60,7 @@ const CustomerList = () => {
   const [selectedCustomerId, setSelectedCustomerId] = useState(null)
   const [selectedPrescriptionCustomerId, setSelectedPrescriptionCustomerId] =
     useState(null)
+  const [statuses, setStatuses] = useState([])
 
   const getCustomers = async () => {
     const data = await customerService.getCustomers()
@@ -76,9 +78,18 @@ const CustomerList = () => {
       }
     }
   }
+  const fetchConstants = async () => {
+    const data = await constantsService.getConstants()
+    if (data) {
+      // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
 
+      setStatuses(Object.values(data.GENERAL['STATUS']))
+
+    }
+  }
   useEffect(() => {
     getCustomers()
+    fetchConstants()
   }, [])
 
   const dropdownMenu = (row) => (
@@ -197,6 +208,16 @@ const CustomerList = () => {
       dataIndex: 'lastName',
       sorter: (a, b) => utils.antdTableSorter(a, b, 'lastname'),
     },
+
+    {
+      title: 'Email',
+      dataIndex: 'email',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'email'),
+    },
+    {
+      title: 'Phone',
+      dataIndex: 'phone',
+    },
     {
       title: 'Groups',
       dataIndex: 'groups',
@@ -214,15 +235,6 @@ const CustomerList = () => {
         )
       },
       // sorter: (a, b) => utils.antdTableSorter(a, b, 'lastname'),
-    },
-    {
-      title: 'Email',
-      dataIndex: 'email',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'email'),
-    },
-    {
-      title: 'Phone',
-      dataIndex: 'phone',
     },
     {
       title: 'Status',
@@ -286,15 +298,16 @@ const CustomerList = () => {
       </div>
       <div className="mb-3">
         <Select
-          defaultValue="All"
           className="w-100"
           style={{ minWidth: 180 }}
-          onChange={handleShowStatus}
           placeholder="Status"
         >
-          <Option value="All">All</Option>
-          <Option value="Active">Active</Option>
-          <Option value="Hold">Hold</Option>
+          <Option value="">All</Option>
+          {statuses.map((item) => (
+            <Option key={item.id} value={item}>
+              {item}
+            </Option>
+          ))}
         </Select>
       </div>
     </Flex>

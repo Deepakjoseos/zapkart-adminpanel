@@ -31,7 +31,7 @@ import productTemplate from 'services/productTemplate'
 import manufacturerService from 'services/manufacturer'
 import categoryService from 'services/category'
 import medicineTypeService from 'services/medicineType'
-
+import constantsService from 'services/constants'
 
 const { Option } = Select
 
@@ -63,6 +63,7 @@ const ProductTemplateList = () => {
   // Added for Pagination
   const [loading, setLoading] = useState(false)
   const [filterEnabled, setFilterEnabled] = useState(false)
+  const [statuses,setStatuses]=useState([])
 
   // pagination
   const [pagination, setPagination] = useState({
@@ -182,6 +183,7 @@ const ProductTemplateList = () => {
     // getCategories()
     // getMedicineTypes()
     // getManufacturers()
+    fetchConstants()
   }, [])
 
   const dropdownMenu = (row) => (
@@ -376,7 +378,15 @@ const ProductTemplateList = () => {
     current: 1,
     pageSize: 10,
   })
-
+  const fetchConstants = async () => {
+    const data = await constantsService.getConstants()
+    if (data) {
+      // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
+  
+      setStatuses(Object.values(data.GENERAL['STATUS']))
+  
+    }
+  }
   // Filter Submit
   const handleFilterSubmit = async () => {
     setPagination(resetPagination())
@@ -462,14 +472,17 @@ const ProductTemplateList = () => {
         </Col>
         <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item name="status" label="Status">
-            <Select
+          <Select
               className="w-100"
               style={{ minWidth: 180 }}
               placeholder="Status"
             >
               <Option value="">All</Option>
-              <Option value="Active">Active</Option>
-              <Option value="Hold">Hold</Option>
+            {statuses.map((item) => (
+                <Option key={item.id} value={item}>
+                  {item}
+                </Option>
+              ))}
             </Select>
           </Form.Item>
         </Col>

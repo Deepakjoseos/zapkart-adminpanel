@@ -31,6 +31,7 @@ import productService from 'services/product'
 import categoryService from 'services/category'
 import DeliveryZoneService from 'services/deliveryZone'
 import vendorService from 'services/vendor'
+import constantsService from 'services/constants'
 
 const { Option } = Select
 
@@ -58,6 +59,7 @@ const ProductList = () => {
   const [searchBackupList, setSearchBackupList] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
+  const [statuses,setStatuses] = useState([])
 
   let history = useHistory()
   const [form] = Form.useForm()
@@ -81,7 +83,15 @@ const ProductList = () => {
     current: 1,
     pageSize: 10,
   })
-
+  const fetchConstants = async () => {
+    const data = await constantsService.getConstants()
+    if (data) {
+      // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
+  
+      setStatuses(Object.values(data.GENERAL['STATUS']))
+  
+    }
+  }
   // Changed here for pagination
   const getProducts = async (paginationParams = {}, filterParams) => {
     setLoading(true)
@@ -140,6 +150,7 @@ const ProductList = () => {
     getBrands()
     getCategories()
     getVendors()
+    fetchConstants()
     console.log('vendors', vendors)
   }, [])
   const getPaginationParams = (params) => ({
@@ -515,14 +526,17 @@ const ProductList = () => {
         </Col>
         <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item name="status" label="Status">
-            <Select
+          <Select
               className="w-100"
               style={{ minWidth: 180 }}
               placeholder="Status"
             >
               <Option value="">All</Option>
-              <Option value="Active">Active</Option>
-              <Option value="Hold">Hold</Option>
+            {statuses.map((item) => (
+                <Option key={item.id} value={item}>
+                  {item}
+                </Option>
+              ))}
             </Select>
           </Form.Item>
         </Col>

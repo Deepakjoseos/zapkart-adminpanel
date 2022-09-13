@@ -10,11 +10,11 @@ mainBannerService.getMainBanners = async function () {
         method: 'get',
       })
       const data = res.data.filter((cur) => cur.status !== 'Deleted')
-      return data
+      return {data:data}
     } catch (err) {
-      console.log(err, 'show-err')
+      console.log(err, 'show-err')}
     }
-  }
+  
 
 mainBannerService.deleteMainBanner = async function (id) {
   try {

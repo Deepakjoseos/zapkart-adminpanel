@@ -104,11 +104,8 @@ const GeneralField = ({ propsImages, categories, handleChange, form,statuses }) 
 
           <Form.Item name="status" label="Status" rules={rules.status}>
             <Select placeholder="Status">
-            {statuses.map((item) => (
-                <Option key={item.id} value={item}>
-                  {item}
-                </Option>
-              ))}
+            <Option value="Active">Active</Option>
+            <Option value="Hold">Hold</Option>
             </Select>
           </Form.Item>
         </Card>

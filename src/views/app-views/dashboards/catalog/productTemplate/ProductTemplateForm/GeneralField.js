@@ -207,7 +207,7 @@ const GeneralField = ({
           <Form.Item
             name="description"
             label="Description"
-            // rules={rules.description}
+          // rules={rules.description}
           >
             <Editor
               placeholder="Write something..."
@@ -215,15 +215,12 @@ const GeneralField = ({
               onChange={(e) => form.setFieldsValue({ description: e })}
               name="description"
             />
-            
+
           </Form.Item>
           <Form.Item name="status" label="Status" rules={rules.status}>
             <Select placeholder="Status">
-              {statuses?.map((item) => (
-                <Option key={item.id} value={item}>
-                  {item}
-                </Option>
-              ))}
+              <Option value="Active">Active</Option>
+              <Option value="Hold"></Option>Hold
             </Select>
           </Form.Item>
           <Form.Item name="brandId" label="Brand">
@@ -296,10 +293,10 @@ const GeneralField = ({
               </Select>
             </Form.Item>
           )}
-          <Form.Item  name="commission"
-              label="Vendor Commission"
-              rules={rules.commission}>
-                <Input placeholder='Vendor Commission'/>
+          <Form.Item name="commission"
+            label="Vendor Commission"
+            rules={rules.commission}>
+            <Input placeholder='Vendor Commission' />
 
           </Form.Item>
           {/* <Form.Item
@@ -316,10 +313,10 @@ const GeneralField = ({
               rules={rules.medicineTypeId}
             >
               <Select placeholder="Medicine Type" showSearch
-              optionFilterProp="children"
-              filterOption={(input, option) =>
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }>
+                optionFilterProp="children"
+                filterOption={(input, option) =>
+                  option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                }>
                 {medicineTypes.map((medicineType) => (
                   <Option key={medicineType.id} value={medicineType.id}>
                     {medicineType.name}
@@ -360,7 +357,7 @@ const GeneralField = ({
               style={{ width: '100%' }}
               placeholder="Allowed Payment Types"
             >
-             {paymentTypes.map((item) => (
+              {paymentTypes.map((item) => (
                 <Option key={item} value={item}>
                   {item}
                 </Option>
@@ -384,7 +381,7 @@ const GeneralField = ({
             <Form.Item
               name="returnPeriod"
               label="ReturnPeriod"
-              // rules={rules.returnPeriod}
+            // rules={rules.returnPeriod}
             >
               <InputNumber type="number" min={0} max={100000} />
             </Form.Item>
@@ -648,14 +645,14 @@ const GeneralField = ({
             label="Length Class"
             rules={rules.lengthClass}
           >
-             <Select
-            style={{ width: 150 }}
-          >
-            {lengthClass?.map((item) => (
-              <Option key={item} value={item}>
-                {item}
-              </Option>
-            ))}
+            <Select
+              style={{ width: 150 }}
+            >
+              {lengthClass?.map((item) => (
+                <Option key={item} value={item}>
+                  {item}
+                </Option>
+              ))}
             </Select>
           </Form.Item>
 
@@ -664,20 +661,20 @@ const GeneralField = ({
             label="Weight Class"
             rules={rules.weightClass}
           >
-            
-     
-       
-          <Select
-            style={{ width: 150 }}
-          >
-            {weightClass?.map((item) => (
-              <Option key={item} value={item}>
-                {item}
-              </Option>
-            ))}
-          </Select>
-        
-    
+
+
+
+            <Select
+              style={{ width: 150 }}
+            >
+              {weightClass?.map((item) => (
+                <Option key={item} value={item}>
+                  {item}
+                </Option>
+              ))}
+            </Select>
+
+
           </Form.Item>
 
           <Form.Item name="height" label="Height" rules={rules.height}>

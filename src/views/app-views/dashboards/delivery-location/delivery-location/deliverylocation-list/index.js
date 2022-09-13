@@ -29,6 +29,7 @@ import _ from 'lodash'
 import deliveryLocationService from 'services/deliveryLocation'
 import vendorService from 'services/vendor'
 import deliveryLocation from 'services/deliveryLocation'
+import constantsService from 'services/constants'
 
 const { Option } = Select
 
@@ -52,14 +53,15 @@ const getStockStatus = (status) => {
 const ProductList = () => {
   let history = useHistory()
   const [form] = Form.useForm()
-  
+
   const [list, setList] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
-  
+
   // Added for Pagination
   const [loading, setLoading] = useState(false)
   const [filterEnabled, setFilterEnabled] = useState(false)
-  
+  const [statuses, setStatuses] = useState([])
+
   // pagination
   const [pagination, setPagination] = useState({
     current: 1,
@@ -67,13 +69,13 @@ const ProductList = () => {
   })
 
   const [searchBackupList, setSearchBackupList] = useState([])
-  
-  const [selectedRowKeys, setSelectedRowKeys] = useState([])
-  const [vendors,setVendors] = useState(null)
-  const [selectedVendorId,setSelectedVendorId]= useState(null)
 
- 
-  
+  const [selectedRowKeys, setSelectedRowKeys] = useState([])
+  const [vendors, setVendors] = useState(null)
+  const [selectedVendorId, setSelectedVendorId] = useState(null)
+
+
+
   // Changed here for pagination
   const getDeliveryLocations = async (paginationParams = {}, filterParams) => {
     setLoading(true)
@@ -81,10 +83,10 @@ const ProductList = () => {
       qs.stringify(getPaginationParams(paginationParams)),
       qs.stringify(filterParams)
     )
-  
+
     if (data) {
       setList(data.data)
-  
+
       // Pagination
       setPagination({
         ...paginationParams.pagination,
@@ -93,21 +95,30 @@ const ProductList = () => {
       setLoading(false)
     }
   }
-  
+  const fetchConstants = async () => {
+    const data = await constantsService.getConstants()
+    if (data) {
+      // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
+
+      setStatuses(Object.values(data.GENERAL['STATUS']))
+
+    }
+  }
   useEffect(() => {
     getDeliveryLocations({
       pagination,
     })
     getVendors()
+    fetchConstants()
   }, [])
-  
+
   // pagination generator
   const getPaginationParams = (params) => ({
     limit: params.pagination?.pageSize,
     page: params.pagination?.current,
     // ...params,
   })
-  
+
   // On pagination Change
   const handleTableChange = (newPagination) => {
     getDeliveryLocations(
@@ -117,19 +128,19 @@ const ProductList = () => {
       filterEnabled ? _.pickBy(form.getFieldsValue(), _.identity) : {}
     )
   }
-    const getVendors = async () => {
-      const data = await vendorService.getVendors()
-      if (data) {
-        const vendorsList = data.map(cur => {
-          return {
-            ...cur, fullName: `${cur.firstName} ${cur.lastName}`
-          }
-        })
-        setVendors(vendorsList)
-      }
-    
+  const getVendors = async () => {
+    const data = await vendorService.getVendors()
+    if (data) {
+      const vendorsList = data.map(cur => {
+        return {
+          ...cur, fullName: `${cur.firstName} ${cur.lastName}`
+        }
+      })
+      setVendors(vendorsList)
     }
-    
+
+  }
+
 
   const dropdownMenu = (row) => (
     <Menu>
@@ -181,16 +192,18 @@ const ProductList = () => {
     }
   }
 
-  const getParentName = (parentId) => {
+  const getParentName = async (parentId) => {
     // const parentName = searchBackupList.find((cur) => cur.id === parentId)
     // return parentName ? parentName.name : ''
-    const parent = deliveryLocation.getDeliveryLocationById(parentId)
-    if(parent){
+    console.log('parentId', parentId)
+    const parent = await deliveryLocation.getDeliveryLocationById(parentId)
+    if (parent) {
+      console.log(parent, 'parentvfv')
       return parent?.name
     }
     // console.log('parent,',parent)
-      
-    
+
+
   }
 
   const tableColumns = [
@@ -218,8 +231,8 @@ const ProductList = () => {
     {
       title: 'Parent',
       dataIndex: 'parentId',
-      render: (parentId) => (
-        <Flex alignItems="center">{getParentName(parentId)}</Flex>
+      render: async (parentId) => (
+        <Flex alignItems="center">{parentId && await getParentName(parentId)}</Flex>
       ),
     },
 
@@ -279,17 +292,25 @@ const ProductList = () => {
             <Input placeholder="Search" prefix={<SearchOutlined />} />
           </Form.Item>
         </Col>
-        
+
         <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item name="status" label="Status">
-            <Select className="w-100" placeholder="Status">
+            <Select
+              className="w-100"
+              style={{ minWidth: 180 }}
+              placeholder="Status"
+            >
               <Option value="">All</Option>
-              <Option value="Active">Active</Option>
-              <Option value="Hold">Hold</Option>
+              {statuses.map((item) => (
+                <Option key={item.id} value={item}>
+                  {item}
+                </Option>
+              ))}
             </Select>
+
           </Form.Item>
         </Col>
-    
+
         <Col className="mb-4">
           <Button type="primary" onClick={handleFilterSubmit}>
             Filter
@@ -307,22 +328,22 @@ const ProductList = () => {
     <Card>
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
         {filtersComponent()}
-       
+
       </Flex>
       <div>
-          <Button
-            onClick={addProduct}
-            type="primary"
-            icon={<PlusCircleOutlined />}
-            
-          >
-            Add DeliveryLocation
-          </Button>
-        </div>
+        <Button
+          onClick={addProduct}
+          type="primary"
+          icon={<PlusCircleOutlined />}
+
+        >
+          Add DeliveryLocation
+        </Button>
+      </div>
       <div className="table-responsive">
         <Table columns={tableColumns} dataSource={list} rowKey="id" pagination={pagination}
-        loading={loading}
-        onChange={handleTableChange}/>
+          loading={loading}
+          onChange={handleTableChange} />
       </div>
     </Card>
   )

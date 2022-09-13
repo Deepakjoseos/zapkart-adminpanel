@@ -27,6 +27,7 @@ import utils from 'utils'
 import brandService from 'services/brand'
 import _ from 'lodash'
 import categoryService from 'services/category'
+import constantsService from 'services/constants'
 
 const { Option } = Select
 
@@ -48,7 +49,7 @@ const getStockStatus = (status) => {
   if (status === 'Deleted') {
     return (
       <>
-        <Tag color="red">Hold</Tag>
+        <Tag color="red">Deleted</Tag>
       </>
     )
   }
@@ -64,13 +65,22 @@ const [selectedRows, setSelectedRows] = useState([])
 // Added for Pagination
 const [loading, setLoading] = useState(false)
 const [filterEnabled, setFilterEnabled] = useState(false)
+const [statuses,setStatuses] = useState([])
 
 // pagination
 const [pagination, setPagination] = useState({
   current: 1,
   pageSize: 10,
 })
+const fetchConstants = async () => {
+  const data = await constantsService.getConstants()
+  if (data) {
+    // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
 
+    setStatuses(Object.values(data.GENERAL['STATUS']))
+
+  }
+}
 // Changed here for pagination
 const getCategories = async (paginationParams = {}, filterParams) => {
   setLoading(true)
@@ -88,6 +98,7 @@ const getCategories = async (paginationParams = {}, filterParams) => {
       total: data.total,
     })
     setLoading(false)
+    fetchConstants()
   }
 }
 
@@ -95,6 +106,7 @@ useEffect(() => {
   getCategories({
     pagination,
   })
+  fetchConstants()
 }, [])
 
 // pagination generator
@@ -275,8 +287,11 @@ const handleTableChange = (newPagination) => {
               placeholder="Status"
             >
               <Option value="">All</Option>
-              <Option value="Active">Active</Option>
-              <Option value="Hold">Hold</Option>
+            {statuses.map((item) => (
+                <Option key={item.id} value={item}>
+                  {item}
+                </Option>
+              ))}
             </Select>
           </Form.Item>
         </Col>

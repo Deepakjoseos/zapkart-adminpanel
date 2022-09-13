@@ -28,6 +28,7 @@ import brandService from 'services/brand'
 import _ from 'lodash'
 import couponService from 'services/coupon'
 import moment from 'moment'
+import constantsService from 'services/constants'
 
 const { Option } = Select
 
@@ -51,20 +52,29 @@ const getStockStatus = (status) => {
 const CouponList = () => {
   let history = useHistory()
   const [form] = Form.useForm()
-  
+
   const [list, setList] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
-  
+
   // Added for Pagination
   const [loading, setLoading] = useState(false)
   const [filterEnabled, setFilterEnabled] = useState(false)
-  
+  const [statuses, setStatuses] = useState([])
+
   // pagination
   const [pagination, setPagination] = useState({
     current: 1,
     pageSize: 10,
   })
-  
+  const fetchConstants = async () => {
+    const data = await constantsService.getConstants()
+    if (data) {
+      // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
+
+      setStatuses(Object.values(data.GENERAL['STATUS']))
+
+    }
+  }
   // Changed here for pagination
   const getCoupons = async (paginationParams = {}, filterParams) => {
     setLoading(true)
@@ -72,10 +82,10 @@ const CouponList = () => {
       qs.stringify(getPaginationParams(paginationParams)),
       qs.stringify(filterParams)
     )
-  
+
     if (data) {
       setList(data.data)
-  
+
       // Pagination
       setPagination({
         ...paginationParams.pagination,
@@ -84,20 +94,21 @@ const CouponList = () => {
       setLoading(false)
     }
   }
-  
+
   useEffect(() => {
     getCoupons({
       pagination,
     })
+    fetchConstants()
   }, [])
-  
+
   // pagination generator
   const getPaginationParams = (params) => ({
     limit: params.pagination?.pageSize,
     page: params.pagination?.current,
     // ...params,
   })
-  
+
   // On pagination Change
   const handleTableChange = (newPagination) => {
     getCoupons(
@@ -156,7 +167,7 @@ const CouponList = () => {
     }
   }
 
- // Pagination
+  // Pagination
   const resetPagination = () => ({
     ...pagination,
     current: 1,
@@ -300,21 +311,24 @@ const CouponList = () => {
               placeholder="Status"
             >
               <Option value="">All</Option>
-              <Option value="Active">Active</Option>
-              <Option value="Hold">Hold</Option>
+              {statuses.map((item) => (
+                <Option key={item.id} value={item}>
+                  {item}
+                </Option>
+              ))}
             </Select>
           </Form.Item>
         </Col>
-       
+
         <Col className="mb-4 ml-5">
           <Button type="primary" onClick={handleFilterSubmit}>
             Filter
           </Button>
-          <Button  className="ml-1" type="primary" onClick={handleClearFilter}>
+          <Button className="ml-1" type="primary" onClick={handleClearFilter}>
             Clear
           </Button>
         </Col>
-       
+
       </Row>
     </Form>
   )
@@ -336,11 +350,11 @@ const CouponList = () => {
       </Flex>
       <div className="table-responsive">
         <Table scroll={{
-            x: true,
-          }}
-        columns={tableColumns} dataSource={list} rowKey="id" pagination={pagination}
-        loading={loading}
-        onChange={handleTableChange}/>
+          x: true,
+        }}
+          columns={tableColumns} dataSource={list} rowKey="id" pagination={pagination}
+          loading={loading}
+          onChange={handleTableChange} />
       </div>
     </Card>
   )
