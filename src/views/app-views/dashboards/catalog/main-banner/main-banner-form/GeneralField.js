@@ -45,7 +45,7 @@ const rules = {
   ],
 }
 
-const GeneralField = ({ propsImages, propsMobileImages, form_statuses }) => (
+const GeneralField = ({ propsImages, propsMobileImages,form_statuses }) => (
   <Row gutter={16}>
     <Col xs={24} sm={24} md={17}>
       <Card title="Basic Info">
@@ -55,7 +55,7 @@ const GeneralField = ({ propsImages, propsMobileImages, form_statuses }) => (
         <Form.Item
           name="forwardUrl"
           label="Forward Url"
-        // rules={rules.forwardUrl}
+          // rules={rules.forwardUrl}
         >
           <Input placeholder="URL" />
         </Form.Item>
@@ -64,12 +64,12 @@ const GeneralField = ({ propsImages, propsMobileImages, form_statuses }) => (
         </Form.Item>
 
         <Form.Item name="status" label="Status" rules={rules.status}>
-          <Select placeholder="Status">
-            {form_statuses.map((item) => (
-              <Option key={item.id} value={item}>
-                {item}
-              </Option>
-            ))}
+        <Select placeholder="Status">
+        {form_statuses.map((item) => (
+                <Option key={item.id} value={item}>
+                  {item}
+                </Option>
+              ))}
           </Select>
         </Form.Item>
       </Card>
@@ -85,6 +85,7 @@ const GeneralField = ({ propsImages, propsMobileImages, form_statuses }) => (
         <Upload listType="picture-card" name="image" {...propsMobileImages}>
           <CustomIcon className="display-3" svg={ImageSvg} />
         </Upload>
+        size: 336px * 350px
       </Card>
     </Col>
   </Row>

@@ -65,7 +65,7 @@ const ProductList = () => {
   // pagination
   const [pagination, setPagination] = useState({
     current: 1,
-    pageSize: 10,
+    pageSize: 15,
   })
 
   const [searchBackupList, setSearchBackupList] = useState([])

@@ -37,7 +37,7 @@ const GeneralField = ({
   form,
   deliveryLocations,
   setIsFinalTrue,
-  isFinalTrue, userGroups, statuses
+  isFinalTrue, userGroups, form_statuses
 }) => (
   <Card title="Basic Info">
     <Form.Item name="name" label="Name" rules={rules.name}>
@@ -57,8 +57,11 @@ const GeneralField = ({
 
     <Form.Item name="status" label="Status" rules={rules.status}>
       <Select placeholder="Status">
-        <Option value="Active">Active</Option>
-        <Option value="Hold"></Option>Hold
+        {form_statuses.map((item) => (
+          <Option key={item.id} value={item}>
+            {item}
+          </Option>
+        ))}
       </Select>
     </Form.Item>
 

@@ -9,12 +9,13 @@ import BannerService from 'services/banner'
 import Utils from 'utils'
 import { useHistory } from 'react-router-dom'
 import constantsService from 'services/constants'
+import mainBannerService from 'services/MainBanner'
 const { TabPane } = Tabs
 
 const ADD = 'ADD'
 const EDIT = 'EDIT'
 
-const ProductForm = (props) => {
+const MainBannerForm = (props) => {
   const { mode = ADD, param } = props
   const history = useHistory()
 
@@ -57,7 +58,7 @@ const ProductForm = (props) => {
     if (mode === EDIT) {
       const fetchBannerById = async () => {
         const { id } = param
-        const data = await BannerService.getBannerById(id)
+        const data = await mainBannerService.getMainBannerById(id)
         if (data) {
           let himg = []
           if (data.image) {
@@ -95,7 +96,7 @@ const ProductForm = (props) => {
             forwardUrl: data.forwardUrl,
           })
         } else {
-          history.replace('/app/dashboards/catalog/banner/banner-list')
+          history.replace('/app/dashboards/catalog/main-banner/main-banner-list')
         }
       }
 
@@ -158,9 +159,9 @@ const ProductForm = (props) => {
             values.image = imgValue
             values.mobileImage = mobileImgValue
 
-            const created = await BannerService.createBanner(values)
+            const created = await mainBannerService.createMainBanner(values)
             if (created) {
-              message.success(`Created ${values.name} to Banner list`)
+              message.success(`Created ${values.name} to Main Banner list`)
               history.goBack()
             }
           } else {
@@ -192,9 +193,9 @@ const ProductForm = (props) => {
             values.image = imgValue
             values.mobileImage = mobileImgValue
 
-            const edited = await BannerService.editBanner(param.id, values)
+            const edited = await mainBannerService.editMainBanner(param.id, values)
             if (edited) {
-              message.success(`Edited ${values.name} to Banner list`)
+              message.success(`Edited ${values.name} to Main Banner list`)
               history.goBack()
             }
           } else {
@@ -230,13 +231,13 @@ const ProductForm = (props) => {
               alignItems="center"
             >
               <h2 className="mb-3">
-                {mode === 'ADD' ? 'Add New Banner' : `Edit Banner`}{' '}
+                {mode === 'ADD' ? 'Add New Main Banner' : `Edit Main Banner`}{' '}
               </h2>
               <div className="mb-3">
                 <Button
                   className="mr-2"
                   onClick={() =>
-                    history.push('/app/dashboards/catalog/banner/banner-list')
+                    history.push('/app/dashboards/catalog/main-banner/main-banner-list')
                   }
                 >
                   Discard
@@ -271,4 +272,4 @@ const ProductForm = (props) => {
   )
 }
 
-export default ProductForm
+export default MainBannerForm

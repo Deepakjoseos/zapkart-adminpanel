@@ -64,7 +64,7 @@ const ProductList = () => {
   // pagination
   const [pagination, setPagination] = useState({
     current: 1,
-    pageSize: 10,
+    pageSize: 15,
   })
   const fetchConstants = async () => {
     const data = await constantsService.getConstants()
@@ -264,11 +264,9 @@ const ProductList = () => {
               placeholder="Order By Priority"
             >
               <Option value="">All</Option>
-              {statuses.map((item) => (
-                <Option key={item.id} value={item}>
-                  {item}
-                </Option>
-              ))}
+               <Option value={true}>Yes</Option>
+               <Option value={false}>No</Option>
+
             </Select>
           </Form.Item>
         </Col>
