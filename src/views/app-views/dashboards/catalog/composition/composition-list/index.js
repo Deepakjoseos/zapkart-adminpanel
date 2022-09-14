@@ -256,7 +256,7 @@ const CompositionList = () => {
           </Form.Item>
         </Col>
 
-        <Col className="mb-4">
+        <Col className="mb-4 ml-5">
           <Button type="primary" onClick={handleFilterSubmit}>
             Filter
           </Button>

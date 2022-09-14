@@ -261,7 +261,7 @@ const ProductList = () => {
             <Select
               className="w-100"
               style={{ minWidth: 180 }}
-              placeholder="Status"
+              placeholder="Order By Priority"
             >
               <Option value="">All</Option>
               {statuses.map((item) => (
@@ -273,7 +273,7 @@ const ProductList = () => {
           </Form.Item>
         </Col>
 
-        <Col className="mb-4">
+        <Col className="mb-4 ml-5">
           <Button type="primary" onClick={handleFilterSubmit}>
             Filter
           </Button>
