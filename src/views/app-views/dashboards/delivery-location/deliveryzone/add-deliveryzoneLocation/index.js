@@ -121,6 +121,10 @@ import deliveryLocation from 'services/deliveryLocation'
             placeholder="Please select Delivery Location"
             treeDefaultExpandAll
             onChange={(val) => setSelectedDeliveryLocationId(val)}
+            showSearch
+            filterOption={(inputValue, option) =>
+              option.title.toLowerCase().includes(inputValue.toLowerCase())
+            }
             // onChange={(e) =>
             //   props.form.setFieldsValue({
             //     parentId: e,

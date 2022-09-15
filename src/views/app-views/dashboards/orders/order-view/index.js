@@ -11,6 +11,7 @@ import moment from 'moment'
 import { useReactToPrint } from 'react-to-print'
 import customerService from 'services/customer'
 import PrescriptionSelector from './PrescriptionSelector'
+import CreateInvoiceForm from './CreateInvoiceForm'
 
 const { Column } = Table
 const { Option } = Select
@@ -20,6 +21,7 @@ const OrderView = () => {
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [printing, setPrinting] = useState(false)
   const [isPrescriptionModalOpen, setIsPrescriptionModalOpen] = useState(false)
+  const [isInvoiceFormOpen, setIsInvoiceFormOpen] = useState(false)
 
   const componentRef = useRef()
   const handlePrint = useReactToPrint({
@@ -161,6 +163,13 @@ const OrderView = () => {
           onClick={() => setIsFormOpen(true)}
         >
           Create Shipment
+        </Button>
+        <Button
+          type="primary"
+          className="mb-4 mr-2"
+          onClick={() => setIsInvoiceFormOpen(true)}
+        >
+          Create Invoice
         </Button>
         <Button type="primary" className="mb-4" onClick={handlePrint}>
           Print this out!
@@ -522,6 +531,8 @@ const OrderView = () => {
         orderNo={order?.orderNo}
         orderId={order?.id}
       />
+
+      <CreateInvoiceForm items={order?.items} isInvoiceFormOpen={isInvoiceFormOpen} setIsInvoiceFormOpen={setIsInvoiceFormOpen} orderId={order?.id}/>
     </div>
   )
 }

@@ -3,6 +3,7 @@ import fetch from 'auth/FetchInterceptor'
 const deliveryzoneService = {}
 const api='/deliveryzones/public'
 deliveryzoneService.getDeliveryZones = async function (paginationQuery = '', query = '') {
+  console.log(query, 'oslj')
   try {
     let url = `${api}?${paginationQuery}&${query}`
     const res = await fetch({

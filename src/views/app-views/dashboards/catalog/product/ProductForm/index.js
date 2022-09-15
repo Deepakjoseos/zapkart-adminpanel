@@ -129,7 +129,7 @@ const ProductForm = (props) => {
           setSelectedVendorId(data?.userId)
           setProductTemplateId(data.productTemplateId)
           setProductBuyType(data.acquirementMethod)
-          getDeliveryZones()
+          getDeliveryZones({}, {vendorId: data?.userId})
 
           // const subscriptionPrice = data.subscriptionPrice.map((item) => {
           //   return {
