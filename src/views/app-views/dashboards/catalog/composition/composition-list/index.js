@@ -62,7 +62,7 @@ const CompositionList = () => {
   // pagination
   const [pagination, setPagination] = useState({
     current: 1,
-    pageSize: 10,
+    pageSize: 15,
   })
   const fetchConstants = async () => {
     const data = await constantsService.getConstants()
@@ -256,7 +256,7 @@ const CompositionList = () => {
           </Form.Item>
         </Col>
 
-        <Col className="mb-4">
+        <Col className="mb-4 ml-5">
           <Button type="primary" onClick={handleFilterSubmit}>
             Filter
           </Button>

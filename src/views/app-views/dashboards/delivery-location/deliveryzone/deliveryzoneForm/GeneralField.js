@@ -26,7 +26,7 @@ const GeneralField = ({
 
   vendors,
   mode,
-  statuses
+  form_statuses
 }) => {
   console.log('mode', mode)
   return (
@@ -37,11 +37,11 @@ const GeneralField = ({
 
       <Form.Item name="status" label="Status" rules={rules.status}>
         <Select placeholder="Status">
-          {statuses.map((item) => (
-            <Option key={item.id} value={item}>
-              {item}
-            </Option>
-          ))}
+        {form_statuses.map((item) => (
+                <Option key={item.id} value={item}>
+                  {item}
+                </Option>
+              ))}
         </Select>
       </Form.Item>
       <Form.Item name="vendorId" label="Vendor" rules={rules.vendor} >

@@ -22,14 +22,14 @@ const TemplateForm = (props) => {
   const [submitLoading, setSubmitLoading] = useState(false)
   const [tempConstants, setTempConstants] = useState({})
   const [editorRender, setEditorRender] = useState(false)
-  const[statuses,setStatuses] = useState([])
+  const[form_statuses,setStatuses] = useState([])
 
   useEffect(() => {
     const fetchConstants = async () => {
       const data = await constantsService.getConstants()
       if (data) {
         setTempConstants(data.TEMPLATE)
-        setStatuses(Object.values(data.GENERAL['STATUS']))
+        setStatuses(Object.values(data.GENERAL['FORM_STATU']))
       }
     }
 
@@ -170,7 +170,7 @@ const TemplateForm = (props) => {
         <div className="container">
           <Tabs defaultActiveKey="1" style={{ marginTop: 30 }}>
             <TabPane tab="General" key="1">
-              <GeneralField tempConstants={tempConstants} form={form}  statuses={statuses}/>
+              <GeneralField tempConstants={tempConstants} form={form}  form_statuses={form_statuses}/>
             </TabPane>
           </Tabs>
         </div>

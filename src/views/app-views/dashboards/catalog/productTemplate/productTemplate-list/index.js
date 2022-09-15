@@ -9,7 +9,7 @@ import {
   Tag,
   Form,
   Row,
-  Col,Modal,notification
+  Col,Modal,notification,message
 } from 'antd'
 // import BrandListData from 'assets/data/product-list.data.json'
 import {
@@ -248,18 +248,19 @@ const ProductTemplateList = () => {
     const sendingValues = {
       ...selectedRow,
       categoryId: selectedRow.category.id,
+      taxCategoryId:selectedRow.taxCategory.id,
       status: value,
     }
-  }
+  
 
-  //   const edited = await productTemplate.editProductTemplate(
-  //     selectedRow.id,
-  //     sendingValues
-  //   )
-  //   if (edited) {
-  //     message.success(`Status Edited Successfully:  ${selectedRow.name}`)
-  //   }
-  // }
+    const edited = await productTemplate.editProductTemplate(
+      selectedRow.id,
+      sendingValues
+    )
+    if (edited) {
+      message.success(`Status Edited Successfully:  ${selectedRow.name}`)
+    }
+  }
   const tableColumns = [
     {
       title: 'Product Template',
@@ -335,21 +336,24 @@ const ProductTemplateList = () => {
       // ),
       render: (status, row) => {
         return (
+          status !=='Deleted' ? 
           <Select
             defaultValue={status?.charAt(0)?.toUpperCase() + status?.slice(1)}
             // style={{ width: 120 }}
             onChange={(e) => handleStatusChange(e, row)}
           >
-            <Option value="Active">
+         
+             <Option value="Active">
               <Tag color="green">Active</Tag>
             </Option>
             <Option value="Hold">
               <Tag color="orange">Hold</Tag>
-            </Option>
-            <Option value="Deleted">
+            </Option> 
+           
+            {/* <Option value="Deleted">
               <Tag color="red">Deleted</Tag>
-            </Option>
-          </Select>
+            </Option> */}
+          </Select> : getStockStatus(status)
         )
       },
       sorter: (a, b) => utils.antdTableSorter(a, b, 'status'),
@@ -386,7 +390,7 @@ const ProductTemplateList = () => {
   } const resetPagination = () => ({
     ...pagination,
     current: 1,
-    pageSize: 10,
+    pageSize: 15,
   })
   const fetchConstants = async () => {
     const data = await constantsService.getConstants()

@@ -20,7 +20,7 @@ const rules = {
   ],
 }
 
-const GeneralField = ({ statuses }) => (
+const GeneralField = ({ form_statuses }) => (
   <Row gutter={16}>
     <Col xs={24} sm={24} md={24}>
       <Card title="Basic Info">
@@ -29,8 +29,11 @@ const GeneralField = ({ statuses }) => (
         </Form.Item>
         <Form.Item name="status" label="Status" rules={rules.status}>
           <Select placeholder="Status">
-            <Option value="Active">Active</Option>
-            <Option value="Hold"></Option>Hold
+            {form_statuses.map((item) => (
+              <Option key={item.id} value={item}>
+                {item}
+              </Option>
+            ))}
           </Select>
         </Form.Item>
       </Card>

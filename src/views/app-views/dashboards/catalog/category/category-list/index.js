@@ -70,7 +70,7 @@ const [statuses,setStatuses] = useState([])
 // pagination
 const [pagination, setPagination] = useState({
   current: 1,
-  pageSize: 10,
+  pageSize: 15,
 })
 const fetchConstants = async () => {
   const data = await constantsService.getConstants()

@@ -30,7 +30,7 @@ const DeliveryZoneForm = (props) => {
   //   const [uploadLoading, setUploadLoading] = useState(false)
   const [submitLoading, setSubmitLoading] = useState(false)
   const [userGroups,setUserGroups]=useState([])
-  const [statuses,setStatuses] = useState([])
+  const [form_statuses,setStatuses] = useState([])
   const getVendors = async () => {
     const data = await vendorService.getVendors()
     if (data) {
@@ -65,7 +65,7 @@ const fetchConstants = async () => {
   if (data) {
     // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
 
-    setStatuses(Object.values(data.GENERAL['STATUS']))
+    setStatuses(Object.values(data.GENERAL['FORM_STATUS']))
 
   }
 }
@@ -189,7 +189,7 @@ const fetchConstants = async () => {
                 form={form}
                 vendors={vendors} 
                 mode={mode}
-                statuses={statuses}
+                form_statuses={form_statuses}
                 // isFinalTrue={isFinalTrue}
                 // setIsFinalTrue={setIsFinalTrue}
                 // deliveryLocations={deliveryLocations}

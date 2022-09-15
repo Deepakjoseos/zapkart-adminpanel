@@ -65,7 +65,7 @@ const ProductList = () => {
   // pagination
   const [pagination, setPagination] = useState({
     current: 1,
-    pageSize: 10,
+    pageSize: 15,
   })
 
   const [searchBackupList, setSearchBackupList] = useState([])
@@ -311,7 +311,7 @@ const ProductList = () => {
           </Form.Item>
         </Col>
 
-        <Col className="mb-4">
+        <Col className="mb-4 ml-5">
           <Button type="primary" onClick={handleFilterSubmit}>
             Filter
           </Button>

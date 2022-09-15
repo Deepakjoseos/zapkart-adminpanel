@@ -23,7 +23,7 @@ const MainBannerForm = (props) => {
   const [uploadedImg, setImage] = useState(null)
   const [uploadedMobileImg, setMobileImg] = useState(null)
   const [submitLoading, setSubmitLoading] = useState(false)
-  const [statuses,setStatuses]= useState([])
+  const [form_statuses,setStatuses]= useState([])
 
   // Normal Image
   const {
@@ -49,7 +49,7 @@ const MainBannerForm = (props) => {
     if (data) {
       // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
 
-      setStatuses(Object.values(data.GENERAL['STATUS']))
+      setStatuses(Object.values(data.GENERAL['FORM_STATUS']))
 
     }
   }
@@ -231,13 +231,13 @@ const MainBannerForm = (props) => {
               alignItems="center"
             >
               <h2 className="mb-3">
-                {mode === 'ADD' ? 'Add New Banner' : `Edit Banner`}{' '}
+                {mode === 'ADD' ? 'Add New Main Banner' : `Edit Main Banner`}{' '}
               </h2>
               <div className="mb-3">
                 <Button
                   className="mr-2"
                   onClick={() =>
-                    history.push('/app/dashboards/catalog/banner/banner-list')
+                    history.push('/app/dashboards/catalog/main-banner/main-banner-list')
                   }
                 >
                   Discard
@@ -262,7 +262,7 @@ const MainBannerForm = (props) => {
                 // uploadLoading={uploadLoading}
                 // handleUploadChange={handleUploadChange}
                 propsImages={propsImages}
-                propsMobileImages={propsMobileImages} statuses={statuses}
+                propsMobileImages={propsMobileImages} form_statuses={form_statuses}
               />
             </TabPane>
           </Tabs>

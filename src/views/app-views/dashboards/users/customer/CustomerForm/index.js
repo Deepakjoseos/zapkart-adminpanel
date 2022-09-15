@@ -39,7 +39,7 @@ const ProductForm = (props) => {
   const [groupList,setGroupList] = useState([])
   const [phoneVerified, setPhoneVerified] = useState(false)
   const [emailVerified, setEmailVerified] = useState(false)
-  const [statuses,setStatuses] = useState([])
+  const [form_statuses,setStatuses] = useState([])
   const {
     fileList: fileListDisplayImages,
     beforeUpload: beforeUploadDisplayImages,
@@ -62,7 +62,7 @@ const ProductForm = (props) => {
     if (data) {
       // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
 
-      setStatuses(Object.values(data.GENERAL['STATUS']))
+      setStatuses(Object.values(data.GENERAL['FORM_STATUS']))
 
     }
   }
@@ -239,7 +239,7 @@ const ProductForm = (props) => {
         <div className="container">
           <Tabs defaultActiveKey="1" style={{ marginTop: 30 }}>
             <TabPane tab="General" key="1">
-              <GeneralField propsDisplayImages={propsDisplayImages} mode={mode} userGroups={groupList} form={form} emailVerified={emailVerified} phoneVerified={phoneVerified} statuses={statuses}/>
+              <GeneralField propsDisplayImages={propsDisplayImages} mode={mode} userGroups={groupList} form={form} emailVerified={emailVerified} phoneVerified={phoneVerified} form_statuses={form_statuses}/>
             </TabPane>
             {id && (
               <>

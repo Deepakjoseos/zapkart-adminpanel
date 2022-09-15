@@ -25,7 +25,7 @@ const ProductForm = (props) => {
   // For Image Upload
   const [uploadedImg, setImage] = useState(null)
   const [submitLoading, setSubmitLoading] = useState(false)
-  const [statuses, setStatuses] = useState([])
+  const [form_statuses, setStatuses] = useState([])
   // For Image upload
   const {
     fileList: fileListImages,
@@ -40,7 +40,7 @@ const ProductForm = (props) => {
     if (data) {
       // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
 
-      setStatuses(Object.values(data.GENERAL['STATUS']))
+      setStatuses(Object.values(data.GENERAL['FORM_STATUS']))
 
     }
   }
@@ -213,7 +213,7 @@ const ProductForm = (props) => {
                 uploadedImg={uploadedImg}
                 // uploadLoading={uploadLoading}
                 // handleUploadChange={handleUploadChange}
-                propsImages={propsImages} statuses={statuses}
+                propsImages={propsImages} form_statuses={form_statuses}
                 form={form}
               />
             </TabPane>

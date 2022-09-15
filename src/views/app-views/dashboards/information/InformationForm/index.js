@@ -24,13 +24,13 @@ const ProductForm = (props) => {
   //   const [uploadLoading, setUploadLoading] = useState(false)
   const [submitLoading, setSubmitLoading] = useState(false)
   const [editorRender, setEditorRender] = useState(false)
-  const [statuses,setStatuses] = useState([])
+  const [form_statuses,setStatuses] = useState([])
   const fetchConstants = async () => {
     const data = await constantsService.getConstants()
     if (data) {
       // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
 
-      setStatuses(Object.values(data.GENERAL['STATUS']))
+      setStatuses(Object.values(data.GENERAL['FORM_STATUS']))
 
     }
   }
@@ -210,7 +210,7 @@ const ProductForm = (props) => {
                 // uploadLoading={uploadLoading}
                 // handleUploadChange={handleUploadChange}
                 propsImages={propsImages}
-                form={form} statuses={statuses}
+                form={form} form_statuses={form_statuses}
               />
             </TabPane>
           </Tabs>

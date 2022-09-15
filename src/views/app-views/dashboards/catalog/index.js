@@ -11,7 +11,7 @@ import Banner from './banner/index'
 import MedicineType from './medicineType'
 import Composition from './composition'
 import Coupon from './coupon'
-
+import MainBanner from '../main-banner'
 const Catalog = ({ match }) => {
   return (
     <Switch>
@@ -33,6 +33,9 @@ const Catalog = ({ match }) => {
       <Route path={`${match.url}/medicinetype`} component={MedicineType} />
       <Route path={`${match.url}/composition`} component={Composition} />
       <Route path={`${match.url}/coupon`} component={Coupon} />
+      <Route path={`${match.url}/main-banner`} component={MainBanner} />
+
+
     </Switch>
   )
 }

@@ -26,14 +26,14 @@ const ProductForm = (props) => {
   //   const [uploadLoading, setUploadLoading] = useState(false)
   const [submitLoading, setSubmitLoading] = useState(false)
   const [userGroups,setUserGroups] = useState([])
-  const [statuses,setStatuses]=useState([])
+  const [form_statuses,setStatuses]=useState([])
 
   const fetchConstants = async () => {
     const data = await constantsService.getConstants()
     if (data) {
       // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
 
-      setStatuses(Object.values(data.GENERAL['STATUS']))
+      setStatuses(Object.values(data.GENERAL['FORM_STATUS']))
 
     }
   }
@@ -195,7 +195,7 @@ const ProductForm = (props) => {
                 isFinalTrue={isFinalTrue}
                 setIsFinalTrue={setIsFinalTrue}
                 deliveryLocations={deliveryLocations} 
-                statuses={statuses}
+                form_statuses={form_statuses}
                 // uploadLoading={uploadLoading}
                 // handleUploadChange={handleUploadChange}
               />

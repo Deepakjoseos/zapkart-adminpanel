@@ -171,7 +171,7 @@ const CouponList = () => {
   const resetPagination = () => ({
     ...pagination,
     current: 1,
-    pageSize: 10,
+    pageSize: 15,
   })
 
   // Filter Submit
