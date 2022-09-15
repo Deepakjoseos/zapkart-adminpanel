@@ -43,6 +43,7 @@ const[setmode,setMode]=useState('')
             metaTitle: data.metaTitle,
             metaDescription: data.metaDescription,
             metakeywords: data.metakeywords,
+            whatsappNo:data.whatsappNo
           })
         
         setSettings(data)
@@ -78,7 +79,8 @@ const[setmode,setMode]=useState('')
           instagramUrl: values?.instagramUrl,
           twitterUrl: values?.twitterUrl,
           vendorCommission:values?.vendorCommission,
-          deliveryCharges: values?.deliveryCharges
+          deliveryCharges: values?.deliveryCharges,
+          whatsappNo:values?.whatsappNo
         }
 
 
