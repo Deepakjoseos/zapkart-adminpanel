@@ -187,6 +187,20 @@ orderService.updateUserOrderPrescriptions = async function (
   }
 }
 
+orderService.createVendorOrderInvoice = async function (orderId, data) {
+  try {
+    const res = await fetch({
+      url: `/order/admin/addVendorInvoice/${orderId}/${data?.vendorId}`,
+      method: 'post',
+      data,
+    })
+
+    return res
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
+
 // orderService.getProductById = async function (id) {
 //   try {
 //     const res = await fetch({

@@ -281,7 +281,7 @@ class Utils {
       }
     } else {
       if(categories?.data) {
-      category = categories.data.filter((cat) => cat?.parentId === parentId)
+        category = categories.data.filter((cat) => cat?.parentId === parentId)
       } else {
         category = categories.filter((cat) => cat?.parentId === parentId)
       }

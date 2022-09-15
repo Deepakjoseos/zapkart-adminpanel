@@ -179,7 +179,6 @@ const GeneralField = ({
   taxCategories,
   paymentTypes,
   statuses,
-  
 }) => {
   const [image, setImage] = useState(false)
 
@@ -319,7 +318,19 @@ const GeneralField = ({
                 optionFilterProp="children"
                 filterOption={(input, option) =>
                   option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                }>
+                }
+                // onPopupScroll={e => {
+                //   const { target } = e;
+
+                 
+                //   if (
+                //     Math.round(target.scrollTop + target.offsetHeight) ===
+                //     Math.round(target.scrollHeight)
+                //   ) {
+                //     setSelectPage(prev => prev + 1)
+                //   }
+                // }}
+                >
                 {medicineTypes.map((medicineType) => (
                   <Option key={medicineType.id} value={medicineType.id}>
                     {medicineType.name}

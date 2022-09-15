@@ -74,6 +74,12 @@ const ProductForm = (props) => {
     const data = await medicineTypeService.getMedicineTypes()
     const activeMedicineTypes = data.data.filter((item) => item.status === 'Active')
     setMedicineTypes(activeMedicineTypes)
+
+    // const pagination = qs.stringify({page: selectPage, limit: 20})
+    // const data = await medicineTypeService.getMedicineTypes()
+    // const activeMedicineTypes = data.data.filter((item) => item.status === 'Active')
+
+    // setMedicineTypes(prev => [...prev,activeMedicineTypes])
   }
 
   const getManufacturers = async () => {
