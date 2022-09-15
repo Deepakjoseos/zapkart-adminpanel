@@ -40,7 +40,7 @@ const rules = {
   ],
 }
 
-const GeneralField = ({form,propsImages,statuses}) => (
+const GeneralField = ({ form, propsImages, form_statuses }) => (
   <Row gutter={16}>
     <Col xs={24} sm={24} md={17}>
       <Card title="Basic Info">
@@ -69,47 +69,50 @@ const GeneralField = ({form,propsImages,statuses}) => (
         </Form.Item>
 
         <Form.Item name="status" label="Status" rules={rules.status}>
-        <Select placeholder="Status">
-            <Option value="Active">Active</Option>
-            <Option value="Hold">Hold</Option>
+          <Select placeholder="Status">
+            {form_statuses.map((item) => (
+              <Option key={item.id} value={item}>
+                {item}
+              </Option>
+            ))}
           </Select>
         </Form.Item>
       </Card>
       <Card title="SEO">
-          <Form.Item name="metaTitle" label="Meta Title">
-            <Input placeholder="Meta Title" />
-          </Form.Item>
-          <Form.Item name="metaDescription" label="Meta Description">
-            <Input placeholder="Meta Description" />
-          </Form.Item>
-          {/* <Form.Item name="keywords" label="Keywords">
+        <Form.Item name="metaTitle" label="Meta Title">
+          <Input placeholder="Meta Title" />
+        </Form.Item>
+        <Form.Item name="metaDescription" label="Meta Description">
+          <Input placeholder="Meta Description" />
+        </Form.Item>
+        {/* <Form.Item name="keywords" label="Keywords">
             <Input placeholder="Keywords" />
           </Form.Item> */}
-          <Form.Item name="keywords" label="Keywords">
-            <Select
-              dropdownStyle={{ display: 'none' }}
-              mode="tags"
-              style={{
-                width: '100%',
-              }}
-              placeholder="Keywords"
-            ></Select>
-          </Form.Item>
-          {/* <Form.Item name="slug" label="Slug" rules={rules.slug}>
+        <Form.Item name="keywords" label="Keywords">
+          <Select
+            dropdownStyle={{ display: 'none' }}
+            mode="tags"
+            style={{
+              width: '100%',
+            }}
+            placeholder="Keywords"
+          ></Select>
+        </Form.Item>
+        {/* <Form.Item name="slug" label="Slug" rules={rules.slug}>
             <Input placeholder="Slug" />
           </Form.Item> */}
-         
-          <Form.Item name="tags" label="Tags">
-            <Select
-              dropdownStyle={{ display: 'none' }}
-              mode="tags"
-              style={{
-                width: '100%',
-              }}
-              placeholder="Tags"
-            ></Select>
-          </Form.Item>
-        </Card>
+
+        <Form.Item name="tags" label="Tags">
+          <Select
+            dropdownStyle={{ display: 'none' }}
+            mode="tags"
+            style={{
+              width: '100%',
+            }}
+            placeholder="Tags"
+          ></Select>
+        </Form.Item>
+      </Card>
     </Col>
     <Col xs={24} sm={24} md={7}>
       <Card title="Media">

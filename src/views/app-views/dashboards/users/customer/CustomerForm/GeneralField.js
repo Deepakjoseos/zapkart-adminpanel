@@ -21,7 +21,7 @@ const rules = {
   ],
 }
 
-const GeneralField = ({ propsDisplayImages, mode, userGroups, form, phoneVerified, emailVerified, statuses }) => {
+const GeneralField = ({ propsDisplayImages, mode, userGroups, form, phoneVerified, emailVerified, form_statuses }) => {
 
   return (
     <Row gutter={16}>
@@ -35,8 +35,11 @@ const GeneralField = ({ propsDisplayImages, mode, userGroups, form, phoneVerifie
           </Form.Item>
           <Form.Item name="status" label="Status" rules={rules.status}>
             <Select placeholder="Status">
-              <Option value="Active">Active</Option>
-              <Option value="Hold">Hold</Option>
+            {form_statuses.map((item) => (
+                <Option key={item.id} value={item}>
+                  {item}
+                </Option>
+              ))}
             </Select>
           </Form.Item>
           {mode === 'EDIT' ?

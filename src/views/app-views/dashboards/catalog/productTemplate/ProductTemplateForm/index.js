@@ -47,7 +47,7 @@ const ProductForm = (props) => {
   const [lengthClass, setLengthClass] = useState([])
   const[taxCtegories,setTaxCategories]=useState([])
   const [paymentTypes,setPaymenTypes] = useState([])
-  const [statuses,setStatuses] = useState([])
+  const [form_statuses,setStatuses] = useState([])
 
   const {
     fileList: fileListImages,
@@ -119,7 +119,7 @@ const ProductForm = (props) => {
       setWeightClass(Object.values(data.GENERAL['WEIGHT_CLASS']))
       setLengthClass(Object.values(data.GENERAL['LENGTH_CLASS']))
       setPaymenTypes(Object.values(data.GENERAL['PAYMENT_TYPE']))
-      setStatuses(Object.values(data.GENERAL['STATUS']))
+      setStatuses(Object.values(data.GENERAL['FORM_STATUS']))
 
     }
   }
@@ -194,6 +194,8 @@ const ProductForm = (props) => {
           returnable: data.returnable,
           brandId: data?.brand?.id,
           taxCategoryId:data?.taxCategory?.id,
+          manufacturerId: data.manufacturer?.id,
+
           description: data?.description,
           returnPeriod: data.returnPeriod,
           allowedQuantityPerOrder: data.allowedQuantityPerOrder,
@@ -225,7 +227,6 @@ const ProductForm = (props) => {
           productType: data.productType,
           medicineTypeId: data.medicineTypeId,
           medicinePackaging: data.medicinePackaging,
-          manufacturerId: data.manufacturer?.id,
           composition: data.composition,
 
           // productType =============> 'Medicine'
@@ -337,7 +338,7 @@ const ProductForm = (props) => {
             priority: values.priority,
             medicineTypeId: values.medicineTypeId,
             medicinePackaging: values.medicinePackaging,
-            // manufacturerId: values.manufacturerId,
+            manufacturerId: values.manufacturerId,
             minQty: values.minQty,
             slug: values.slug,
             tags: values.tags,
@@ -552,7 +553,7 @@ const ProductForm = (props) => {
                 lengthClass={lengthClass}
                 taxCategories={taxCtegories}
                 paymentTypes={paymentTypes}
-                statuses={statuses}
+                form_statuses={form_statuses}
               />
             </TabPane>
             {mode === EDIT && (

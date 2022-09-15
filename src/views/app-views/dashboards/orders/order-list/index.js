@@ -79,7 +79,7 @@ const Orders = () => {
   // pagination
   const [pagination, setPagination] = useState({
     current: 1,
-    pageSize: 10,
+    pageSize: 15,
   })
   const getCustomers = async () => {
     const data = await customerService.getCustomers()
@@ -264,7 +264,28 @@ const Orders = () => {
         </Link>
       ),
     },
-
+    {
+      title: 'shipment',
+      dataIndex: 'items',
+      render: (items) => {
+        return (
+          <>
+            {items?.map((item) => (
+              <>
+              {item.shipmentId ? 
+              <Link to={`/app/dashboards/shipments/shipment/shipment-view/${item.shipmentId}`}> {item.shipmentId}</Link>
+              :
+              "No shipment"}
+                {/* {item.shipmentId ? item.shipmentId :"No Shipment"} */}
+                {/* <p>Type:{group.type}</p>
+          <p>Status:{group.status}</p> */}
+              </>
+            ))}
+          </>
+        )
+      },
+      // sorter: (a, b) => utils.antdTableSorter(a, b, 'lastname'),
+    },
 
     {
       title: 'Customer Name',

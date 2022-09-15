@@ -22,7 +22,7 @@ const AttributeForm = (props) => {
   const [attributeOptions, setAttributeOptions] = useState([])
   //   const [uploadLoading, setUploadLoading] = useState(false)
   const [submitLoading, setSubmitLoading] = useState(false)
-  const [statuses,setStatuses]= useState([])
+  const [form_statuses,setStatuses]= useState([])
 
   const handleDeleteAttributeOption = (id) => {
     const optionClone = [...attributeOptions]
@@ -34,7 +34,7 @@ const AttributeForm = (props) => {
     if (data) {
       // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
 
-      setStatuses(Object.values(data.GENERAL['STATUS']))
+      setStatuses(Object.values(data.GENERAL['FORM_STATUS']))
 
     }
   }
@@ -200,7 +200,7 @@ const AttributeForm = (props) => {
                 handleAttributeOptionValueChange={
                   handleAttributeOptionValueChange
                 }
-                attributeOptions={attributeOptions} statuses={statuses}
+                attributeOptions={attributeOptions} form_statuses={form_statuses}
               />
             </TabPane>
             {mode === EDIT && (

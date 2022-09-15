@@ -120,6 +120,13 @@ const GeneralField = ({ setmode }) => {
           >
             <Input placeholder="Twitter" type="text" />
           </Form.Item>
+          <Form.Item
+            name="whatsappNo"
+            label="WhatsApp Number"
+            rules={rules.whatsappNo}
+          >
+            <Input placeholder="Whatsapp Number" type="text" />
+          </Form.Item>
           {/* <Form.Item
             name="vendorCommission"
             label="Vendor Commission"

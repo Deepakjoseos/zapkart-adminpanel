@@ -64,7 +64,7 @@ const InformationList = () => {
   // pagination
   const [pagination, setPagination] = useState({
     current: 1,
-    pageSize: 10,
+    pageSize: 15,
   })
   
   // Changed here for pagination

@@ -180,7 +180,8 @@ const OrderView = () => {
 
                   <br />
                   <span>
-                    ShippingAddress: {order?.shippingAddress?.addressLine1},{' '}
+                    {/* ShippingAddress: */}
+                    {order?.shippingAddress?.addressLine1},{' '}
                     {order?.shippingAddress?.city},{' '}
                     {order?.shippingAddress?.stateOrRegion},{' '}
                     {order?.shippingAddress?.country}
@@ -212,10 +213,11 @@ const OrderView = () => {
                 </p>
               </address>
             </div>
-            <div className="mt-3 text-right">
-              <h2 className="mb-1 font-weight-semibold">
-                Order No: {order?.orderNo}
-              </h2>
+            <div className="text-right">
+
+              <p>GSTIN:</p>
+              <p>Drug Licence No:</p>
+
               <p>
                 Order Date:
                 {moment(new Date(order?.createdAt * 1000)).format('DD-MM-YYYY')}
@@ -230,8 +232,7 @@ const OrderView = () => {
                 ''
               )}
               <p>Total Amount: ₹{order?.totalAmount}</p>
-              <p>Order Date: {moment(new Date(order?.createdAt * 1000)).format('DD-MM-YYYY hh:mm:a')}
-              </p>
+
               <address>
                 <p>
                   <span className="font-weight-semibold text-dark font-size-md">
@@ -244,6 +245,67 @@ const OrderView = () => {
                 <span>Niagara Falls, New York 14304</span> */}
                 </p>
               </address>
+            </div>
+          </div>
+          <div>
+            <h4 className="mb-1 font-weight-semibold">
+              Invoice  No: {order?.invoice?.invoiceNo}
+            </h4>
+            {/* <h4 className="mb-1 font-weight-semibold">
+                Invoice  Date: 
+              </h4> */}
+            <h4 className="mb-1 font-weight-semibold">
+              Order No: {order?.orderNo}
+            </h4>
+            <h4 className="mb-1 font-weight-semibold">
+              Order Date: {moment(new Date(order?.createdAt * 1000)).format('DD-MM-YYYY hh:mm:a')}
+              
+            </h4>
+            {/* <h4 className="mb-1 font-weight-semibold">
+                Customer Name : {order?.items.map((item)=>{
+                  return  item.vendorName
+                })}
+              </h4> */}
+            {/* <h4 className="mb-1 font-weight-semibold">
+               Customer GST No(If Any): 
+              </h4> */}
+          </div>
+          <div className="mt-3 d-md-flex justify-content-md-between">
+            <div className=''>
+              <h5>Billing Address:</h5>
+              <p>{order?.payment?.billingAddress?.name}</p>
+              <span>
+                {order?.payment?.billingAddress?.addressLine1},
+                {order?.payment?.billingAddress?.city},
+                {order?.payment?.billingAddress?.stateOrRegion},
+              </span>
+              <span>
+                {order?.payment?.billingAddress?.country},
+
+
+                {order?.payment?.billingAddress?.uniqueId}
+              </span>
+
+              <p>Mobile no:{order?.payment?.billingAddress?.mobileNumber}</p>
+
+
+            </div>
+            <div className='text-right'>
+              <h5>Shipping Address:</h5>
+              <p>{order?.shippingAddress?.name}</p>
+              <span>
+                {order?.shippingAddress?.addressLine1},
+                {order?.shippingAddress?.city},
+                {order?.shippingAddress?.stateOrRegion},
+              </span>
+              <span>
+                {order?.shippingAddress?.country},
+
+
+                {order?.shippingAddress?.uniqueId}
+              </span>
+
+              <p>Mobile no:{order?.shippingAddress?.mobileNumber}</p>
             </div>
           </div>
           {order?.prescriptions?.length > 0 && (
@@ -264,8 +326,8 @@ const OrderView = () => {
               }}
             >
               {/* <Column title="SN" dataIndex="name" key="name" /> */}
-              <Column title="Shipment" dataIndex="shipmentId" key="shipmentId" render={(text) => text ? <Link to={`/app/dashboards/shipments/shipment/shipment-view/${text}`}> {text}</Link>:"Shipment not available"} />
-             
+              <Column title="Shipment" dataIndex="shipmentId" key="shipmentId" render={(text) => text ? <Link to={`/app/dashboards/shipments/shipment/shipment-view/${text}`}> {text}</Link> : "Shipment not available"} />
+
               <Column title="Product Name" dataIndex="name" key="name" />
               <Column title="HSN" dataIndex="hsn" key="hsn" />
               <Column title="BATCH" dataIndex="batchNumber" key="batchNumber" />
@@ -279,7 +341,7 @@ const OrderView = () => {
               <Column title="AMOUNT" dataIndex="price" key="price" />
 
               <Column title="Vendor" dataIndex="vendorName" key="vendorName" />
-    
+
               {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
                 <Column
                   title="Prescription Required"
@@ -330,12 +392,12 @@ const OrderView = () => {
                 <span className='mr-1'>shipping Charge: {order?.shippingCharge}
                 </span>
                 <div>
-                {order?.couponCode ? <div className='mr-1'>Coupon Code: {order?.couponCode}
-                </div> :""}
-                
-                {order?.discount ? <div className='mr-1'>Discount Amount(-): {order?.discount}
-                </div> :""}
-                                </div>
+                  {order?.couponCode ? <div className='mr-1'>Coupon Code: {order?.couponCode}
+                  </div> : ""}
+
+                  {order?.discount ? <div className='mr-1'>Discount Amount(-): {order?.discount}
+                  </div> : ""}
+                </div>
                 <h2 className="font-weight-semibold mt-3">
                   <span className="mr-1">Grand Total: </span>₹
                   {order?.totalAmount}
@@ -381,7 +443,8 @@ const OrderView = () => {
                     {/* <span>Invoice No: {order?.invoice?.invoiceNo}</span> */}
                     <br />
                     <span>
-                      ShippingAddress: {order?.shippingAddress?.addressLine1},{' '}
+                      {/* ShippingAddress: */}
+                      {order?.shippingAddress?.addressLine1},{' '}
                       {order?.shippingAddress?.city},{' '}
                       {order?.shippingAddress?.stateOrRegion},{' '}
                       {order?.shippingAddress?.country}
@@ -399,41 +462,74 @@ const OrderView = () => {
                   </p>
                 </address>
               </div>
-              <div className="mt-3 text-right">
-                <h2 className="mb-1 font-weight-semibold">
-                  Order No: {order?.orderNo}
-                </h2>
-                <p>
-                  Order Date:
-                  {moment(new Date(order?.createdAt * 1000)).format(
-                    'DD-MM-YYYY'
-                  )}
-                  {/* {moment(parseInt(order?.createdAt)).format('YYYY-MM-DD')} */}
-                </p>
-                <p>Status: {order?.status}</p>
-                <p>Payment method : {order?.payment?.type}</p>
-                {order?.transaction ? (
-                  <p>Transaction ID : {order?.transaction?.id}</p>
-                ) : (
-                  ''
-                )}
-                <p>Total Amount: ₹{order?.totalAmount}</p>
-                <address>
-                  <p>
-                    <span className="font-weight-semibold text-dark font-size-md">
-                      Payment Status:{' '}
-                      {order?.payment?.completed
-                        ? 'Completed'
-                        : 'Not Completed'}
-                    </span>
-                    <br />
-                    {/* <span>8626 Maiden Dr. </span>
-                <br />
-                <span>Niagara Falls, New York 14304</span> */}
-                  </p>
-                </address>
+              <div className="text-right">
+                <p>GSTIN :</p>
+                <p>Drug Licence No :</p>
+               
+             
               </div>
             </div>
+            <div>
+            <h4 className="mb-1 font-weight-semibold">
+              Invoice  No: {order?.invoice?.invoiceNo}
+            </h4>
+            {/* <h4 className="mb-1 font-weight-semibold">
+                Invoice  Date: 
+              </h4> */}
+            <h4 className="mb-1 font-weight-semibold">
+              Order No: {order?.orderNo}
+            </h4>
+            <h4 className="mb-1 font-weight-semibold">
+              Order Date: {moment(new Date(order?.createdAt * 1000)).format('DD-MM-YYYY hh:mm:a')}
+              
+            </h4>
+            {/* <h4 className="mb-1 font-weight-semibold">
+                Customer Name : {order?.items.map((item)=>{
+                  return  item.vendorName
+                })}
+              </h4> */}
+            {/* <h4 className="mb-1 font-weight-semibold">
+               Customer GST No(If Any): 
+              </h4> */}
+          </div>
+          <div className="d-md-flex justify-content-md-between">
+            <div className=''>
+              <h5>Billing Address:</h5>
+              <p>{order?.payment?.billingAddress?.name}</p>
+              <span>
+                {order?.payment?.billingAddress?.addressLine1},
+                {order?.payment?.billingAddress?.city},
+                {order?.payment?.billingAddress?.stateOrRegion},
+              </span>
+              <span>
+                {order?.payment?.billingAddress?.country},
+
+
+                {order?.payment?.billingAddress?.uniqueId}
+              </span>
+
+              <p>Mobile no:{order?.payment?.billingAddress?.mobileNumber}</p>
+
+
+            </div>
+            <div className='text-right'>
+              <h5>Shipping Address:</h5>
+              <p>{order?.shippingAddress?.name}</p>
+              <span>
+                {order?.shippingAddress?.addressLine1},
+                {order?.shippingAddress?.city},
+                {order?.shippingAddress?.stateOrRegion},
+              </span>
+              <span>
+                {order?.shippingAddress?.country},
+
+
+                {order?.shippingAddress?.uniqueId}
+              </span>
+
+              <p>Mobile no:{order?.shippingAddress?.mobileNumber}</p>
+            </div>
+          </div>
             {order?.prescriptions?.length > 0 && (
               <>
                 <p>Prescriptions: </p>
@@ -448,14 +544,21 @@ const OrderView = () => {
                 pagination={false}
                 className="mb-5"
               >
-                <Column title="Product" dataIndex="name" key="name" />
-                <Column title="Quantity" dataIndex="quantity" key="quantity" />
-                <Column title="Price" dataIndex="price" key="price" />
-                <Column
-                  title="Vendor"
-                  dataIndex="vendorName"
-                  key="vendorName"
-                />
+                {/* <Column title="Shipment" dataIndex="shipmentId" key="shipmentId" render={(text) => text ? <Link to={`/app/dashboards/shipments/shipment/shipment-view/${text}`}> {text}</Link> : "Shipment not available"} /> */}
+
+                <Column title="Product Name" dataIndex="name" key="name" />
+                <Column title="HSN" dataIndex="hsn" key="hsn" />
+                <Column title="BATCH" dataIndex="batchNumber" key="batchNumber" />
+                <Column title="EXP" dataIndex="expiryDate" key="expiryDate" />
+                <Column title="QTY" dataIndex="quantity" key="quantity" />
+                <Column title="MRP" dataIndex="basePrice" key="basePrice" />
+                <Column title="DISC" dataIndex="discount" key="discount" />
+                <Column title="TAXABLE" dataIndex="taxableAmount" key="taxableAmount" />
+                <Column title="SGST" dataIndex="sgst" key="sgst" />
+                <Column title="CGST" dataIndex="cgst" key="cgst" />
+                <Column title="AMOUNT" dataIndex="price" key="price" />
+
+                <Column title="Vendor" dataIndex="vendorName" key="vendorName" />
                 {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
                   <Column
                     title="Prescription Required"
@@ -471,7 +574,15 @@ const OrderView = () => {
                 <div className="text-right ">
                   <h2 className="font-weight-semibold mt-3">
 
+                    <span className='mr-1'>shipping Charge: {order?.shippingCharge}
+                    </span>
+                    <div>
+                      {order?.couponCode ? <div className='mr-1'>Coupon Code: {order?.couponCode}
+                      </div> : ""}
 
+                      {order?.discount ? <div className='mr-1'>Discount Amount(-): {order?.discount}
+                      </div> : ""}
+                    </div>
                     <span className="mr-1">Grand Total: </span>₹
                     {order?.totalAmount}
                   </h2>

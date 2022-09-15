@@ -69,7 +69,7 @@ const rules = {
   ],
 }
 
-const GeneralField = ({ form, tempConstants, statuses }) => {
+const GeneralField = ({ form, tempConstants, form_statuses }) => {
   console.log('constants', tempConstants)
   return (
     <Row gutter={16}>
@@ -98,8 +98,11 @@ const GeneralField = ({ form, tempConstants, statuses }) => {
 
           <Form.Item name="status" label="Status" rules={rules.status}>
             <Select placeholder="Status">
-              <Option value="Active">Active</Option>
-              <Option value="Hold">Hold</Option>
+              {form_statuses.map((item) => (
+                <Option key={item.id} value={item}>
+                  {item}
+                </Option>
+              ))}
             </Select>
           </Form.Item>
         </Card>
@@ -166,8 +169,11 @@ const GeneralField = ({ form, tempConstants, statuses }) => {
             <Col xs={24} sm={24} md={16}>
               <Form.Item name="emailStatus" label="Status" rules={rules.status}>
                 <Select placeholder="Status">
-                  <Option value="Active">Active</Option>
-                  <Option value="Hold">Hold</Option>
+                  {form_statuses.map((item) => (
+                    <Option key={item.id} value={item}>
+                      {item}
+                    </Option>
+                  ))}
                 </Select>
               </Form.Item>
             </Col>
@@ -238,8 +244,11 @@ const GeneralField = ({ form, tempConstants, statuses }) => {
             <Col xs={24} sm={24} md={16}>
               <Form.Item name="smsStatus" label="Status" rules={rules.status}>
                 <Select placeholder="Status">
-                  <Option value="Active">Active</Option>
-                  <Option value="Hold">Hold</Option>
+                  {form_statuses.map((item) => (
+                    <Option key={item.id} value={item}>
+                      {item}
+                    </Option>
+                  ))}
                 </Select>
               </Form.Item>
             </Col>
@@ -310,8 +319,11 @@ const GeneralField = ({ form, tempConstants, statuses }) => {
             <Col xs={24} sm={24} md={16}>
               <Form.Item name="fcmStatus" label="Status" rules={rules.status}>
                 <Select placeholder="Status">
-                  <Option value="Active">Active</Option>
-                  <Option value="Hold">Hold</Option>
+                  {form_statuses.map((item) => (
+                    <Option key={item.id} value={item}>
+                      {item}
+                    </Option>
+                  ))}
                 </Select>
               </Form.Item>
             </Col>

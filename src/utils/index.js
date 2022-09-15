@@ -274,9 +274,17 @@ class Utils {
     const categoryList = []
     let category
     if (parentId == null) {
-      category = categories.data.filter((cat) => !cat?.parentId)
+      if(categories?.data) {
+        category = categories.data.filter((cat) => !cat?.parentId)
+      } else {
+        category = categories.filter((cat) => !cat?.parentId)
+      }
     } else {
+      if(categories?.data) {
       category = categories.data.filter((cat) => cat?.parentId === parentId)
+      } else {
+        category = categories.filter((cat) => cat?.parentId === parentId)
+      }
     }
     // eslint-disable-next-line prefer-const
     for (let cate of category) {

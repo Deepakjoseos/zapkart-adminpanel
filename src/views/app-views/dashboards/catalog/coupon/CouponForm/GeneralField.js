@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React, { useState } from 'react'
 import {
   Input,
   Row,
@@ -119,10 +119,10 @@ const GeneralField = ({
   userGroups,
   valueTypes,
   availableTypes,
-  statuses
+  form_statuses
 }) => {
-  const [availableType,setAvailableType] = useState(null)
-  console.log('availableType',availableType)
+  const [availableType, setAvailableType] = useState(null)
+  console.log('availableType', availableType)
   return (
     <Row gutter={16}>
       <Col xs={24} sm={24} md={17}>
@@ -136,19 +136,19 @@ const GeneralField = ({
           </Form.Item>
 
           <Form.Item name="valueType" label="Value Type" rules={rules.valueType}>
-          <Select showSearch
-            optionFilterProp="children"
-            filterOption={(input, option) =>
-              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-            }
-            style={{ width: 150 }}
-          >
-            {valueTypes?.map((item) => (
-              <Option key={item} value={item}>
-                {item}
-              </Option>
-            ))}
-          </Select>
+            <Select showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              style={{ width: 150 }}
+            >
+              {valueTypes?.map((item) => (
+                <Option key={item} value={item}>
+                  {item}
+                </Option>
+              ))}
+            </Select>
           </Form.Item>
 
           <Form.Item name="value" label="Value" rules={rules.priority}>
@@ -169,36 +169,36 @@ const GeneralField = ({
           <Row>
             <Col span={8}>
               <Form.Item
-              name="availableType"
-              label="Available Type"
-              rules={rules.availableType}
-            >
-              <Select placeholder="Available Type"  onChange={value => {
-              setAvailableType(value)
-              }} showSearch
-              optionFilterProp="children"
-              filterOption={(input, option) =>
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }>
-          
-            {availableTypes?.map((item) => (
-              <Option key={item} value={item}>
-                {item}
-              </Option>
-            ))}
-          </Select>
-                
-            </Form.Item>
+                name="availableType"
+                label="Available Type"
+                rules={rules.availableType}
+              >
+                <Select placeholder="Available Type" onChange={value => {
+                  setAvailableType(value)
+                }} showSearch
+                  optionFilterProp="children"
+                  filterOption={(input, option) =>
+                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                  }>
+
+                  {availableTypes?.map((item) => (
+                    <Option key={item} value={item}>
+                      {item}
+                    </Option>
+                  ))}
+                </Select>
+
+              </Form.Item>
             </Col>
-            {availableType === "Limited" ? 
-            <span className="ml-3" >
-            <Col span={16} > 
-             <Form.Item name="available" label="Available" rules={rules.available}>
-              <InputNumber placeholder="Available" min={0} max={100000} />
-            </Form.Item>
-            </Col></span>:"" }
-            
-            
+            {availableType === "Limited" ?
+              <span className="ml-3" >
+                <Col span={16} >
+                  <Form.Item name="available" label="Available" rules={rules.available}>
+                    <InputNumber placeholder="Available" min={0} max={100000} />
+                  </Form.Item>
+                </Col></span> : ""}
+
+
           </Row>
 
 
@@ -315,10 +315,13 @@ const GeneralField = ({
           </Form.Item>
 
           <Form.Item name="status" label="Status" rules={rules.status}>
-          <Select placeholder="Status">
-            <Option value="Active">Active</Option>
-            <Option value="Hold">Hold</Option>
-          </Select>
+            <Select placeholder="Status">
+              {form_statuses.map((item) => (
+                <Option key={item.id} value={item}>
+                  {item}
+                </Option>
+              ))}
+            </Select>
           </Form.Item>
         </Card>
       </Col>

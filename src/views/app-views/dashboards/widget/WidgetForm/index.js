@@ -30,13 +30,13 @@ const WidgetForm = (props) => {
   const [listItems, setListItems] = useState([])
   const [isStaticProviderSelected, setIsStaticProviderSelected] =
     useState(false)
- const [statuses,setStatuses]= useState([])
+ const [form_statuses,setStatuses]= useState([])
  const fetchConstants = async () => {
   const data = await constantsService.getConstants()
   if (data) {
     // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
 
-    setStatuses(Object.values(data.GENERAL['STATUS']))
+    setStatuses(Object.values(data.GENERAL['FORM_STATUS']))
 
   }
 }
@@ -313,7 +313,7 @@ const WidgetForm = (props) => {
         <div className="container">
           <Tabs defaultActiveKey="1" style={{ marginTop: 30 }}>
             <TabPane tab="General" key="1">
-              <GeneralField statuses={statuses}/>
+              <GeneralField form_statuses={form_statuses}/>
             </TabPane>
             <TabPane tab="Widget" key="2">
               <WidgetField

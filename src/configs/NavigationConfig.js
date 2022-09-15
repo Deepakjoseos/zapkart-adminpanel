@@ -232,7 +232,14 @@ const dashBoardNavTree = [
             breadcrumb: false,
             submenu: [],
           },
-
+          {
+            key: 'dashboards-main-banner',
+            path: `${APP_PREFIX_PATH}/dashboards/catalog/main-banner/main-banner-list`,
+            title: 'Main Banner',
+            icon: FileImageOutlined ,
+            breadcrumb: false,
+            submenu: [],
+          },
           {
             key: 'dashboards-catalog-banner',
             path: `${APP_PREFIX_PATH}/dashboards/catalog/banner/banner-list`,
@@ -414,14 +421,7 @@ const dashBoardNavTree = [
         breadcrumb: false,
         submenu: [],
       },
-      {
-        key: 'dashboards-main-banner',
-        path: `${APP_PREFIX_PATH}/dashboards/main-banner`,
-        title: 'Main Banner',
-        icon: FileImageOutlined ,
-        breadcrumb: false,
-        submenu: [],
-      },
+     
       {
         key: 'dashboards-settings',
         path: `${APP_PREFIX_PATH}/dashboards/settings`,

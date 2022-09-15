@@ -32,7 +32,7 @@ const ProductForm = (props) => {
   const [users, setUsers] = useState([])
   const [valueTypes, setValueTypes] = useState([])
   const [availableTypes, setAvailableTypes] = useState([])
-  const [statuses,setStatuses]= useState([])
+  const [form_statuses,setStatuses]= useState([])
 
   const getCategories = async () => {
     const data = await categoryService.getCategories()
@@ -88,7 +88,7 @@ const ProductForm = (props) => {
       // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
       setValueTypes(Object.values(data.COUPON['VALUE_TYPE']))
       setAvailableTypes(Object.values(data.COUPON['AVAILABLE_TYPE']))
-      setStatuses(Object.values(data.GENERAL['STATUS']))
+      setStatuses(Object.values(data.GENERAL['FORM_STATUS']))
     }
   }
 
@@ -265,7 +265,7 @@ const ProductForm = (props) => {
                 userGroups={userGroups}
                 valueTypes={valueTypes}
                 availableTypes={availableTypes}
-                statuses={statuses}
+                form_statuses={form_statuses}
               />
             </TabPane>
           </Tabs>

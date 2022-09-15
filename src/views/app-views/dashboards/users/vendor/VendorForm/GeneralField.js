@@ -25,9 +25,51 @@ const rules = {
       message: 'Required',
     },
   ],
+  gst: [
+    {
+      required: true,
+      message: 'Required',
+    },
+  ],
+  email: [
+    {
+      required: true,
+      message: 'Required',
+    },
+  ],
+  emailVerified: [
+    {
+      required: true,
+      message: 'Required',
+    },
+  ],
+  password: [
+    {
+      required: true,
+      message: 'Required',
+    },
+  ],
+  phone: [
+    {
+      required: true,
+      message: 'Required',
+    },
+  ],
+  pan: [
+    {
+      required: true,
+      message: 'Required',
+    },
+  ],
+  tanNumber: [
+    {
+      required: true,
+      message: 'Required',
+    },
+  ],
 }
 
-const GeneralField = ({ propsDisplayImages, form, mode, emailVerified, phoneVerified, pickupLocations, statuses, userGroups }) => (
+const GeneralField = ({ propsDisplayImages, form, mode, emailVerified, phoneVerified, pickupLocations, form_statuses, userGroups }) => (
   <Row gutter={16}>
     <Col xs={24} sm={24} md={17}>
       <Card title="Basic Info">
@@ -73,17 +115,20 @@ const GeneralField = ({ propsDisplayImages, form, mode, emailVerified, phoneVeri
           <>
             <Form.Item name="status" label="Status" rules={rules.status}>
               <Select placeholder="Status">
-                <Option value="Active">Active</Option>
-                <Option value="Hold">Hold</Option>
+              {form_statuses.map((item) => (
+                <Option key={item.id} value={item}>
+                  {item}
+                </Option>
+              ))}
               </Select>
             </Form.Item>
-            <Form.Item name="emailVerified" label="Emal Verified" rules={rules.status}>
+            <Form.Item name="emailVerified" label="Emal Verified" rules={rules.emailVerified}>
               <Select placeholder="Email Verified">
                 <Option value={true}>Yes</Option>
                 <Option value={false}>No</Option>
               </Select>
             </Form.Item>
-            <Form.Item name="phone" label="Phone" rules={rules.pan}>
+            <Form.Item name="phone" label="Phone" rules={rules.pone}>
               <Input placeholder="Phone" />
             </Form.Item>
             <Form.Item
@@ -95,7 +140,7 @@ const GeneralField = ({ propsDisplayImages, form, mode, emailVerified, phoneVeri
             </Form.Item>
 
 
-            <Form.Item name="email" label="Email">
+            <Form.Item name="email" label="Email" rules={rules.email}>
               <Input />
             </Form.Item>
 
@@ -216,7 +261,9 @@ const GeneralField = ({ propsDisplayImages, form, mode, emailVerified, phoneVeri
       <Card title="Display Image">
         <Upload listType="picture-card" name="image" {...propsDisplayImages} accept="image/*">
           <CustomIcon className="display-3" svg={ImageSvg} />
+         
         </Upload>
+       size: 150px * 150px
       </Card>
     </Col>
   </Row>

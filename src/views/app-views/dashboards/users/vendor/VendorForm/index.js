@@ -38,7 +38,7 @@ const ProductForm = (props) => {
   const [selectedVendorId, setSelectedCustomerId] = useState(null)
   const [phoneVerified, setPhoneVerified] = useState(false)
   const [emailVerified, setEmailVerified] = useState(false)
-  const [statuses,setStatuses] = useState([])
+  const [form_statuses,setStatuses] = useState([])
   const [groupList,setGroupList] = useState([])
 
 
@@ -63,7 +63,7 @@ const ProductForm = (props) => {
     if (data) {
       // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
 
-      setStatuses(Object.values(data.GENERAL['STATUS']))
+      setStatuses(Object.values(data.GENERAL['FORM_STATUS']))
 
     }
   }
@@ -301,7 +301,7 @@ const ProductForm = (props) => {
               <GeneralField
                 propsDisplayImages={propsDisplayImages}
                 form={form} mode={mode} emailVerified={emailVerified} phoneVerified={phoneVerified}
-               statuses={statuses} userGroups={groupList}
+               form_statuses={form_statuses} userGroups={groupList}
               />
             </TabPane>
             {/* <TabPane tab="PickUpLocations" key="2">
