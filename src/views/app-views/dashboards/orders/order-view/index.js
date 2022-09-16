@@ -12,6 +12,7 @@ import { useReactToPrint } from 'react-to-print'
 import customerService from 'services/customer'
 import PrescriptionSelector from './PrescriptionSelector'
 import CreateInvoiceForm from './CreateInvoiceForm'
+import './Order.css'
 
 const { Column } = Table
 const { Option } = Select
@@ -225,7 +226,7 @@ const OrderView = () => {
             <div className="text-right">
 
               <p>GSTIN:</p>
-              <p>Drug Licence No:</p>
+              <p>Drug License No:</p>
 
               <p>
                 Order Date:
@@ -441,14 +442,33 @@ const OrderView = () => {
       <div style={{ display: 'none' }}>
         <div ref={componentRef}>
           <Card>
+            <Flex justifyContent="end">
+            
+              <h1 className='text'>Zapkart </h1>
+              
+              
+                 <h2 className='happy'>Retail Invoice/Bill</h2>
+                
+                <h4 className='hello1'>Customer Care: 7736192811</h4> 
+         
+               
+            </Flex>
+          
+          <hr className='line'/>
+         
+          <br/><br/>
+          
+          
+          
+      
             <div className="d-md-flex justify-content-md-between">
               <div>
                 <address>
                   <p>
-                    <span className="font-weight-semibold text-dark font-size-md">
+                    <span className="font-weight-semibold text-dark font-size-lg">
                       {order?.userName}
                     </span>
-                    <br />
+                   
                     {/* <span>Invoice No: {order?.invoice?.invoiceNo}</span> */}
                     <br />
                     <span>
@@ -459,28 +479,28 @@ const OrderView = () => {
                       {order?.shippingAddress?.country}
                     </span>
                     <br />
-                    <abbr className="text-dark" title="Phone">
-                      Phone:{' '}
-                    </abbr>
+                    <p className="" title="Phone">
+                      Phone: {' '}
+                   
                     <span>{order?.shippingAddress?.mobileNumber}</span>
-                    <br />
-                    <abbr className="text-dark" title="Phone">
-                      Address Type:{' '}
-                    </abbr>
-                    <span>{order?.shippingAddress?.addressType}</span>
+                  
+                    </p>
+                    
+                 
                   </p>
                 </address>
               </div>
               <div className="text-right">
                 <p>GSTIN :</p>
-                <p>Drug Licence No :</p>
+                <p>Drug License No :</p>
+                <hr className='line'/>
                
              
               </div>
             </div>
             <div>
             <h4 className="mb-1 font-weight-semibold">
-              Invoice  No: {order?.invoice?.invoiceNo}
+              Invoice No: {order?.invoice?.invoiceNo}
             </h4>
             {/* <h4 className="mb-1 font-weight-semibold">
                 Invoice  Date: 
@@ -536,7 +556,7 @@ const OrderView = () => {
                 {order?.shippingAddress?.uniqueId}
               </span>
 
-              <p>Mobile no:{order?.shippingAddress?.mobileNumber}</p>
+              <p>Mobile No:{order?.shippingAddress?.mobileNumber}</p>
             </div>
           </div>
             {order?.prescriptions?.length > 0 && (
@@ -583,7 +603,7 @@ const OrderView = () => {
                 <div className="text-right ">
                   <h2 className="font-weight-semibold mt-3">
 
-                    <span className='mr-1'>shipping Charge: {order?.shippingCharge}
+                    <span className='mr-1'>Shipping Charge: {order?.shippingCharge}
                     </span>
                     <div>
                       {order?.couponCode ? <div className='mr-1'>Coupon Code: {order?.couponCode}

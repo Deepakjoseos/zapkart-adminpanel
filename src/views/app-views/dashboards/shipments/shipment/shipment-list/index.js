@@ -178,6 +178,7 @@ const ShipmentList = () => {
         </Flex>
       </Menu.Item> */}
     </Menu>
+    
   )
 
   const addShipment = () => {
@@ -211,7 +212,7 @@ const ShipmentList = () => {
   // Antd Table Columns
   const tableColumns = [
     {
-      title: 'ShipmentId',
+      title: 'Shipment Id',
       dataIndex: 'id',
       render: (text) => <Link to={`/app/dashboards/shipments/shipment/shipment-view/${text}`}>
         {text}
@@ -231,7 +232,7 @@ const ShipmentList = () => {
                 </Link>
 
               </div>
-              <div>Products: {item?.items?.map((cur) => `${cur.name}, `)}</div>
+             
             </>
           ))}
         </div>
@@ -239,7 +240,7 @@ const ShipmentList = () => {
       sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
     },
     {
-      title: 'shippedByVendor',
+      title: 'Shipped By Vendor',
       dataIndex: 'shippedByVendor',
       render: (text) => <div>{text ? 'Yes' : 'No'}</div>,
     },
@@ -253,15 +254,7 @@ const ShipmentList = () => {
       dataIndex: 'actions',
       render: (_, elm) => (
         <Flex>
-          {!elm.shippedByVendor && (
-            <Button
-              type="primary"
-              className="ml-auto"
-              onClick={() => requestPickupOrder(elm.id)}
-            >
-              Request Shipment
-            </Button>
-          )}
+
 
           {elm.status !== 'Cancelled' && (
             <Button
@@ -327,15 +320,6 @@ const ShipmentList = () => {
     </Flex>
   )
 
-  const requestPickupOrder = async (shipmentId) => {
-    const resp = await shipmentService.requestPickupOrder({ shipmentId })
-    if (resp) {
-      notification.success({
-        message: 'Success',
-        description: 'Request pickup order successfully',
-      })
-    }
-  }
 
   const cancelShipment = async (shipmentId) => {
     const resp = await shipmentService.shipmentCancel({ shipmentId })

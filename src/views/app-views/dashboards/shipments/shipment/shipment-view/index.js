@@ -9,14 +9,26 @@ import orderService from 'services/orders'
 import Flex from 'components/shared-components/Flex'
 import moment from 'moment'
 import { useReactToPrint } from 'react-to-print'
-import customerService from 'services/customer'
+
 // import PrescriptionSelector from './PrescriptionSelector'
 import shipmentService from 'services/shipment'
-import utils from 'utils'
 
 
-const { Column } = Table
-const { Option } = Select
+
+
+const requestPickupOrder = async (id) => {
+  const data = await shipmentService.requestPickupOrder({
+    shipmentId:id,
+  })
+  if (data) {
+    notification.success({
+      message: 'Success',
+      description: 'Request pickup successful',
+    })
+    // getShipments()
+  }
+}
+
 const ShipmentView = () => {
   const { id } = useParams()
   const [shipment, setShipment] = useState({})
@@ -55,6 +67,8 @@ const ShipmentView = () => {
 
   useEffect(() => {
     getShipmentById()
+    requestPickupOrder()
+
     console.log('shipmnt', id)
 
   }, [id])
@@ -222,13 +236,21 @@ const ShipmentView = () => {
           >
             Generate Invoice
           </Button>
+          <Button onClick={() => requestPickupOrder(id)}  type="primary">
+        
+          <span className="ml-2">requestPickupOrder</span>
+        
+      </Button>
         </div>
+
       </Flex>
+      <br/> <br/> 
+     
         <h3>Shipment</h3>
         {shipment?.items?.map((item, index) => (
           <>
             <div>
-              <span>OrderId:</span>
+              <span>Order Id:</span>
               <Link to={`/app/dashboards/orders/order-view/${item.orderId}`}>
                 {item?.orderId}
               </Link>
