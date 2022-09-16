@@ -634,7 +634,7 @@ const ProductList = () => {
             </Select>
           </Form.Item>
         </Col>
-        <Col md={6} sm={24} xs={24} lg={6}>
+        {/* <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item name="acquirementMethod" label="Acquirement Method">
             <Select
               showSearch
@@ -656,7 +656,7 @@ const ProductList = () => {
               <Option value="Giveaway">Giveaway</Option>
             </Select>
           </Form.Item>
-        </Col>
+        </Col> */}
 
         <Col className="mb-4">
           <Button type="primary" onClick={handleFilterSubmit}>
