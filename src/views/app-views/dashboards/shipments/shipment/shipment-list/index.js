@@ -213,22 +213,22 @@ const ShipmentList = () => {
   const tableColumns = [
     {
       title: 'Shipment Id',
-      dataIndex: 'id',
+      dataIndex: 'shipmentNo',
       render: (text) => <Link to={`/app/dashboards/shipments/shipment/shipment-view/${text}`}>
         {text}
       </Link>
     },
     {
-      title: 'Shipment',
+      title: 'Orders',
       dataIndex: 'items',
       render: (_, record) => (
         <div>
           {record.items.map((item, index) => (
             <>
               <div>
-                <span>OrderId:</span>
+                <span>Order Number:</span>
                 <Link to={`/app/dashboards/orders/order-view/${item.orderId}`}>
-                  {item?.orderId}
+                  {item?.orderNo}
                 </Link>
 
               </div>

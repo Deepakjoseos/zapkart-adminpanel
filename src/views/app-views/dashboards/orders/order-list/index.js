@@ -264,28 +264,28 @@ const Orders = () => {
         </Link>
       ),
     },
-    {
-      title: 'shipment',
-      dataIndex: 'items',
-      render: (items) => {
-        return (
-          <>
-            {items?.map((item) => (
-              <>
-              {item.shipmentId ? 
-              <Link to={`/app/dashboards/shipments/shipment/shipment-view/${item.shipmentId}`}> {item.shipmentId}</Link>
-              :
-              "No shipment"}
-                {/* {item.shipmentId ? item.shipmentId :"No Shipment"} */}
-                {/* <p>Type:{group.type}</p>
-          <p>Status:{group.status}</p> */}
-              </>
-            ))}
-          </>
-        )
-      },
-      // sorter: (a, b) => utils.antdTableSorter(a, b, 'lastname'),
-    },
+    // {
+    //   title: 'shipment',
+    //   dataIndex: 'items',
+    //   render: (items) => {
+    //     return (
+    //       <>
+    //         {items?.map((item) => (
+    //           <>
+    //           {item.shipmentId ? 
+    //           <Link to={`/app/dashboards/shipments/shipment/shipment-view/${item.shipmentId}`}> {item.shipmentId}</Link>
+    //           :
+    //           "No shipment"}
+    //             {/* {item.shipmentId ? item.shipmentId :"No Shipment"} */}
+    //             {/* <p>Type:{group.type}</p>
+    //       <p>Status:{group.status}</p> */}
+    //           </>
+    //         ))}
+    //       </>
+    //     )
+    //   },
+    //   // sorter: (a, b) => utils.antdTableSorter(a, b, 'lastname'),
+    // },
 
     {
       title: 'Customer Name',
