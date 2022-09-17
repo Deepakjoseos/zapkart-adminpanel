@@ -657,7 +657,7 @@ const GeneralField = ({
           <Form.Item
             name="lengthClass"
             label="Length Class"
-            rules={rules.lengthClass}
+            // rules={rules.lengthClass}
           >
             <Select
               style={{ width: 150 }}
@@ -673,7 +673,7 @@ const GeneralField = ({
           <Form.Item
             name="weightClass"
             label="Weight Class"
-            rules={rules.weightClass}
+            // rules={rules.weightClass}
           >
 
 
@@ -691,19 +691,19 @@ const GeneralField = ({
 
           </Form.Item>
 
-          <Form.Item name="height" label="Height" rules={rules.height}>
+          <Form.Item name="height" label="Height" >
             <InputNumber type="number" min={0} max={100000} />
           </Form.Item>
 
-          <Form.Item name="length" label="Length" rules={rules.length}>
+          <Form.Item name="length" label="Length" >
             <InputNumber type="number" min={0} max={100000} />
           </Form.Item>
 
-          <Form.Item name="width" label="Width" rules={rules.width}>
+          <Form.Item name="width" label="Width">
             <InputNumber type="number" min={0} max={100000} />
           </Form.Item>
 
-          <Form.Item name="weight" label="Weight" rules={rules.weight}>
+          <Form.Item name="weight" label="Weight" >
             <InputNumber type="number" min={0} max={100000} />
           </Form.Item>
         </Card>

@@ -147,7 +147,7 @@ const ShipmentList = () => {
           <span className="ml-2">View Details</span>
         </Flex>
       </Menu.Item>
-      <Menu.Item onClick={() => generateAwb(row.id)}>
+      {/* <Menu.Item onClick={() => generateAwb(row.id)}>
         <Flex alignItems="center">
           <span className="ml-2">Generate AWB</span>
         </Flex>
@@ -166,7 +166,7 @@ const ShipmentList = () => {
         <Flex alignItems="center">
           <span className="ml-2">Generate Invoice</span>
         </Flex>
-      </Menu.Item>
+      </Menu.Item> */}
       {/* <Menu.Item onClick={() => deleteRow(row)}>
         <Flex alignItems="center">
           <DeleteOutlined />

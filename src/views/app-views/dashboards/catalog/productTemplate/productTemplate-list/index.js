@@ -612,8 +612,8 @@ const ProductTemplateList = () => {
           placeholder="Prescription Required"
         >
           <Option value="">All</Option>
-          <Option value="Yes">Yes</Option>
-          <Option value="No">No</Option>
+          <Option value="true">Yes</Option>
+          <Option value="false">No</Option>
         </Select>
           </Form.Item>
         </Col>

@@ -269,7 +269,7 @@ const OrderView = () => {
             </h4>
             <h4 className="mb-1 font-weight-semibold">
               Order Date: {moment(new Date(order?.createdAt * 1000)).format('DD-MM-YYYY hh:mm:a')}
-              
+
             </h4>
             {/* <h4 className="mb-1 font-weight-semibold">
                 Customer Name : {order?.items.map((item)=>{
@@ -442,33 +442,40 @@ const OrderView = () => {
       <div style={{ display: 'none' }}>
         <div ref={componentRef}>
           <Card>
-            <Flex justifyContent="end">
-            
-              <h1 className='text'>Zapkart </h1>
-              
-              
-                 <h2 className='happy'>Retail Invoice/Bill</h2>
-                
-                <h4 className='hello1'>Customer Care: 7736192811</h4> 
-         
-               
-            </Flex>
-          
-          <hr className='line'/>
-         
-          <br/><br/>
-          
-          
-          
-      
+
+
+            <hr className='line' />
+
+            <br /><br />
+
+
+
+
             <div className="d-md-flex justify-content-md-between">
               <div>
+                <div className='logo' style={{ width: 250 }}>
+                  <img src="/img/logo.png" alt="Ecommerce logo" />
+                </div>
+                <Flex justifyContent="end">
+
+                  {/* <h1 className='text'>Zapkart </h1> */}
+
+
+                  
+
+                  <div>
+                    <h2 className='happy'>Retail Invoice/Bill</h2>
+                  <h4 className='hello1'>Customer Care: 9778418822/Email:care@zapkart.com</h4>
+                  </div>
+
+
+                </Flex>
                 <address>
                   <p>
                     <span className="font-weight-semibold text-dark font-size-lg">
                       {order?.userName}
                     </span>
-                   
+
                     {/* <span>Invoice No: {order?.invoice?.invoiceNo}</span> */}
                     <br />
                     <span>
@@ -481,84 +488,84 @@ const OrderView = () => {
                     <br />
                     <p className="" title="Phone">
                       Phone: {' '}
-                   
-                    <span>{order?.shippingAddress?.mobileNumber}</span>
-                  
+
+                      <span>{order?.shippingAddress?.mobileNumber}</span>
+
                     </p>
-                    
-                 
+
+
                   </p>
                 </address>
               </div>
               <div className="text-right">
                 <p>GSTIN :</p>
                 <p>Drug License No :</p>
-                <hr className='line'/>
-               
-             
+                <hr className='line' />
+
+
               </div>
             </div>
             <div>
-            <h4 className="mb-1 font-weight-semibold">
-              Invoice No: {order?.invoice?.invoiceNo}
-            </h4>
-            {/* <h4 className="mb-1 font-weight-semibold">
+              <h4 className="mb-1 font-weight-semibold">
+                Invoice No: {order?.invoice?.invoiceNo}
+              </h4>
+              {/* <h4 className="mb-1 font-weight-semibold">
                 Invoice  Date: 
               </h4> */}
-            <h4 className="mb-1 font-weight-semibold">
-              Order No: {order?.orderNo}
-            </h4>
-            <h4 className="mb-1 font-weight-semibold">
-              Order Date: {moment(new Date(order?.createdAt * 1000)).format('DD-MM-YYYY hh:mm:a')}
-              
-            </h4>
-            {/* <h4 className="mb-1 font-weight-semibold">
+              <h4 className="mb-1 font-weight-semibold">
+                Order No: {order?.orderNo}
+              </h4>
+              <h4 className="mb-1 font-weight-semibold">
+                Order Date: {moment(new Date(order?.createdAt * 1000)).format('DD-MM-YYYY hh:mm:a')}
+
+              </h4>
+              {/* <h4 className="mb-1 font-weight-semibold">
                 Customer Name : {order?.items.map((item)=>{
                   return  item.vendorName
                 })}
               </h4> */}
-            {/* <h4 className="mb-1 font-weight-semibold">
+              {/* <h4 className="mb-1 font-weight-semibold">
                Customer GST No(If Any): 
               </h4> */}
-          </div>
-          <div className="d-md-flex justify-content-md-between">
-            <div className=''>
-              <h5>Billing Address:</h5>
-              <p>{order?.payment?.billingAddress?.name}</p>
-              <span>
-                {order?.payment?.billingAddress?.addressLine1},
-                {order?.payment?.billingAddress?.city},
-                {order?.payment?.billingAddress?.stateOrRegion},
-              </span>
-              <span>
-                {order?.payment?.billingAddress?.country},
-
-
-                {order?.payment?.billingAddress?.uniqueId}
-              </span>
-
-              <p>Mobile no:{order?.payment?.billingAddress?.mobileNumber}</p>
-
-
             </div>
-            <div className='text-right'>
-              <h5>Shipping Address:</h5>
-              <p>{order?.shippingAddress?.name}</p>
-              <span>
-                {order?.shippingAddress?.addressLine1},
-                {order?.shippingAddress?.city},
-                {order?.shippingAddress?.stateOrRegion},
-              </span>
-              <span>
-                {order?.shippingAddress?.country},
+            <div className="d-md-flex justify-content-md-between">
+              <div className=''>
+                <h5>Billing Address:</h5>
+                <p>{order?.payment?.billingAddress?.name}</p>
+                <span>
+                  {order?.payment?.billingAddress?.addressLine1},
+                  {order?.payment?.billingAddress?.city},
+                  {order?.payment?.billingAddress?.stateOrRegion},
+                </span>
+                <span>
+                  {order?.payment?.billingAddress?.country},
 
 
-                {order?.shippingAddress?.uniqueId}
-              </span>
+                  {order?.payment?.billingAddress?.uniqueId}
+                </span>
 
-              <p>Mobile No:{order?.shippingAddress?.mobileNumber}</p>
+                <p>Mobile no:{order?.payment?.billingAddress?.mobileNumber}</p>
+
+
+              </div>
+              <div className='text-right'>
+                <h5>Shipping Address:</h5>
+                <p>{order?.shippingAddress?.name}</p>
+                <span>
+                  {order?.shippingAddress?.addressLine1},
+                  {order?.shippingAddress?.city},
+                  {order?.shippingAddress?.stateOrRegion},
+                </span>
+                <span>
+                  {order?.shippingAddress?.country},
+
+
+                  {order?.shippingAddress?.uniqueId}
+                </span>
+
+                <p>Mobile No:{order?.shippingAddress?.mobileNumber}</p>
+              </div>
             </div>
-          </div>
             {order?.prescriptions?.length > 0 && (
               <>
                 <p>Prescriptions: </p>
@@ -663,7 +670,7 @@ const OrderView = () => {
         orderId={order?.id}
       />
 
-      <CreateInvoiceForm items={order?.items} isInvoiceFormOpen={isInvoiceFormOpen} setIsInvoiceFormOpen={setIsInvoiceFormOpen} orderId={order?.id}/>
+      <CreateInvoiceForm items={order?.items} isInvoiceFormOpen={isInvoiceFormOpen} setIsInvoiceFormOpen={setIsInvoiceFormOpen} orderId={order?.id} />
     </div>
   )
 }
