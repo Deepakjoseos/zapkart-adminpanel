@@ -11,76 +11,76 @@ import {
   Row,
   Select,
   Space,
-} from 'antd'
-import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
-import PageHeaderAlt from 'components/layout-components/PageHeaderAlt'
-import Flex from 'components/shared-components/Flex'
-import React, { useEffect, useState } from 'react'
-import { useHistory } from 'react-router-dom'
-import productService from 'services/product'
-import customerService from 'services/customer'
-import PrescriptionSelector from './PrescriptionSelector'
-import orderService from 'services/orders'
-import { EventSourcePolyfill } from 'event-source-polyfill'
-import OrderComplete from './OrderComplete'
-import qs from 'qs'
+} from "antd";
+import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
+import PageHeaderAlt from "components/layout-components/PageHeaderAlt";
+import Flex from "components/shared-components/Flex";
+import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
+import productService from "services/product";
+import customerService from "services/customer";
+import PrescriptionSelector from "./PrescriptionSelector";
+import orderService from "services/orders";
+import { EventSourcePolyfill } from "event-source-polyfill";
+import OrderComplete from "./OrderComplete";
+import qs from "qs";
 
 const OrderCreate = () => {
-  const { Option } = Select
-  const [form] = Form.useForm()
-  const history = useHistory()
+  const { Option } = Select;
+  const [form] = Form.useForm();
+  const history = useHistory();
 
-  const [submitLoading, setSubmitLoading] = useState(false)
-  const [products, setProducts] = useState([])
-  const [customers, setCustomers] = useState([])
-  const [selectedCustomer, setSelectedCustomer] = useState(null)
+  const [submitLoading, setSubmitLoading] = useState(false);
+  const [products, setProducts] = useState([]);
+  const [customers, setCustomers] = useState([]);
+  const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [isShippingAndBillingAddressSame, setIsShippingAndBillingAddressSame] =
-    useState(true)
-  const [customerPrescriptions, setCustomerPrescriptions] = useState([])
-  const [selectedPrescriptions, setSelectedPrescriptions] = useState([])
-  const [isPrescriptionRequired, setIsPrescriptionRequired] = useState(false)
+    useState(true);
+  const [customerPrescriptions, setCustomerPrescriptions] = useState([]);
+  const [selectedPrescriptions, setSelectedPrescriptions] = useState([]);
+  const [isPrescriptionRequired, setIsPrescriptionRequired] = useState(false);
 
-  const [currentViewMode, setCurrentViewMode] = useState('order-create')
-  const [isCheckoutEvenStarted, setIsCheckoutEventStarted] = useState(false)
-  const [requestId, setRequestId] = useState(null)
-  const [paymentId, setPaymentId] = useState(null)
-  const [paymentLoading, setPaymentLoading] = useState(false)
-  const [razorpayItems, setRazorpayItems] = useState(null)
-  const [availablePaymentMethods, setAvailablePaymentMethods] = useState([])
-  const [loading,setLoading] = useState([])
+  const [currentViewMode, setCurrentViewMode] = useState("order-create");
+  const [isCheckoutEvenStarted, setIsCheckoutEventStarted] = useState(false);
+  const [requestId, setRequestId] = useState(null);
+  const [paymentId, setPaymentId] = useState(null);
+  const [paymentLoading, setPaymentLoading] = useState(false);
+  const [razorpayItems, setRazorpayItems] = useState(null);
+  const [availablePaymentMethods, setAvailablePaymentMethods] = useState([]);
+  const [loading, setLoading] = useState([]);
 
   const rules = {
     name: [
       {
         required: true,
-        message: 'Required',
+        message: "Required",
       },
     ],
     description: [
       {
         required: true,
-        message: 'Required',
+        message: "Required",
       },
     ],
     image: [
       {
         required: true,
-        message: 'required',
+        message: "required",
       },
     ],
     status: [
       {
         required: true,
-        message: 'Required',
+        message: "Required",
       },
     ],
     priority: [
       {
         required: true,
-        message: 'Required',
+        message: "Required",
       },
     ],
-  } 
+  };
 
   // const getProducts = (paginationParams = {}, filterParams={userId:selectedCustomerId}) => {
   //   const data = await productService.getProducts()
@@ -99,79 +99,82 @@ const OrderCreate = () => {
     limit: params.pagination?.pageSize,
     page: params.pagination?.current,
     // ...params,
-  })
-    const getProducts = async (paginationParams = {}, filterParams={status:'Active',approval:'Approved'}) => {
-      setLoading(true)
-      const data = await productService.getProducts(
-        qs.stringify(getPaginationParams(paginationParams)),
-        qs.stringify(filterParams)
-      )
-    
-      if (data) {
-        const productList = data.data.map((product) => {
-          return {
-            ...product,
-            productname: product?.variant?.name
-              ? product?.variant?.name
-              : product?.name,
-          }
-        })
-        setProducts(productList)
-  }
-}
+  });
+  const getProducts = async (
+    paginationParams = {},
+    filterParams = { status: "Active", approval: "Approved" }
+  ) => {
+    setLoading(true);
+    const data = await productService.getProducts(
+      qs.stringify(getPaginationParams(paginationParams)),
+      qs.stringify(filterParams)
+    );
+
+    if (data) {
+      const productList = data.data.map((product) => {
+        return {
+          ...product,
+          productname: product?.variant?.name
+            ? product?.variant?.name
+            : product?.name,
+        };
+      });
+      setProducts(productList);
+    }
+  };
 
   const getCustomers = async () => {
-    const data = await customerService.getCustomers()
+    const data = await customerService.getCustomers();
     if (data) {
       const customerList = data.map((customer) => {
         return {
           ...customer,
           fullName: `${customer?.firstName} ${customer?.lastName}`,
-        }
-      })
-      setCustomers(customerList)
+        };
+      });
+      setCustomers(customerList);
     }
-  }
+  };
 
   const getCustomerPrescriptions = async (customerId) => {
-    const data = await customerService.getCustomerPrescription(customerId)
+    const data = await customerService.getCustomerPrescription(customerId);
     if (data) {
-      setCustomerPrescriptions(data.prescriptions)
+      setCustomerPrescriptions(data.prescriptions);
     }
-  }
+  };
 
   const getCustomerById = async (id) => {
-    const customer = customers.find((cur) => cur.id === id)
-    setSelectedCustomer(customer)
+    const customer = customers.find((cur) => cur.id === id);
+    setSelectedCustomer(customer);
 
-    await getCustomerPrescriptions(id)
-  }
+    await getCustomerPrescriptions(id);
+  };
 
   const onSetSameAddressCheckChange = (e) => {
     if (e.target.checked) {
       form.setFieldsValue({
-        billingAddressId: form.getFieldValue('shippingAddressId'),
-      })
-      setIsShippingAndBillingAddressSame(true)
+        billingAddressId: form.getFieldValue("shippingAddressId"),
+      });
+      setIsShippingAndBillingAddressSame(true);
     } else {
-      setIsShippingAndBillingAddressSame(false)
+      setIsShippingAndBillingAddressSame(false);
     }
-  }
+  };
 
   useEffect(() => {
-    getProducts()
-    getCustomers()
-  }, [])
+    getProducts();
+    getCustomers();
+  }, []);
 
   const onFinish = async () => {
-    setSubmitLoading(true)
+    setSubmitLoading(true);
     form
       .validateFields()
       .then(async (values) => {
         if (isPrescriptionRequired && selectedPrescriptions.length === 0) {
-          message.error('Please select atleast one prescription')
-          setSubmitLoading(false)
-          return
+          message.error("Please select atleast one prescription");
+          setSubmitLoading(false);
+          return;
         }
 
         const sendingData = {
@@ -182,136 +185,136 @@ const OrderCreate = () => {
             ? values.shippingAddressId
             : values.billingAddressId,
           prescriptions: selectedPrescriptions ? selectedPrescriptions : [],
-        }
-        if (values.couponCode !== '') {
-          sendingData.couponCode = values.couponCode
+        };
+        if (values.couponCode !== "") {
+          sendingData.couponCode = values.couponCode;
         }
 
         const createOrder = await orderService.createOrder(
           values.customerId,
           sendingData
-        )
+        );
 
         if (createOrder) {
-          setPaymentLoading(true)
+          setPaymentLoading(true);
           // notification.success({
           //   message: 'Success',
           //   description: 'Order created successfully',
           // })
 
-          console.log(createOrder, 'showww')
+          console.log(createOrder, "showww");
 
-          setIsCheckoutEventStarted(true)
-          setRequestId(createOrder.requestId)
+          setIsCheckoutEventStarted(true);
+          setRequestId(createOrder.requestId);
 
           notification.success({
-            message: 'Success',
-            description: 'Please Wait Order Is Being Proccessing...',
-          })
+            message: "Success",
+            description: "Please Wait Order Is Being Proccessing...",
+          });
           // history.push('/app/dashboards/orders/orders-list')
         } else {
-          setPaymentLoading(false)
+          setPaymentLoading(false);
         }
-        setSubmitLoading(false)
+        setSubmitLoading(false);
       })
       .catch((info) => {
-        setSubmitLoading(false)
-        console.log('info', info)
+        setSubmitLoading(false);
+        console.log("info", info);
         // message.error('Please enter all required field ')
-      })
-    setSubmitLoading(false)
-  }
+      });
+    setSubmitLoading(false);
+  };
 
   const checkPrescriptionRequired = () => {
-    const productsval = form.getFieldValue('items')
+    const productsval = form.getFieldValue("items");
 
     if (products) {
-      const ids = productsval?.map((cur) => cur.id)
-      console.log(ids, 'plkss')
+      const ids = productsval?.map((cur) => cur.id);
+      console.log(ids, "plkss");
 
       if (ids) {
         const prescriptionRequired = products.some(
           (cur) => ids.includes(cur.id) && cur.prescriptionRequired
-        )
+        );
 
-        setIsPrescriptionRequired(prescriptionRequired)
+        setIsPrescriptionRequired(prescriptionRequired);
       }
     }
-  }
+  };
 
   // Checkout Events
   useEffect(() => {
     if (isCheckoutEvenStarted && requestId) {
       let baseurl;
 
-      if(process.env.REACT_APP_SITE_NAME === 'athathy') {
-        baseurl = 'https://www.ecommercetest2.riolabz.com'
+      if (process.env.REACT_APP_SITE_NAME === "athathy") {
+        baseurl = "https://www.ecommercetest2.riolabz.com";
       } else {
-        if(process.env.NODE_ENV === 'development') {
-          baseurl = 'https://www.ecommerce.riolabz.com'
-        } else if (process.env.NODE_ENV === 'production') {
-          baseurl = 'https://ecommercelive.riolabz.com'
+        if (process.env.NODE_ENV === "development") {
+          baseurl = "https://www.ecommerce.riolabz.com";
+        } else if (process.env.NODE_ENV === "production") {
+          baseurl = "https://ecommercelive.riolabz.com";
         }
       }
 
-      const customerId = selectedCustomer.id
+      const customerId = selectedCustomer.id;
 
-      console.log(customerId, 'sgvcdgjh')
+      console.log(customerId, "sgvcdgjh");
 
       let eventSourcePaymentRequired = new EventSourcePolyfill(
         `${baseurl}/api/v1/events/order/${customerId}/Payment_Required`,
         {
           headers: {
             Authorization:
-              'Bearer ' + window.localStorage.getItem('auth_token'),
-            Connection: 'Keep-Alive',
-            'Keep-Alive': { timeout: 6000, max: 1000 },
+              "Bearer " + window.localStorage.getItem("auth_token"),
+            Connection: "Keep-Alive",
+            "Keep-Alive": { timeout: 6000, max: 1000 },
           },
           heartbeatTimeout: 600 * 1000,
         }
-      )
+      );
 
       eventSourcePaymentRequired.onmessage = (e) => {
-        console.log(JSON.parse(e.data), 'Payment_Required => SUCCESS')
+        console.log(JSON.parse(e.data), "Payment_Required => SUCCESS");
 
-        const data = JSON.parse(e.data)
+        const data = JSON.parse(e.data);
 
-        console.log(data.requestId, requestId, 'reqqqqq')
+        console.log(data.requestId, requestId, "reqqqqq");
 
         if (requestId === data.requestId) {
-          setPaymentId(data.paymentId)
+          setPaymentId(data.paymentId);
 
-          setCurrentViewMode('payment')
+          setCurrentViewMode("payment");
 
           const formattedAvailablePaymentMethods =
             data.availablePaymentMethods?.map((curMethod, i) => {
               return {
-                label: curMethod === 'Cod' ? 'Cash On Delivery' : curMethod,
+                label: curMethod === "Cod" ? "Cash On Delivery" : curMethod,
                 value: curMethod,
                 // name: 'payment',
-                defaultChecked: curMethod === 'PaymentLink',
-              }
-            })
+                defaultChecked: curMethod === "PaymentLink",
+              };
+            });
 
-          setAvailablePaymentMethods(formattedAvailablePaymentMethods)
-          setPaymentLoading(false)
+          setAvailablePaymentMethods(formattedAvailablePaymentMethods);
+          setPaymentLoading(false);
         } else {
           notification.error({
-            message: 'Request Id is not valid',
-            description: 'Cannot Order Because Request Id is not matched',
-          })
+            message: "Request Id is not valid",
+            description: "Cannot Order Because Request Id is not matched",
+          });
 
-          setPaymentLoading(false)
+          setPaymentLoading(false);
         }
 
         // setdata(JSON.parse(e.data))
         // seteventype('payment')
-        eventSourcePaymentRequired.close()
-      }
+        eventSourcePaymentRequired.close();
+      };
       eventSourcePaymentRequired.onerror = (e) => {
-        eventSourcePaymentRequired.close()
-        console.log('PAYMENT_REQUIRED', e)
-      }
+        eventSourcePaymentRequired.close();
+        console.log("PAYMENT_REQUIRED", e);
+      };
 
       // ORDER_FALIED
       let eventSourceOrderFailed = new EventSourcePolyfill(
@@ -319,31 +322,31 @@ const OrderCreate = () => {
         {
           headers: {
             Authorization:
-              'Bearer ' + window.localStorage.getItem('auth_token'),
-            Connection: 'Keep-Alive',
-            'Keep-Alive': { timeout: 6000, max: 1000 },
+              "Bearer " + window.localStorage.getItem("auth_token"),
+            Connection: "Keep-Alive",
+            "Keep-Alive": { timeout: 6000, max: 1000 },
           },
           heartbeatTimeout: 600 * 1000,
         }
-      )
+      );
 
       eventSourceOrderFailed.onmessage = (e) => {
-        console.log(JSON.parse(e.data), 'Order_Failed => SUCCESS')
+        console.log(JSON.parse(e.data), "Order_Failed => SUCCESS");
 
         notification.error({
-          message: 'Order Failed',
-        })
-        setPaymentLoading(false)
+          message: "Order Failed",
+        });
+        setPaymentLoading(false);
 
         // setdata(JSON.parse(e.data))
         // seteventype('payment')
-        eventSourceOrderFailed.close()
-      }
+        eventSourceOrderFailed.close();
+      };
       eventSourceOrderFailed.onerror = (e) => {
-        eventSourceOrderFailed.close()
-        console.log('ORDER_FAILED', e)
-        setPaymentLoading(false)
-      }
+        eventSourceOrderFailed.close();
+        console.log("ORDER_FAILED", e);
+        setPaymentLoading(false);
+      };
 
       // ORDER_CONFIRMED
       let eventSourceOrderConfirmed = new EventSourcePolyfill(
@@ -351,33 +354,33 @@ const OrderCreate = () => {
         {
           headers: {
             Authorization:
-              'Bearer ' + window.localStorage.getItem('auth_token'),
-            Connection: 'Keep-Alive',
-            'Keep-Alive': { timeout: 6000, max: 1000 },
+              "Bearer " + window.localStorage.getItem("auth_token"),
+            Connection: "Keep-Alive",
+            "Keep-Alive": { timeout: 6000, max: 1000 },
           },
           heartbeatTimeout: 600 * 1000,
         }
-      )
+      );
 
       eventSourceOrderConfirmed.onmessage = (e) => {
-        console.log(JSON.parse(e.data), 'Order_Confirmed => SUCCESS')
+        console.log(JSON.parse(e.data), "Order_Confirmed => SUCCESS");
 
-        setPaymentLoading(false)
+        setPaymentLoading(false);
 
         notification.success({
-          message: 'Order Placed Successfully',
-        })
+          message: "Order Placed Successfully",
+        });
 
-        history.push('/app/dashboards/orders/orders-list')
+        history.push("/app/dashboards/orders/orders-list");
         // setdata(JSON.parse(e.data))
         // seteventype('payment')
-        eventSourceOrderConfirmed.close()
-      }
+        eventSourceOrderConfirmed.close();
+      };
       eventSourceOrderConfirmed.onerror = (e) => {
-        eventSourceOrderConfirmed.close()
-        console.log('ORDER_Confirmed => FAILURE', e)
-        setPaymentLoading(false)
-      }
+        eventSourceOrderConfirmed.close();
+        console.log("ORDER_Confirmed => FAILURE", e);
+        setPaymentLoading(false);
+      };
 
       // Razorpay_Payment_Created
       let eventSourceRazorpayPaymentCreated = new EventSourcePolyfill(
@@ -385,29 +388,29 @@ const OrderCreate = () => {
         {
           headers: {
             Authorization:
-              'Bearer ' + window.localStorage.getItem('auth_token'),
-            Connection: 'Keep-Alive',
-            'Keep-Alive': { timeout: 6000, max: 1000 },
+              "Bearer " + window.localStorage.getItem("auth_token"),
+            Connection: "Keep-Alive",
+            "Keep-Alive": { timeout: 6000, max: 1000 },
           },
           heartbeatTimeout: 600 * 1000,
         }
-      )
+      );
 
       eventSourceRazorpayPaymentCreated.onmessage = (e) => {
-        console.log(JSON.parse(e.data), 'Razorpay_Payment_Created => SUCCESS')
+        console.log(JSON.parse(e.data), "Razorpay_Payment_Created => SUCCESS");
 
-        setRazorpayItems(JSON.parse(e.data))
+        setRazorpayItems(JSON.parse(e.data));
 
         // setdata(JSON.parse(e.data))
         // seteventype('payment')
-        eventSourceRazorpayPaymentCreated.close()
-      }
+        eventSourceRazorpayPaymentCreated.close();
+      };
       eventSourceRazorpayPaymentCreated.onerror = (e) => {
-        eventSourceRazorpayPaymentCreated.close()
-        setPaymentLoading(false)
+        eventSourceRazorpayPaymentCreated.close();
+        setPaymentLoading(false);
 
-        console.log('Razorpay_Payment_Created => FAILURE', e)
-      }
+        console.log("Razorpay_Payment_Created => FAILURE", e);
+      };
     }
 
     // return () => {
@@ -415,11 +418,11 @@ const OrderCreate = () => {
     //   eventSourceOrderConfirmed.close()
     //   eventSourceRazorpayPaymentCreated.close()
     // }
-  }, [isCheckoutEvenStarted, requestId])
+  }, [isCheckoutEvenStarted, requestId]);
 
   return (
     <>
-      {currentViewMode === 'order-create' ? (
+      {currentViewMode === "order-create" ? (
         <Form
           layout="vertical"
           form={form}
@@ -428,8 +431,8 @@ const OrderCreate = () => {
           initialValues={{
             items: [
               {
-                id: '',
-                quantity: '',
+                id: "",
+                quantity: "",
               },
             ],
             fromCart: false,
@@ -448,7 +451,7 @@ const OrderCreate = () => {
                   <Button
                     className="mr-2"
                     onClick={() =>
-                      history.push('/app/dashboards/orders/orders-list')
+                      history.push("/app/dashboards/orders/orders-list")
                     }
                   >
                     Discard
@@ -472,22 +475,22 @@ const OrderCreate = () => {
                   <Form.Item
                     label="Customer"
                     name="customerId"
-                    rules={[{ required: true, message: 'required' }]}
+                    rules={[{ required: true, message: "required" }]}
                   >
                     <Select
                       placeholder="Select Customer"
                       showSearch
                       optionFilterProp="children"
                       filterOption={(input, option) => {
-                        console.log(input, option, 'gyhighi')
+                        console.log(input, option, "gyhighi");
                         return (
                           option.children
                             .toLowerCase()
                             .indexOf(input.toLowerCase()) >= 0
-                        )
+                        );
                       }}
                       onChange={(e) => {
-                        getCustomerById(e)
+                        getCustomerById(e);
                       }}
                     >
                       {customers?.map((customer) => (
@@ -499,27 +502,27 @@ const OrderCreate = () => {
                   </Form.Item>
                   {selectedCustomer && (
                     <>
-                      <label style={{ fontWeight: 500, marginBottom: '10px' }}>
+                      <label style={{ fontWeight: 500, marginBottom: "10px" }}>
                         Products
                       </label>
                       <Form.List name="items">
                         {(fields, { add, remove }) => {
-                          console.log(fields, 'show-filelds')
+                          console.log(fields, "show-filelds");
                           return (
                             <>
                               {fields.map((field) => (
                                 <Space
                                   key={field.key}
-                                  style={{ display: 'flex', width: '100%' }}
+                                  style={{ display: "flex", width: "100%" }}
                                   align="baseline"
                                 >
                                   <Form.Item
                                     {...field}
                                     rules={[
-                                      { required: true, message: 'required' },
+                                      { required: true, message: "required" },
                                     ]}
-                                    name={[field.name, 'id']}
-                                    fieldKey={[field.fieldKey, 'id']}
+                                    name={[field.name, "id"]}
+                                    fieldKey={[field.fieldKey, "id"]}
                                   >
                                     <Select
                                       placeholder="Select Product"
@@ -532,7 +535,7 @@ const OrderCreate = () => {
                                           .indexOf(input.toLowerCase()) >= 0
                                       }
                                       onChange={(e) => {
-                                        checkPrescriptionRequired()
+                                        checkPrescriptionRequired();
                                       }}
                                     >
                                       {products?.map((product) => (
@@ -549,10 +552,10 @@ const OrderCreate = () => {
                                   <Form.Item
                                     {...field}
                                     rules={[
-                                      { required: true, message: 'required' },
+                                      { required: true, message: "required" },
                                     ]}
-                                    name={[field.name, 'quantity']}
-                                    fieldKey={[field.fieldKey, 'quantity']}
+                                    name={[field.name, "quantity"]}
+                                    fieldKey={[field.fieldKey, "quantity"]}
                                   >
                                     <InputNumber
                                       placeholder="Quantity"
@@ -567,8 +570,8 @@ const OrderCreate = () => {
                                     <MinusCircleOutlined
                                       onClick={() => {
                                         //   onAttributeChange()
-                                        remove(field.name)
-                                        checkPrescriptionRequired()
+                                        remove(field.name);
+                                        checkPrescriptionRequired();
                                       }}
                                     />
                                   )}
@@ -578,7 +581,7 @@ const OrderCreate = () => {
                                 <Button
                                   type="dashed"
                                   onClick={() => {
-                                    add()
+                                    add();
                                     // checkPrescriptionRequired()
                                   }}
                                   icon={<PlusOutlined />}
@@ -587,7 +590,7 @@ const OrderCreate = () => {
                                 </Button>
                               </Form.Item>
                             </>
-                          )
+                          );
                         }}
                       </Form.List>
 
@@ -595,25 +598,25 @@ const OrderCreate = () => {
                         name="shippingAddressId"
                         label="Shipping Address"
                         // rules={rules.shippingAddressId}
-                        rules={[{ required: true, message: 'required' }]}
+                        rules={[{ required: true, message: "required" }]}
                       >
                         <Select
                           allowClear
-                          style={{ width: '100%' }}
+                          style={{ width: "100%" }}
                           placeholder="Address"
                           onSelect={() => {
                             if (isShippingAndBillingAddressSame) {
                               form.setFieldsValue({
                                 billingAddressId:
-                                  form.getFieldValue('shippingAddressId'),
-                              })
+                                  form.getFieldValue("shippingAddressId"),
+                              });
                             }
                           }}
                         >
                           {selectedCustomer?.address?.map((address) => (
                             <Option key={address.id} value={address.id}>
                               {address?.line1} {address?.city} {address?.state}
-                              {', '}
+                              {", "}
                               {address?.zipcode}
                             </Option>
                           ))}
@@ -633,18 +636,18 @@ const OrderCreate = () => {
                           name="billingAddressId"
                           label="Billing Address"
                           // rules={rules.billingAddressId}
-                          rules={[{ required: true, message: 'required' }]}
+                          rules={[{ required: true, message: "required" }]}
                         >
                           <Select
                             allowClear
-                            style={{ width: '100%' }}
+                            style={{ width: "100%" }}
                             placeholder="Address"
                           >
                             {selectedCustomer?.address?.map((address) => (
                               <Option key={address.id} value={address.id}>
-                                {address?.line1} {address?.city}{' '}
+                                {address?.line1} {address?.city}{" "}
                                 {address?.state}
-                                {', '}
+                                {", "}
                                 {address?.zipcode}
                               </Option>
                             ))}
@@ -654,7 +657,7 @@ const OrderCreate = () => {
                       {isPrescriptionRequired && (
                         <>
                           <div
-                            style={{ fontWeight: 500, marginBottom: '10px' }}
+                            style={{ fontWeight: 500, marginBottom: "10px" }}
                           >
                             Prescription
                           </div>
@@ -695,7 +698,7 @@ const OrderCreate = () => {
         />
       )}
     </>
-  )
-}
+  );
+};
 
-export default OrderCreate
+export default OrderCreate;
