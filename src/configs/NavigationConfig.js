@@ -7,6 +7,7 @@ import {
   EnvironmentOutlined,
   AntDesignOutlined,
   SafetyOutlined,
+  HomeOutlined,
   StopOutlined,
   DotChartOutlined,
   NodeExpandOutlined,
@@ -369,6 +370,7 @@ const dashBoardNavTree = [
             breadcrumb: false,
             submenu: [],
           },
+          
           {
             key: 'dashboards-deliverylocation-deliveryzones',
             path: `${APP_PREFIX_PATH}/dashboards/deliverylocation/deliveryzone/deliveryzone-list`,
@@ -379,6 +381,58 @@ const dashBoardNavTree = [
           },
         ],
       },
+      {
+        key: 'dashboards-locality',
+        path: `${APP_PREFIX_PATH}/dashboards/locality`,
+        title: 'Locality',
+        icon: HomeOutlined ,
+        breadcrumb: false,
+        submenu: [
+      
+      {
+      key: 'dashboards-locality-country',
+      path: `${APP_PREFIX_PATH}/dashboards/locality/country/country-list`,
+      title: 'Country',
+      icon: AppstoreOutlined ,
+      breadcrumb: false,
+      submenu: [],
+    },
+    
+    {
+      key: 'dashboards-locality-state',
+      path: `${APP_PREFIX_PATH}/dashboards/locality/state/statelist`,
+      title: 'State',
+      icon: AppstoreOutlined,
+      breadcrumb: false,
+      submenu: [],
+    },
+    {
+      key: 'dashboards-locality-district',
+      path: `${APP_PREFIX_PATH}/dashboards/locality/district/districtlist`,
+      title: 'District',
+      icon: AppstoreOutlined,
+      breadcrumb: false,
+      submenu: [],
+    },
+    {
+      key: 'dashboards-locality-city',
+      path: `${APP_PREFIX_PATH}/dashboards/locality/city/city-list`,
+      title: 'City',
+      icon: AppstoreOutlined,
+      breadcrumb: false,
+      submenu: [],
+    },
+    {
+      key: 'dashboards-locality-pincode',
+      path: `${APP_PREFIX_PATH}/dashboards/locality/pincode/pincodelist`,
+      title: 'Pincode',
+      icon: AppstoreOutlined,
+      breadcrumb: false,
+      submenu: [],
+    },
+  ],
+  
+},
 
       {
         key: 'dashboards-widget',

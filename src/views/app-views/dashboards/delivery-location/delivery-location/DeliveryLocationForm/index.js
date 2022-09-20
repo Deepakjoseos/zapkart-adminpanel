@@ -40,7 +40,7 @@ const ProductForm = (props) => {
   // For selecting DELIVERY LOCATION PARENT
   const getDeliveryLocations = async () => {
     const data = await deliveryLocationService.getDeliveryLocations()
-    console.log(data, 'myyy-data')
+
 
     if (data) {
        if (mode === EDIT) {
