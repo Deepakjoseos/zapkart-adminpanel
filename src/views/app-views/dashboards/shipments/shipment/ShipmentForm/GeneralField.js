@@ -98,6 +98,23 @@ const GeneralField = ({ form }) => {
               }
               onChange={(e) => {
                 setSelectedVendorId(e)
+                form?.setFieldsValue({
+                  shippedByVendor: false,
+                  expectedDeliveryDate: moment(),
+                  items: [
+                    {
+                      orderId: '',
+                      itemIds: [],
+                    },
+                  ],
+                  description: '',
+                  pickup_location: '',
+                  length: '',
+                  breadth: '',
+                  height: '',
+                  weight: '',
+                })
+                setShippedByVendor(false)
               }}
             >
               {vendors?.map((cur) => (

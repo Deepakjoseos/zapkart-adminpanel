@@ -86,7 +86,6 @@ const ShipmentForm = (props) => {
             message.success(`Created Shipment Successfully`)
             history.goBack()
           }
-        
         }
         // if (mode === EDIT) {
         //   // Checking if image exists
