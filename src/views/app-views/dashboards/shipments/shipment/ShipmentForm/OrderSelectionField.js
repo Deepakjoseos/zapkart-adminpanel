@@ -3,14 +3,23 @@ import React, { useEffect, useState } from 'react'
 import orderService from 'services/orders'
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
 
-const OrderSelectionField = ({ form, fields, remove, add }) => {
+const OrderSelectionField = ({
+  form,
+  fields,
+  remove,
+  add,
+  selectedVendorId,
+}) => {
   const { Option } = Select
 
   const [orders, setOrders] = useState([])
   const [curOderItems, setCurOderItems] = useState([])
 
   const getOrders = async () => {
-    const data = await orderService.getOrders()
+    const data = await orderService.getOrders(
+      '',
+      `vendorId=${selectedVendorId}`
+    )
     if (data.data) {
       setOrders(data.data)
     }
@@ -18,7 +27,7 @@ const OrderSelectionField = ({ form, fields, remove, add }) => {
 
   useEffect(() => {
     getOrders()
-  }, [])
+  }, [selectedVendorId])
 
   return (
     <>
@@ -65,7 +74,8 @@ const OrderSelectionField = ({ form, fields, remove, add }) => {
             fieldKey={[field.fieldKey, 'itemIds']}
           >
             <Select
-              mode="multiple" optionFilterProp="children"
+              mode="multiple"
+              optionFilterProp="children"
               filterOption={(input, option) =>
                 option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
               }
