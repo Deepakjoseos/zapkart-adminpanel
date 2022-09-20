@@ -163,15 +163,17 @@ const TaxCategoryList = () => {
       dataIndex: 'name'
     },
     {
-      title: 'Same State',
-      dataIndex: 'sameState',
-      render: (sameState) => {
+      title: 'Taxes',
+      dataIndex: 'taxes',
+      render: (taxes) => {
         return (
           <>
-            {sameState?.map((item) => (
+            {taxes?.map((item) => (
               <>
                 <p>Type:{item.type}</p>
                 <p>Percent:{item.percent}</p>
+                <p>Same State:{item.sameState}</p>
+
 
               </>
             ))}
@@ -180,24 +182,7 @@ const TaxCategoryList = () => {
       },
       // sorter: (a, b) => utils.antdTableSorter(a, b, 'lastname'),
     },
-    {
-      title: 'Non Same State',
-      dataIndex: 'nonSameState',
-      render: (nonSameState) => {
-        return (
-          <>
-            {nonSameState?.map((item) => (
-              <>
-                <p>Type:{item.type}</p>
-                <p>Percent:{item.percent}</p>
-
-              </>
-            ))}
-          </>
-        )
-      },
-      // sorter: (a, b) => utils.antdTableSorter(a, b, 'lastname'),
-    },
+  
 
     {
       title: 'Status',

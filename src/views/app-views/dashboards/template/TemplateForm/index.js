@@ -29,7 +29,7 @@ const TemplateForm = (props) => {
       const data = await constantsService.getConstants()
       if (data) {
         setTempConstants(data.TEMPLATE)
-        setStatuses(Object.values(data.GENERAL['FORM_STATU']))
+        setStatuses(Object.values(data.GENERAL['FORM_STATUS']))
       }
     }
 

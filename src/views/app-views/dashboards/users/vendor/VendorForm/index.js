@@ -11,6 +11,8 @@ import vendorService from 'services/vendor'
 import ViewPickupLocations from '../vendor-list/ViewPickUpLocations'
 import constantsService from 'services/constants'
 import userGroupService from 'services/userGroup'
+import VendorTransactions from './vendorTransactions'
+import walletService from 'services/Wallet'
 
 // const getAllPickUpLocations = async ()=>{
 //   const data = await shipmentService.getAllPickUpLocations()
@@ -40,6 +42,7 @@ const ProductForm = (props) => {
   const [emailVerified, setEmailVerified] = useState(false)
   const [form_statuses,setStatuses] = useState([])
   const [groupList,setGroupList] = useState([])
+  const [transactions,setTransactions] = useState([])
 
 
    const {
@@ -67,15 +70,24 @@ const ProductForm = (props) => {
 
     }
   }
+  const getTransactions = async() =>{
+   const data= await walletService.getTransactions({userId:param.id})
+   if(data){
+    setTransactions(data)
+   }
+   console.log('trans',data)
+  }
   useEffect(()=>{
+    getTransactions()
    fetchConstants()
    getUserGroups()
-  },[])
+  },[param.id])
   const fetchVendorById = async () => {
     const { id } = param
+    console.log('id_vendor',param.id)
     const data = await vendorService.getVendorById(id)
     if (data) {
-
+     
       setPickUpLocation(data.pickupLocations)
       let himg = []
       if (data.image) {
@@ -303,6 +315,9 @@ const ProductForm = (props) => {
                 form={form} mode={mode} emailVerified={emailVerified} phoneVerified={phoneVerified}
                form_statuses={form_statuses} userGroups={groupList}
               />
+            </TabPane>
+            <TabPane tab="Transactions" key="2">
+           <VendorTransactions selectedVendorId={param.id} transactions={transactions}/>
             </TabPane>
             {/* <TabPane tab="PickUpLocations" key="2">
               <ViewPickupLocations pickupLocations={pickupLocations} selectedVendorId={selectedVendorId} refetchData={fetchVendorById}/>
