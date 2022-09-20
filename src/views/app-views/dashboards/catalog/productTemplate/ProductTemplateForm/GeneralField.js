@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react'
 import {
   Input,
   Row,
@@ -11,36 +11,36 @@ import {
   TreeSelect,
   Space,
   Button,
-} from "antd";
-import { ImageSvg } from "assets/svg/icon";
-import CustomIcon from "components/util-components/CustomIcon";
-import Editor from "components/shared-components/Editor";
-import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
-import { TweenOneGroup } from "rc-tween-one";
-import slugify from "slugify";
+} from 'antd'
+import { ImageSvg } from 'assets/svg/icon'
+import CustomIcon from 'components/util-components/CustomIcon'
+import Editor from 'components/shared-components/Editor'
+import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
+import { TweenOneGroup } from 'rc-tween-one'
+import slugify from 'slugify'
 
 // const { Dragger } = Upload
-const { Option } = Select;
+const { Option } = Select
 
-const SITE_NAME = process.env.REACT_APP_SITE_NAME;
+const SITE_NAME = process.env.REACT_APP_SITE_NAME
 
 const rules = {
   name: [
     {
       required: true,
-      message: "Required",
+      message: 'Required',
     },
   ],
   images: [
     {
       required: true,
-      message: "Required",
+      message: 'Required',
     },
   ],
   status: [
     {
       required: true,
-      message: "Required",
+      message: 'Required',
     },
   ],
   // description: [
@@ -53,19 +53,19 @@ const rules = {
   categoryId: [
     {
       required: true,
-      message: "Required",
+      message: 'Required',
     },
   ],
   allowedPaymentTypes: [
     {
       required: true,
-      message: "Required",
+      message: 'Required',
     },
   ],
   returnable: [
     {
       required: true,
-      message: "Required",
+      message: 'Required',
     },
   ],
   // returnPeriod: [
@@ -77,85 +77,85 @@ const rules = {
   allowedQuantityPerOrder: [
     {
       required: true,
-      message: "Required",
+      message: 'Required',
     },
   ],
   minQty: [
     {
       required: true,
-      message: "Required",
+      message: 'Required',
     },
   ],
 
   prescriptionRequired: [
     {
       required: true,
-      message: "Required",
+      message: 'Required',
     },
   ],
   medicineTypeId: [
     {
       required: true,
-      message: "Required",
+      message: 'Required',
     },
   ],
   manufacturer: [
     {
       required: true,
-      message: "Required",
+      message: 'Required',
     },
   ],
   medicinePackaging: [
     {
       required: true,
-      message: "Required",
+      message: 'Required',
     },
   ],
 
   lengthClass: [
     {
       required: true,
-      message: "Required",
+      message: 'Required',
     },
   ],
   weightClass: [
     {
       required: true,
-      message: "Required",
+      message: 'Required',
     },
   ],
   height: [
     {
       required: true,
-      message: "Required",
+      message: 'Required',
     },
   ],
   length: [
     {
       required: true,
-      message: "Required",
+      message: 'Required',
     },
   ],
   width: [
     {
       required: true,
-      message: "Required",
+      message: 'Required',
     },
   ],
   weight: [
     {
       required: true,
-      message: "Required",
+      message: 'Required',
     },
   ],
 
   slug: [
     {
       required: true,
-      message: "Required",
+      message: 'Required',
     },
   ],
-};
+}
 
 const GeneralField = ({
   propsImages,
@@ -181,12 +181,12 @@ const GeneralField = ({
   statuses,
   // setSelectPage,
 }) => {
-  const [image, setImage] = useState(false);
+  const [image, setImage] = useState(false)
 
   const generateSlugFromName = (value) => {
-    const slug = slugify(value);
-    form.setFieldsValue({ slug });
-  };
+    const slug = slugify(value)
+    form.setFieldsValue({ slug })
+  }
 
   return (
     <Row gutter={16}>
@@ -212,7 +212,7 @@ const GeneralField = ({
           >
             <Editor
               placeholder="Write something..."
-              editorHtml={form.getFieldValue("description") || ""}
+              editorHtml={form.getFieldValue('description') || ''}
               onChange={(e) => form.setFieldsValue({ description: e })}
               name="description"
             />
@@ -254,6 +254,10 @@ const GeneralField = ({
             <Select
               placeholder="Tax Category"
               showSearch
+              // optionFilterProp="children"
+              // filterOption={(input, option) =>
+              //   option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              // }
               optionFilterProp="children"
               filterOption={(input, option) =>
                 option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
@@ -261,7 +265,7 @@ const GeneralField = ({
             >
               {taxCategories.map((item) => (
                 <Option key={item.id} value={item.id}>
-                  {item.name}
+                  {item.name || item?.id}
                 </Option>
               ))}
             </Select>
@@ -281,7 +285,7 @@ const GeneralField = ({
               treeDefaultExpandAll
             />
           </Form.Item>
-          {process.env.REACT_APP_SITE_NAME === "zapkart" && (
+          {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
             <Form.Item
               name="manufacturerId"
               label="Manufacturer"
@@ -318,7 +322,7 @@ const GeneralField = ({
         >
           <Input placeholder="Product Type" />
         </Form.Item> */}
-          {SITE_NAME === "zapkart" && (
+          {SITE_NAME === 'zapkart' && (
             <Form.Item
               name="medicineTypeId"
               label="Medicine Type"
@@ -342,7 +346,7 @@ const GeneralField = ({
             </Form.Item>
           )}
 
-          {SITE_NAME === "zapkart" && (
+          {SITE_NAME === 'zapkart' && (
             <Form.Item
               name="medicinePackaging"
               label="Medicine Packaging"
@@ -370,7 +374,7 @@ const GeneralField = ({
                 option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
               }
               allowClear
-              style={{ width: "100%" }}
+              style={{ width: '100%' }}
               placeholder="Allowed Payment Types"
             >
               {paymentTypes.map((item) => (
@@ -409,7 +413,7 @@ const GeneralField = ({
             rules={[
               {
                 required: true,
-                message: "Required",
+                message: 'Required',
               },
               // {
               //   min: minQty,
@@ -431,7 +435,7 @@ const GeneralField = ({
               rules={[
                 {
                   required: true,
-                  message: "Required",
+                  message: 'Required',
                 },
                 // {
                 //   max: maxQty,
@@ -448,7 +452,7 @@ const GeneralField = ({
             </Form.Item>
           )}
 
-          {SITE_NAME === "zapkart" && (
+          {SITE_NAME === 'zapkart' && (
             <Form.Item
               name="prescriptionRequired"
               label="PrescriptionRequired"
@@ -462,27 +466,27 @@ const GeneralField = ({
           )}
 
           {/* Compostion */}
-          {SITE_NAME === "zapkart" && (
+          {SITE_NAME === 'zapkart' && (
             <>
-              <label style={{ fontWeight: 500, marginBottom: "10px" }}>
+              <label style={{ fontWeight: 500, marginBottom: '10px' }}>
                 Composition
               </label>
               <Form.List name="composition">
                 {(fields, { add, remove }) => {
-                  console.log(fields, "show-filelds");
+                  console.log(fields, 'show-filelds')
                   return (
                     <>
                       {fields.map((field) => (
                         <Space
                           key={field.key}
-                          style={{ display: "flex" }}
+                          style={{ display: 'flex' }}
                           align="baseline"
                         >
                           <Form.Item
                             {...field}
-                            rules={[{ required: true, message: "required" }]}
-                            name={[field.name, "id"]}
-                            fieldKey={[field.fieldKey, "id"]}
+                            rules={[{ required: true, message: 'required' }]}
+                            name={[field.name, 'id']}
+                            fieldKey={[field.fieldKey, 'id']}
                           >
                             <Select
                               showSearch
@@ -508,16 +512,16 @@ const GeneralField = ({
                           </Form.Item>
                           <Form.Item
                             {...field}
-                            rules={[{ required: true, message: "required" }]}
-                            name={[field.name, "qty"]}
-                            fieldKey={[field.fieldKey, "qty"]}
+                            rules={[{ required: true, message: 'required' }]}
+                            name={[field.name, 'qty']}
+                            fieldKey={[field.fieldKey, 'qty']}
                           >
                             <Input placeholder="Quantity" />
                           </Form.Item>
                           <MinusCircleOutlined
                             onClick={() => {
-                              remove(field.name);
-                              onCompositionChange();
+                              remove(field.name)
+                              onCompositionChange()
                             }}
                           />
                         </Space>
@@ -532,13 +536,13 @@ const GeneralField = ({
                         </Button>
                       </Form.Item>
                     </>
-                  );
+                  )
                 }}
               </Form.List>
             </>
           )}
 
-          {SITE_NAME === "zapkart" && (
+          {SITE_NAME === 'zapkart' && (
             <Form.Item
               name="productType"
               label="ProductType"
@@ -562,7 +566,7 @@ const GeneralField = ({
         </Card>
 
         {/* Medicine Informations */}
-        {productType === "Medicine" && SITE_NAME === "zapkart" && (
+        {productType === 'Medicine' && SITE_NAME === 'zapkart' && (
           <Card title="Medicine Informations">
             <Form.Item
               name="pregnancyInteraction"
@@ -571,7 +575,7 @@ const GeneralField = ({
             >
               <Editor
                 placeholder="Write something..."
-                editorHtml={form.getFieldValue("pregnancyInteraction")}
+                editorHtml={form.getFieldValue('pregnancyInteraction')}
                 onChange={(e) =>
                   form.setFieldsValue({ pregnancyInteraction: e })
                 }
@@ -586,7 +590,7 @@ const GeneralField = ({
             >
               <Editor
                 placeholder="Write something..."
-                editorHtml={form.getFieldValue("expertAdvice") || ""}
+                editorHtml={form.getFieldValue('expertAdvice') || ''}
                 onChange={(e) => form.setFieldsValue({ expertAdvice: e })}
                 name="expertAdvice"
               />
@@ -599,7 +603,7 @@ const GeneralField = ({
             >
               <Editor
                 placeholder="Write something..."
-                editorHtml={form.getFieldValue("sideEffects") || ""}
+                editorHtml={form.getFieldValue('sideEffects') || ''}
                 onChange={(e) => form.setFieldsValue({ sideEffects: e })}
                 name="sideEffects"
               />
@@ -612,7 +616,7 @@ const GeneralField = ({
             >
               <Editor
                 placeholder="Write something..."
-                editorHtml={form.getFieldValue("howToUse") || ""}
+                editorHtml={form.getFieldValue('howToUse') || ''}
                 onChange={(e) => form.setFieldsValue({ howToUse: e })}
                 name="howToUse"
               />
@@ -621,7 +625,7 @@ const GeneralField = ({
             <Form.Item name="faq" label="FAQ" rules={rules.faq}>
               <Editor
                 placeholder="Write something..."
-                editorHtml={form.getFieldValue("faq") || ""}
+                editorHtml={form.getFieldValue('faq') || ''}
                 onChange={(e) => form.setFieldsValue({ faq: e })}
                 name="faq"
               />
@@ -630,7 +634,7 @@ const GeneralField = ({
             <Form.Item name="uses" label="Uses" rules={rules.uses}>
               <Editor
                 placeholder="Write something..."
-                editorHtml={form.getFieldValue("uses") || ""}
+                editorHtml={form.getFieldValue('uses') || ''}
                 onChange={(e) => form.setFieldsValue({ uses: e })}
                 name="uses"
               />
@@ -684,11 +688,11 @@ const GeneralField = ({
             </Select>
           </Form.Item>
 
-          <Form.Item name="height" label="Height" >
+          <Form.Item name="height" label="Height">
             <InputNumber type="number" min={0} max={100000} />
           </Form.Item>
 
-          <Form.Item name="length" label="Length" >
+          <Form.Item name="length" label="Length">
             <InputNumber type="number" min={0} max={100000} />
           </Form.Item>
 
@@ -696,7 +700,7 @@ const GeneralField = ({
             <InputNumber type="number" min={0} max={100000} />
           </Form.Item>
 
-          <Form.Item name="weight" label="Weight" >
+          <Form.Item name="weight" label="Weight">
             <InputNumber type="number" min={0} max={100000} />
           </Form.Item>
         </Card>
@@ -712,10 +716,10 @@ const GeneralField = ({
           </Form.Item> */}
           <Form.Item name="keywords" label="Keywords">
             <Select
-              dropdownStyle={{ display: "none" }}
+              dropdownStyle={{ display: 'none' }}
               mode="tags"
               style={{
-                width: "100%",
+                width: '100%',
               }}
               placeholder="Keywords"
             ></Select>
@@ -726,10 +730,10 @@ const GeneralField = ({
 
           <Form.Item name="tags" label="Tags">
             <Select
-              dropdownStyle={{ display: "none" }}
+              dropdownStyle={{ display: 'none' }}
               mode="tags"
               style={{
-                width: "100%",
+                width: '100%',
               }}
               placeholder="Tags"
             ></Select>
@@ -750,7 +754,7 @@ const GeneralField = ({
         </Card>
       </Col>
     </Row>
-  );
-};
+  )
+}
 
-export default GeneralField;
+export default GeneralField

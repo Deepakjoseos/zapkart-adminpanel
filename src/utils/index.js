@@ -1,4 +1,5 @@
 import { notification } from 'antd'
+import _, { isArray } from 'lodash'
 
 class Utils {
   /**
@@ -32,7 +33,7 @@ class Utils {
     }
     return route
   }
-  
+
   /**
    * Get accessible color contrast
    * @param {String} hex - Hex color code e.g '#3e82f7'
@@ -274,13 +275,13 @@ class Utils {
     const categoryList = []
     let category
     if (parentId == null) {
-      if(categories?.data) {
+      if (categories?.data) {
         category = categories.data.filter((cat) => !cat?.parentId)
       } else {
         category = categories.filter((cat) => !cat?.parentId)
       }
     } else {
-      if(categories?.data) {
+      if (categories?.data) {
         category = categories.data.filter((cat) => cat?.parentId === parentId)
       } else {
         category = categories.filter((cat) => cat?.parentId === parentId)
@@ -304,16 +305,40 @@ class Utils {
     console.log('my-res', res)
     if (res) {
       if (res?.errors) {
-        for (const [key, value] of Object.entries(res?.errors)) {
-          value.forEach((cur) => {
+        if (isArray(res?.errors)) {
+          res?.errors?.forEach((cur) => {
             notification.error({
-              description: key,
-              message: cur,
+              description: cur.itemName,
+              message: cur.type,
             })
           })
+        } else {
+          for (const [key, value] of Object.entries(res?.errors)) {
+            if (isArray(value)) {
+              value.forEach((cur) => {
+                notification.error({
+                  description: key,
+                  message: cur,
+                })
+              })
+            } else {
+              notification.error({
+                // description: res.title,
+                description: value,
+                message: key,
+              })
+            }
+          }
         }
       } else {
         // toast.error(res.title)
+        notification.error({
+          // description: res.title,
+          message: res.title,
+        })
+      }
+
+      if (_.isEmpty(res?.errors)) {
         notification.error({
           // description: res.title,
           message: res.title,
