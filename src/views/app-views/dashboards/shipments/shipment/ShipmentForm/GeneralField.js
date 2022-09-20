@@ -16,12 +16,19 @@ import CustomIcon from 'components/util-components/CustomIcon'
 import OrderSelectionField from './OrderSelectionField'
 import moment from 'moment'
 import shipmentService from 'services/shipment'
+import vendorService from 'services/vendor'
 
 // const { Dragger } = Upload
 const { Option } = Select
 
 const rules = {
   name: [
+    {
+      required: true,
+      message: 'Required',
+    },
+  ],
+  vendorId: [
     {
       required: true,
       message: 'Required',
@@ -50,6 +57,8 @@ const rules = {
 const GeneralField = ({ form }) => {
   const [shippedByVendor, setShippedByVendor] = useState(null)
   const [pickupLocations, setPickUpLocations] = useState([])
+  const [selectedVendorId, setSelectedVendorId] = useState(null)
+  const [vendors, setVendors] = useState([])
 
   const getPickupLocations = async () => {
     const data = await shipmentService.getPickupLocations()
@@ -57,29 +66,63 @@ const GeneralField = ({ form }) => {
       setPickUpLocations(data.shipping_address)
     }
   }
+  const getVendors = async () => {
+    const data = await vendorService.getVendors()
+    if (data) {
+      const setCorrectVendorInfo = data?.map((cur) => {
+        return { ...cur, fullName: cur?.firstName + ' ' + cur?.lastName }
+      })
+      setVendors(setCorrectVendorInfo)
+    }
+  }
 
   useEffect(() => {
     getPickupLocations()
+    getVendors()
   }, [])
   return (
     <Row gutter={16}>
       <Col xs={24} sm={24} md={24}>
         <Card title="Basic Info">
           <Form.Item
-            name="shippedByVendor"
-            label="Shipped By Vendor"
-            rules={rules.shippedByVendor}
+            name="vendorId"
+            label="Select Vendor"
+            rules={rules.vendorId}
           >
             <Select
-              placeholder="Shipped By Vendor"
+              placeholder="Select Vendor"
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
               onChange={(e) => {
-                setShippedByVendor(e)
+                setSelectedVendorId(e)
               }}
             >
-              <Option value={true}>Yes</Option>
-              <Option value={false}>No</Option>
+              {vendors?.map((cur) => (
+                <Option value={cur.id}>{cur?.fullName}</Option>
+              ))}
             </Select>
           </Form.Item>
+
+          {selectedVendorId && (
+            <Form.Item
+              name="shippedByVendor"
+              label="Shipped By Vendor"
+              rules={rules.shippedByVendor}
+            >
+              <Select
+                placeholder="Shipped By Vendor"
+                onChange={(e) => {
+                  setShippedByVendor(e)
+                }}
+              >
+                <Option value={true}>Yes</Option>
+                <Option value={false}>No</Option>
+              </Select>
+            </Form.Item>
+          )}
 
           {shippedByVendor && (
             <Form.Item
@@ -99,19 +142,22 @@ const GeneralField = ({ form }) => {
             </Form.Item>
           )}
 
-          <Form.List name="items">
-            {(fields, { add, remove }) => {
-              console.log(fields, 'show-filelds')
-              return (
-                <OrderSelectionField 
-                  add={add}
-                  fields={fields}
-                  remove={remove}
-                  form={form}
-                />
-              )
-            }}
-          </Form.List>
+          {selectedVendorId && (
+            <Form.List name="items">
+              {(fields, { add, remove }) => {
+                console.log(fields, 'show-filelds')
+                return (
+                  <OrderSelectionField
+                    selectedVendorId={selectedVendorId}
+                    add={add}
+                    fields={fields}
+                    remove={remove}
+                    form={form}
+                  />
+                )
+              }}
+            </Form.List>
+          )}
 
           {/* <Form.Item name="name" label="Name" rules={rules.name}>
             <Input placeholder="Name" />
