@@ -31,12 +31,14 @@ const WidgetForm = (props) => {
   const [isStaticProviderSelected, setIsStaticProviderSelected] =
     useState(false)
  const [form_statuses,setStatuses]= useState([])
+ const [listing_platforms,setListingPlatforms]=useState([])
  const fetchConstants = async () => {
   const data = await constantsService.getConstants()
   if (data) {
     // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
 
     setStatuses(Object.values(data.GENERAL['FORM_STATUS']))
+    setListingPlatforms(Object.values(data.WIDGET['LISTING_PLATFORM']))
 
   }
 }
@@ -56,6 +58,7 @@ const WidgetForm = (props) => {
             listingItems: data?.listingItems?.map((item) => item.id),
             staticContent: data.staticContent,
             status: data.status,
+            listingPlatform:data.listingPlatform,
             startEndDate: [
               moment(data.startDate, 'YYYY-MM-DD'),
               moment(data.endDate, 'YYYY-MM-DD'),
@@ -212,6 +215,7 @@ const WidgetForm = (props) => {
           tabTitle: values.tabTitle,
           status: values.status,
           priority: values.priority,
+          listingPlatform:values.listingPlatform,
           numberOfItems: values?.numberOfItems
             ? values?.numberOfItems
             : form.getFieldValue('numberOfItems'),
@@ -322,7 +326,7 @@ const WidgetForm = (props) => {
                 form={form}
                 isStaticProviderSelected={isStaticProviderSelected}
                 listItems={listItems}
-                setListItems={setListItems}
+                setListItems={setListItems} listing_platforms={listing_platforms}
               />
             </TabPane>
           </Tabs>

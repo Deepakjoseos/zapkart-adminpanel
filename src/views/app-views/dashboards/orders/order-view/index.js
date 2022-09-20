@@ -157,21 +157,26 @@ const OrderView = () => {
             Re-Upload Prescription
           </Button>
         )}
-
+       {order.status === 'Cancelled' ?  "":
+        <>
         <Button
-          type="primary"
-          className="mb-4 mr-2"
-          onClick={() => setIsFormOpen(true)}
-        >
-          Create Shipment
-        </Button>
-        <Button
-          type="primary"
-          className="mb-4 mr-2"
-          onClick={() => setIsInvoiceFormOpen(true)}
-        >
-          Create Invoice
-        </Button>
+        type="primary"
+        className="mb-4 mr-2"
+        onClick={() => setIsFormOpen(true)}
+      >
+        Create Shipment
+      </Button>
+      <Button
+        type="primary"
+        className="mb-4 mr-2"
+        onClick={() => setIsInvoiceFormOpen(true)}
+      >
+        Create Invoice
+      </Button>
+      </>
+       }
+        
+        
         <Button type="primary" className="mb-4" onClick={handlePrint}>
           Print this out!
         </Button>
@@ -294,7 +299,7 @@ const OrderView = () => {
               }}
             >
               {/* <Column title="SN" dataIndex="name" key="name" /> */}
-              <Column title="Shipment" dataIndex="shipmentId" key="shipmentId" render={(text) => text ? <Link to={`/app/dashboards/shipments/shipment/shipment-view/${text}`}> {text}</Link> : "Shipment not available"} />
+              <Column title="Shipment" dataIndex="shipmentId" key="shipmentId" render={(text) => text ? <Link to={`/app/dashboards/shipments/shipment/shipment-view/${text}`}> {text}</Link> : "Not Shipped Yet"} />
 
               <Column title="Product Name" dataIndex="name" key="name" />
               <Column title="HSN" dataIndex="hsn" key="hsn" />

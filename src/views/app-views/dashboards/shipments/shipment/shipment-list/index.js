@@ -212,8 +212,8 @@ const ShipmentList = () => {
   // Antd Table Columns
   const tableColumns = [
     {
-      title: 'Shipment Id',
-      dataIndex: 'shipmentNo',
+      title: 'Shipment Number',
+      dataIndex: 'id',
       render: (text) => <Link to={`/app/dashboards/shipments/shipment/shipment-view/${text}`}>
         {text}
       </Link>
@@ -226,9 +226,9 @@ const ShipmentList = () => {
           {record.items.map((item, index) => (
             <>
               <div>
-                <span>Order Number:</span>
+                
                 <Link to={`/app/dashboards/orders/order-view/${item.orderId}`}>
-                  {item?.orderNo}
+                  {item?.orderId}
                 </Link>
 
               </div>

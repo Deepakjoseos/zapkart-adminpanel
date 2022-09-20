@@ -421,6 +421,26 @@ const dashBoardNavTree = [
         breadcrumb: false,
         submenu: [],
       },
+      {
+        key: 'dashboards-wallet',
+        path: `${APP_PREFIX_PATH}/dashboards/wallet`,
+        title: 'Wallet',
+        icon: MoneyCollectOutlined,
+        breadcrumb: false,
+        submenu: [
+          {
+            key: 'dashboards-wallet-transactions',
+            path: `${APP_PREFIX_PATH}/dashboards/wallet/transactions/transaction-list`,
+            title: 'Transactions',
+            icon: MoneyCollectOutlined,
+            breadcrumb: false,
+            submenu: [],
+          },
+         
+        ],
+      },
+    
+     
      
       {
         key: 'dashboards-settings',

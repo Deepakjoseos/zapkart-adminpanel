@@ -358,9 +358,9 @@ const ShipmentView = () => {
         {shipment?.items?.map((item, index) => (
           <>
             <div>
-              <span>Order Id:</span>
+              <span>Order:</span>
               <Link to={`/app/dashboards/orders/order-view/${item.orderId}`}>
-                {item?.orderId}
+                {item?.orderNo}
               </Link>
             </div>
             <div>Products: {item?.items?.map((cur) => `${cur.name}, `)}</div>
