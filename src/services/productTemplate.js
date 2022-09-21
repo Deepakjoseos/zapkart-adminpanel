@@ -31,18 +31,17 @@ const api = 'producttemplates'
 //               ? `${url}&manufacturerId=${manufacturerId}`
 //               : `${url}?manufacturerId=${manufacturerId}`
 //           if(medicineTypeId)
-//           url = 
-//           (brandId && brandId !== null) || (categoryId && categoryId !== null) 
+//           url =
+//           (brandId && brandId !== null) || (categoryId && categoryId !== null)
 //           ||(status && status !==null) ||(manufacturerId && manufacturerId !==null)
 //           ? `${url}&medicineTypeId=${medicineTypeId}`
 //           : `${url}?medicineTypeId=${medicineTypeId}`
 
 //           if(prescriptionRequired)
-//           url = 
-//           (brandId && brandId !== null) || (categoryId && categoryId !== null) 
+//           url =
+//           (brandId && brandId !== null) || (categoryId && categoryId !== null)
 //           ||(status && status !==null) ||(manufacturerId && manufacturerId !==null) || (medicineTypeId && medicineTypeId !==null)
-          
-         
+
 //           ? `${url}&prescriptionRequired=${prescriptionRequired === "Yes" ?  true: false}`
 //           : `${url}?prescriptionRequired=${prescriptionRequired === "Yes" ?  true: false}`
 
@@ -57,9 +56,27 @@ const api = 'producttemplates'
 //     console.log(err, 'show-err')
 //   }
 // }
-productTemplate.getProductTemplates = async function (paginationQuery = '', query = '') {
+productTemplate.getProductTemplates = async function (
+  paginationQuery = '',
+  query = ''
+) {
   try {
     let url = `${api}?${paginationQuery}&${query}`
+    const res = await fetch({
+      url,
+      method: 'get',
+    })
+    return res
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
+productTemplate.getProductTemplatesPublic = async function (
+  paginationQuery = '',
+  query = 'status=Active'
+) {
+  try {
+    let url = `${api}/public?${paginationQuery}&${query}`
     const res = await fetch({
       url,
       method: 'get',
