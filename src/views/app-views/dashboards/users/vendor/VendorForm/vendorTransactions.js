@@ -2,24 +2,30 @@ import { Button, Card, Drawer, notification, Table, Typography } from 'antd'
 import Flex from 'components/shared-components/Flex'
 import React, { useEffect, useState } from 'react'
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
+import { WalletOutlined, PlusCircleOutlined } from '@ant-design/icons'
 // import AddressForm from './AddressForm'
 // import customerService from 'services/customer'
 import utils from 'utils'
 import moment from 'moment'
 import { Link } from 'react-router-dom'
+import walletService from 'services/Wallet'
 
 
 const VendorTransactions = ({
 
     selectedVendorId,
     refetchData,
-    transactions
+    transactions,
+    wallet
 }) => {
 
     console.log('transactions', transactions)
+    console.log('wallet', wallet)
     const [viewFormModal, setViewFormModal] = useState(false)
     const [formMode, setFormMode] = useState('add')
     const [selectedFormAddress, setSelectedFormAddress] = useState({})
+    const [openBankAccountForm, setOpenBankAccountForm] = useState(false)
+
 
     //   const onDeleteAddress = async (addressId) => {
     //     const customerDelete = await customerService.deleteAddress(
@@ -47,6 +53,10 @@ const VendorTransactions = ({
             dataIndex: 'type'
         },
         {
+            title: "Description",
+            dataIndex: 'description'
+        },
+        {
             title: 'Confirmed',
             dataIndex: 'confirmed',
             render: (text) => (
@@ -59,7 +69,7 @@ const VendorTransactions = ({
         {
             title: 'Date',
             dataIndex: 'createdAt',
-            render: (text) => <div>{moment(text).format('YYYY-MM-DD hh:mm:a')}</div>,
+            render: (text) => <div>{moment(new Date(text * 1000)).format('YYYY-MM-DD hh:mm:a')}</div>,
         },
         // {
         //     title: 'User',
@@ -76,8 +86,10 @@ const VendorTransactions = ({
                         <Link to={`/app/dashboards/orders/order-view/${row.orderId}`}>
                             {row.orderId}
                         </Link>
-                        <p>ItemId:</p>
-                        {row.itemId}
+                        <p>Item Name:</p>
+                        {row.itemName}
+                        <p>Item Quantity</p>
+                        {row.itemQty}
 
                     </Flex>
                 )
@@ -85,10 +97,36 @@ const VendorTransactions = ({
         },
 
     ]
+    // const withdrawBalance = async() =>{
+    //     const data= await walletService.withdrawBalanceofVendor({selectedVendorId})
+    //     if(data){
+    //      setTransactions(data)
+    //     }
+    //     console.log('trans',data)
+    //    }
 
 
     return (
         <div className="table-responsive">
+            <div>
+                <Flex justifyContent='end'>
+
+
+                    <div>
+                        {/* <span>   <WalletOutlined /></span> */}
+                        <h3>Wallet</h3>
+                        <p>Balance:{wallet.balance}</p>
+                        <p>Pending Balance:{wallet.pendingBalance}</p>
+                    </div>
+                    <Button className='ml-2' type="primary" > Withdraw Balance</Button>
+                    {/* <Button
+                        type="primary"
+                        className="mr-1"
+                        icon={<PlusCircleOutlined />}
+                        onClick={() => setOpenBankAccountForm(true)}
+                    >Add Bank account</Button> */}
+                </Flex>
+            </div>
             <Table columns={tableColumns} dataSource={transactions} rowKey="id" />
         </div>
 

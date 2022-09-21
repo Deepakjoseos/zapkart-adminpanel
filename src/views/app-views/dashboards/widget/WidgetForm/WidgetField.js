@@ -115,7 +115,7 @@ const WidgetField = ({
             rules={rules.allowedPaymentTypes}
           >
             <Select
-              mode="multiple"
+              mode="multiple" 
               optionFilterProp="children"
               filterOption={(input, option) =>
                 option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0

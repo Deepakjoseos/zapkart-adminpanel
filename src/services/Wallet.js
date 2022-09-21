@@ -45,12 +45,11 @@ walletService.getTransactionByUserId = async function (userId) {
   }
 }
 
-walletService.createTaxCategory = async function (data) {
+walletService.getVendorWallet = async function (userId) {
   try {
     const res = await fetch({
-      url: apiRoute,
-      method: 'post',
-      data: data,
+      url: `${apiRoute}/${userId}`,
+      method: 'get',
     })
     return res
   } catch (err) {
@@ -58,12 +57,12 @@ walletService.createTaxCategory = async function (data) {
   }
 }
 
-walletService.editTaxCategory = async function (id, data) {
+
+walletService.withdrawBalanceofVendor = async function (userId) {
   try {
     const res = await fetch({
-      url: `${apiRoute}/${id}`,
-      method: 'put',
-      data: data,
+      url: `${apiRoute}/withdraw/${userId}`,
+      method: 'post',
     })
     return res
   } catch (err) {
