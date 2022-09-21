@@ -58,18 +58,42 @@ walletService.getVendorWallet = async function (userId) {
 }
 
 
-walletService.withdrawBalanceofVendor = async function (userId) {
+walletService.withdrawBalanceofVendor = async function (userId,data) {
   try {
     const res = await fetch({
       url: `${apiRoute}/withdraw/${userId}`,
       method: 'post',
+      data: data,
     })
     return res
   } catch (err) {
     console.log(err, 'show-err')
   }
 }
-
+walletService.addBalancetoWallet = async function (data) {
+  try {
+    const res = await fetch({
+      url: `${apiRoute}/add-balance-by-admin`,
+      method: 'post',
+      data: data,
+    })
+    return res
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
+walletService.removeBalanceFromWallet = async function (data) {
+  try {
+    const res = await fetch({
+      url: `${apiRoute}/remove-balance-by-admin`,
+      method: 'post',
+      data: data,
+    })
+    return res
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
 // medicineTypeService.setPost = function (data) {
 //   return fetch({
 //     url: '/posts',
