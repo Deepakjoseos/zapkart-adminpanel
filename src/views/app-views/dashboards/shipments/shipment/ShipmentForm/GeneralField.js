@@ -60,12 +60,12 @@ const GeneralField = ({ form }) => {
   const [selectedVendorId, setSelectedVendorId] = useState(null)
   const [vendors, setVendors] = useState([])
 
-  const getPickupLocations = async () => {
-    const data = await shipmentService.getPickupLocations()
-    if (data?.shipping_address) {
-      setPickUpLocations(data.shipping_address)
-    }
-  }
+  // const getPickupLocations = async () => {
+  //   const data = await shipmentService.getPickupLocations()
+  //   if (data?.shipping_address) {
+  //     setPickUpLocations(data.shipping_address)
+  //   }
+  // }
   const getVendors = async () => {
     const data = await vendorService.getVendors()
     if (data) {
@@ -76,8 +76,14 @@ const GeneralField = ({ form }) => {
     }
   }
 
+  const getPickupLocationByVendorId = (vendorId) => {
+    const vendor = vendors?.find((cur) => cur.id === vendorId)
+
+    setPickUpLocations(vendor?.pickupLocations)
+  }
+
   useEffect(() => {
-    getPickupLocations()
+    // getPickupLocations()
     getVendors()
   }, [])
   return (
@@ -98,6 +104,9 @@ const GeneralField = ({ form }) => {
               }
               onChange={(e) => {
                 setSelectedVendorId(e)
+
+                getPickupLocationByVendorId(e)
+
                 form?.setFieldsValue({
                   shippedByVendor: false,
                   expectedDeliveryDate: moment(),
@@ -188,7 +197,7 @@ const GeneralField = ({ form }) => {
 
             <Form.Item name="pickup_location" label="Pickup Location">
               <Select placeholder="Pickup Location">
-                {pickupLocations.map((item) => (
+                {pickupLocations?.map((item) => (
                   <Option value={item?.pickup_location}>
                     {`${item.address}, ${item.city}, ${item.state}, ${item?.pin_code}`}
                   </Option>
