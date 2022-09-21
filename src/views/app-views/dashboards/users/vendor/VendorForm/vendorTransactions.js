@@ -9,6 +9,10 @@ import utils from 'utils'
 import moment from 'moment'
 import { Link } from 'react-router-dom'
 import walletService from 'services/Wallet'
+import WithdrawBalance from './withdrawBalance'
+import paymentService from 'services/payment'
+import AddBalancetoWallet from './addBalancetoWallet'
+import RemoveBalanceForm from './removeBalanceFromWallet'
 
 
 const VendorTransactions = ({
@@ -21,11 +25,24 @@ const VendorTransactions = ({
 
     console.log('transactions', transactions)
     console.log('wallet', wallet)
-    const [viewFormModal, setViewFormModal] = useState(false)
-    const [formMode, setFormMode] = useState('add')
-    const [selectedFormAddress, setSelectedFormAddress] = useState({})
-    const [openBankAccountForm, setOpenBankAccountForm] = useState(false)
 
+    const [isFormOpen, setisFormOpen] = useState(false)
+    const [bank_accounts, setBankAccounts] = useState([])
+    const [addBalanceForm,setAddBalanceForm] = useState(false)
+    const [removeBalanceForm,setRemoveBalanceForm] = useState(false)
+    const getBankAccounts = async () => {
+        // const data = await paymentService.getBankAccounts({ userId: selectedVendorId })
+        // if (data) {
+        //     setBankAccounts(data)
+        //     console.log(data, 'show-bankacccounts')
+        // }
+        if(wallet.bankAccounts.length > 0){
+            setBankAccounts(wallet.bankAccounts)
+        }
+    }
+    useEffect(() => {
+        getBankAccounts()
+    }, [])
 
     //   const onDeleteAddress = async (addressId) => {
     //     const customerDelete = await customerService.deleteAddress(
@@ -107,28 +124,38 @@ const VendorTransactions = ({
 
 
     return (
-        <div className="table-responsive">
-            <div>
-                <Flex justifyContent='end'>
-
-
+        <>
+            <Card>
+                <div className="table-responsive">
                     <div>
-                        {/* <span>   <WalletOutlined /></span> */}
-                        <h3>Wallet</h3>
-                        <p>Balance:{wallet.balance}</p>
-                        <p>Pending Balance:{wallet.pendingBalance}</p>
-                    </div>
-                    <Button className='ml-2' type="primary" > Withdraw Balance</Button>
-                    {/* <Button
+                        <Flex justifyContent='end'>
+
+
+                            <div>
+                                {/* <span>   <WalletOutlined /></span> */}
+                                <h3>Wallet</h3>
+                                <p>Balance:{wallet.balance}</p>
+                                <p>Pending Balance:{wallet.pendingBalance}</p>
+                            </div>
+                            <Button className='ml-2' type="primary" onClick={() => { setisFormOpen(true) }} > Withdraw Balance From Wallet</Button>
+                            <Button className='ml-2' type="primary" onClick={() => { setAddBalanceForm(true) }} > Add Balance to Wallet</Button>
+                            <Button className='ml-2' type="primary" onClick={() => { setRemoveBalanceForm(true) }} > Remove Balance to From Wallet</Button>
+
+                            {/* <Button
                         type="primary"
                         className="mr-1"
                         icon={<PlusCircleOutlined />}
                         onClick={() => setOpenBankAccountForm(true)}
                     >Add Bank account</Button> */}
-                </Flex>
-            </div>
-            <Table columns={tableColumns} dataSource={transactions} rowKey="id" />
-        </div>
+                        </Flex>
+                    </div>
+                    <Table columns={tableColumns} dataSource={transactions} rowKey="id" />
+                </div>
+            </Card>
+            <WithdrawBalance setisFormOpen={setisFormOpen} isFormOpen={isFormOpen} bank_accounts={bank_accounts} selectedVendorId={selectedVendorId} />
+            <AddBalancetoWallet setAddBalanceForm={setAddBalanceForm} addBalanceForm={addBalanceForm} selectedVendorId={selectedVendorId}/>
+            <RemoveBalanceForm selectedVendorId={selectedVendorId} removeBalanceForm={removeBalanceForm} setRemoveBalanceForm={setRemoveBalanceForm}/>
+        </>
 
 
 

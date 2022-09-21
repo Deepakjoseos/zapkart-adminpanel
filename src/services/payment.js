@@ -15,4 +15,19 @@ paymentService.createBankAccount = async function (userId,data) {
       console.log(err, 'show-err')
     }
   }
+  paymentService.getBankAccounts = async function (query) {
+    try {
+      let url=  `${apiRoute}/getFundAccounts/admin`
+      const userId= query.userId
+      if (userId)  url = `${url}?userId=${userId}`;
+      const res = await fetch({
+        url: url,
+        method: 'get',
+      })
+      // const data = res.data.filter((cur) => cur.status !== 'Deleted')
+      return res
+    } catch (err) {
+      console.log(err, 'show-err')
+    }
+  }
   export default paymentService

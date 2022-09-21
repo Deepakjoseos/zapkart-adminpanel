@@ -39,14 +39,13 @@ const ProductForm = (props) => {
   const [displayImage, setDisplayImage] = useState(null)
   const [submitLoading, setSubmitLoading] = useState(false)
   const[pickupLocation,setPickUpLocation] = useState(null)
-  const [selectedVendorId, setSelectedCustomerId] = useState(null)
   const [phoneVerified, setPhoneVerified] = useState(false)
   const [emailVerified, setEmailVerified] = useState(false)
   const [form_statuses,setStatuses] = useState([])
   const [groupList,setGroupList] = useState([])
   const [transactions,setTransactions] = useState([])
   const [wallet,setWallet] = useState({})
-  const[selctedVendorId,setSelectedVendorId] =useState(null)
+  const[selectedVendorId,setSelectedVendorId] =useState(null)
 
 
    const {
@@ -333,10 +332,10 @@ const ProductForm = (props) => {
             {id && (
               <>
             <TabPane tab="Transactions" key="2">
-           <VendorTransactions selectedVendorId={id} transactions={transactions} wallet={wallet}/>
+           <VendorTransactions selectedVendorId={selectedVendorId} transactions={transactions} wallet={wallet}/>
             </TabPane>
             <TabPane tab="Bank Accounts" key="3">
-               <BankAccount selctedVendorId={selctedVendorId}/>
+               <BankAccount selectedVendorId={selectedVendorId}/>
             </TabPane>
             </>
             )}
