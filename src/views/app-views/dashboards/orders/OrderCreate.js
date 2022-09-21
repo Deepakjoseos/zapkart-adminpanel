@@ -734,7 +734,7 @@ const OrderCreate = () => {
                                                 key={item.id}
                                                 value={item.id}
                                               >
-                                                {item.name}
+                                                {item?.username}
                                               </Option>
                                             )
                                           )}

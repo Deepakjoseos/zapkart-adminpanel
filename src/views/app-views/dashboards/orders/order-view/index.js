@@ -157,26 +157,27 @@ const OrderView = () => {
             Re-Upload Prescription
           </Button>
         )}
-       {order.status === 'Cancelled' ?  "":
-        <>
-        <Button
-        type="primary"
-        className="mb-4 mr-2"
-        onClick={() => setIsFormOpen(true)}
-      >
-        Create Shipment
-      </Button>
-      <Button
-        type="primary"
-        className="mb-4 mr-2"
-        onClick={() => setIsInvoiceFormOpen(true)}
-      >
-        Create Invoice
-      </Button>
-      </>
-       }
-        
-        
+        {order.status === 'Cancelled' ? (
+          ''
+        ) : (
+          <>
+            <Button
+              type="primary"
+              className="mb-4 mr-2"
+              onClick={() => setIsFormOpen(true)}
+            >
+              Create Shipment
+            </Button>
+            <Button
+              type="primary"
+              className="mb-4 mr-2"
+              onClick={() => setIsInvoiceFormOpen(true)}
+            >
+              Create Invoice
+            </Button>
+          </>
+        )}
+
         <Button type="primary" className="mb-4" onClick={handlePrint}>
           Print this out!
         </Button>
@@ -201,7 +202,6 @@ const OrderView = () => {
                     {order?.shippingAddress?.stateOrRegion},{' '}
                     {order?.shippingAddress?.country}
                     {order?.shippingAddress?.uniqueId}
-
                   </span>
                   {/* <span>
                   {
@@ -229,7 +229,6 @@ const OrderView = () => {
               </address>
             </div>
             <div className="text-right">
-
               {/* <p>GSTIN:</p>
               <p>Drug License No:</p> */}
               <h4 className="mb-1 font-weight-semibold">
@@ -253,8 +252,7 @@ const OrderView = () => {
               <address>
                 <p>
                   <span className="font-weight-semibold text-dark font-size-md">
-                    Payment Status:{' '}
-                    {order?.payment?.status}
+                    Payment Status: {order?.payment?.status}
                   </span>
                   <br />
                   {/* <span>8626 Maiden Dr. </span>
@@ -265,11 +263,9 @@ const OrderView = () => {
             </div>
           </div>
           <div>
-
             {/* <h4 className="mb-1 font-weight-semibold">
                 Invoice  Date: 
               </h4> */}
-
 
             {/* <h4 className="mb-1 font-weight-semibold">
                 Customer Name : {order?.items.map((item)=>{
@@ -299,18 +295,36 @@ const OrderView = () => {
               }}
             >
               {/* <Column title="SN" dataIndex="name" key="name" /> */}
-              <Column title="Shipment" dataIndex="shipmentId" key="shipmentId" render={(text) => text ? <Link to={`/app/dashboards/shipments/shipment/shipment-view/${text}`}> {text}</Link> : "Not Shipped Yet"} />
+              <Column
+                title="Shipment"
+                dataIndex="shipmentId"
+                key="shipmentId"
+                render={(text) =>
+                  text ? (
+                    <Link
+                      to={`/app/dashboards/shipments/shipment/shipment-view/${text}`}
+                    >
+                      {' '}
+                      {text}
+                    </Link>
+                  ) : (
+                    'Not Shipped Yet'
+                  )
+                }
+              />
 
               <Column title="Product Name" dataIndex="name" key="name" />
               <Column title="HSN" dataIndex="hsn" key="hsn" />
-              <Column title="BATCH" dataIndex="batch" key="batch"/>
-      
+              <Column title="BATCH" dataIndex="batch" key="batch" />
+
               <Column title="EXP" dataIndex="expiry" key="expiry" />
               <Column title="QTY" dataIndex="quantity" key="quantity" />
               <Column title="PRICE" dataIndex="price" key="price" />
               <Column title="DISC" dataIndex="discount" key="discount" />
               {/* <Column title="TAXABLE" dataIndex="taxableAmount" key="taxableAmount" /> */}
-              <Column title="TAX" dataIndex="taxSplitup"
+              <Column
+                title="TAX"
+                dataIndex="taxSplitup"
                 render={(taxSplitup) => {
                   return (
                     <>
@@ -319,13 +333,12 @@ const OrderView = () => {
                           <p>Amount:{item.taxAmount}</p>
                           <p>Percentage:{item.taxPercentage}</p>
                           <p>Type:{item.taxType}</p>
-
-
                         </>
                       ))}
                     </>
                   )
-                }} />
+                }}
+              />
 
               {/* <Column title="AMOUNT" dataIndex="price" key="price" /> */}
 
@@ -378,18 +391,24 @@ const OrderView = () => {
             </Table>
             <div className="d-flex justify-content-end">
               <div className="text-right ">
-
-                <span className='mr-1'>shipping Charge: {order?.shippingCharge}
+                <span className="mr-1">
+                  shipping Charge: {order?.shippingCharge}
                 </span>
+                <div>Payment method : {order?.payment?.type}</div>
                 <div>
-                  Payment method : {order?.payment?.type}
-                </div>
-                <div>
-                  {order?.couponCode ? <div className='mr-1'>Coupon Code: {order?.couponCode}
-                  </div> : ""}
+                  {order?.couponCode ? (
+                    <div className="mr-1">Coupon Code: {order?.couponCode}</div>
+                  ) : (
+                    ''
+                  )}
 
-                  {order?.discount ? <div className='mr-1'>Discount Amount(-): {order?.discount}
-                  </div> : ""}
+                  {order?.discount ? (
+                    <div className="mr-1">
+                      Discount Amount(-): {order?.discount}
+                    </div>
+                  ) : (
+                    ''
+                  )}
                 </div>
                 <h2 className="font-weight-semibold mt-3">
                   <span className="mr-1">Grand Total: </span>₹
@@ -425,18 +444,13 @@ const OrderView = () => {
       <div style={{ display: 'none' }}>
         <div ref={componentRef}>
           <Card>
+            <hr className="line" />
 
-
-            <hr className='line' />
-
-            <br /><br />
-
-
-
+            <br />
+            <br />
 
             <div className="d-md-flex justify-content-md-between">
               <div>
-                
                 <address>
                   <p>
                     <span className="font-weight-semibold text-dark font-size-lg">
@@ -454,42 +468,36 @@ const OrderView = () => {
                     </span>
                     <br />
                     <p className="" title="Phone">
-                      Phone: {' '}
-
-                      <span>{order?.shippingAddress?.mobileNumber}</span>
-
+                      Phone: <span>{order?.shippingAddress?.mobileNumber}</span>
                     </p>
-
-
                   </p>
                 </address>
               </div>
               <div className="text-right">
-               
-              <h4 className="mb-1 font-weight-semibold">
-                Order No: {order?.orderNo}
-              </h4>
+                <h4 className="mb-1 font-weight-semibold">
+                  Order No: {order?.orderNo}
+                </h4>
 
-              <h6>
-                Order Date:
-                {moment(new Date(order?.createdAt * 1000)).format('DD-MM-YYYY')}
-                {/* {moment(parseInt(order?.createdAt)).format('YYYY-MM-DD')} */}
-              </h6>
-              <h4 className="mb-1 font-weight-semibold">
-                Payment Status: {order?.payment?.status}
-              </h4>
-              {/* <p>Status: {order?.status}</p> */}
-              {/* <p>shipping Charge: {order?.shippingCharge}</p> */}
-              {order?.transaction ? (
-                <p>Transaction ID : {order?.transaction?.id}</p>
-              ) : (
-                ''
-              )}
-
+                <h6>
+                  Order Date:
+                  {moment(new Date(order?.createdAt * 1000)).format(
+                    'DD-MM-YYYY'
+                  )}
+                  {/* {moment(parseInt(order?.createdAt)).format('YYYY-MM-DD')} */}
+                </h6>
+                <h4 className="mb-1 font-weight-semibold">
+                  Payment Status: {order?.payment?.status}
+                </h4>
+                {/* <p>Status: {order?.status}</p> */}
+                {/* <p>shipping Charge: {order?.shippingCharge}</p> */}
+                {order?.transaction ? (
+                  <p>Transaction ID : {order?.transaction?.id}</p>
+                ) : (
+                  ''
+                )}
               </div>
             </div>
             <div>
-
               {/* <h4 className="mb-1 font-weight-semibold">
                 Invoice  Date: 
               </h4> */}
@@ -522,12 +530,18 @@ const OrderView = () => {
 
                 <Column title="Product Name" dataIndex="name" key="name" />
                 <Column title="HSN" dataIndex="hsn" key="hsn" />
-                <Column title="BATCH" dataIndex="batchNumber" key="batchNumber" />
+                <Column
+                  title="BATCH"
+                  dataIndex="batchNumber"
+                  key="batchNumber"
+                />
                 <Column title="EXP" dataIndex="expiryDate" key="expiryDate" />
                 <Column title="QTY" dataIndex="quantity" key="quantity" />
                 <Column title="PRICE" dataIndex="price" key="price" />
                 <Column title="DISC" dataIndex="discount" key="discount" />
-                <Column title="TAX" dataIndex="taxSplitup"
+                <Column
+                  title="TAX"
+                  dataIndex="taxSplitup"
                   render={(taxSplitup) => {
                     return (
                       <>
@@ -536,17 +550,20 @@ const OrderView = () => {
                             <p>Amount:{item.taxAmount}</p>
                             <p>Percentage:{item.taxPercentage}</p>
                             <p>Type:{item.taxType}</p>
-
-
                           </>
                         ))}
                       </>
                     )
-                  }} />
+                  }}
+                />
 
                 {/* <Column title="AMOUNT" dataIndex="price" key="price" /> */}
 
-                <Column title="Vendor" dataIndex="vendorName" key="vendorName" />
+                <Column
+                  title="Vendor"
+                  dataIndex="vendorName"
+                  key="vendorName"
+                />
                 {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
                   <Column
                     title="Prescription Required"
@@ -561,15 +578,25 @@ const OrderView = () => {
               <div className="d-flex justify-content-end">
                 <div className="text-right ">
                   <h2 className="font-weight-semibold mt-3">
-
-                    <span className='mr-1'>Shipping Charge: {order?.shippingCharge}
+                    <span className="mr-1">
+                      Shipping Charge: {order?.shippingCharge}
                     </span>
                     <div>
-                      {order?.couponCode ? <div className='mr-1'>Coupon Code: {order?.couponCode}
-                      </div> : ""}
+                      {order?.couponCode ? (
+                        <div className="mr-1">
+                          Coupon Code: {order?.couponCode}
+                        </div>
+                      ) : (
+                        ''
+                      )}
 
-                      {order?.discount!==0 ? <div className='mr-1'>Discount Amount(-): {order?.discount}
-                      </div> : ""}
+                      {order?.discount !== 0 ? (
+                        <div className="mr-1">
+                          Discount Amount(-): {order?.discount}
+                        </div>
+                      ) : (
+                        ''
+                      )}
                     </div>
                     <span className="mr-1">Grand Total: </span>₹
                     {order?.totalAmount}
@@ -622,7 +649,13 @@ const OrderView = () => {
         orderId={order?.id}
       />
 
-      <CreateInvoiceForm items={order?.items} isInvoiceFormOpen={isInvoiceFormOpen} setIsInvoiceFormOpen={setIsInvoiceFormOpen} orderId={order?.id} />
+      <CreateInvoiceForm
+        refetchOrderData={getOrderById}
+        items={order?.items}
+        isInvoiceFormOpen={isInvoiceFormOpen}
+        setIsInvoiceFormOpen={setIsInvoiceFormOpen}
+        orderId={order?.id}
+      />
     </div>
   )
 }
