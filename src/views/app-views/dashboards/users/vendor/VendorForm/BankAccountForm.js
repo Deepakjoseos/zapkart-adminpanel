@@ -71,12 +71,21 @@ const BankAccountForm = ({
     if (data) {
       // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
 
-      setAccountTypes(Object.values(data.WALLET['FUND_ACCOUNT_TYPE']))
+     
+
+      
+
+      setAccountTypes(data.WALLET['FUND_ACCOUNT_TYPE'])
+
+      
+
       console.log('wallet',data.WALLET)
-      console.log('accountTypes',accountTypes);
+   
 
     }
   }
+
+  console.log('accountTypes',Object.keys(accountTypes));
   useEffect(() => {
     fetchConstants()
   }, [])
@@ -188,11 +197,22 @@ const BankAccountForm = ({
           >
             {/* <Input placeholder="Account Type" /> */}
             <Select placeholder="Account Type" onChange={(value) => { setSelectedAccountType(value) }}>
-              {accountTypes.map((item) => (
+              
+              {/* {accountTypes.map((item) => (
                 <Option key={item.id} value={item.key}>
                   {item}
                 </Option>
-              ))}
+              ))} */}
+              {
+                Object.keys(accountTypes).map(function(key) {
+                  return (
+                    <Option key={key} value={key}>
+                      {accountTypes[key]}
+                    </Option>
+                  )
+            // console.log(key, data.WALLET['FUND_ACCOUNT_TYPE'][key],'constants-wallent');
+               })
+              }
 
             </Select>
           </Form.Item>

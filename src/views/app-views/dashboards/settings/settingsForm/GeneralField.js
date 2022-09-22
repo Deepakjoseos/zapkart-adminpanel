@@ -127,6 +127,13 @@ const GeneralField = ({ setmode }) => {
           >
             <Input placeholder="Whatsapp Number" type="text" />
           </Form.Item>
+          <Form.Item
+            name="razorPayPayoutAccountNumber"
+            label="Razor Pay Account"
+            rules={rules.whatsappNo}
+          >
+            <Input placeholder="Razor Pay Account" type="text" />
+          </Form.Item>
           {/* <Form.Item
             name="vendorCommission"
             label="Vendor Commission"
