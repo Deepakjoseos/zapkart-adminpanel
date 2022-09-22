@@ -16,6 +16,7 @@ import moment from 'moment'
 import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import shipmentService from 'services/shipment'
+import vendorService from 'services/vendor'
 
 const ShipmentCreateForm = ({
   setIsFormOpen,
@@ -32,17 +33,41 @@ const ShipmentCreateForm = ({
 
   const [pickupLocations, setPickUpLocations] = useState([])
   const [submitLoading, setSubmitLoading] = useState(false)
+  const [vendors, setVendors] = useState([])
+  const [selectedVendorId, setSelectedVendorId] = useState(null)
+  const [vendorBasedItems, setVendorBasedItems] = useState([])
 
-  const getPickupLocations = async () => {
-    const data = await shipmentService.getPickupLocations()
-    if (data?.shipping_address) {
-      setPickUpLocations(data.shipping_address)
+  const getPickupLocations = async (id) => {
+    // const data = await shipmentService.getPickupLocations()
+    // if (data?.shipping_address) {
+    //   setPickUpLocations(data.shipping_address)
+    // }
+    const data = await vendorService.getVendorById(id)
+    if (data) {
+      setPickUpLocations(data.pickupLocations)
     }
   }
 
   useEffect(() => {
-    getPickupLocations()
-  }, [])
+    console.log(orderItems, 'hjvj')
+    if (orderItems?.length > 0) {
+      const vendors = orderItems?.map((cur) => {
+        return {
+          id: cur.vendorId,
+          name: cur.vendorName,
+        }
+      })
+      setVendors(vendors)
+    }
+  }, [orderItems])
+
+  const getVendorItems = (vendorId) => {
+    const itemsBasedVendor = orderItems?.filter(
+      (cur) => cur.vendorId === vendorId && !cur.shipmentId
+    )
+
+    setVendorBasedItems(itemsBasedVendor)
+  }
 
   const onFinish = async () => {
     setSubmitLoading(true)
@@ -72,7 +97,7 @@ const ShipmentCreateForm = ({
 
         const created = await shipmentService.createShipment(sendingValues)
         if (created) {
-          message.success(`Created ${values.name} to Shipment list`)
+          message.success(`Created Shipment`)
           history.goBack()
           setIsFormOpen(false)
           form.resetFields()
@@ -120,6 +145,47 @@ const ShipmentCreateForm = ({
           <Col xs={24} sm={24} md={24}>
             <Card title="Basic Info">
               <h3>Order No: {orderNo}</h3>
+
+              <Form.Item
+                name="vendorId"
+                label="Select Vendor"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Required',
+                  },
+                ]}
+              >
+                <Select
+                  placeholder="Select Vendor"
+                  showSearch
+                  optionFilterProp="children"
+                  filterOption={(input, option) =>
+                    option.children
+                      .toLowerCase()
+                      .indexOf(input.toLowerCase()) >= 0
+                  }
+                  onChange={(e) => {
+                    setSelectedVendorId(e)
+                    getVendorItems(e)
+                    getPickupLocations(e)
+
+                    // getPickupLocationByVendorId(e)
+                    form.resetFields()
+                    form.setFieldsValue({
+                      vendorId: e,
+                      shippedByVendor: false,
+                    })
+
+                    setShippedByVendor(false)
+                  }}
+                >
+                  {vendors?.map((cur) => (
+                    <Option value={cur.id}>{cur?.name}</Option>
+                  ))}
+                </Select>
+              </Form.Item>
+
               <Form.Item
                 name="shippedByVendor"
                 label="Shipped By Vendor"
@@ -152,16 +218,19 @@ const ShipmentCreateForm = ({
                 ]}
               >
                 <Select
-                  mode="multiple" optionFilterProp="children"
+                  mode="multiple"
+                  optionFilterProp="children"
                   filterOption={(input, option) =>
-                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                    option.children
+                      .toLowerCase()
+                      .indexOf(input.toLowerCase()) >= 0
                   }
                   //   size={size}
                   placeholder="Products Items"
                   defaultValue={[]}
                   //   onChange={handleChange}
                 >
-                  {orderItems?.map((item) => (
+                  {vendorBasedItems?.map((item) => (
                     <Option key={item.id} value={item.id}>
                       {item.name}
                     </Option>

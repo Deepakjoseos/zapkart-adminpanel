@@ -25,6 +25,7 @@ import { EventSourcePolyfill } from 'event-source-polyfill'
 import OrderComplete from './OrderComplete'
 import qs from 'qs'
 import productTemplate from 'services/productTemplate'
+import PrescriptionSection from './PrescriptionSection'
 
 const OrderCreate = () => {
   const { Option } = Select
@@ -893,7 +894,15 @@ const OrderCreate = () => {
                           {customerPrescriptions?.length === 0 && (
                             <h4>No Prescription Found</h4>
                           )}
-                          <Flex>
+
+                          <PrescriptionSection
+                            selectedCustomerId={selectedCustomer?.id}
+                            selectedPrescriptions={selectedPrescriptions}
+                            setSelectedPrescriptions={setSelectedPrescriptions}
+                            customerPrescriptions={customerPrescriptions}
+                            getCustomerPrescriptions={getCustomerPrescriptions}
+                          />
+                          {/* <Flex>
                             {customerPrescriptions &&
                               customerPrescriptions.map((prescription) => (
                                 <PrescriptionSelector
@@ -904,7 +913,7 @@ const OrderCreate = () => {
                                   cur={prescription}
                                 />
                               ))}
-                          </Flex>
+                          </Flex> */}
                         </>
                       )}
                       <Form.Item name="couponCode" label="CouponCode">

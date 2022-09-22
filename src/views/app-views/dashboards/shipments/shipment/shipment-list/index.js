@@ -7,7 +7,7 @@ import {
   Button,
   Menu,
   Tag,
-  notification
+  notification,
 } from 'antd'
 
 // import ShipmentListData from 'assets/data/product-list.data.json'
@@ -129,7 +129,6 @@ const ShipmentList = () => {
       // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
 
       setStatuses(Object.values(data.GENERAL['STATUS']))
-
     }
   }
 
@@ -178,7 +177,6 @@ const ShipmentList = () => {
         </Flex>
       </Menu.Item> */}
     </Menu>
-    
   )
 
   const addShipment = () => {
@@ -214,9 +212,11 @@ const ShipmentList = () => {
     {
       title: 'Shipment Number',
       dataIndex: 'id',
-      render: (text) => <Link to={`/app/dashboards/shipments/shipment/shipment-view/${text}`}>
-        {text}
-      </Link>
+      render: (text, row) => (
+        <Link to={`/app/dashboards/shipments/shipment/shipment-view/${text}`}>
+          {text}
+        </Link>
+      ),
     },
     {
       title: 'Orders',
@@ -226,13 +226,10 @@ const ShipmentList = () => {
           {record.items.map((item, index) => (
             <>
               <div>
-                
                 <Link to={`/app/dashboards/orders/order-view/${item.orderId}`}>
-                  {item?.orderId}
+                  {item?.orderNo}
                 </Link>
-
               </div>
-             
             </>
           ))}
         </div>
@@ -254,8 +251,6 @@ const ShipmentList = () => {
       dataIndex: 'actions',
       render: (_, elm) => (
         <Flex>
-
-
           {elm.status !== 'Cancelled' && (
             <Button
               className="mr-auto ml-2"
@@ -319,7 +314,6 @@ const ShipmentList = () => {
       </div>
     </Flex>
   )
-
 
   const cancelShipment = async (shipmentId) => {
     const resp = await shipmentService.shipmentCancel({ shipmentId })
