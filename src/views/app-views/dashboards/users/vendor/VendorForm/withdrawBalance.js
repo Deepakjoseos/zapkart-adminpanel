@@ -103,7 +103,7 @@ import walletService from 'services/Wallet'
               sendingValues
             )
           if (created) {
-            message.success(`Created BankAccount Success`)
+            message.success(`Withdrawed ${values.amount} from wallet`)
             setisFormOpen(false)
             // setSelectedBankAccount(null)
             // refreshData()
