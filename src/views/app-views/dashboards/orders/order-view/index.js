@@ -689,6 +689,7 @@ const OrderView = () => {
           {/* <Column title="Shipment" dataIndex="shipmentId" key="shipmentId" render={(text) => text ? <Link to={`/app/dashboards/shipments/shipment/shipment-view/${text}`}> {text}</Link> : "Shipment not available"} /> */}
 
           <Column title="Invoice Number" dataIndex="invoiceId" key="invoiceId" />
+          <Column title="Vendor Name" dataIndex="vendorName" key="vendorName"/>
           <Column title="Actions" 
            render={(_, row) => {
             return (
