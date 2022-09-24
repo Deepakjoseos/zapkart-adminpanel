@@ -32,6 +32,7 @@ import {
   FundProjectionScreenOutlined,
   UsergroupAddOutlined,
   FormatPainterOutlined,
+  NotificationOutlined,
   UserOutlined,
   ApartmentOutlined,
   SettingOutlined,
@@ -345,6 +346,15 @@ const dashBoardNavTree = [
         breadcrumb: false,
         submenu: [],
       },
+      {
+        key: 'dashboards-notifications',
+        path: `${APP_PREFIX_PATH}/dashboards/notifications/notification-list`,
+        title: 'Notifications',
+        icon: NotificationOutlined ,
+        breadcrumb: false,
+        submenu: [],
+      },
+
 
       {
         key: 'dashboards-orders',
@@ -472,6 +482,14 @@ const dashBoardNavTree = [
         path: `${APP_PREFIX_PATH}/dashboards/tax-category`,
         title: 'Tax Category',
         icon: MoneyCollectOutlined ,
+        breadcrumb: false,
+        submenu: [],
+      },
+      {
+        key: 'dashboards-imagecategories',
+        path: `${APP_PREFIX_PATH}/dashboards/image-categories/image-list`,
+        title: 'Images',
+        icon: DotChartOutlined,
         breadcrumb: false,
         submenu: [],
       },
