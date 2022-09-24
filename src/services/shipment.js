@@ -4,6 +4,7 @@ const shipmentService = {}
 const apiRoute = '/shipment'
 
 shipmentService.getShipments = async function () {
+  console.log('shipments')
   try {
     const res = await fetch({
       url: `${apiRoute}`,

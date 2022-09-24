@@ -157,6 +157,8 @@ const ShipmentView = () => {
   console.log(shipment, 'opskhsjlgbui')
   const requestPickupOrder = async () => {
     console.log('shipmentidpickuporder', id)
+    console.log('shipment_id',id)
+
 
     const data = await shipmentService.requestPickupOrder({
       shipmentId: id,
