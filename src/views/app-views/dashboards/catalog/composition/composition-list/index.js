@@ -9,14 +9,14 @@ import {
   Tag,
   Form,
   Row,
-  Col,
+  Col,Modal,notification,message
 } from 'antd'
 // import BrandListData from 'assets/data/product-list.data.json'
 import {
   EyeOutlined,
   DeleteOutlined,
   SearchOutlined,
-  PlusCircleOutlined,
+  PlusCircleOutlined,FileAddOutlined,DownloadOutlined
 } from '@ant-design/icons'
 import AvatarStatus from 'components/shared-components/AvatarStatus'
 import EllipsisDropdown from 'components/shared-components/EllipsisDropdown'
@@ -49,6 +49,7 @@ const getStockStatus = (status) => {
 }
 const CompositionList = () => {
   let history = useHistory()
+  const fileInputRef = React.useRef(null)
   const [form] = Form.useForm()
 
   const [list, setList] = useState([])
@@ -58,6 +59,8 @@ const CompositionList = () => {
   const [loading, setLoading] = useState(false)
   const [filterEnabled, setFilterEnabled] = useState(false)
   const [statuses, setStatuses] = useState([])
+  const [isExcelModalOpen, setIsExcelModalOpen] = useState(false)
+  const [excelFile, setExcelFile] = useState(null)
 
   // pagination
   const [pagination, setPagination] = useState({
@@ -225,6 +228,31 @@ const CompositionList = () => {
     getCompositions({ pagination: resetPagination() }, {})
     setFilterEnabled(false)
   }
+  const handleExcelUpload = (e) => {
+    let file = e.target.files[0]
+
+    setExcelFile(file)
+  }
+
+  const onExcelSubmit = async () => {
+    const sendingData = {
+      file: excelFile,
+    }
+
+    const sendExcelFile = await compositionService.createCompositionFromExcel(
+      sendingData
+    )
+
+    if (sendExcelFile) {
+      setIsExcelModalOpen(false)
+      setExcelFile(null)
+      notification.success({
+        message: 'Product Excel File Uploaded',
+      })
+      getCompositions(pagination)
+    }
+  }
+
   const filtersComponent = () => (
     <Form
       layout="vertical"
@@ -275,6 +303,15 @@ const CompositionList = () => {
     <Card>
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
         {filtersComponent()}
+        </Flex>
+        <div className="mr-2 d-flex justify-content-between">
+        <Button
+          type="primary"
+          icon={<FileAddOutlined />}
+          onClick={() => setIsExcelModalOpen(true)}
+        >
+          Excel Upload
+        </Button>
         <div>
           <Button
             onClick={addProduct}
@@ -285,7 +322,42 @@ const CompositionList = () => {
             Add Composition
           </Button>
         </div>
-      </Flex>
+        </div>
+        <Modal
+        title="Composition Excel Upload"
+        visible={isExcelModalOpen}
+        onCancel={() => {
+          setIsExcelModalOpen(false)
+          setExcelFile(null)
+        }}
+        footer={false}
+      >
+        <Flex flexDirection="column" alignItems="center">
+          <div className="mb-4 mt-4">
+            <Button
+              type="primary"
+              icon={<DownloadOutlined />}
+              onClick={() => fileInputRef.current.click()}
+            >
+              Upload Excel File
+            </Button>
+            <input
+              accept=".xls,.xlsx"
+              multiple={false}
+              ref={fileInputRef}
+              type="file"
+              onChange={handleExcelUpload}
+              hidden
+            />
+            <p> {excelFile && excelFile?.name}</p>
+          </div>
+
+          <Button type="primary" disabled={!excelFile} onClick={onExcelSubmit}>
+            Submit
+          </Button>
+        </Flex>
+      </Modal>
+      
       <div className="table-responsive">
         <Table columns={tableColumns} dataSource={list} rowKey="id" pagination={pagination}
           loading={loading}
