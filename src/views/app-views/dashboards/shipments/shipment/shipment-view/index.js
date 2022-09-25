@@ -1,16 +1,6 @@
 import React, { Component, useEffect, useRef, useState } from 'react'
 import { PrinterOutlined } from '@ant-design/icons'
-import {
-  Card,
-  Table,
-  Button,
-  Select,
-  notification,
-  Image,
-  Modal,
-  Row,
-  Col,
-} from 'antd'
+import { Card, Table, Button, Select, notification, Image, Modal, Row, Col } from 'antd'
 // import { invoiceData } from '../../../pages/invoice/invoiceData'
 import NumberFormat from 'react-number-format'
 import { useParams, Link } from 'react-router-dom'
@@ -22,7 +12,11 @@ import { useReactToPrint } from 'react-to-print'
 
 // import PrescriptionSelector from './PrescriptionSelector'
 import shipmentService from 'services/shipment'
-import CheckIfDeliverable from '../shipment-list/CheckIfDeliverable'
+
+
+
+
+
 
 const ShipmentView = () => {
   const { id } = useParams()
@@ -33,9 +27,6 @@ const ShipmentView = () => {
   const [manifest_button, showManifestButton] = useState(false)
   const [invoice_button, showInvoiceButton] = useState(false)
   const [pickupDetails, setPickupDetails] = useState(false)
-  const [checkIfDeliverableOpen, setCheckIfDeliverableOpen] = useState(false)
-  const [selectedCourierId, setSelectedCourierId] = useState(null)
-  const [currentActionButton, setCurrentActionButton] = useState(null)
   //   const [isFormOpen, setIsFormOpen] = useState(false)
   //   const [printing, setPrinting] = useState(false)
   //   const [isPrescriptionModalOpen, setIsPrescriptionModalOpen] = useState(false)
@@ -74,9 +65,11 @@ const ShipmentView = () => {
     // requestPickupOrder()
 
     console.log('shipmntId', id)
+
   }, [id])
   console.log('shipment', shipment)
   console.log('shiprocket', shipment.shiprocket)
+
 
   //   const handleOrderStatusChange = async (value, selectedRow) => {
   //     const updatedOrderStatus = await orderService.updateOrderItemStatus(id, {
@@ -153,26 +146,20 @@ const ShipmentView = () => {
   //     sorter: (a, b) => utils.antdTableSorter(a, b, 'status'),
   //   }
   // ]
-
-  console.log(shipment, 'opskhsjlgbui')
-  const requestPickupOrder = async () => {
+  const requestPickupOrder = async (id) => {
     console.log('shipmentidpickuporder', id)
     console.log('shipment_id',id)
 
 
     const data = await shipmentService.requestPickupOrder({
       shipmentId: id,
-      courierId: selectedCourierId,
     })
     if (data) {
       notification.success({
         message: 'Success',
         description: 'Request pickup successful',
       })
-      setCheckIfDeliverableOpen(false)
-      setSelectedCourierId(null)
-      setCurrentActionButton(null)
-      window.location.reload(true)
+    window.location.reload(true)
       // getShipments()
       console.log('pickuprequested data', data)
       if (!shipment.shiprocket?.awbDetails) {
@@ -188,16 +175,14 @@ const ShipmentView = () => {
         showInvoiceButton(true)
       }
     }
+
   }
-  const generateAwb = async () => {
+  const generateAwb = async (id) => {
+    console.log('id', id)
     const data = await shipmentService.generateAwb({
       shipmentId: id,
-      courierId: selectedCourierId,
     })
     if (data) {
-      setCheckIfDeliverableOpen(false)
-      setSelectedCourierId(null)
-      setCurrentActionButton(null)
       notification.success({
         message: 'Success',
         description: 'AWB Generated Successfully',
@@ -208,6 +193,7 @@ const ShipmentView = () => {
   const showAWBDetails = () => {
     setAWB(true)
   }
+
 
   const generateManifest = async (id) => {
     const data = await shipmentService.generateManifest({
@@ -220,10 +206,13 @@ const ShipmentView = () => {
       })
       // getShipments()
       // window.open(data.data.shiprocket.manifest, '_blank', 'noopener,noreferrer')
+
     }
+
   }
   const downloadManifest = () => {
     window.open(shipment.shiprocket?.manifest, '_blank', 'noopener,noreferrer')
+
   }
 
   const generateLabel = async (id) => {
@@ -237,10 +226,12 @@ const ShipmentView = () => {
       })
       // getShipments()
       // window.open(data.data.shiprocket.label, '_blank', 'noopener,noreferrer')
+
     }
   }
   const downloadLabel = () => {
     window.open(shipment.shiprocket?.label, '_blank', 'noopener,noreferrer')
+
   }
   const generateInvoice = async (id) => {
     const data = await shipmentService.generateInvoice({
@@ -258,45 +249,29 @@ const ShipmentView = () => {
   }
   const downlodInvoice = () => {
     window.open(shipment.shiprocket?.invoice, '_blank', 'noopener,noreferrer')
+
   }
   const showPickUpDetails = () => {
     setPickupDetails(true)
   }
 
-  useEffect(() => {
-    if (selectedCourierId) {
-      if (currentActionButton === 'request-pickup') {
-        requestPickupOrder()
-      } else if (currentActionButton === 'AWB') {
-        generateAwb()
-      }
-    }
-  }, [selectedCourierId])
-
   return (
+
     <>
       <Card>
         <Flex alignItems="right" justifyContent="between" mobileFlex={false}>
-          {shipment.shippedByVendor ? (
-            ''
-          ) : (
+          {shipment.shippedByVendor ?
+            "" :
             <div className="d-flex right">
-              {AWB_button ? (
+              {AWB_button ?
                 <Button
-                  onClick={() => {
-                    // generateAwb(id)
-                    setCheckIfDeliverableOpen(true)
-                    setCurrentActionButton('AWB')
-                  }}
-                  block
-                  type="primary"
+                  onClick={() => generateAwb(id)}
+                  block type="primary"
                   className="mr-2"
                 >
                   Generate AWB
                 </Button>
-              ) : (
-                ''
-              )}
+                : ""}
               {/* {shipment.shiprocket?.awbDetails ? <Button
                   onClick={showAWBDetails}
                   block type="primary"
@@ -305,80 +280,61 @@ const ShipmentView = () => {
                   Show AWB Details
                 </Button> : ""} */}
 
-              {label_button ? (
+
+              {label_button ?
                 <Button
                   onClick={() => generateLabel(id)}
                   type="primary"
-                  block
-                  className="mr-2"
+                  block className="mr-2"
                 >
                   Generate Label
-                </Button>
-              ) : (
-                ''
-              )}
-              {shipment.shiprocket?.label ? (
-                <Button
-                  onClick={downloadLabel}
-                  type="primary"
-                  block
-                  className="mr-2"
-                >
-                  Download Label
-                </Button>
-              ) : (
-                ''
-              )}
+                </Button> : ""}
+              {shipment.shiprocket?.label ? <Button
+                onClick={downloadLabel}
+                type="primary"
+                block className="mr-2"
+              >
+                Download Label
+              </Button> : ""}
 
-              {manifest_button ? (
+
+              {manifest_button ?
                 <Button
                   onClick={() => generateManifest(id)}
                   type="primary"
-                  block
-                  className="mr-2"
+                  block className="mr-2"
                 >
                   Generate Manifest
-                </Button>
-              ) : (
-                ''
-              )}
-              {shipment.shiprocket?.manifest ? (
-                <Button
-                  onClick={downloadManifest}
-                  type="primary"
-                  block
-                  className="mr-2"
-                >
-                  Download Manifest
-                </Button>
-              ) : (
-                ''
-              )}
+                </Button> : ""}
+              {shipment.shiprocket?.manifest ? <Button
+                onClick={downloadManifest}
+                type="primary"
+                block className="mr-2"
+              >
+                Download Manifest
+              </Button> : ""}
 
-              {invoice_button ? (
+
+
+              {invoice_button ?
                 <Button
                   onClick={() => generateInvoice(id)}
                   type="primary"
-                  block
-                  className="mr-2"
+                  block className="mr-2"
                 >
                   Generate Invoice
-                </Button>
-              ) : (
-                ''
-              )}
-              {shipment.shiprocket?.invoice ? (
+                </Button> : ""}
+              {shipment.shiprocket?.invoice ?
                 <Button
                   onClick={downlodInvoice}
                   type="primary"
-                  block
-                  className="mr-2"
+                  block className="mr-2"
                 >
                   Download Invoice
-                </Button>
-              ) : (
-                ''
-              )}
+                </Button> : ""}
+
+
+
 
               {/* {shipment.status === 'Pickup Requested' ?
                 <Button onClick={showPickUpDetails} type="primary">
@@ -388,24 +344,19 @@ const ShipmentView = () => {
                 </Button>
                 : ""} */}
 
-              {!shipment.shiprocket?.pickup ? (
-                <Button
-                  onClick={() => {
-                    // requestPickupOrder(id)
-                    setCheckIfDeliverableOpen(true)
-                    setCurrentActionButton('request-pickup')
-                  }}
-                  type="primary"
-                >
+              {!shipment.shiprocket?.pickup ?
+                <Button onClick={() => requestPickupOrder(id)} type="primary">
+
                   <span className="ml-2">Request to Pickup Order</span>
-                </Button>
-              ) : (
-                ''
-              )}
-            </div>
-          )}
+
+                </Button> : ""}
+
+
+            </div>}
+
         </Flex>
         <br /> <br />
+
         <h3>Shipment</h3>
         {shipment?.items?.map((item, index) => (
           <>
@@ -421,195 +372,79 @@ const ShipmentView = () => {
         <span>Status:</span>
         {shipment.status} <br />
         <span>Shipped By Vendor:</span>
-        {shipment.shippedByVendor ? 'Yes' : 'No'}
+        {shipment.shippedByVendor ? "Yes" : "No"}
         <Row>
           <Col>
-            {shipment.shiprocket?.awbDetails ? (
+            {shipment.shiprocket?.awbDetails ?
               <Card>
-                <div className="mt-3">
+                <div className='mt-3'>
                   <Row>
                     <Col>
                       <h3>AWB Details</h3>
-                      <p>
-                        AWB Code: {shipment.shiprocket?.awbDetails.awb_code}
-                      </p>
-                      <p>
-                        AWB Code Status:{' '}
-                        {shipment.shiprocket?.awbDetails.awb_code_status}
-                      </p>
+                      <p>AWB Code: {shipment.shiprocket?.awbDetails.awb_code}</p>
+                      <p>AWB Code Status: {shipment.shiprocket?.awbDetails.awb_code_status}</p>
                       <p>COD: {shipment.shiprocket?.awbDetails.cod}</p>
 
-                      <p>
-                        Courier Name:{' '}
-                        {shipment.shiprocket?.awbDetails.courier_name}
-                      </p>
-                      <p>
-                        Applied weight:{' '}
-                        {shipment.shiprocket?.awbDetails.applied_weight}
-                      </p>
-                      <p>
-                        Invoice Number:{' '}
-                        {shipment.shiprocket?.awbDetails.invoice_no}
-                      </p>
-                      <p>
-                        Company Id: {shipment.shiprocket?.awbDetails.company_id}
-                      </p>
-                      <p>
-                        Courier Company Id:{' '}
-                        {shipment.shiprocket?.awbDetails.courier_company_id}
-                      </p>
-                      <p>
-                        Date:{' '}
-                        {
-                          shipment.shiprocket?.awbDetails.assigned_date_time
-                            .date
-                        }
-                      </p>
-                      <p>
-                        Transporter Id :
-                        {shipment.shiprocket?.awbDetails.transporter_id}{' '}
-                      </p>
-                      {shipment.shiprocket?.awbDetails.transporter_name ? (
-                        <p>
-                          Transporter Name :
-                          {shipment.shiprocket?.awbDetails.transporter_name}{' '}
-                        </p>
-                      ) : (
-                        ''
-                      )}
+
+                      <p>Courier Name: {shipment.shiprocket?.awbDetails.courier_name}</p>
+                      <p>Applied weight: {shipment.shiprocket?.awbDetails.applied_weight}</p>
+                      <p>Invoice Number: {shipment.shiprocket?.awbDetails.invoice_no}</p>
+                      <p>Company Id: {shipment.shiprocket?.awbDetails.company_id}</p>
+                      <p>Courier Company Id: {shipment.shiprocket?.awbDetails.courier_company_id}</p>
+                      <p>Date: {shipment.shiprocket?.awbDetails.assigned_date_time.date}</p>
+                      <p>Transporter Id :{shipment.shiprocket?.awbDetails.transporter_id} </p>
+                      {shipment.shiprocket?.awbDetails.transporter_name ?
+                        <p>Transporter Name :{shipment.shiprocket?.awbDetails.transporter_name} </p>
+                        : ""}
+
                     </Col>
                     <Col>
                       <h5>Shipping Details</h5>
-                      <p>
-                        Shipper Company Name :
-                        {
-                          shipment.shiprocket?.awbDetails.shipped_by
-                            .shipper_company_name
-                        }{' '}
-                      </p>
-                      <p>
-                        RTO Country :
-                        {shipment.shiprocket?.awbDetails.shipped_by.rto_country}{' '}
-                      </p>
-                      <p>
-                        RTO State :
-                        {shipment.shiprocket?.awbDetails.shipped_by.rto_state}{' '}
-                      </p>
-                      <p>
-                        RTO City :
-                        {shipment.shiprocket?.awbDetails.shipped_by.rto_city}{' '}
-                      </p>
-                      <p>
-                        RTO Phone :
-                        {shipment.shiprocket?.awbDetails.shipped_by.rto_phone}{' '}
-                      </p>
-                      <p>
-                        RTO Phone :
-                        {shipment.shiprocket?.awbDetails.shipped_by.rto_phone}{' '}
-                      </p>
-                      <p>
-                        RTO PostCode :
-                        {
-                          shipment.shiprocket?.awbDetails.shipped_by
-                            .rto_postcode
-                        }{' '}
-                      </p>
-                      <p>
-                        RTO Email :
-                        {shipment.shiprocket?.awbDetails.shipped_by.rto_email}{' '}
-                      </p>
-                      <p>
-                        Shipper Address :
-                        {
-                          shipment.shiprocket?.awbDetails.shipped_by
-                            .shipper_address_1
-                        }{' '}
-                      </p>
-                      <p>
-                        Shipper City :
-                        {
-                          shipment.shiprocket?.awbDetails.shipped_by
-                            .shipper_city
-                        }{' '}
-                      </p>
-                      <p>
-                        Shipper Country :
-                        {
-                          shipment.shiprocket?.awbDetails.shipped_by
-                            .shipper_country
-                        }{' '}
-                      </p>
-                      <p>
-                        Shipper Email :
-                        {
-                          shipment.shiprocket?.awbDetails.shipped_by
-                            .shipper_email
-                        }{' '}
-                      </p>
-                      <p>
-                        Shipper Phone :
-                        {
-                          shipment.shiprocket?.awbDetails.shipped_by
-                            .shipper_phone
-                        }{' '}
-                      </p>
-                      <p>
-                        Shipper PostCode :
-                        {
-                          shipment.shiprocket?.awbDetails.shipped_by
-                            .shipper_postcode
-                        }{' '}
-                      </p>
-                      <p>
-                        Shipper State :
-                        {
-                          shipment.shiprocket?.awbDetails.shipped_by
-                            .shipper_state
-                        }{' '}
-                      </p>
+                      <p>Shipper Company Name :{shipment.shiprocket?.awbDetails.shipped_by.shipper_company_name} </p>
+                      <p>RTO Country :{shipment.shiprocket?.awbDetails.shipped_by.rto_country} </p>
+                      <p>RTO State :{shipment.shiprocket?.awbDetails.shipped_by.rto_state} </p>
+                      <p>RTO City :{shipment.shiprocket?.awbDetails.shipped_by.rto_city} </p>
+                      <p>RTO Phone :{shipment.shiprocket?.awbDetails.shipped_by.rto_phone} </p>
+                      <p>RTO Phone :{shipment.shiprocket?.awbDetails.shipped_by.rto_phone} </p>
+                      <p>RTO PostCode :{shipment.shiprocket?.awbDetails.shipped_by.rto_postcode} </p>
+                      <p>RTO Email :{shipment.shiprocket?.awbDetails.shipped_by.rto_email} </p>
+                      <p>Shipper Address :{shipment.shiprocket?.awbDetails.shipped_by.shipper_address_1} </p>
+                      <p>Shipper City :{shipment.shiprocket?.awbDetails.shipped_by.shipper_city} </p>
+                      <p>Shipper Country :{shipment.shiprocket?.awbDetails.shipped_by.shipper_country} </p>
+                      <p>Shipper Email :{shipment.shiprocket?.awbDetails.shipped_by.shipper_email} </p>
+                      <p>Shipper Phone :{shipment.shiprocket?.awbDetails.shipped_by.shipper_phone} </p>
+                      <p>Shipper PostCode :{shipment.shiprocket?.awbDetails.shipped_by.shipper_postcode} </p>
+                      <p>Shipper State :{shipment.shiprocket?.awbDetails.shipped_by.shipper_state} </p>
                     </Col>
                   </Row>
+
+
+
+
                 </div>
               </Card>
-            ) : (
-              ''
-            )}
+              : ""}
           </Col>
           <Col>
-            {shipment.shiprocket?.pickup ? (
+            {shipment.shiprocket?.pickup ?
               <Card>
-                <div className="mt-3">
+                <div className='mt-3'>
                   <h3>Pick Up Details</h3>
                   <h6>{shipment.shiprocket?.pickup?.data}</h6>
-                  <p>
-                    Scheduled Date:
-                    {moment(
-                      shipment.shiprocket?.pickup?.pickup_scheduled_date
-                    ).format('YYYY-MM-DD hh:mm a')}
-                  </p>
-                  <p>
-                    Pick Up Token Number:
-                    {shipment.shiprocket?.pickup?.pickup_token_number}
-                  </p>
+                  <p>Scheduled Date:{moment(shipment.shiprocket?.pickup?.pickup_scheduled_date).format('YYYY-MM-DD hh:mm a')}</p>
+                  <p>Pick Up Token Number:{shipment.shiprocket?.pickup?.pickup_token_number}</p>
                   <p>Status:{shipment.shiprocket?.pickup?.status}</p>
+
                 </div>
-              </Card>
-            ) : (
-              ''
-            )}
+              </Card> : ""}
           </Col>
+
         </Row>
+
       </Card>
-      <CheckIfDeliverable
-        setCheckIfDeliverableOpen={setCheckIfDeliverableOpen}
-        checkIfDeliverableOpen={checkIfDeliverableOpen}
-        selectable={true}
-        setSelectedCourierId={setSelectedCourierId}
-        shipment={shipment?.shiprocket?.order}
-        title="Select Courier"
-      />
     </>
   )
 }
+
 
 export default ShipmentView
