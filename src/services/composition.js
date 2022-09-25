@@ -66,5 +66,20 @@ compositionService.editComposition = async function (id, data) {
     console.log(err, 'show-err')
   }
 }
+compositionService.createCompositionFromExcel = async function (data) {
+  const formData = new FormData()
+  formData.append('file', data.file)
+
+  try {
+    const res = await fetch({
+      url: `/composition/createFromExcel`,
+      method: 'post',
+      data: formData,
+    })
+    return res
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
 
 export default compositionService
