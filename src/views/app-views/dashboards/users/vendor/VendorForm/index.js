@@ -11,6 +11,9 @@ import vendorService from 'services/vendor'
 import ViewPickupLocations from '../vendor-list/ViewPickUpLocations'
 import constantsService from 'services/constants'
 import userGroupService from 'services/userGroup'
+import VendorTransactions from './vendorTransactions'
+import walletService from 'services/Wallet'
+import BankAccount from './bankAccount'
 
 // const getAllPickUpLocations = async ()=>{
 //   const data = await shipmentService.getAllPickUpLocations()
@@ -28,6 +31,7 @@ const EDIT = 'EDIT'
 
 const ProductForm = (props) => {
   const { mode = ADD, param } = props
+  const id = param?.id
 
   const history = useHistory()
 
@@ -35,11 +39,13 @@ const ProductForm = (props) => {
   const [displayImage, setDisplayImage] = useState(null)
   const [submitLoading, setSubmitLoading] = useState(false)
   const[pickupLocation,setPickUpLocation] = useState(null)
-  const [selectedVendorId, setSelectedCustomerId] = useState(null)
   const [phoneVerified, setPhoneVerified] = useState(false)
   const [emailVerified, setEmailVerified] = useState(false)
   const [form_statuses,setStatuses] = useState([])
   const [groupList,setGroupList] = useState([])
+  const [transactions,setTransactions] = useState([])
+  const [wallet,setWallet] = useState({})
+  const[selectedVendorId,setSelectedVendorId] =useState(null)
 
 
    const {
@@ -67,15 +73,34 @@ const ProductForm = (props) => {
 
     }
   }
+  const getTransactions = async() =>{
+   const data= await walletService.getTransactions({userId:id})
+   if(data){
+    setTransactions(data)
+   }
+   console.log('trans',data)
+  }
+  const getWallet = async() =>{
+    const data= await walletService.getVendorWallet(id)
+    if(data){
+     setWallet(data)
+    }
+    console.log('trans',data)
+   }
   useEffect(()=>{
+    getTransactions()
+    if(id){ getWallet()}
+   
    fetchConstants()
    getUserGroups()
-  },[])
+  },[id])
   const fetchVendorById = async () => {
     const { id } = param
+    // console.log('id_vendor',param.id)
     const data = await vendorService.getVendorById(id)
     if (data) {
-
+     setSelectedVendorId(data.id)
+     console.log('datavendorid',data)
       setPickUpLocation(data.pickupLocations)
       let himg = []
       if (data.image) {
@@ -304,9 +329,17 @@ const ProductForm = (props) => {
                form_statuses={form_statuses} userGroups={groupList}
               />
             </TabPane>
-            {/* <TabPane tab="PickUpLocations" key="2">
-              <ViewPickupLocations pickupLocations={pickupLocations} selectedVendorId={selectedVendorId} refetchData={fetchVendorById}/>
-            </TabPane> */}
+            {id && (
+              <>
+            <TabPane tab="Transactions" key="2">
+           <VendorTransactions selectedVendorId={selectedVendorId} transactions={transactions} wallet={wallet}/>
+            </TabPane>
+            <TabPane tab="Bank Accounts" key="3">
+               <BankAccount selectedVendorId={selectedVendorId}/>
+            </TabPane>
+            </>
+            )}
+        
           </Tabs>
         </div>
       </Form>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+  import React, { useState } from 'react'
 import {
   Input,
   Row,
@@ -30,6 +30,12 @@ const rules = {
       message: 'Required',
     },
   ],
+  listingPlatform:[
+    {
+      required:true,
+      message:'Required'
+    }
+  ],
   staticContent: [
     {
       required: true,
@@ -53,7 +59,7 @@ const WidgetField = ({
   listItemsProvider,
   isStaticProviderSelected,
   listItems,
-  setListItems,
+  setListItems,listing_platforms
 }) => {
   const [isopenAddListingTableModal, setIsOpenAddListingTableModal] =
     useState(false)
@@ -97,6 +103,28 @@ const WidgetField = ({
               }}
             >
               {listingType.map((item) => (
+                <Option key={item} value={item}>
+                  {item}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item
+            name="listingPlatform"
+            label="Listing Platform"
+            rules={rules.allowedPaymentTypes}
+          >
+            <Select
+              mode="multiple" 
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              allowClear
+              style={{ width: '100%' }}
+              placeholder="Listing Platform"
+            >
+              {listing_platforms.map((item) => (
                 <Option key={item} value={item}>
                   {item}
                 </Option>

@@ -179,6 +179,7 @@ const GeneralField = ({
   taxCategories,
   paymentTypes,
   statuses,
+  // setSelectPage,
 }) => {
   const [image, setImage] = useState(false)
 
@@ -207,7 +208,7 @@ const GeneralField = ({
           <Form.Item
             name="description"
             label="Description"
-          // rules={rules.description}
+            // rules={rules.description}
           >
             <Editor
               placeholder="Write something..."
@@ -215,9 +216,7 @@ const GeneralField = ({
               onChange={(e) => form.setFieldsValue({ description: e })}
               name="description"
             />
-
           </Form.Item>
-
 
           <Form.Item name="status" label="Status" rules={rules.status}>
             <Select placeholder="Status">
@@ -233,6 +232,16 @@ const GeneralField = ({
               filterOption={(input, option) =>
                 option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
               }
+              // onPopupScroll={(e) => {
+              //   const { target } = e;
+
+              //   if (
+              //     Math.round(target.scrollTop + target.offsetHeight) ===
+              //     Math.round(target.scrollHeight)
+              //   ) {
+              //     setSelectPage((prev) => prev + 1);
+              //   }
+              // }}
             >
               {brands.map((brand) => (
                 <Option key={brand.id} value={brand.id}>
@@ -245,6 +254,10 @@ const GeneralField = ({
             <Select
               placeholder="Tax Category"
               showSearch
+              // optionFilterProp="children"
+              // filterOption={(input, option) =>
+              //   option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              // }
               optionFilterProp="children"
               filterOption={(input, option) =>
                 option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
@@ -252,7 +265,7 @@ const GeneralField = ({
             >
               {taxCategories.map((item) => (
                 <Option key={item.id} value={item.id}>
-                  {item.name}
+                  {item.name || item?.id}
                 </Option>
               ))}
             </Select>
@@ -295,11 +308,12 @@ const GeneralField = ({
               </Select>
             </Form.Item>
           )}
-          <Form.Item name="commission"
+          <Form.Item
+            name="commission"
             label="Vendor Commission"
-            rules={rules.commission}>
-            <Input placeholder='Vendor Commission' />
-
+            rules={rules.commission}
+          >
+            <Input placeholder="Vendor Commission" />
           </Form.Item>
           {/* <Form.Item
           name="productType"
@@ -314,23 +328,15 @@ const GeneralField = ({
               label="Medicine Type"
               rules={rules.medicineTypeId}
             >
-              <Select placeholder="Medicine Type" showSearch
+              <Select
+                placeholder="Medicine Type"
+                showSearch
                 optionFilterProp="children"
                 filterOption={(input, option) =>
-                  option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                  option.children.toLowerCase().indexOf(input.toLowerCase()) >=
+                  0
                 }
-                // onPopupScroll={e => {
-                //   const { target } = e;
-
-                 
-                //   if (
-                //     Math.round(target.scrollTop + target.offsetHeight) ===
-                //     Math.round(target.scrollHeight)
-                //   ) {
-                //     setSelectPage(prev => prev + 1)
-                //   }
-                // }}
-                >
+              >
                 {medicineTypes.map((medicineType) => (
                   <Option key={medicineType.id} value={medicineType.id}>
                     {medicineType.name}
@@ -395,7 +401,7 @@ const GeneralField = ({
             <Form.Item
               name="returnPeriod"
               label="ReturnPeriod"
-            // rules={rules.returnPeriod}
+              // rules={rules.returnPeriod}
             >
               <InputNumber type="number" min={0} max={100000} />
             </Form.Item>
@@ -659,9 +665,7 @@ const GeneralField = ({
             label="Length Class"
             // rules={rules.lengthClass}
           >
-            <Select
-              style={{ width: 150 }}
-            >
+            <Select style={{ width: 150 }}>
               {lengthClass?.map((item) => (
                 <Option key={item} value={item}>
                   {item}
@@ -675,27 +679,20 @@ const GeneralField = ({
             label="Weight Class"
             // rules={rules.weightClass}
           >
-
-
-
-            <Select
-              style={{ width: 150 }}
-            >
+            <Select style={{ width: 150 }}>
               {weightClass?.map((item) => (
                 <Option key={item} value={item}>
                   {item}
                 </Option>
               ))}
             </Select>
-
-
           </Form.Item>
 
-          <Form.Item name="height" label="Height" >
+          <Form.Item name="height" label="Height">
             <InputNumber type="number" min={0} max={100000} />
           </Form.Item>
 
-          <Form.Item name="length" label="Length" >
+          <Form.Item name="length" label="Length">
             <InputNumber type="number" min={0} max={100000} />
           </Form.Item>
 
@@ -703,7 +700,7 @@ const GeneralField = ({
             <InputNumber type="number" min={0} max={100000} />
           </Form.Item>
 
-          <Form.Item name="weight" label="Weight" >
+          <Form.Item name="weight" label="Weight">
             <InputNumber type="number" min={0} max={100000} />
           </Form.Item>
         </Card>

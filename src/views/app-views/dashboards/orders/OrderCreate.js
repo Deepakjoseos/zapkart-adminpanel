@@ -24,6 +24,8 @@ import orderService from 'services/orders'
 import { EventSourcePolyfill } from 'event-source-polyfill'
 import OrderComplete from './OrderComplete'
 import qs from 'qs'
+import productTemplate from 'services/productTemplate'
+import PrescriptionSection from './PrescriptionSection'
 
 const OrderCreate = () => {
   const { Option } = Select
@@ -47,7 +49,10 @@ const OrderCreate = () => {
   const [paymentLoading, setPaymentLoading] = useState(false)
   const [razorpayItems, setRazorpayItems] = useState(null)
   const [availablePaymentMethods, setAvailablePaymentMethods] = useState([])
-  const [loading,setLoading] = useState([])
+  const [loading, setLoading] = useState([])
+
+  const [productSelectChangeTracker, setProductChangeTracker] = useState(false)
+  const [productsTemplate, setProductsTemplate] = useState([])
 
   const rules = {
     name: [
@@ -80,11 +85,103 @@ const OrderCreate = () => {
         message: 'Required',
       },
     ],
-  } 
+  }
 
-  // const getProducts = (paginationParams = {}, filterParams={userId:selectedCustomerId}) => {
-  //   const data = await productService.getProducts()
-  //   if (data.data) {
+  const getProductsTemplate = async () => {
+    const data = await productTemplate.getProductTemplatesPublic(
+      '',
+      'status=Active&productsExists=true'
+    )
+    if (data.data) {
+      setProductsTemplate(data.data)
+    }
+  }
+
+  const resetProductItem = (fieldIndex, productTemplateId, variantId) => {
+    const resetCur = form.getFieldValue('items')?.map((cur, i) => {
+      if (i === fieldIndex) {
+        console.log('plsseswewe', fieldIndex)
+        return {
+          productTemplateId: productTemplateId,
+          variantId: variantId ? variantId : '',
+          id: '',
+          quantity: '',
+        }
+      } else {
+        return { ...cur }
+      }
+    })
+
+    return resetCur
+  }
+
+  const getProductVariants = (fieldIndex) => {
+    const allProductTempVariants = productsTemplate?.find(
+      (cur) =>
+        cur.id === form.getFieldValue('items')[fieldIndex]?.productTemplateId
+    )
+    console.log(allProductTempVariants?.variants, 'plssswe23')
+
+    return allProductTempVariants?.variants
+  }
+
+  const getProducts = (fieldIndex) => {
+    const allProductTempVariants = productsTemplate?.find(
+      (cur) =>
+        cur.id === form.getFieldValue('items')[fieldIndex]?.productTemplateId
+    )
+
+    if (form.getFieldValue('items')[fieldIndex]?.variantId) {
+      const filterByVendorId = allProductTempVariants?.products?.filter(
+        (cur) =>
+          cur?.variant?.id ===
+          form.getFieldValue('items')[fieldIndex]?.variantId
+      )
+      return filterByVendorId
+    } else {
+      return allProductTempVariants?.products
+    }
+  }
+
+  // const updateProductsByVariantId = (fieldIndex) => {
+  //   const allProductTempVariants = productsTemplate?.find(
+  //     (cur) =>
+  //       cur.id === form.getFieldValue('items')[fieldIndex]?.productTemplateId
+  //   )
+
+  //   const filterByVariantId = ()
+
+  //   return allProductTempVariants?.products
+  // }
+
+  // const getOrderItems = (fieldIndex) => {
+  //   const allOrderItems = orders?.find(
+  //     (cur) => cur.id === form.getFieldValue('items')[fieldIndex]?.orderId
+  //   )
+
+  //   const filterOrderItemsByVendor = allOrderItems?.items?.filter(
+  //     (cur) => cur.vendorId === selectedVendorId
+  //   )
+
+  //   return filterOrderItemsByVendor
+  // }
+
+  // const getPaginationParams = (params) => ({
+  //   limit: params.pagination?.pageSize,
+  //   page: params.pagination?.current,
+  //   // ...params,
+  // })
+  // const getProducts = async (
+  //   paginationParams = {},
+  //   filterParams = { status: 'Active', approval: 'Approved' }
+  // ) => {
+  //   setLoading(true)
+  //   const data = await productService.getProducts(
+  //     qs.stringify(getPaginationParams(paginationParams)),
+  //     qs.stringify(filterParams)
+  //   )
+
+  //   if (data) {
   //     const productList = data.data.map((product) => {
   //       return {
   //         ...product,
@@ -95,30 +192,7 @@ const OrderCreate = () => {
   //     })
   //     setProducts(productList)
   //   }
-  const getPaginationParams = (params) => ({
-    limit: params.pagination?.pageSize,
-    page: params.pagination?.current,
-    // ...params,
-  })
-    const getProducts = async (paginationParams = {}, filterParams={status:'Active',approval:'Approved'}) => {
-      setLoading(true)
-      const data = await productService.getProducts(
-        qs.stringify(getPaginationParams(paginationParams)),
-        qs.stringify(filterParams)
-      )
-    
-      if (data) {
-        const productList = data.data.map((product) => {
-          return {
-            ...product,
-            productname: product?.variant?.name
-              ? product?.variant?.name
-              : product?.name,
-          }
-        })
-        setProducts(productList)
-  }
-}
+  // }
 
   const getCustomers = async () => {
     const data = await customerService.getCustomers()
@@ -159,7 +233,8 @@ const OrderCreate = () => {
   }
 
   useEffect(() => {
-    getProducts()
+    // getProducts()
+    getProductsTemplate()
     getCustomers()
   }, [])
 
@@ -175,7 +250,9 @@ const OrderCreate = () => {
         }
 
         const sendingData = {
-          items: values.items,
+          items: values.items?.map((item) => {
+            return { id: item.id, quantity: item.quantity }
+          }),
           fromCart: false,
           shippingAddressId: values.shippingAddressId,
           billingAddressId: isShippingAndBillingAddressSame
@@ -225,12 +302,12 @@ const OrderCreate = () => {
   const checkPrescriptionRequired = () => {
     const productsval = form.getFieldValue('items')
 
-    if (products) {
-      const ids = productsval?.map((cur) => cur.id)
+    if (productsTemplate) {
+      const ids = productsval?.map((cur) => cur?.productTemplateId)
       console.log(ids, 'plkss')
 
       if (ids) {
-        const prescriptionRequired = products.some(
+        const prescriptionRequired = productsTemplate.some(
           (cur) => ids.includes(cur.id) && cur.prescriptionRequired
         )
 
@@ -242,12 +319,12 @@ const OrderCreate = () => {
   // Checkout Events
   useEffect(() => {
     if (isCheckoutEvenStarted && requestId) {
-      let baseurl;
+      let baseurl
 
-      if(process.env.REACT_APP_SITE_NAME === 'athathy') {
+      if (process.env.REACT_APP_SITE_NAME === 'athathy') {
         baseurl = 'https://www.ecommercetest2.riolabz.com'
       } else {
-        if(process.env.NODE_ENV === 'development') {
+        if (process.env.NODE_ENV === 'development') {
           baseurl = 'https://www.ecommerce.riolabz.com'
         } else if (process.env.NODE_ENV === 'production') {
           baseurl = 'https://ecommercelive.riolabz.com'
@@ -428,6 +505,8 @@ const OrderCreate = () => {
           initialValues={{
             items: [
               {
+                productTemplateId: '',
+                variantId: '',
                 id: '',
                 quantity: '',
               },
@@ -466,7 +545,7 @@ const OrderCreate = () => {
             </div>
           </PageHeaderAlt>
           <div className="container">
-            <Row gutter={16}>
+            <Row gutter={16} align="middle">
               <Col xs={24} sm={24} md={24}>
                 <Card title="Order Form">
                   <Form.Item
@@ -499,21 +578,171 @@ const OrderCreate = () => {
                   </Form.Item>
                   {selectedCustomer && (
                     <>
-                      <label style={{ fontWeight: 500, marginBottom: '10px' }}>
+                      {/* <label style={{ fontWeight: 500, marginBottom: '10px' }}>
                         Products
-                      </label>
+                      </label> */}
                       <Form.List name="items">
                         {(fields, { add, remove }) => {
                           console.log(fields, 'show-filelds')
                           return (
                             <>
                               {fields.map((field) => (
-                                <Space
+                                <Row
+                                  gutter={16}
                                   key={field.key}
                                   style={{ display: 'flex', width: '100%' }}
                                   align="baseline"
                                 >
-                                  <Form.Item
+                                  <Col lg={6} md={6} sm={12}>
+                                    <Form.Item
+                                      {...field}
+                                      rules={[
+                                        { required: true, message: 'required' },
+                                      ]}
+                                      label="Product Template"
+                                      name={[field.name, 'productTemplateId']}
+                                      fieldKey={[
+                                        field.fieldKey,
+                                        'productTemplateId',
+                                      ]}
+                                    >
+                                      <Select
+                                        style={{ width: '100%' }}
+                                        placeholder="Select Product Template"
+                                        showSearch
+                                        optionFilterProp="children"
+                                        filterOption={(input, option) =>
+                                          option.children
+                                            .toLowerCase()
+                                            .indexOf(input.toLowerCase()) >= 0
+                                        }
+                                        onChange={(e) => {
+                                          checkPrescriptionRequired()
+                                          setProductChangeTracker(
+                                            !productSelectChangeTracker
+                                          )
+                                          form.setFieldsValue({
+                                            items: resetProductItem(
+                                              field.name,
+                                              e
+                                            ),
+                                          })
+                                        }}
+                                      >
+                                        {productsTemplate?.map((product) => (
+                                          <Option
+                                            key={product.id}
+                                            value={product.id}
+                                          >
+                                            {product.name}
+                                          </Option>
+                                        ))}
+                                      </Select>
+                                    </Form.Item>
+                                  </Col>
+
+                                  <Col lg={6} md={6} sm={12}>
+                                    <Form.Item
+                                      {...field}
+                                      rules={[
+                                        {
+                                          required:
+                                            getProductVariants(field.name)
+                                              ?.length > 0
+                                              ? true
+                                              : false,
+                                          message: 'required',
+                                        },
+                                      ]}
+                                      name={[field.name, 'variantId']}
+                                      fieldKey={[field.fieldKey, 'variantId']}
+                                      label="Variant"
+                                    >
+                                      <Select
+                                        style={{ width: '100%' }}
+                                        placeholder="Select Variant"
+                                        showSearch
+                                        optionFilterProp="children"
+                                        filterOption={(input, option) =>
+                                          option.children
+                                            .toLowerCase()
+                                            .indexOf(input.toLowerCase()) >= 0
+                                        }
+                                        onChange={(e) => {
+                                          // checkPrescriptionRequired()
+                                          form.setFieldsValue({
+                                            items: resetProductItem(
+                                              field?.name,
+                                              form.getFieldValue('items')[
+                                                field?.name
+                                              ]?.productTemplateId,
+                                              e
+                                            ),
+                                          })
+
+                                          setProductChangeTracker(
+                                            !productSelectChangeTracker
+                                          )
+                                        }}
+                                      >
+                                        {form.getFieldValue('items')[field.name]
+                                          ?.productTemplateId &&
+                                          getProductVariants(field.name)?.map(
+                                            (item) => (
+                                              <Option
+                                                key={item.id}
+                                                value={item.id}
+                                              >
+                                                {item.name}
+                                              </Option>
+                                            )
+                                          )}
+                                      </Select>
+                                    </Form.Item>
+                                  </Col>
+                                  <Col lg={6} md={6} sm={12}>
+                                    <Form.Item
+                                      {...field}
+                                      rules={[
+                                        { required: true, message: 'required' },
+                                      ]}
+                                      name={[field.name, 'id']}
+                                      fieldKey={[field.fieldKey, 'id']}
+                                      label="Product"
+                                    >
+                                      <Select
+                                        style={{ width: '100%' }}
+                                        placeholder="Select Product"
+                                        showSearch
+                                        optionFilterProp="children"
+                                        filterOption={(input, option) =>
+                                          option.children
+                                            .toLowerCase()
+                                            .indexOf(input.toLowerCase()) >= 0
+                                        }
+                                        onChange={(e) => {
+                                          // checkPrescriptionRequired()
+                                          setProductChangeTracker(
+                                            !productSelectChangeTracker
+                                          )
+                                        }}
+                                      >
+                                        {form.getFieldValue('items')[field.name]
+                                          ?.productTemplateId &&
+                                          getProducts(field.name)?.map(
+                                            (item) => (
+                                              <Option
+                                                key={item.id}
+                                                value={item.id}
+                                              >
+                                                {item?.username}
+                                              </Option>
+                                            )
+                                          )}
+                                      </Select>
+                                    </Form.Item>
+                                  </Col>
+                                  {/* <Form.Item
                                     {...field}
                                     rules={[
                                       { required: true, message: 'required' },
@@ -523,7 +752,7 @@ const OrderCreate = () => {
                                   >
                                     <Select
                                       placeholder="Select Product"
-                                      style={{ width: 300 }}
+                                      
                                       showSearch
                                       optionFilterProp="children"
                                       filterOption={(input, option) =>
@@ -544,35 +773,39 @@ const OrderCreate = () => {
                                         </Option>
                                       ))}
                                     </Select>
-                                    {/* <Input placeholder="name" /> */}
-                                  </Form.Item>
-                                  <Form.Item
-                                    {...field}
-                                    rules={[
-                                      { required: true, message: 'required' },
-                                    ]}
-                                    name={[field.name, 'quantity']}
-                                    fieldKey={[field.fieldKey, 'quantity']}
-                                  >
-                                    <InputNumber
-                                      placeholder="Quantity"
-                                      size="large"
-                                      style={{ width: 300 }}
-                                      min={1}
-                                      type="number"
-                                      max={100000}
-                                    />
-                                  </Form.Item>
+                                  </Form.Item> */}
+                                  <Col lg={3} md={3} sm={8}>
+                                    <Form.Item
+                                      {...field}
+                                      rules={[
+                                        { required: true, message: 'required' },
+                                      ]}
+                                      name={[field.name, 'quantity']}
+                                      fieldKey={[field.fieldKey, 'quantity']}
+                                      label="Quantity"
+                                    >
+                                      <InputNumber
+                                        style={{ width: '100%' }}
+                                        placeholder="Quantity"
+                                        size="large"
+                                        min={1}
+                                        type="number"
+                                        max={100000}
+                                      />
+                                    </Form.Item>
+                                  </Col>
                                   {fields.length > 1 && (
-                                    <MinusCircleOutlined
-                                      onClick={() => {
-                                        //   onAttributeChange()
-                                        remove(field.name)
-                                        checkPrescriptionRequired()
-                                      }}
-                                    />
+                                    <Col lg={3} md={3} sm={8}>
+                                      <MinusCircleOutlined
+                                        onClick={() => {
+                                          //   onAttributeChange()
+                                          remove(field.name)
+                                          checkPrescriptionRequired()
+                                        }}
+                                      />
+                                    </Col>
                                   )}
-                                </Space>
+                                </Row>
                               ))}
                               <Form.Item>
                                 <Button
@@ -661,7 +894,15 @@ const OrderCreate = () => {
                           {customerPrescriptions?.length === 0 && (
                             <h4>No Prescription Found</h4>
                           )}
-                          <Flex>
+
+                          <PrescriptionSection
+                            selectedCustomerId={selectedCustomer?.id}
+                            selectedPrescriptions={selectedPrescriptions}
+                            setSelectedPrescriptions={setSelectedPrescriptions}
+                            customerPrescriptions={customerPrescriptions}
+                            getCustomerPrescriptions={getCustomerPrescriptions}
+                          />
+                          {/* <Flex>
                             {customerPrescriptions &&
                               customerPrescriptions.map((prescription) => (
                                 <PrescriptionSelector
@@ -672,7 +913,7 @@ const OrderCreate = () => {
                                   cur={prescription}
                                 />
                               ))}
-                          </Flex>
+                          </Flex> */}
                         </>
                       )}
                       <Form.Item name="couponCode" label="CouponCode">

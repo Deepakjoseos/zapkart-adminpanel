@@ -64,8 +64,8 @@ const TaxCategoryForm = (props) => {
           form.setFieldsValue({
             status: data.status,
             name:data.name,
-            sameState:data.sameState,
-            nonSameState:data.nonSameState
+            taxes:data.taxes
+       
             
 
           })
@@ -92,8 +92,8 @@ const TaxCategoryForm = (props) => {
         const sendingValues = {
           status: values?.status,
           name:values?.name,
-          sameState:values?.sameState,
-          nonSameState:values?.nonSameState
+          taxes:values?.taxes
+       
  
     
       
@@ -142,18 +142,14 @@ const TaxCategoryForm = (props) => {
       
         initialValues={{
             status:'Hold',
-            sameState: [
+            taxes: [
               {
                 type: '',
                 percent: '',
+                sameState:''
               },
             ],
-            nonSameState: [
-                {
-                  type: '',
-                  percent: '',
-                },
-              ],
+     
           }}
       >
         <PageHeaderAlt className="border-bottom" overlap>

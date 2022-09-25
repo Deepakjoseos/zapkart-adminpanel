@@ -56,11 +56,11 @@ const GeneralField = ({
                     <Form.Item label="Status" name="status">
                         <Select placeholder="Status">
                             <Option value="Active">Active</Option>
-                            <Option value="Hold"></Option>Hold
+                            <Option value="Hold">Hold</Option>
                         </Select>
                     </Form.Item>
-                    <p>Same State</p>
-                    <Form.List name="sameState">
+                    <p>Taxes</p>
+                    <Form.List name="taxes">
                         {(fields, { add, remove }) => {
                             console.log(fields, 'show-filelds')
                             return (
@@ -101,75 +101,19 @@ const GeneralField = ({
 
                                                 />
                                             </Form.Item>
-
-                                            {fields.length > 1 && (
-                                                <MinusCircleOutlined
-                                                    onClick={() => {
-                                                        // onAttributeChange()
-                                                        remove(field.name)
-                                                        // checkPrescriptionRequired()
-                                                    }}
-                                                />
-                                            )}
-                                        </Space>
-                                    ))}
-                                    <Form.Item>
-                                        <Button
-                                            type="primary"
-                                            onClick={() => {
-                                                add()
-                                                // checkPrescriptionRequired()
-                                            }}
-                                            icon={<PlusOutlined />}
-                                        >
-                                            Add Same State values
-                                        </Button>
-                                    </Form.Item>
-                                </>
-                            )
-                        }}
-                    </Form.List>
-                    <p>Non Same State</p>
-                    <Form.List name="nonSameState">
-                        {(fields, { add, remove }) => {
-                            console.log(fields, 'show-filelds')
-                            return (
-                                <>
-                                    {fields.map((field) => (
-                                        <Space
-                                            key={field.key}
-                                            style={{ display: 'flex', width: '100%' }}
-                                            align="baseline"
-                                        >
-                                            <Form.Item
-                                                {...field} label="Type"
-                                                rules={[
-                                                    { required: true, message: 'required' },
-                                                ]}
-                                                name={[field.name, 'type']}
-                                                fieldKey={[field.fieldKey, 'type']}
-                                            >
-                                                <Input
-                                                    placeholder="Type"
-                                                    style={{ width: '100%' }}
-
-                                                />
-
-                                            </Form.Item>
-                                            <Form.Item label="Percent"
+                                            <Form.Item label="Same State"
                                                 {...field}
                                                 rules={[
                                                     { required: true, message: 'required' },
                                                 ]}
-                                                name={[field.name, 'percent']}
-                                                fieldKey={[field.fieldKey, 'percent']}
+                                                name={[field.name, 'sameState']}
+                                                fieldKey={[field.fieldKey, 'sameState']}
                                             >
-                                                <InputNumber
-                                                    placeholder="Percent"
-                                                    style={{ width: '100%' }}
+                                                <Select>
+                                                    <Option value='Yes'>Yes</Option>
+                                                    <Option value='No'>No</Option>
 
-
-                                                />
+                                                </Select>
                                             </Form.Item>
 
                                             {fields.length > 1 && (
@@ -192,13 +136,14 @@ const GeneralField = ({
                                             }}
                                             icon={<PlusOutlined />}
                                         >
-                                            Add Non Same State values
+                                            Add Tax Values
                                         </Button>
                                     </Form.Item>
                                 </>
                             )
                         }}
                     </Form.List>
+                   
                 </Card>
 
 
