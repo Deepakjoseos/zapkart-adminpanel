@@ -23,6 +23,7 @@ const OrderView = () => {
   const [printing, setPrinting] = useState(false)
   const [isPrescriptionModalOpen, setIsPrescriptionModalOpen] = useState(false)
   const [isInvoiceFormOpen, setIsInvoiceFormOpen] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const componentRef = useRef()
   const handlePrint = useReactToPrint({
@@ -55,7 +56,17 @@ const OrderView = () => {
   useEffect(() => {
     getOrderById()
   }, [id])
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
 
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
   const orderStatuses = [
     'Pending',
     'Received',
@@ -134,8 +145,12 @@ const OrderView = () => {
   // const getCustomerPrescription = async(value) => {
   //   await customerService.getCustomerPrescription
   // }
-
+  const downloadInvoice = (invoiceUrl) => {
+    window.open(invoiceUrl, '_blank', 'noopener,noreferrer')
+  }
   return (
+    <>
+
     <div className="container">
       <Flex justifyContent="end">
         {order.status === 'Verifying Prescription' && (
@@ -177,6 +192,14 @@ const OrderView = () => {
             </Button>
           </>
         )}
+         {
+            order?.invoice?.vendorInvoices && (
+              <Button type="primary" className='mb-4 mr-2' onClick={showModal}>
+                Download Invoices
+              </Button>
+            )
+          }
+
 
         <Button type="primary" className="mb-4" onClick={handlePrint}>
           Print this out!
@@ -657,6 +680,33 @@ const OrderView = () => {
         orderId={order?.id}
       />
     </div>
+    <Modal title="Invoices" visible={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+        <Table
+          dataSource={order?.invoice?.vendorInvoices}
+          pagination={false}
+          className="mb-5"
+        >
+          {/* <Column title="Shipment" dataIndex="shipmentId" key="shipmentId" render={(text) => text ? <Link to={`/app/dashboards/shipments/shipment/shipment-view/${text}`}> {text}</Link> : "Shipment not available"} /> */}
+
+          <Column title="Invoice Number" dataIndex="invoiceId" key="invoiceId" />
+          <Column title="Vendor Name" dataIndex="vendorName" key="vendorName"/>
+          <Column title="Actions" 
+           render={(_, row) => {
+            return (
+                <Button
+                  type="primary"
+                  onClick={() => downloadInvoice(row.invoiceUrl)}
+                >
+                  Download
+                </Button>
+              )
+            
+          }}
+          />
+
+        </Table>
+      </Modal>
+    </>
   )
 }
 //   total() {
