@@ -32,6 +32,7 @@ const StateForm = (props) => {
    const [state ,setState]=useState([])
 
    const [form_statuses,setStatuses] = useState([])
+   const [countries,setCountries] =useState([])
    
    
    
@@ -45,6 +46,15 @@ const StateForm = (props) => {
 
     }
   }
+  const getCountries = async()=>{
+    const data= await countryService.getCountries()
+    if(data){
+      setCountries(data)
+    }
+  }
+  useEffect(()=>{
+ getCountries()
+  },[])
 //
 const getCountry = async () => {
   const data = await countryService.getCountry()
@@ -211,7 +221,7 @@ useEffect(() => {
             <TabPane tab="General" key="1">
               <GeneralField form_statuses={form_statuses}
               
-              state={state}
+              state={state} countries={countries}
               />
             </TabPane>
           </Tabs>

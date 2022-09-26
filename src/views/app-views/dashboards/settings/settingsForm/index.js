@@ -42,7 +42,7 @@ const[setmode,setMode]=useState('')
             deliveryCharges: data.deliveryCharges,
             metaTitle: data.metaTitle,
             metaDescription: data.metaDescription,
-            metakeywords: data.metakeywords,
+            keywords: data.keywords,
             whatsappNo:data.whatsappNo,
             razorPayPayoutAccountNumber:data.razorPayPayoutAccountNumber
           })
@@ -76,6 +76,9 @@ const[setmode,setMode]=useState('')
           address: values?.address,
           email: values?.email,
           phone: values?.phone,
+          keywords:values?.keywords,
+          metaTitle:values?.metaTitle,
+          metaDescription:values?.metaDescription,
           facebookUrl: values?.facebookUrl,
           instagramUrl: values?.instagramUrl,
           twitterUrl: values?.twitterUrl,
@@ -83,6 +86,7 @@ const[setmode,setMode]=useState('')
           deliveryCharges: values?.deliveryCharges,
           whatsappNo:values?.whatsappNo,
           razorPayPayoutAccountNumber:values?.razorPayPayoutAccountNumber
+
         }
 
 

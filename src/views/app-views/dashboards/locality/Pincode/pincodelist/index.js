@@ -28,6 +28,7 @@ import pincodeService from 'services/pincode'
 import _ from 'lodash'
 
 import constantsService from 'services/constants'
+import cityService from 'services/city'
 
 const { Option } = Select
 
@@ -66,6 +67,7 @@ const Pincodelist = () => {
   const [loading, setLoading] = useState(false)
   const [filterEnabled, setFilterEnabled] = useState(false)
   const [statuses,setStatuses] = useState([])
+  const [cities,setCities]=useState([])
   
   // pagination
   const [pagination, setPagination] = useState({
@@ -79,6 +81,12 @@ const Pincodelist = () => {
 
       setStatuses(Object.values(data.GENERAL['STATUS']))
 
+    }
+  }
+  const getCities = async ()=>{
+    const data = await cityService.getCity()
+    if (data){
+      setCities(data.data)
     }
   }
   // Changed here for pagination
@@ -106,6 +114,7 @@ const Pincodelist = () => {
       pagination,
     })
     fetchConstants()
+    getCities()
   }, [])
   
   // pagination generator
@@ -246,21 +255,56 @@ const Pincodelist = () => {
             <Input placeholder="Search" prefix={<SearchOutlined />} />
           </Form.Item>
         </Col>
-        
         <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item name="status" label="Status">
-            <Select className="w-100" placeholder="Status">
-          <Option value="">All</Option>
-          {statuses.map((item) => (
+
+            <Select
+              className="w-100"
+              style={{ minWidth: 180 }}
+              placeholder="Status"
+            >
+              <Option value="">All</Option>
+              {statuses.map((item) => (
                 <Option key={item.id} value={item}>
                   {item}
                 </Option>
               ))}
-          </Select>
-        </Form.Item>
-       
+            </Select>
+          </Form.Item>
         </Col>
-    
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="orderByPriority" label="OrderByPriority" className='ml-2'>
+            <Select className="w-100" placeholder="OrderBy Priority">
+              <Option value="">All</Option>
+              <Option value="true">Yes</Option>
+              <Option value="false">No</Option>
+            </Select>
+          </Form.Item>
+        </Col>
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="cityId" label="City">
+            <Select
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              className="w-100"
+              style={{ minWidth: 180 }}
+              // onChange={(value) => setSelectedBrandId(value)}
+              // onSelect={handleQuery}
+              placeholder="City"
+            // value={selectedBrandId}
+            >
+              <Option value="">All</Option>
+              {cities.map((item) => (
+                <Option key={item.id} value={item.id}>
+                  {item.name}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </Col>
         <Col className="mb-4">
           <Button type="primary" onClick={handleFilterSubmit}>
             Filter

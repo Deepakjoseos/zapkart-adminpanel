@@ -79,13 +79,13 @@ const GeneralField = ({ propsImages, propsMobileImages, form_statuses }) => (
         <Upload listType="picture-card" name="image" {...propsImages} accept="image/*">
           <CustomIcon className="display-3" svg={ImageSvg} />
         </Upload>
-        size: 1394px * 537px
+        size: 500px * 270px
       </Card>
       <Card title="Mobile Image">
         <Upload listType="picture-card" name="image" {...propsMobileImages}>
           <CustomIcon className="display-3" svg={ImageSvg} />
         </Upload>
-        size: 366px * 150px
+        size: 245px * 150px
       </Card>
     </Col>
   </Row>

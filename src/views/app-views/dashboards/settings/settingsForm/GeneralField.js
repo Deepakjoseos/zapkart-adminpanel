@@ -240,7 +240,7 @@ const GeneralField = ({ setmode }) => {
           {/* <Form.Item name="keywords" label="Keywords">
             <Input placeholder="Keywords" />
           </Form.Item> */}
-          <Form.Item name="metakeywords" label="Meta Keywords">
+          <Form.Item name="keywords" label="Meta Keywords">
             <Select
               dropdownStyle={{ display: 'none' }}
               mode="tags"
