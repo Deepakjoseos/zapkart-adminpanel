@@ -43,7 +43,8 @@ const[setmode,setMode]=useState('')
             metaTitle: data.metaTitle,
             metaDescription: data.metaDescription,
             metakeywords: data.metakeywords,
-            whatsappNo:data.whatsappNo
+            whatsappNo:data.whatsappNo,
+            razorPayPayoutAccountNumber:data.razorPayPayoutAccountNumber
           })
         
         setSettings(data)
@@ -80,7 +81,8 @@ const[setmode,setMode]=useState('')
           twitterUrl: values?.twitterUrl,
           vendorCommission:values?.vendorCommission,
           deliveryCharges: values?.deliveryCharges,
-          whatsappNo:values?.whatsappNo
+          whatsappNo:values?.whatsappNo,
+          razorPayPayoutAccountNumber:values?.razorPayPayoutAccountNumber
         }
 
 
