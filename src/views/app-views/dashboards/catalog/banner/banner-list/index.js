@@ -314,7 +314,7 @@ const handleTableChange = (newPagination) => {
         type="primary"
         icon={<PlusCircleOutlined />}
       >
-        Add Brand
+        Add Banner
       </Button>
     </div>
     <div className="table-responsive">
