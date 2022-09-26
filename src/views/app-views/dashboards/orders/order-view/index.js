@@ -193,7 +193,7 @@ const OrderView = () => {
           </>
         )}
          {
-            order?.invoice?.vendorInvoices && (
+            order?.invoice?.vendorInvoices.length>0 && (
               <Button type="primary" className='mb-4 mr-2' onClick={showModal}>
                 Download Invoices
               </Button>
