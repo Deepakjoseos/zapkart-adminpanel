@@ -243,6 +243,12 @@ const handleTableChange = (newPagination) => {
       title: 'Priority',
       dataIndex: 'priority',
     },
+    {
+      title: 'Description',
+      dataIndex: 'description',
+      render:	(description)	=>			<div dangerouslySetInnerHTML={{ __html: description}} />
+
+    },
 
     {
       title: 'Status',

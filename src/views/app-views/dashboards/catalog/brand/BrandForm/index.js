@@ -26,6 +26,8 @@ const ProductForm = (props) => {
   const [uploadedImg, setImage] = useState(null)
   const [submitLoading, setSubmitLoading] = useState(false)
   const [form_statuses, setStatuses] = useState([])
+  const [uploadedBanner, setBannerImage] = useState(null)
+
   // For Image upload
   const {
     fileList: fileListImages,
@@ -34,6 +36,15 @@ const ProductForm = (props) => {
     onRemove: onRemoveImages,
     setFileList: setFileListImages,
   } = useUpload(1) // useUpload(1, 'multiple') or useUpload(1)
+
+  // Banner upload
+  const {
+    fileList: fileListBannerImages,
+    beforeUpload: beforeUploadBannerImage,
+    onChange: onChangeBannerImage,
+    onRemove: onRemoveBannerImage,
+    setFileList: setFileListBannerImage,
+  } = useUpload(1)
 
   const fetchConstants = async () => {
     const data = await constantsService.getConstants()
@@ -66,6 +77,20 @@ const ProductForm = (props) => {
             setImage(himg)
             setFileListImages(himg)
           }
+          //Banner 
+          if (data.banner) {
+            himg = [
+              {
+                uid: Math.random() * 1000,
+                name: Utils.getBaseName(data.banner),
+                url: data.banner,
+                thumbUrl: data.banner,
+              },
+            ]
+
+            setBannerImage(himg)
+            setFileListBannerImage(himg)
+          }
           // For setting form values when Load if it is in EDIT mode
           form.setFieldsValue({
             name: data.name,
@@ -76,6 +101,7 @@ const ProductForm = (props) => {
             keywords: data.keywords,
             slug: data.slug,
             tags: data.tags,
+            description: data.description
           })
         } else {
           history.replace('/app/dashboards/catalog/brand/brands-list')
@@ -99,7 +125,17 @@ const ProductForm = (props) => {
   useEffect(() => {
     setImage(fileListImages)
   }, [fileListImages])
-
+  //Banner
+  const propsBannerImage = {
+    multiple: false,
+    beforeUpload: beforeUploadBannerImage,
+    onRemove: onRemoveBannerImage,
+    onChange: onChangeBannerImage,
+    fileList: fileListBannerImages,
+  }
+  useEffect(() => {
+    setBannerImage(fileListBannerImages)
+  }, [fileListBannerImages])
   // Trigger When Submit Button pressed
   const onFinish = async () => {
     setSubmitLoading(true)
@@ -120,6 +156,19 @@ const ProductForm = (props) => {
 
             //  append image url to values object
             values.image = imgValue
+            //checking if banner exists
+            if (uploadedBanner.length !== 0 && uploadedBanner !== null) {
+              console.log('uploadedBanner', uploadedBanner)
+              const bannerValue = await singleImageUploader(
+                uploadedBanner[0].originFileObj,
+                uploadedBanner,
+                uploadedBanner[0].url,
+                'category'
+              )
+              values.banner = bannerValue
+            } else {
+              values.banner = null
+            }
 
             const created = await brandService.createBrand(values)
             if (created) {
@@ -144,6 +193,19 @@ const ProductForm = (props) => {
 
             //  append image url to values object
             values.image = imgValue
+            //checking banner exists
+            if (uploadedBanner.length !== 0 && uploadedBanner !== null) {
+              console.log('uploadedBanner', uploadedBanner)
+              const bannerValue = await singleImageUploader(
+                uploadedBanner[0].originFileObj,
+                uploadedBanner,
+                uploadedBanner[0].url,
+                'category'
+              )
+              values.banner = bannerValue
+            } else {
+              values.banner = null
+            }
 
             const edited = await brandService.editBrand(param.id, values)
             if (edited) {
@@ -214,7 +276,7 @@ const ProductForm = (props) => {
                 // uploadLoading={uploadLoading}
                 // handleUploadChange={handleUploadChange}
                 propsImages={propsImages} form_statuses={form_statuses}
-                form={form}
+                form={form} propsBannerImage={propsBannerImage}
               />
             </TabPane>
           </Tabs>

@@ -29,6 +29,8 @@ const ProductForm = (props) => {
   const [categories, setCategories] = useState([])
   const [children, setChildren] = useState([])
   const [form_statuses,setStatuses]= useState([])
+  const [uploadedBanner, setBannerImage] = useState(null)
+
 
   const {
     fileList: fileListImages,
@@ -38,6 +40,14 @@ const ProductForm = (props) => {
     setFileList: setFileListImages,
   } = useUpload(1)
 
+  // Banner
+  const {
+    fileList: fileListBannerImages,
+    beforeUpload: beforeUploadBannerImage,
+    onChange: onChangeBannerImage,
+    onRemove: onRemoveBannerImage,
+    setFileList: setFileListBannerImage,
+  } = useUpload(1)
   const fetchConstants = async () => {
     const data = await constantsService.getConstants()
     if (data) {
@@ -91,11 +101,26 @@ const ProductForm = (props) => {
             setImage(himg)
             setFileListImages(himg)
           }
+          if (data.banner) {
+            himg = [
+              {
+                uid: Math.random() * 1000,
+                name: Utils.getBaseName(data.banner),
+                url: data.banner,
+                thumbUrl: data.banner,
+              },
+            ]
 
+            setBannerImage(himg)
+            setFileListBannerImage(himg)
+          }
           form.setFieldsValue({
             name: data.name,
             status: data.status,
             priority: data.priority,
+            description: data.description,
+
+            homePriority:data.homePriority,
             metaTitle: data.metaTitle,
             metaDescription: data.metaDescription,
             keywords: data.keywords,
@@ -134,6 +159,17 @@ const ProductForm = (props) => {
     setImage(fileListImages)
   }, [fileListImages])
 
+  const propsBannerImage = {
+    multiple: false,
+    beforeUpload: beforeUploadBannerImage,
+    onRemove: onRemoveBannerImage,
+    onChange: onChangeBannerImage,
+    fileList: fileListBannerImages,
+  }
+  useEffect(() => {
+    setBannerImage(fileListBannerImages)
+  }, [fileListBannerImages])
+
   const onFinish = async () => {
     setSubmitLoading(true)
     form
@@ -154,6 +190,19 @@ const ProductForm = (props) => {
           } else {
             values.image = null
           }
+          //checking if banner exists
+          if (uploadedBanner.length !== 0 && uploadedBanner !== null) {
+            console.log('uploadedBanner', uploadedBanner)
+            const bannerValue = await singleImageUploader(
+              uploadedBanner[0].originFileObj,
+              uploadedBanner,
+              uploadedBanner[0].url,
+              'category'
+            )
+            values.banner = bannerValue
+          } else {
+            values.banner = null
+          }
           const created = await categoryService.createCategory(values)
           if (created) {
             message.success(`Created ${values.name} to product list`)
@@ -173,6 +222,19 @@ const ProductForm = (props) => {
             values.image = imgValue
           } else {
             values.image = null
+          }
+          //checking banner exists
+          if (uploadedBanner.length !== 0 && uploadedBanner !== null) {
+            console.log('uploadedBanner', uploadedBanner)
+            const bannerValue = await singleImageUploader(
+              uploadedBanner[0].originFileObj,
+              uploadedBanner,
+              uploadedBanner[0].url,
+              'category'
+            )
+            values.banner = bannerValue
+          } else {
+            values.banner = null
           }
           const edited = await categoryService.editCategory(param.id, values)
           if (edited) {
@@ -243,7 +305,7 @@ const ProductForm = (props) => {
                 categories={categories}
                 // uploadLoading={uploadLoading}
                 // handleUploadChange={handleUploadChange}
-                propsImages={propsImages} handleChange={handleChange} form_statuses={form_statuses}
+                propsImages={propsImages} propsBannerImage={propsBannerImage} handleChange={handleChange} form_statuses={form_statuses}
               />
             </TabPane>
           </Tabs>
