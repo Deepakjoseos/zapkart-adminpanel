@@ -18,6 +18,8 @@ import CustomIcon from 'components/util-components/CustomIcon'
 import { TweenOneGroup } from 'rc-tween-one'
 import { SwapOutlined } from '@ant-design/icons'
 import slugify from 'slugify'
+import Editor from 'components/shared-components/Editor'
+
 
 // const { Dragger } = Upload
 const { Option } = Select
@@ -56,7 +58,7 @@ const rules = {
   ],
 }
 
-const GeneralField = ({ form, propsImages, form_statuses }) => {
+const GeneralField = ({ form, propsImages, form_statuses, propsBannerImage }) => {
   const generateSlugFromName = (value) => {
     const slug = slugify(value)
     form.setFieldsValue({ slug })
@@ -79,10 +81,22 @@ const GeneralField = ({ form, propsImages, form_statuses }) => {
               max={100000}
             />
           </Form.Item>
+          <Form.Item
+            name="description"
+            label="Description"
+            rules={rules.description}
+          >
+            <Editor
+              placeholder="Write something..."
+              editorHtml={form.getFieldValue('description') || ''}
+              onChange={(e) => form.setFieldsValue({ description: e })}
+              name="description"
+            />
+          </Form.Item>
 
           <Form.Item name="status" label="Status" rules={rules.status}>
             <Select placeholder="Status">
-            {form_statuses.map((item) => (
+              {form_statuses.map((item) => (
                 <Option key={item.id} value={item}>
                   {item}
                 </Option>
@@ -134,6 +148,12 @@ const GeneralField = ({ form, propsImages, form_statuses }) => {
           </Upload>
           size: 100px * 100px
 
+        </Card>
+        <Card title="Banner">
+          <Upload listType="picture-card" name="image" {...propsBannerImage}>
+            <CustomIcon className="display-3" svg={ImageSvg} />
+          </Upload>
+          size: 1510px * 210px
         </Card>
       </Col>
     </Row>
