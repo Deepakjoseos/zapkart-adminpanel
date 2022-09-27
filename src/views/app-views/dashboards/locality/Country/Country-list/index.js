@@ -253,21 +253,32 @@ const CountryList = () => {
             <Input placeholder="Search" prefix={<SearchOutlined />} />
           </Form.Item>
         </Col>
-        
         <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item name="status" label="Status">
-            <Select className="w-100" placeholder="Status">
-          <Option value="">All</Option>
-          {statuses.map((item) => (
+
+            <Select
+              className="w-100"
+              style={{ minWidth: 180 }}
+              placeholder="Status"
+            >
+              <Option value="">All</Option>
+              {statuses.map((item) => (
                 <Option key={item.id} value={item}>
                   {item}
                 </Option>
               ))}
-          </Select>
-        </Form.Item>
-       
+            </Select>
+          </Form.Item>
         </Col>
-    
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="orderByPriority" label="OrderByPriority" className='ml-2'>
+            <Select className="w-100" placeholder="OrderBy Priority">
+              <Option value="">All</Option>
+              <Option value="true">Yes</Option>
+              <Option value="false">No</Option>
+            </Select>
+          </Form.Item>
+        </Col>
         <Col className="mb-4">
           <Button type="primary" onClick={handleFilterSubmit}>
             Filter

@@ -28,6 +28,7 @@ import stateService from 'services/state'
 import _ from 'lodash'
 
 import constantsService from 'services/constants'
+import countryService from 'services/country'
 
 const { Option } = Select
 
@@ -61,12 +62,19 @@ const Statelist = () => {
   
   const [list, setList] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
+
   
   // Added for Pagination
   const [loading, setLoading] = useState(false)
   const [filterEnabled, setFilterEnabled] = useState(false)
   const [statuses,setStatuses] = useState([])
-  
+  const [countries,setCountries] = useState([])
+  const getCountries = async () => {
+    const data = await countryService.getCountry()
+    if (data) {
+      setCountries(data.data)
+    }
+  }
   // pagination
   const [pagination, setPagination] = useState({
     current: 1,
@@ -80,6 +88,16 @@ const Statelist = () => {
       setStatuses(Object.values(data.GENERAL['STATUS']))
 
     }
+  }
+  const getCountryName =(countryId) =>{
+     let country= countryService.getCountryById(countryId)
+     if (country) 
+     {
+      return  country?.name
+     }
+     
+     
+    
   }
   // Changed here for pagination
   const getState= async (paginationParams = {}, filterParams) => {
@@ -102,6 +120,7 @@ const Statelist = () => {
   }
   
   useEffect(() => {
+    getCountries()
     getState({
       pagination,
     })
@@ -186,6 +205,13 @@ const Statelist = () => {
       dataIndex: 'priority',
       sorter: (a, b) => utils.antdTableSorter(a, b, 'priority'),
     },
+    {
+      title: 'Country',
+      dataIndex: 'countryId',
+      render: (countryId) => (
+        getCountryName(countryId)
+      ),
+    },
 
     {
       title: 'Status',
@@ -251,21 +277,56 @@ const Statelist = () => {
             <Input placeholder="Search" prefix={<SearchOutlined />} />
           </Form.Item>
         </Col>
-        
         <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item name="status" label="Status">
-            <Select className="w-100" placeholder="Status">
-          <Option value="">All</Option>
-          {statuses.map((item) => (
+
+            <Select
+              className="w-100"
+              style={{ minWidth: 180 }}
+              placeholder="Status"
+            >
+              <Option value="">All</Option>
+              {statuses.map((item) => (
                 <Option key={item.id} value={item}>
                   {item}
                 </Option>
               ))}
-          </Select>
-        </Form.Item>
-       
+            </Select>
+          </Form.Item>
         </Col>
-    
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="orderByPriority" label="OrderByPriority" className='ml-2'>
+            <Select className="w-100" placeholder="OrderBy Priority">
+              <Option value="">All</Option>
+              <Option value="true">Yes</Option>
+              <Option value="false">No</Option>
+            </Select>
+          </Form.Item>
+        </Col>
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="countryId" label="Country">
+            <Select
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              className="w-100"
+              style={{ minWidth: 180 }}
+              // onChange={(value) => setSelectedBrandId(value)}
+              // onSelect={handleQuery}
+              placeholder="Countries"
+            // value={selectedBrandId}
+            >
+              <Option value="">All</Option>
+              {countries.map((item) => (
+                <Option key={item.id} value={item.id}>
+                  {item.name}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </Col>
         <Col className="mb-4">
           <Button type="primary" onClick={handleFilterSubmit}>
             Filter

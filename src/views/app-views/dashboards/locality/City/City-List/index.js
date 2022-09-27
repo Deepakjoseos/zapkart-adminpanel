@@ -29,6 +29,7 @@ import cityService from 'services/city'
 import _ from 'lodash'
 
 import constantsService from 'services/constants'
+import districtService from 'services/district'
 
 const { Option } = Select
 
@@ -59,15 +60,16 @@ const getStockStatus = (status) => {
 const CityList = () => {
   let history = useHistory()
   const [form] = Form.useForm()
-  
+
   const [list, setList] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
-  
+
   // Added for Pagination
   const [loading, setLoading] = useState(false)
   const [filterEnabled, setFilterEnabled] = useState(false)
-  const [statuses,setStatuses] = useState([])
-  
+  const [statuses, setStatuses] = useState([])
+  const [districts,setDistricts]= useState([])
+
   // pagination
   const [pagination, setPagination] = useState({
     current: 1,
@@ -82,17 +84,23 @@ const CityList = () => {
 
     }
   }
+  const getDistricts = async ()=>{
+    const data = await districtService.getDistrict()
+    if (data){
+      setDistricts(data.data)
+    }
+    }
   // Changed here for pagination
-  const getCity= async (paginationParams = {}, filterParams) => {
+  const getCity = async (paginationParams = {}, filterParams) => {
     setLoading(true)
     const data = await cityService.getCity(
       qs.stringify(getPaginationParams(paginationParams)),
       qs.stringify(filterParams)
     )
-  
+
     if (data) {
       setList(data.data)
-  
+
       // Pagination
       setPagination({
         ...paginationParams.pagination,
@@ -101,21 +109,22 @@ const CityList = () => {
       setLoading(false)
     }
   }
-  
+
   useEffect(() => {
     getCity({
       pagination,
     })
     fetchConstants()
+    getDistricts()
   }, [])
-  
+
   // pagination generator
   const getPaginationParams = (params) => ({
     limit: params.pagination?.pageSize,
     page: params.pagination?.current,
     // ...params,
   })
-  
+
   // On pagination Change
   const handleTableChange = (newPagination) => {
     getCity(
@@ -207,7 +216,7 @@ const CityList = () => {
     getCity({ pagination: resetPagination() }, {})
     setFilterEnabled(false)
   }
-  
+
 
   const tableColumns = [
     {
@@ -240,7 +249,7 @@ const CityList = () => {
     },
   ]
 
-  
+
   const filtersComponent = () => (
     <Form
       layout="vertical"
@@ -254,22 +263,57 @@ const CityList = () => {
             <Input placeholder="Search" prefix={<SearchOutlined />} />
           </Form.Item>
         </Col>
-        
         <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item name="status" label="Status">
-            <Select className="w-100" placeholder="Status">
-          <Option value="">All</Option>
-          {statuses.map((item) => (
+
+            <Select
+              className="w-100"
+              style={{ minWidth: 180 }}
+              placeholder="Status"
+            >
+              <Option value="">All</Option>
+              {statuses.map((item) => (
                 <Option key={item.id} value={item}>
                   {item}
                 </Option>
               ))}
-          </Select>
-        </Form.Item>
-       
+            </Select>
+          </Form.Item>
         </Col>
-    
-        <Col className="mb-4">
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="orderByPriority" label="OrderByPriority" className='ml-2'>
+            <Select className="w-100" placeholder="OrderBy Priority">
+              <Option value="">All</Option>
+              <Option value="true">Yes</Option>
+              <Option value="false">No</Option>
+            </Select>
+          </Form.Item>
+        </Col>
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="districtId" label="District">
+            <Select
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              className="w-100"
+              style={{ minWidth: 180 }}
+              // onChange={(value) => setSelectedBrandId(value)}
+              // onSelect={handleQuery}
+              placeholder="District"
+            // value={selectedBrandId}
+            >
+              <Option value="">All</Option>
+              {districts.map((item) => (
+                <Option key={item.id} value={item.id}>
+                  {item.name}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </Col>
+        <Col className="mb-4 ml-3">
           <Button type="primary" onClick={handleFilterSubmit}>
             Filter
           </Button>
@@ -282,7 +326,6 @@ const CityList = () => {
       </Row>
     </Form>
   )
-
   return (
     <Card>
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
@@ -300,8 +343,8 @@ const CityList = () => {
       </Flex>
       <div className="table-responsive">
         <Table columns={tableColumns} dataSource={list} rowKey="id" pagination={pagination}
-        loading={loading}
-        onChange={handleTableChange}/>
+          loading={loading}
+          onChange={handleTableChange} />
       </div>
     </Card>
   )
