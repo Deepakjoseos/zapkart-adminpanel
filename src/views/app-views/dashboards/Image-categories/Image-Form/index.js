@@ -52,7 +52,7 @@ const ImageForm = (props) => {
     fetchConstants()
     if (mode === EDIT) {
       const fetchImageCategoriesById = async () => {
-        const data = await countryService.getImageCategoriesById(param.id)
+        const data = await imageCategoriesService.getImageCategoriesById(param.id)
         if (data) {
           // For Image upload
           let himg = []
@@ -70,8 +70,10 @@ const ImageForm = (props) => {
            
           }
           form.setFieldsValue({
-            name: data.name,
-            status: data.status,
+            imageFor: data.imageFor,
+            width:data.width,
+            height:data.height,
+           
             
            
            
@@ -93,7 +95,7 @@ const ImageForm = (props) => {
  
 
   const onFinish = async () => {
-    setSubmitLoading(true)
+    setSubmitLoading(false)
     form
       .validateFields()
       .then(async (values) => {
@@ -129,7 +131,7 @@ const ImageForm = (props) => {
         setSubmitLoading(false)
         console.log('info', info)
         message.error('Please enter all required field ')
-      })
+      }) 
   }
 
   return (

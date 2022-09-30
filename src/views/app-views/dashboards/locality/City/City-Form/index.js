@@ -82,7 +82,7 @@ useEffect(() => {
     if (mode === EDIT) {
       const fetchCityById = async () => {
        
-        const data = await stateService.getCityById(param.id)
+        const data = await cityService.getCityById(param.id)
         if (data) {
           // For Image upload
           let himg = []
@@ -101,8 +101,10 @@ useEffect(() => {
           }
           form.setFieldsValue({
             name: data.name,
+            priority:data.priority,
             status: data.status,
-            cityId:data.cityId
+            
+            districtId:data.districtId,
 
           })
         } else {
@@ -122,7 +124,7 @@ useEffect(() => {
  
 
   const onFinish = async () => {
-    setSubmitLoading(true)
+    setSubmitLoading(false)
     form
       .validateFields()
       .then(async (values) => {

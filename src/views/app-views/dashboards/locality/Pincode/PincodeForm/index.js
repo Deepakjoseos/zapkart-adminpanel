@@ -86,6 +86,8 @@ const PincodeForm = (props) => {
           }
           form.setFieldsValue({
             name: data.name,
+            cityId:data.cityId,
+            priority:data.priority,
             status: data.status,
           });
         } else {
@@ -102,7 +104,7 @@ const PincodeForm = (props) => {
   //Image Upload
 
   const onFinish = async () => {
-    setSubmitLoading(true);
+    setSubmitLoading(false);
     form
       .validateFields()
       .then(async (values) => {

@@ -186,14 +186,7 @@ const ImageList = () => {
     },
    
 
-    {
-      title: 'Status',
-      dataIndex: 'status',
-      render: (status) => (
-        <Flex alignItems="center">{getStockStatus(status)}</Flex>
-      ),
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'status'),
-    },
+    
   
     {
       title: '',

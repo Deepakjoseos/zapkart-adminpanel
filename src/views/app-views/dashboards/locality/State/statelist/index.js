@@ -205,13 +205,7 @@ const Statelist = () => {
       dataIndex: 'priority',
       sorter: (a, b) => utils.antdTableSorter(a, b, 'priority'),
     },
-    {
-      title: 'Country',
-      dataIndex: 'countryId',
-      render: (countryId) => (
-        getCountryName(countryId)
-      ),
-    },
+   
 
     {
       title: 'Status',
