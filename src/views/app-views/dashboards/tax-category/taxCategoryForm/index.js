@@ -39,6 +39,7 @@ const TaxCategoryForm = (props) => {
   const [currentParticipant,setCurrentParticipant] = useState()
   const [registrations,setRegistrations]= useState([])
   const [statuses,setStatuses]= useState([])
+  const[sameStateValues,setSameStateValues] = useState([])
   
 
   useEffect(() => {
@@ -49,6 +50,7 @@ const TaxCategoryForm = (props) => {
       // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
 
       setStatuses(Object.values(data.GENERAL['STATUS']))
+      setSameStateValues(Object.values(data.TAX_CATEGORY['SAME_STATE']))
 
     }
   }
@@ -190,7 +192,7 @@ const TaxCategoryForm = (props) => {
             <TabPane tab="General" key="1">
               <GeneralField
                 
-                mode={mode} statuses={statuses}
+                mode={mode} statuses={statuses} sameStateValues={sameStateValues}
            
               />
             </TabPane>
