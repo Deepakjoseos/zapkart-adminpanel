@@ -43,7 +43,7 @@ const GeneralField = ({ form_statuses,form, }) => {
       <Card title="Basic Info">
         <Form.Item name="name" label="Name" rules={rules.name}>
           <Input placeholder="Name" 
-           onChange={(e) => generateSlugFromName(e.target.value)}/>
+          />
         </Form.Item>
         
         <Form.Item name="priority" label="Priority" rules={rules.priority}>

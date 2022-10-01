@@ -30,13 +30,10 @@ const rules = {
   ],
 }
 
-const GeneralField = ({ form_statuses,image_for,form }) => {
-  const generateSlugFromName = (value) => {
-    const slug = slugify(value)
-    form.setFieldsValue({ slug })
-  }
+const GeneralField = ({ form_statuses,image_for }) => (
+  
 
-  return(
+ 
 
     <Row gutter={16}>
     <Col xs={24} sm={24} md={17}>
@@ -58,15 +55,7 @@ const GeneralField = ({ form_statuses,image_for,form }) => {
           <InputNumber placeholder="Height"  />
         </Form.Item>
 
-        <Form.Item name="status" label="Status" rules={rules.status}>
-          <Select placeholder="Status">
-            {form_statuses.map((item) => (
-              <Option key={item.id} value={item}>
-                {item}
-              </Option>
-            ))}
-          </Select>
-        </Form.Item>
+        
       
       </Card>
     </Col>
@@ -76,7 +65,7 @@ const GeneralField = ({ form_statuses,image_for,form }) => {
     </Col>
   </Row>
    )
-}
+
 
  
 

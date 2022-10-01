@@ -46,9 +46,7 @@ const StateForm = (props) => {
 
     }
   }
-
-
-//
+ 
 const getCountry = async () => {
   const data = await countryService.getCountry()
   if (data) {
@@ -102,6 +100,7 @@ useEffect(() => {
           }
           form.setFieldsValue({
             name: data.name,
+            priority:data.priority,
             status: data.status,
             countryId:data.countryId
 
@@ -123,7 +122,7 @@ useEffect(() => {
  
 
   const onFinish = async () => {
-    setSubmitLoading(true)
+    setSubmitLoading(false)
     form
       .validateFields()
       .then(async (values) => {

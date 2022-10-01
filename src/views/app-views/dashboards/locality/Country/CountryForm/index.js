@@ -88,7 +88,7 @@ const CountryForm = (props) => {
  
 
   const onFinish = async () => {
-    setSubmitLoading(true)
+    setSubmitLoading(false)
     form
       .validateFields()
       .then(async (values) => {
