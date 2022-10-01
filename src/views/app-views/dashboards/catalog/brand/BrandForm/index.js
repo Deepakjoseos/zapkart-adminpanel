@@ -10,6 +10,7 @@ import Utils from 'utils'
 import { useHistory } from 'react-router-dom'
 import slugify from 'slugify'
 import constantsService from 'services/constants'
+import { useSelector } from 'react-redux'
 
 const { TabPane } = Tabs
 
@@ -27,6 +28,7 @@ const ProductForm = (props) => {
   const [submitLoading, setSubmitLoading] = useState(false)
   const [form_statuses, setStatuses] = useState([])
   const [uploadedBanner, setBannerImage] = useState(null)
+  const { imageCategories } = useSelector((state) => state.auth)
 
   // For Image upload
   const {
@@ -52,7 +54,6 @@ const ProductForm = (props) => {
       // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
 
       setStatuses(Object.values(data.GENERAL['FORM_STATUS']))
-
     }
   }
   useEffect(() => {
@@ -77,7 +78,7 @@ const ProductForm = (props) => {
             setImage(himg)
             setFileListImages(himg)
           }
-          //Banner 
+          //Banner
           if (data.banner) {
             himg = [
               {
@@ -101,7 +102,7 @@ const ProductForm = (props) => {
             keywords: data.keywords,
             slug: data.slug,
             tags: data.tags,
-            description: data.description
+            description: data.description,
           })
         } else {
           history.replace('/app/dashboards/catalog/brand/brands-list')
@@ -146,12 +147,18 @@ const ProductForm = (props) => {
           // Checking if image exists
           if (uploadedImg.length !== 0 && uploadedImg !== null) {
             console.log('uploadedImg', uploadedImg)
-            // We will upload image to S3 and get the image url
+            // We will upload image to our backend and get the image url
+            const imageCategory = imageCategories.find(
+              (imgCat) => imgCat.imageFor === 'Brands'
+            )
+
+            console.log(imageCategory, 'shsiy')
+
             const imgValue = await singleImageUploader(
               uploadedImg[0].originFileObj,
               uploadedImg,
               uploadedImg[0].url,
-              'brand'
+              imageCategory.id
             )
 
             //  append image url to values object
@@ -159,11 +166,14 @@ const ProductForm = (props) => {
             //checking if banner exists
             if (uploadedBanner.length !== 0 && uploadedBanner !== null) {
               console.log('uploadedBanner', uploadedBanner)
+              const imageCategory = imageCategories.find(
+                (imgCat) => imgCat.imageFor === 'BrandBanners'
+              )
               const bannerValue = await singleImageUploader(
                 uploadedBanner[0].originFileObj,
                 uploadedBanner,
                 uploadedBanner[0].url,
-                'category'
+                imageCategory.id
               )
               values.banner = bannerValue
             } else {
@@ -183,24 +193,32 @@ const ProductForm = (props) => {
           // Checking if image exists
           if (uploadedImg.length !== 0 && uploadedImg !== null) {
             console.log('uploadedImg', uploadedImg)
-            // We will upload image to S3 and get the image url
+            // We will upload image to our backend and get the image url
+            const imageCategory = imageCategories.find(
+              (imgCat) => imgCat.imageFor === 'Brands'
+            )
+
+            console.log(imageCategory, 'shsiy')
+
             const imgValue = await singleImageUploader(
               uploadedImg[0].originFileObj,
               uploadedImg,
               uploadedImg[0].url,
-              'brand'
+              imageCategory.id
             )
 
             //  append image url to values object
             values.image = imgValue
             //checking banner exists
             if (uploadedBanner.length !== 0 && uploadedBanner !== null) {
-              console.log('uploadedBanner', uploadedBanner)
+              const imageCategory = imageCategories.find(
+                (imgCat) => imgCat.imageFor === 'BrandBanners'
+              )
               const bannerValue = await singleImageUploader(
                 uploadedBanner[0].originFileObj,
                 uploadedBanner,
                 uploadedBanner[0].url,
-                'category'
+                imageCategory.id
               )
               values.banner = bannerValue
             } else {
@@ -275,8 +293,10 @@ const ProductForm = (props) => {
                 uploadedImg={uploadedImg}
                 // uploadLoading={uploadLoading}
                 // handleUploadChange={handleUploadChange}
-                propsImages={propsImages} form_statuses={form_statuses}
-                form={form} propsBannerImage={propsBannerImage}
+                propsImages={propsImages}
+                form_statuses={form_statuses}
+                form={form}
+                propsBannerImage={propsBannerImage}
               />
             </TabPane>
           </Tabs>
