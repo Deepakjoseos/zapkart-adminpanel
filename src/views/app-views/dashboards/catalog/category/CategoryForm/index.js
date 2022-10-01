@@ -12,6 +12,7 @@ import { PlusOutlined } from '@ant-design/icons';
 import { Input, Tag } from 'antd';
 import { TweenOneGroup } from 'rc-tween-one';
 import constantsService from 'services/constants'
+import { useSelector } from 'react-redux'
 
 const { TabPane } = Tabs
 
@@ -30,6 +31,8 @@ const ProductForm = (props) => {
   const [children, setChildren] = useState([])
   const [form_statuses,setStatuses]= useState([])
   const [uploadedBanner, setBannerImage] = useState(null)
+  const { imageCategories } = useSelector((state) => state.auth)
+
 
 
   const {
@@ -179,12 +182,15 @@ const ProductForm = (props) => {
         if (mode === ADD) {
           // Checking if image exists
           if (uploadedImg.length !== 0 && uploadedImg !== null) {
+            const imageCategory = imageCategories.find(
+              (imgCat) => imgCat.imageFor === 'Categories'
+            )
             console.log('uploadedImg', uploadedImg)
             const imgValue = await singleImageUploader(
               uploadedImg[0].originFileObj,
               uploadedImg,
               uploadedImg[0].url,
-              'category'
+              imageCategory.id
             )
             values.image = imgValue
           } else {
@@ -192,12 +198,15 @@ const ProductForm = (props) => {
           }
           //checking if banner exists
           if (uploadedBanner.length !== 0 && uploadedBanner !== null) {
+            const imageCategory = imageCategories.find(
+              (imgCat) => imgCat.imageFor === 'CategoryBanners'
+            )
             console.log('uploadedBanner', uploadedBanner)
             const bannerValue = await singleImageUploader(
               uploadedBanner[0].originFileObj,
               uploadedBanner,
               uploadedBanner[0].url,
-              'category'
+              imageCategory.id
             )
             values.banner = bannerValue
           } else {
@@ -213,11 +222,14 @@ const ProductForm = (props) => {
           // Checking if image exists
           if (uploadedImg.length !== 0 && uploadedImg !== null) {
             console.log('uploadedImg', uploadedImg)
+            const imageCategory = imageCategories.find(
+              (imgCat) => imgCat.imageFor === 'Categories'
+            )
             const imgValue = await singleImageUploader(
               uploadedImg[0].originFileObj,
               uploadedImg,
               uploadedImg[0].url,
-              'category'
+              imageCategory.id
             )
             values.image = imgValue
           } else {
@@ -225,12 +237,15 @@ const ProductForm = (props) => {
           }
           //checking banner exists
           if (uploadedBanner.length !== 0 && uploadedBanner !== null) {
+            const imageCategory = imageCategories.find(
+              (imgCat) => imgCat.imageFor === 'CategoryBanners'
+            )
             console.log('uploadedBanner', uploadedBanner)
             const bannerValue = await singleImageUploader(
               uploadedBanner[0].originFileObj,
               uploadedBanner,
               uploadedBanner[0].url,
-              'category'
+              imageCategory.id
             )
             values.banner = bannerValue
           } else {

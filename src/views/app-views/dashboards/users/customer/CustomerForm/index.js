@@ -16,6 +16,8 @@ import ViewPrescriptions from '../customer-list/ViewPrescriptions'
 import userGroupService from 'services/userGroup'
 import ViewOrders from '../customer-list/ViewOrders'
 import constantsService from 'services/constants'
+import { useSelector } from 'react-redux'
+
 const { TabPane } = Tabs
 
 const ADD = 'ADD'
@@ -40,6 +42,8 @@ const ProductForm = (props) => {
   const [phoneVerified, setPhoneVerified] = useState(false)
   const [emailVerified, setEmailVerified] = useState(false)
   const [form_statuses,setStatuses] = useState([])
+  const { imageCategories } = useSelector((state) => state.auth)
+
   const {
     fileList: fileListDisplayImages,
     beforeUpload: beforeUploadDisplayImages,
@@ -164,11 +168,14 @@ const ProductForm = (props) => {
         if (mode === EDIT) {
           // Checking if image exists
           if (displayImage.length !== 0 && displayImage !== null) {
+            const imageCategory = imageCategories.find(
+              (imgCat) => imgCat.imageFor === 'Users'
+            )
             const displayImageValue = await singleImageUploader(
               displayImage[0].originFileObj,
               displayImage,
               displayImage[0].url,
-              'profile'
+              imageCategory.id
             )
             sendingValues.displayImage = displayImageValue
           } else {

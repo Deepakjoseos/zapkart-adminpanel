@@ -14,6 +14,7 @@ import userGroupService from 'services/userGroup'
 import VendorTransactions from './vendorTransactions'
 import walletService from 'services/Wallet'
 import BankAccount from './bankAccount'
+import { useSelector } from 'react-redux'
 
 // const getAllPickUpLocations = async ()=>{
 //   const data = await shipmentService.getAllPickUpLocations()
@@ -46,6 +47,8 @@ const ProductForm = (props) => {
   const [transactions,setTransactions] = useState([])
   const [wallet,setWallet] = useState({})
   const[selectedVendorId,setSelectedVendorId] =useState(null)
+  const { imageCategories } = useSelector((state) => state.auth)
+
 
 
    const {
@@ -221,11 +224,14 @@ const ProductForm = (props) => {
           }
         }
         if (displayImage.length !== 0 && displayImage !== null) {
+          const imageCategory = imageCategories.find(
+            (imgCat) => imgCat.imageFor === 'Users'
+          )
           const displayImageValue = await singleImageUploader(
             displayImage[0].originFileObj,
             displayImage,
             displayImage[0].url,
-            'profile'
+            imageCategory.id
           )
           sendingValues.displayImage = displayImageValue
           console.log('upload',sendingValues.displayImage)

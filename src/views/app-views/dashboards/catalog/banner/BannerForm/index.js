@@ -9,7 +9,10 @@ import BannerService from 'services/banner'
 import Utils from 'utils'
 import { useHistory } from 'react-router-dom'
 import constantsService from 'services/constants'
+import { useSelector } from 'react-redux'
+
 const { TabPane } = Tabs
+
 
 const ADD = 'ADD'
 const EDIT = 'EDIT'
@@ -23,6 +26,8 @@ const ProductForm = (props) => {
   const [uploadedMobileImg, setMobileImg] = useState(null)
   const [submitLoading, setSubmitLoading] = useState(false)
   const [form_statuses,setStatuses]= useState([])
+  const { imageCategories } = useSelector((state) => state.auth)
+
 
   // Normal Image
   const {
@@ -134,6 +139,7 @@ const ProductForm = (props) => {
       .validateFields()
       .then(async (values) => {
         if (mode === ADD) {
+          
           // Checking if image exists
           if (
             uploadedImg.length !== 0 &&
@@ -141,21 +147,31 @@ const ProductForm = (props) => {
             uploadedMobileImg.length !== 0 &&
             uploadedMobileImg !== null
           ) {
+
+            // We will upload image to our backend and get the image url
+            const imageCategory = imageCategories.find(
+              (imgCat) => imgCat.imageFor === 'Banners'
+            )
             console.log('uploadedImg', uploadedImg)
             const imgValue = await singleImageUploader(
               uploadedImg[0].originFileObj,
               uploadedImg,
               uploadedImg[0].url,
-              'banner'
+              imageCategory.id
+            )
+        
+
+            values.image = imgValue
+            const imageCategoryMobile = imageCategories.find(
+              (imgCat) => imgCat.imageFor === 'BannersMobile'
             )
             const mobileImgValue = await singleImageUploader(
               uploadedMobileImg[0].originFileObj,
               uploadedMobileImg,
               uploadedMobileImg[0].url,
-              'banner'
+              imageCategoryMobile.id
             )
 
-            values.image = imgValue
             values.mobileImage = mobileImgValue
 
             const created = await BannerService.createBanner(values)
@@ -175,18 +191,25 @@ const ProductForm = (props) => {
             uploadedMobileImg.length !== 0 &&
             uploadedMobileImg !== null
           ) {
+            const imageCategory = imageCategories.find(
+              (imgCat) => imgCat.imageFor === 'Banners'
+            )
+            console.log(imageCategory, 'shsiy')
             console.log('uploadedImg', uploadedImg)
             const imgValue = await singleImageUploader(
               uploadedImg[0].originFileObj,
               uploadedImg,
               uploadedImg[0].url,
-              'banner'
+              imageCategory.id
+            )
+            const imageCategoryMobile = imageCategories.find(
+              (imgCat) => imgCat.imageFor === 'BannersMobile'
             )
             const mobileImgValue = await singleImageUploader(
               uploadedMobileImg[0].originFileObj,
               uploadedMobileImg,
               uploadedMobileImg[0].url,
-              'banner'
+              imageCategoryMobile.id
             )
 
             values.image = imgValue

@@ -9,6 +9,8 @@ import manufacturerService from 'services/manufacturer'
 import Utils from 'utils'
 import { useHistory } from 'react-router-dom'
 import constantsService from 'services/constants'
+import { useSelector } from 'react-redux'
+
 
 const { TabPane } = Tabs
 
@@ -23,7 +25,9 @@ const ProductForm = (props) => {
   const [uploadedImg, setImage] = useState(null)
   //   const [uploadLoading, setUploadLoading] = useState(false)
   const [submitLoading, setSubmitLoading] = useState(false)
-  const [form_statuses,setStatuses]= useState([])
+  const [form_statuses, setStatuses] = useState([])
+  const { imageCategories } = useSelector((state) => state.auth)
+
 
   const fetchConstants = async () => {
     const data = await constantsService.getConstants()
@@ -100,11 +104,14 @@ const ProductForm = (props) => {
           // Checking if image exists
           if (uploadedImg.length !== 0 && uploadedImg !== null) {
             console.log('uploadedImg', uploadedImg)
+            const imageCategory = imageCategories.find(
+              (imgCat) => imgCat.imageFor === 'Manufactures'
+            )
             const imgValue = await singleImageUploader(
               uploadedImg[0].originFileObj,
               uploadedImg,
               uploadedImg[0].url,
-              'manufacturer'
+              imageCategory.id
             )
             values.image = imgValue
 
@@ -121,11 +128,14 @@ const ProductForm = (props) => {
           // Checking if image exists
           if (uploadedImg.length !== 0 && uploadedImg !== null) {
             console.log('uploadedImg', uploadedImg)
+            const imageCategory = imageCategories.find(
+              (imgCat) => imgCat.imageFor === 'Manufactures'
+            )
             const imgValue = await singleImageUploader(
               uploadedImg[0].originFileObj,
               uploadedImg,
               uploadedImg[0].url,
-              'manufacturer'
+              imageCategory.id
             )
             values.image = imgValue
 

@@ -2,7 +2,6 @@ import React from 'react'
 import { Input, Row, Col, Card, Form, Upload, Select } from 'antd'
 import { ImageSvg } from 'assets/svg/icon'
 import CustomIcon from 'components/util-components/CustomIcon'
-
 // const { Dragger } = Upload
 const { Option } = Select
 

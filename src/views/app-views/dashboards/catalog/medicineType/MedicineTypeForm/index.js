@@ -10,7 +10,7 @@ import { singleImageUploader } from 'utils/s3/s3ImageUploader'
 import Utils from 'utils'
 import constantsService from 'services/constants'
 
-
+import { useSelector } from 'react-redux'
 
 
 const { TabPane } = Tabs
@@ -28,6 +28,8 @@ const ProductForm = (props) => {
    // For Image Upload
    const [uploadedImg, setImage] = useState(null)
    const [submitLoading, setSubmitLoading] = useState(false)
+   const { imageCategories } = useSelector((state) => state.auth)
+
 
    const [form_statuses,setStatuses] = useState([])
    const fetchConstants = async () => {
@@ -109,13 +111,17 @@ const ProductForm = (props) => {
       .then(async (values) => {
         if (mode === ADD) {
           if (uploadedImg.length !== 0 && uploadedImg !== null) {
+
             console.log('uploadedImg', uploadedImg)
+            const imageCategory = imageCategories.find(
+              (imgCat) => imgCat.imageFor === 'MedicineTypes'
+            )
             // We will upload image to S3 and get the image url
             const imgValue = await singleImageUploader(
               uploadedImg[0].originFileObj,
               uploadedImg,
               uploadedImg[0].url,
-              'medicineType'
+               imageCategory.id
             )
 
             //  append image url to values object
@@ -140,11 +146,14 @@ const ProductForm = (props) => {
           if (uploadedImg.length !== 0 && uploadedImg !== null) {
             console.log('uploadedImg', uploadedImg)
             // We will upload image to S3 and get the image url
+            const imageCategory = imageCategories.find(
+              (imgCat) => imgCat.imageFor === 'MedicineTypes'
+            )
             const imgValue = await singleImageUploader(
               uploadedImg[0].originFileObj,
               uploadedImg,
               uploadedImg[0].url,
-              'medicineType'
+              imageCategory.id
             )
 
             //  append image url to values object
