@@ -8,8 +8,14 @@ import { ThemeSwitcherProvider } from 'react-css-theme-switcher'
 import { THEME_CONFIG } from './configs/AppConfig'
 import { auth, getDeviceToken } from 'auth/FirebaseAuth'
 import authAdminService from 'services/auth/admin'
-import { authenticated, showLoading, signOut } from 'redux/actions/Auth'
+import {
+  authenticated,
+  showLoading,
+  signOut,
+  setImageCategories,
+} from 'redux/actions/Auth'
 import { AUTH_TOKEN } from 'redux/constants/Auth'
+import imageCategoriesService from 'services/imageCategories'
 
 const themes = {
   dark: `${process.env.PUBLIC_URL}/css/dark-theme.css`,
@@ -70,6 +76,20 @@ function App() {
       window.localStorage.setItem('deviceToken', deviceToken)
     }
   }, [deviceToken])
+
+  const getImageCategories = async () => {
+    const data = await imageCategoriesService.getImageCategories()
+
+    if (data) {
+      // setList(data.data)
+      console.log('ekdjkl', data)
+      dispatch(setImageCategories(data.data))
+    }
+  }
+
+  useEffect(() => {
+    getImageCategories()
+  }, [])
   return (
     <div className="App">
       {/* <Provider store={store}> */}
