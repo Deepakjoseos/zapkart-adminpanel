@@ -381,7 +381,11 @@ const OrderView = () => {
                 dataIndex="status"
                 key="status"
                 render={(status, row) => (
-                  <Select
+                  <Select showSearch
+                  optionFilterProp="children"
+                  filterOption={(input, option) =>
+                    option.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0
+                  }
                     defaultValue={status}
                     style={{ width: 150 }}
                     onChange={(e) => handleOrderStatusChange(e, row)}

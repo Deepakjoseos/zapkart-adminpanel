@@ -46,15 +46,8 @@ const StateForm = (props) => {
 
     }
   }
-  const getCountries = async()=>{
-    const data= await countryService.getCountries()
-    if(data){
-      setCountries(data)
-    }
-  }
-  useEffect(()=>{
- getCountries()
-  },[])
+
+
 //
 const getCountry = async () => {
   const data = await countryService.getCountry()
