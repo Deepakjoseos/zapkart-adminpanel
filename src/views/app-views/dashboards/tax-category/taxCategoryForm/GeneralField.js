@@ -42,7 +42,7 @@ const rules = {
 }
 
 const GeneralField = ({
-    mode, statuses
+    mode, statuses, sameStateValues
 }) => {
     const [image, setImage] = useState(false)
 
@@ -110,8 +110,12 @@ const GeneralField = ({
                                                 fieldKey={[field.fieldKey, 'sameState']}
                                             >
                                                 <Select>
-                                                    <Option value='Yes'>Yes</Option>
-                                                    <Option value='No'>No</Option>
+
+                                                    {sameStateValues?.map((item) => (
+                                                        <Option key={item} value={item}>
+                                                            {item}
+                                                        </Option>
+                                                    ))}
 
                                                 </Select>
                                             </Form.Item>
@@ -143,7 +147,7 @@ const GeneralField = ({
                             )
                         }}
                     </Form.List>
-                   
+
                 </Card>
 
 

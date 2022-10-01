@@ -30,7 +30,7 @@ const rules = {
   ],
 }
 
-const GeneralField = ({ form_statuses,state}) => (
+const GeneralField = ({ form_statuses,state,countries}) => (
   <Row gutter={16}>
     <Col xs={24} sm={24} md={17}>
       <Card title="Basic Info">

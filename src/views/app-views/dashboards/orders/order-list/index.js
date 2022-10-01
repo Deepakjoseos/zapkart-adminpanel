@@ -490,17 +490,21 @@ const Orders = () => {
         <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item name="status" label="Status">
 
-            <Select
+            <Select showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
               className="w-100"
               style={{ minWidth: 180 }}
               placeholder="Status"
             >
               <Option value="">All</Option>
-              {statuses.map((item) => (
-                <Option key={item.id} value={item}>
-                  {item}
-                </Option>
-              ))}
+              {orderStatuses?.map((item) => (
+              <Option key={item} value={item}>
+                {item}
+              </Option>
+            ))}
             </Select>
 
           </Form.Item>

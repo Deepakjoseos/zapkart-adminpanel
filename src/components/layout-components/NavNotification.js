@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Menu, Dropdown, Badge, Avatar, List, Button } from 'antd'
 import {
   MailOutlined,
@@ -6,8 +6,9 @@ import {
   WarningOutlined,
   CheckCircleOutlined,
 } from '@ant-design/icons'
-import notificationData from 'assets/data/notification.data.json'
+// import notificationData from 'assets/data/notification.data.json'
 import Flex from 'components/shared-components/Flex'
+import notificationService from 'services/notification'
 
 const getIcon = (icon) => {
   switch (icon) {
@@ -62,8 +63,21 @@ const getNotificationBody = (list) => {
 }
 
 export const NavNotification = () => {
+
+
   const [visible, setVisible] = useState(false)
-  const [data, setData] = useState(notificationData)
+  // const [data, setData] = useState(notificationData)
+  const [list,setList] = useState([])
+  const getNotifications  = () =>{
+
+    const data=notificationService.getNotifications()
+    if(data){
+      setList(data)
+    }
+  }
+  useEffect(()=>{
+   getNotifications()
+  },[])
 
   const handleVisibleChange = (flag) => {
     setVisible(flag)
@@ -71,27 +85,27 @@ export const NavNotification = () => {
 
   const notificationList = (
     <div className="nav-dropdown nav-notification">
-      {/* <div className="nav-notification-header d-flex justify-content-between align-items-center">
+      <div className="nav-notification-header d-flex justify-content-between align-items-center">
         <h4 className="mb-0">Notification</h4>
         <Button
-          className="text-primary"
-          type="text"
-          onClick={() => setData([])}
-          size="small"
+          // className="text-primary"
+          // type="text"
+          // onClick={() => setData([])}
+          // size="small"
         >
           Clear{' '}
         </Button>
-      </div> */}
-      <div className="nav-notification-body">
-        {/* {getNotificationBody(data)} */}
       </div>
-      {/* {data.length > 0 ? (
+      <div className="nav-notification-body">
+       {getNotificationBody(list)} 
+      </div>
+      {list.length > 0 ? (
         <div className="nav-notification-footer">
           <a className="d-block" href="#/">
             View all
           </a>
         </div>
-      ) : null} */}
+      ) : null}
     </div>
   )
 
@@ -105,7 +119,7 @@ export const NavNotification = () => {
     >
       <Menu mode="horizontal">
         <Menu.Item key="notification">
-          <Badge count={data.length}>
+          <Badge count={list.length}>
             <BellOutlined className="nav-icon mx-auto" type="bell" />
           </Badge>
         </Menu.Item>

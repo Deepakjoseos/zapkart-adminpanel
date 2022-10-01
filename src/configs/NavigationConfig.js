@@ -346,14 +346,14 @@ const dashBoardNavTree = [
         breadcrumb: false,
         submenu: [],
       },
-      {
-        key: 'dashboards-notifications',
-        path: `${APP_PREFIX_PATH}/dashboards/notifications/notification-list`,
-        title: 'Notifications',
-        icon: NotificationOutlined ,
-        breadcrumb: false,
-        submenu: [],
-      },
+      // {
+      //   key: 'dashboards-notifications',
+      //   path: `${APP_PREFIX_PATH}/dashboards/notifications/notification-list`,
+      //   title: 'Notifications',
+      //   icon: NotificationOutlined ,
+      //   breadcrumb: false,
+      //   submenu: [],
+      // },
 
 
       {
