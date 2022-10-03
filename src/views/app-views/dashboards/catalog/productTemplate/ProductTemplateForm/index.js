@@ -19,6 +19,7 @@ import manufacturerService from 'services/manufacturer'
 import compositionService from 'services/composition'
 import constantsService from 'services/constants'
 import taxCategoryService from 'services/TaxCategory'
+import { useSelector } from 'react-redux'
 import QueryString from 'qs'
 const { TabPane } = Tabs
 
@@ -49,6 +50,8 @@ const ProductForm = (props) => {
   const [taxCtegories, setTaxCategories] = useState([])
   const [paymentTypes, setPaymenTypes] = useState([])
   const [form_statuses, setStatuses] = useState([])
+  const { imageCategories } = useSelector((state) => state.auth)
+
 
   // category Filter]
   const [selectPage, setSelectPage] = useState(1)
@@ -443,10 +446,15 @@ const ProductForm = (props) => {
         if (mode === ADD) {
           // Checking if image exists
           if (uploadedImg.length !== 0 && uploadedImg !== null) {
+
             console.log('uploadedImg', uploadedImg)
+            const imageCategory = imageCategories.find(
+              (imgCat) => imgCat.imageFor === 'ProductTemplates'
+            )
+
             const imgValues = await multipleImageUpload(
               uploadedImg,
-              'productTemplate'
+              imageCategory.id
             )
 
             sendingValues.images = imgValues
@@ -465,9 +473,13 @@ const ProductForm = (props) => {
           // Checking if image exists
           if (uploadedImg.length !== 0 && uploadedImg !== null) {
             console.log('uploadedImg', uploadedImg)
+            const imageCategory = imageCategories.find(
+              (imgCat) => imgCat.imageFor === 'ProductTemplates'
+            )
+
             const imgValues = await multipleImageUpload(
               uploadedImg,
-              'productTemplate'
+              imageCategory.id
             )
             sendingValues.images = imgValues
           } else {

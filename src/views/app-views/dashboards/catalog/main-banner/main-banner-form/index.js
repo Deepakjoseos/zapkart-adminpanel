@@ -10,6 +10,7 @@ import Utils from 'utils'
 import { useHistory } from 'react-router-dom'
 import constantsService from 'services/constants'
 import mainBannerService from 'services/MainBanner'
+import { useSelector } from 'react-redux'
 const { TabPane } = Tabs
 
 const ADD = 'ADD'
@@ -24,6 +25,9 @@ const MainBannerForm = (props) => {
   const [uploadedMobileImg, setMobileImg] = useState(null)
   const [submitLoading, setSubmitLoading] = useState(false)
   const [form_statuses,setStatuses]= useState([])
+
+  const { imageCategories } = useSelector((state) => state.auth)
+
 
   // Normal Image
   const {
@@ -142,18 +146,24 @@ const MainBannerForm = (props) => {
             uploadedMobileImg.length !== 0 &&
             uploadedMobileImg !== null
           ) {
+            const imageCategory = imageCategories.find(
+              (imgCat) => imgCat.imageFor === 'MainBanners'
+            )
             console.log('uploadedImg', uploadedImg)
             const imgValue = await singleImageUploader(
               uploadedImg[0].originFileObj,
               uploadedImg,
               uploadedImg[0].url,
-              'banner'
+              imageCategory.id
+            )
+            const imageCategoryMobile = imageCategories.find(
+              (imgCat) => imgCat.imageFor === 'MainBannersMobile'
             )
             const mobileImgValue = await singleImageUploader(
               uploadedMobileImg[0].originFileObj,
               uploadedMobileImg,
               uploadedMobileImg[0].url,
-              'banner'
+              imageCategoryMobile.id
             )
 
             values.image = imgValue
@@ -176,18 +186,24 @@ const MainBannerForm = (props) => {
             uploadedMobileImg.length !== 0 &&
             uploadedMobileImg !== null
           ) {
+            const imageCategory = imageCategories.find(
+              (imgCat) => imgCat.imageFor === 'MainBanners'
+            )
             console.log('uploadedImg', uploadedImg)
             const imgValue = await singleImageUploader(
               uploadedImg[0].originFileObj,
               uploadedImg,
               uploadedImg[0].url,
-              'banner'
+              imageCategory.id
+            )
+            const imageCategoryMobile = imageCategories.find(
+              (imgCat) => imgCat.imageFor === 'MainBannersMobile'
             )
             const mobileImgValue = await singleImageUploader(
               uploadedMobileImg[0].originFileObj,
               uploadedMobileImg,
               uploadedMobileImg[0].url,
-              'banner'
+              imageCategoryMobile.id
             )
 
             values.image = imgValue
