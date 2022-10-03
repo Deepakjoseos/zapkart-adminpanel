@@ -21,6 +21,10 @@
   position: relative;
 }
 
+.dropdown-content {
+  position: initial !important;
+}
+
 /* .presc-select-cont .overlay {
   position: absolute;
   top: 0;
