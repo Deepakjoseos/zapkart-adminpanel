@@ -1,8 +1,11 @@
 import fetch from 'auth/FetchInterceptor'
 
 const deliveryzoneService = {}
-const api='/deliveryzones/public'
-deliveryzoneService.getDeliveryZones = async function (paginationQuery = '', query = '') {
+const api = '/deliveryzones/view_all/admin'
+deliveryzoneService.getDeliveryZones = async function (
+  paginationQuery = '',
+  query = ''
+) {
   console.log(query, 'oslj')
   try {
     let url = `${api}?${paginationQuery}&${query}`
@@ -39,10 +42,10 @@ deliveryzoneService.getDeliveryZoneById = async function (id) {
     console.log(err, 'show-err')
   }
 }
-deliveryzoneService.createDeliveryZone = async function (data) {
+deliveryzoneService.createDeliveryZone = async function (vendorId, data) {
   try {
     const res = await fetch({
-      url: `/deliveryzones/${data.vendorId}/admin`,
+      url: `/deliveryzones/${vendorId}/admin`,
       method: 'post',
       data: data,
     })
@@ -51,10 +54,10 @@ deliveryzoneService.createDeliveryZone = async function (data) {
     console.log(err, 'show-err')
   }
 }
-deliveryzoneService.editDeliveryZone = async function (id, data) {
+deliveryzoneService.editDeliveryZone = async function (id, vendorId, data) {
   try {
     const res = await fetch({
-      url: `/deliveryzones/${id}/${data.vendorId}/admin`,
+      url: `/deliveryzones/${id}/${vendorId}/admin`,
       method: 'put',
       data: data,
     })
@@ -95,5 +98,4 @@ deliveryzoneService.removeDeliveryLocationZone = async function (
   }
 }
 
- 
 export default deliveryzoneService

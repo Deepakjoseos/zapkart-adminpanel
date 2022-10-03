@@ -47,7 +47,7 @@ import {
   ShopOutlined,
   FileImageOutlined,
   SafetyCertificateOutlined,
-  MoneyCollectOutlined
+  MoneyCollectOutlined,
 } from '@ant-design/icons'
 import { APP_PREFIX_PATH, AUTH_PREFIX_PATH } from 'configs/AppConfig'
 
@@ -238,7 +238,7 @@ const dashBoardNavTree = [
             key: 'dashboards-main-banner',
             path: `${APP_PREFIX_PATH}/dashboards/catalog/main-banner/main-banner-list`,
             title: 'Main Banner',
-            icon: FileImageOutlined ,
+            icon: FileImageOutlined,
             breadcrumb: false,
             submenu: [],
           },
@@ -355,7 +355,6 @@ const dashBoardNavTree = [
       //   submenu: [],
       // },
 
-
       {
         key: 'dashboards-orders',
         path: `${APP_PREFIX_PATH}/dashboards/orders/orders-list`,
@@ -366,83 +365,79 @@ const dashBoardNavTree = [
       },
 
       {
-        key: 'dashboards-deliverylocation',
-        path: `${APP_PREFIX_PATH}/dashboards/delivery-location`,
-        title: 'Delivery Location',
+        key: 'dashboards-deliverylocation-deliveryzones',
+        path: `${APP_PREFIX_PATH}/dashboards/deliverylocation/deliveryzone/deliveryzone-list`,
+        title: 'Delivery zones',
         icon: DeliveredProcedureOutlined,
         breadcrumb: false,
-        submenu: [
-          {
-            key: 'dashboards-deliverylocation-deliverylocation',
-            path: `${APP_PREFIX_PATH}/dashboards/deliverylocation/delivery-location/delivery-location-list`,
-            title: 'Delivery Locations',
-            icon: DeliveredProcedureOutlined,
-            breadcrumb: false,
-            submenu: [],
-          },
-          
-          {
-            key: 'dashboards-deliverylocation-deliveryzones',
-            path: `${APP_PREFIX_PATH}/dashboards/deliverylocation/deliveryzone/deliveryzone-list`,
-            title: 'Delivery zones',
-            icon: DeliveredProcedureOutlined,
-            breadcrumb: false,
-            submenu: [],
-          },
-        ],
+        submenu: [],
+
+        // key: 'dashboards-deliverylocation',
+        // path: `${APP_PREFIX_PATH}/dashboards/delivery-location`,
+        // title: 'Delivery Location',
+        // icon: DeliveredProcedureOutlined,
+        // breadcrumb: false,
+        // submenu: [
+        //   {
+        //     key: 'dashboards-deliverylocation-deliveryzones',
+        //     path: `${APP_PREFIX_PATH}/dashboards/deliverylocation/deliveryzone/deliveryzone-list`,
+        //     title: 'Delivery zones',
+        //     icon: DeliveredProcedureOutlined,
+        //     breadcrumb: false,
+        //     submenu: [],
+        //   },
+        // ],
       },
       {
         key: 'dashboards-locality',
         path: `${APP_PREFIX_PATH}/dashboards/locality`,
         title: 'Locality',
-        icon: HomeOutlined ,
+        icon: HomeOutlined,
         breadcrumb: false,
         submenu: [
-      
-      {
-      key: 'dashboards-locality-country',
-      path: `${APP_PREFIX_PATH}/dashboards/locality/country/country-list`,
-      title: 'Country',
-      icon: AppstoreOutlined ,
-      breadcrumb: false,
-      submenu: [],
-    },
-    
-    {
-      key: 'dashboards-locality-state',
-      path: `${APP_PREFIX_PATH}/dashboards/locality/state/statelist`,
-      title: 'State',
-      icon: AppstoreOutlined,
-      breadcrumb: false,
-      submenu: [],
-    },
-    {
-      key: 'dashboards-locality-district',
-      path: `${APP_PREFIX_PATH}/dashboards/locality/district/districtlist`,
-      title: 'District',
-      icon: AppstoreOutlined,
-      breadcrumb: false,
-      submenu: [],
-    },
-    {
-      key: 'dashboards-locality-city',
-      path: `${APP_PREFIX_PATH}/dashboards/locality/city/city-list`,
-      title: 'City',
-      icon: AppstoreOutlined,
-      breadcrumb: false,
-      submenu: [],
-    },
-    {
-      key: 'dashboards-locality-pincode',
-      path: `${APP_PREFIX_PATH}/dashboards/locality/pincode/pincodelist`,
-      title: 'Pincode',
-      icon: AppstoreOutlined,
-      breadcrumb: false,
-      submenu: [],
-    },
-  ],
-  
-},
+          {
+            key: 'dashboards-locality-country',
+            path: `${APP_PREFIX_PATH}/dashboards/locality/country/country-list`,
+            title: 'Country',
+            icon: AppstoreOutlined,
+            breadcrumb: false,
+            submenu: [],
+          },
+
+          {
+            key: 'dashboards-locality-state',
+            path: `${APP_PREFIX_PATH}/dashboards/locality/state/statelist`,
+            title: 'State',
+            icon: AppstoreOutlined,
+            breadcrumb: false,
+            submenu: [],
+          },
+          {
+            key: 'dashboards-locality-district',
+            path: `${APP_PREFIX_PATH}/dashboards/locality/district/districtlist`,
+            title: 'District',
+            icon: AppstoreOutlined,
+            breadcrumb: false,
+            submenu: [],
+          },
+          {
+            key: 'dashboards-locality-city',
+            path: `${APP_PREFIX_PATH}/dashboards/locality/city/city-list`,
+            title: 'City',
+            icon: AppstoreOutlined,
+            breadcrumb: false,
+            submenu: [],
+          },
+          {
+            key: 'dashboards-locality-pincode',
+            path: `${APP_PREFIX_PATH}/dashboards/locality/pincode/pincodelist`,
+            title: 'Pincode',
+            icon: AppstoreOutlined,
+            breadcrumb: false,
+            submenu: [],
+          },
+        ],
+      },
 
       {
         key: 'dashboards-widget',
@@ -481,7 +476,7 @@ const dashBoardNavTree = [
         key: 'dashboards-tax-category',
         path: `${APP_PREFIX_PATH}/dashboards/tax-category`,
         title: 'Tax Category',
-        icon: MoneyCollectOutlined ,
+        icon: MoneyCollectOutlined,
         breadcrumb: false,
         submenu: [],
       },
@@ -493,7 +488,7 @@ const dashBoardNavTree = [
         breadcrumb: false,
         submenu: [],
       },
-     
+
       {
         key: 'dashboards-settings',
         path: `${APP_PREFIX_PATH}/dashboards/settings`,

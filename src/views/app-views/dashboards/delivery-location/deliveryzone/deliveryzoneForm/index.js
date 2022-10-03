@@ -12,6 +12,7 @@ import deliveryzoneService from 'services/deliveryZone'
 import vendorService from 'services/vendor'
 import userGroupService from 'services/userGroup'
 import constantsService from 'services/constants'
+import countryService from 'services/country'
 
 const { TabPane } = Tabs
 
@@ -26,17 +27,25 @@ const DeliveryZoneForm = (props) => {
   const [uploadedImg, setImage] = useState(null)
   const [deliveryLocations, setDeliveryLocations] = useState([])
   const [isFinalTrue, setIsFinalTrue] = useState(false)
-  const [vendors,setVendors] = useState([])
+  const [vendors, setVendors] = useState([])
   //   const [uploadLoading, setUploadLoading] = useState(false)
   const [submitLoading, setSubmitLoading] = useState(false)
-  const [userGroups,setUserGroups]=useState([])
-  const [form_statuses,setStatuses] = useState([])
+  const [userGroups, setUserGroups] = useState([])
+  const [form_statuses, setStatuses] = useState([])
+  const [allTreesData, setAllTreesData] = useState([])
+  // const [defaultDeliveryLocations, setDefaultDeliveryLocations] = useState([])
+  const [
+    checkedDeliveryZoneSendingValues,
+    setCheckedDeliveryZoneSendingValues,
+  ] = useState([])
+
   const getVendors = async () => {
     const data = await vendorService.getVendors()
     if (data) {
-      const vendorsList = data.map(cur => {
+      const vendorsList = data.map((cur) => {
         return {
-          ...cur, fullName: `${cur.firstName} ${cur.lastName}`
+          ...cur,
+          fullName: `${cur.firstName} ${cur.lastName}`,
         }
       })
       setVendors(vendorsList)
@@ -44,37 +53,51 @@ const DeliveryZoneForm = (props) => {
   }
 
   // For selecting DELIVERY LOCATION PARENT
-//   const getDeliveryZones = async () => {
-//     const data = await deliveryzoneService.getDeliveryZones()
-//     console.log(data, 'myyy-data')
+  //   const getDeliveryZones = async () => {
+  //     const data = await deliveryzoneService.getDeliveryZones()
+  //     console.log(data, 'myyy-data')
 
-//     if (data) {
-//       if (mode === EDIT) {
-//         const deliveryLocs = data.filter(
-//           (cur) => cur.isFinal !== true && cur.id !== param.id
-//         )
-//         setDeliveryLocations(deliveryLocs)
-//       } else {
-//         const deliveryLocs = data.filter((cur) => cur.isFinal !== true)
-//         setDeliveryLocations(deliveryLocs)
-//       }
-//     }
-//   }
-const fetchConstants = async () => {
-  const data = await constantsService.getConstants()
-  if (data) {
-    // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
+  //     if (data) {
+  //       if (mode === EDIT) {
+  //         const deliveryLocs = data.filter(
+  //           (cur) => cur.isFinal !== true && cur.id !== param.id
+  //         )
+  //         setDeliveryLocations(deliveryLocs)
+  //       } else {
+  //         const deliveryLocs = data.filter((cur) => cur.isFinal !== true)
+  //         setDeliveryLocations(deliveryLocs)
+  //       }
+  //     }
+  //   }
+  const fetchConstants = async () => {
+    const data = await constantsService.getConstants()
+    if (data) {
+      // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
 
-    setStatuses(Object.values(data.GENERAL['FORM_STATUS']))
-
+      setStatuses(Object.values(data.GENERAL['FORM_STATUS']))
+    }
   }
-}
 
+  const getCountry = async () => {
+    const data = await countryService.getCountry()
 
-   useEffect(() => {
+    if (data) {
+      const list = Utils.createDeliveryLocationList(data?.data)
+
+      console.log(list, 'hukjbujk')
+      setAllTreesData(list)
+    }
+  }
+
+  console.log(allTreesData, 'hgdjkvb')
+
+  useEffect(() => {
     getVendors()
     fetchConstants()
-   }, [])
+    getCountry()
+  }, [])
+
+  console.log(allTreesData, 'opdjksgduk')
 
   useEffect(() => {
     if (mode === EDIT) {
@@ -85,9 +108,16 @@ const fetchConstants = async () => {
           form.setFieldsValue({
             name: data.name,
             status: data.status,
-            vendorId:data.vendorId
-            
+            vendorId: data.vendorId,
           })
+          setCheckedDeliveryZoneSendingValues(
+            data.deliveryLocations?.map((cur) => ({
+              id: cur?.deliveryLocationId,
+              key: cur?.deliveryLocationId,
+              deliveryZoneName: cur?.deliveryLocationType,
+              fromInitial: true,
+            }))
+          )
           setIsFinalTrue(data.isFinal)
         } else {
           history.replace(
@@ -105,10 +135,19 @@ const fetchConstants = async () => {
     form
       .validateFields()
       .then(async (values) => {
+        const sendingValues = {
+          name: values?.name,
+          status: values?.status,
+          deliveryLocations: checkedDeliveryZoneSendingValues?.map((cur) => ({
+            deliveryLocationId: cur?.id,
+            deliveryLocationType: cur?.deliveryZoneName,
+          })),
+        }
+        console.log(sendingValues, 'sendinggggg')
         if (mode === ADD) {
           const created = await deliveryzoneService.createDeliveryZone(
-            values,
-            
+            values?.vendorId,
+            sendingValues
           )
           if (created) {
             message.success(`Created ${values.name} to Delivery zones List`)
@@ -118,7 +157,8 @@ const fetchConstants = async () => {
         if (mode === EDIT) {
           const edited = await deliveryzoneService.editDeliveryZone(
             param.id,
-            values
+            values?.vendorId,
+            sendingValues
           )
           if (edited) {
             message.success(`Edited ${values.name} to Delivery zone list`)
@@ -187,9 +227,18 @@ const fetchConstants = async () => {
             <TabPane tab="General" key="1">
               <GeneralField
                 form={form}
-                vendors={vendors} 
+                vendors={vendors}
                 mode={mode}
                 form_statuses={form_statuses}
+                allTreesData={allTreesData}
+                setAllTreesData={setAllTreesData}
+                setCheckedDeliveryZoneSendingValues={
+                  setCheckedDeliveryZoneSendingValues
+                }
+                checkedDeliveryZoneSendingValues={
+                  checkedDeliveryZoneSendingValues
+                }
+
                 // isFinalTrue={isFinalTrue}
                 // setIsFinalTrue={setIsFinalTrue}
                 // deliveryLocations={deliveryLocations}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Provider, useDispatch } from 'react-redux'
+import { Provider, useDispatch, useSelector } from 'react-redux'
 import store from './redux/store'
 import { BrowserRouter as Router } from 'react-router-dom'
 import Views from './views'
@@ -25,6 +25,7 @@ const themes = {
 function App() {
   const [deviceToken, setDeviceToken] = useState('')
   const dispatch = useDispatch()
+  const { authorized } = useSelector((state) => state.auth)
   useEffect(() => {
     // dispatch(showLoading(false))
 
@@ -88,8 +89,10 @@ function App() {
   }
 
   useEffect(() => {
-    getImageCategories()
-  }, [])
+    if (authorized) {
+      getImageCategories()
+    }
+  }, [authorized])
   return (
     <div className="App">
       {/* <Provider store={store}> */}

@@ -53,15 +53,15 @@ const getStockStatus = (status) => {
 const DeliveryZonesList = () => {
   let history = useHistory()
   const [form] = Form.useForm()
-  
+
   const [list, setList] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
-  
+
   // Added for Pagination
   const [loading, setLoading] = useState(false)
   const [filterEnabled, setFilterEnabled] = useState(false)
-  const [statuses,setStatuses] = useState([])
-  
+  const [statuses, setStatuses] = useState([])
+
   // pagination
   const [pagination, setPagination] = useState({
     current: 1,
@@ -69,17 +69,18 @@ const DeliveryZonesList = () => {
   })
   const [searchBackupList, setSearchBackupList] = useState([])
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
-  const [vendors,setVendors] = useState(null)
-  const [selectedVendorId,setSelectedVendorId]= useState(null)
-  const [selectedStatus,setSelectedStatus] = useState(null)
+  const [vendors, setVendors] = useState(null)
+  const [selectedVendorId, setSelectedVendorId] = useState(null)
+  const [selectedStatus, setSelectedStatus] = useState(null)
   const getVendors = async () => {
     const data = await vendorService.getVendors()
     if (data) {
-       const vendorsList = data.map(cur => {
-         return {
-           ...cur, fullName: `${cur.firstName} ${cur.lastName}`
-         }
-       })
+      const vendorsList = data.map((cur) => {
+        return {
+          ...cur,
+          fullName: `${cur.firstName} ${cur.lastName}`,
+        }
+      })
       setVendors(vendorsList)
     }
   }
@@ -87,9 +88,8 @@ const DeliveryZonesList = () => {
     const data = await constantsService.getConstants()
     if (data) {
       // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
-  
+
       setStatuses(Object.values(data.GENERAL['STATUS']))
-  
     }
   }
   const getDeliveryZones = async (paginationParams = {}, filterParams) => {
@@ -98,10 +98,10 @@ const DeliveryZonesList = () => {
       qs.stringify(getPaginationParams(paginationParams)),
       qs.stringify(filterParams)
     )
-  
+
     if (data) {
       setList(data.data)
-  
+
       // Pagination
       setPagination({
         ...paginationParams.pagination,
@@ -110,7 +110,7 @@ const DeliveryZonesList = () => {
       setLoading(false)
     }
   }
-  
+
   useEffect(() => {
     getDeliveryZones({
       pagination,
@@ -118,14 +118,14 @@ const DeliveryZonesList = () => {
     getVendors()
     fetchConstants()
   }, [])
-  
+
   // pagination generator
   const getPaginationParams = (params) => ({
     limit: params.pagination?.pageSize,
     page: params.pagination?.current,
     // ...params,
   })
-  
+
   // On pagination Change
   const handleTableChange = (newPagination) => {
     getDeliveryZones(
@@ -143,12 +143,11 @@ const DeliveryZonesList = () => {
           <span className="ml-2">View Details</span>
         </Flex>
       </Menu.Item>
-      <Menu.Item onClick={() => addDeliveryZoneLocation(row)}>
+      {/* <Menu.Item onClick={() => addDeliveryZoneLocation(row)}>
         <Flex alignItems="center">
-          {/* <EyeOutlined /> */}
           <span className="ml-2">Add Delivery Zone Location</span>
         </Flex>
-      </Menu.Item>
+      </Menu.Item> */}
       {/* <Menu.Item onClick={() => deleteRow(row)}>
         <Flex alignItems="center">
           <DeleteOutlined />
@@ -164,8 +163,9 @@ const DeliveryZonesList = () => {
 
   const addProduct = () => {
     // history.push(`/app/dashboards/deliverylocation/deliveryzone/add-deliveryzone`)
-    history.push(`/app/dashboards/deliverylocation/deliveryzone/add-deliveryzone`)
-
+    history.push(
+      `/app/dashboards/deliverylocation/deliveryzone/add-deliveryzone`
+    )
   }
 
   const viewDetails = (row) => {
@@ -174,35 +174,33 @@ const DeliveryZonesList = () => {
     )
   }
 
-//   const deleteRow = async (row) => {
-//     const resp = await deliveryLocationService.dele(row.id)
+  //   const deleteRow = async (row) => {
+  //     const resp = await deliveryLocationService.dele(row.id)
 
-//     if (resp) {
-//       const objKey = 'id'
-//       let data = list
-//       if (selectedRows.length > 1) {
-//         selectedRows.forEach((elm) => {
-//           data = utils.deleteArrayRow(data, objKey, elm.id)
-//           setList(data)
-//           setSelectedRows([])
-//         })
-//       } else {
-//         data = utils.deleteArrayRow(data, objKey, row.id)
-//         setList(data)
-//       }
-//     }
-//   }
-const addDeliveryZoneLocation = (row) => {
-  history.push(
-     `/app/dashboards/deliverylocation/deliveryzone/add-deliveryzone-location/${row.id}`
-
-  )
-}
-   const getVendorName = (vendorId) => {
-
+  //     if (resp) {
+  //       const objKey = 'id'
+  //       let data = list
+  //       if (selectedRows.length > 1) {
+  //         selectedRows.forEach((elm) => {
+  //           data = utils.deleteArrayRow(data, objKey, elm.id)
+  //           setList(data)
+  //           setSelectedRows([])
+  //         })
+  //       } else {
+  //         data = utils.deleteArrayRow(data, objKey, row.id)
+  //         setList(data)
+  //       }
+  //     }
+  //   }
+  const addDeliveryZoneLocation = (row) => {
+    history.push(
+      `/app/dashboards/deliverylocation/deliveryzone/add-deliveryzone-location/${row.id}`
+    )
+  }
+  const getVendorName = (vendorId) => {
     const getVendorName = vendors?.find((cur) => cur.id === vendorId)
     return getVendorName ? getVendorName.fullName : ''
-   }
+  }
   const tableColumns = [
     {
       title: 'DeliveryZone',
@@ -225,13 +223,13 @@ const addDeliveryZoneLocation = (row) => {
       ),
       sorter: (a, b) => utils.antdTableSorter(a, b, 'status'),
     },
-     {
-       title: 'Vendor',
-       dataIndex: 'vendorId',
+    {
+      title: 'Vendor',
+      dataIndex: 'vendorId',
       render: (vendorId) => (
         <Flex alignItems="center">{getVendorName(vendorId)}</Flex>
       ),
-     },
+    },
 
     {
       title: '',
@@ -289,7 +287,7 @@ const addDeliveryZoneLocation = (row) => {
             <Input placeholder="Search" prefix={<SearchOutlined />} />
           </Form.Item>
         </Col>
-        
+
         <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item name="status" label="Status">
             <Select
@@ -298,7 +296,7 @@ const addDeliveryZoneLocation = (row) => {
               placeholder="Status"
             >
               <Option value="">All</Option>
-            {statuses.map((item) => (
+              {statuses.map((item) => (
                 <Option key={item.id} value={item}>
                   {item}
                 </Option>
@@ -308,63 +306,67 @@ const addDeliveryZoneLocation = (row) => {
         </Col>
         <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item name="vendorId" label="Vendors">
-          <Select showSearch
+            <Select
+              showSearch
               optionFilterProp="children"
               filterOption={(input, option) =>
-                option.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0
+                option.children
+                  .toString()
+                  .toLowerCase()
+                  .indexOf(input.toLowerCase()) >= 0
               }
-          className="w-100"
-          style={{ minWidth: 180 }}
-          // onChange={(value) => setSelectedVendorId(value)}
-          // onSelect={handleQuery}
-          // value={selectedVendorId}
-          placeholder="Vendors">
-             <Option value="">All</Option>
-            {vendors?.map((vendor) => (
-              <Option value={vendor.id}>
-                {vendor?.firstName} {vendor?.lastName}
-              </Option>
-            ))}
-          </Select>
+              className="w-100"
+              style={{ minWidth: 180 }}
+              // onChange={(value) => setSelectedVendorId(value)}
+              // onSelect={handleQuery}
+              // value={selectedVendorId}
+              placeholder="Vendors"
+            >
+              <Option value="">All</Option>
+              {vendors?.map((vendor) => (
+                <Option value={vendor.id}>
+                  {vendor?.firstName} {vendor?.lastName}
+                </Option>
+              ))}
+            </Select>
           </Form.Item>
         </Col>
-    
+
         <Col className="mb-4">
           <Button type="primary" onClick={handleFilterSubmit}>
             Filter
           </Button>
-          <Button className='ml-2' type="primary" onClick={handleClearFilter}>
+          <Button className="ml-2" type="primary" onClick={handleClearFilter}>
             Clear
           </Button>
         </Col>
-  
       </Row>
     </Form>
   )
-
-  
-  
 
   return (
     <Card>
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
         {filtersComponent()}
-       
       </Flex>
       <div>
-          <Button
-            onClick={addProduct}
-            type="primary"
-            icon={<PlusCircleOutlined />}
-            
-          >
-            Add DeliveryZone
-          </Button>
-        </div>
+        <Button
+          onClick={addProduct}
+          type="primary"
+          icon={<PlusCircleOutlined />}
+        >
+          Add DeliveryZone
+        </Button>
+      </div>
       <div className="table-responsive">
-        <Table columns={tableColumns} dataSource={list} rowKey="id"  pagination={pagination}
-        loading={loading}
-        onChange={handleTableChange}/>
+        <Table
+          columns={tableColumns}
+          dataSource={list}
+          rowKey="id"
+          pagination={pagination}
+          loading={loading}
+          onChange={handleTableChange}
+        />
       </div>
     </Card>
   )

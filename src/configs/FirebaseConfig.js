@@ -16,14 +16,14 @@ let FirebaseConfig = {}
 //   // messagingSenderId: '1031062435017',
 //   // appId: '1:1031062435017:web:d6b5ac03cd40d344480918',
 // }
-if(process.env.REACT_APP_SITE_NAME === 'athathy') {
+if (process.env.REACT_APP_SITE_NAME === 'athathy') {
   FirebaseConfig = {
-    apiKey: "AIzaSyDIQXZ_KL265rV0hgSvYH1f5EQo010Lnjo",
-    authDomain: "athathy-13dd6.firebaseapp.com",
-    projectId: "athathy-13dd6",
-    storageBucket: "athathy-13dd6.appspot.com",
-    messagingSenderId: "295619267638",
-    appId: "1:295619267638:web:5bb8523b198a33959bdc97"
+    apiKey: 'AIzaSyDIQXZ_KL265rV0hgSvYH1f5EQo010Lnjo',
+    authDomain: 'athathy-13dd6.firebaseapp.com',
+    projectId: 'athathy-13dd6',
+    storageBucket: 'athathy-13dd6.appspot.com',
+    messagingSenderId: '295619267638',
+    appId: '1:295619267638:web:5bb8523b198a33959bdc97',
   }
 } else {
   switch (process.env.NODE_ENV) {
@@ -61,7 +61,5 @@ if(process.env.REACT_APP_SITE_NAME === 'athathy') {
       break
   }
 }
-
-
 
 export default FirebaseConfig
