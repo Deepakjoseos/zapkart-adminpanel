@@ -48,116 +48,17 @@ const GeneralField = ({
   setCheckedDeliveryZoneSendingValues,
   checkedDeliveryZoneSendingValues,
 }) => {
-  console.log('mode', mode)
-
-  const [expandedKeys, setExpandedKeys] = useState([])
-  const [checkedKeys, setCheckedKeys] = useState([])
-  const [selectedKeys, setSelectedKeys] = useState([])
-  const [autoExpandParent, setAutoExpandParent] = useState(true)
-  const [value, setValue] = useState(['India'])
-
-  const { DirectoryTree, TreeNode } = Tree
-
-  const onChange = (newValue, label, extra) => {
-    console.log('onChange ', newValue, label, extra)
-    setValue(newValue)
-  }
-
-  // TODO: PLAN
-
-  // const treeData = [
-  //   {
-  //     title: 'India',
-  //     key: 'india',
-
-  //     children: [
-  //       {
-  //         title: 'kerala',
-  //         key: 'state',
-  //         deliveryLocation: 'state',
-  //         children: [
-  //           {
-  //             title: 'malapauram',
-  //             key: 'malapauram',
-  //           },
-  //           {
-  //             title: 'kozhikode',
-  //             key: 'kozhikode',
-  //           },
-  //         ],
-  //       },
-  //       {
-  //         title: 'karnataka',
-  //         key: 'karnataka',
-  //         deliveryLocation: 'state',
-  //         children: [
-  //           {
-  //             title: 'banglore',
-  //             key: 'banglore',
-  //           },
-  //           {
-  //             title: 'royal',
-  //             key: 'royal',
-  //           },
-  //         ],
-  //       },
-  //     ],
-  //   },
-  // ]
-
   const getState = async (countryId) => {
     const data = await stateService.getState('', `countryId=${countryId}`)
     console.log(countryId, 'idjhdjdk')
 
-    // if (data) {
-    //   let updatedList = allTreesData.map((item) => {
-    //     // const value = JSON.parse(item.key)
-
-    //     if (item?.value === countryId) {
-    //       console.log(item.value, 'hsty')
-    //       return {
-    //         ...item,
-    //         children: Utils.createDeliveryLocationList(data?.data),
-    //       } //gets everything that was already in item, and updates "done"
-    //     }
-    //     return item // else return unmodified item
-    //   })
-    //   setAllTreesData(updatedList)
-    // }
     if (data?.data?.length > 0) {
       return Utils.createDeliveryLocationList(data?.data)
     }
   }
 
-  // function IsJsonString(str) {
-  //   try {
-  //     JSON.parse(str)
-  //   } catch (e) {
-  //     return false
-  //   }
-  //   return true
-  // }
-
   const getDistrict = async (stateId) => {
     const data = await districtService.getDistrict('', `stateId=${stateId}`)
-
-    // if (data) {
-    //   const updatedDistrictTree = allTreesData.map((item) => {
-    //     // const value = JSON.parse(item.key)
-    //     console.log(item, 'heyyy')
-    //     if (item?.value === countryId) {
-    //       item?.children.forEach((elem) => {
-    //         console.log(elem, 'plsssss')
-    //         if (elem?.value === stateId) {
-    //           elem.children = Utils.createDeliveryLocationList(data?.data)
-    //         }
-    //       })
-    //     }
-    //     return item
-    //   })
-
-    //   setAllTreesData(updatedDistrictTree)
-    // }
     if (data?.data?.length > 0) {
       return Utils.createDeliveryLocationList(data?.data)
     }
@@ -176,25 +77,6 @@ const GeneralField = ({
     if (data?.data?.length > 0) {
       return Utils.createDeliveryLocationList(data?.data)
     }
-  }
-
-  const onExpand = (expandedKeysValue) => {
-    // console.log('onExpand', expandedKeysValue) // if not set autoExpandParent to false, if children expanded, parent can not collapse.
-    // // or, you can remove all expanded children keys.
-    // const deliveryZoneData =
-    //   expandedKeysValue?.length > 0 &&
-    //   JSON.parse(expandedKeysValue[expandedKeysValue?.length - 1])
-    // console.log(deliveryZoneData, 'got-it')
-    // // const deliveryZoneName = deliveryZoneData[0]
-    // // const removeDeliveryZoneName = deliveryZoneData.shift()
-    // // const deliveryZoneId = deliveryZoneData.join('-')
-    // if (deliveryZoneData?.currentStage === 'COUNTRY') {
-    //   getState(deliveryZoneData?.id)
-    // } else if (deliveryZoneData?.currentStage === 'STATE') {
-    //   getDistrict(deliveryZoneData?.countryId, deliveryZoneData?.id)
-    // }
-    // setExpandedKeys(expandedKeysValue)
-    // setAutoExpandParent(false)
   }
 
   const onCheck = (checkedKeysValue, e) => {
@@ -225,24 +107,7 @@ const GeneralField = ({
 
   const onSelect = (selectedKeysValue) => {
     console.log('onSelect', selectedKeysValue)
-    // setSelectedKeys(selectedKeysValue)
   }
-  // const { SHOW_PARENT } = TreeSelect
-
-  // const tProps = {
-  //   treeData: allTreesData,
-  //   value,
-  //   onChange,
-  //   treeCheckable: true,
-  //   showCheckedStrategy: SHOW_PARENT,
-  //   placeholder: 'Please select',
-  //   treeIcon: true,
-  //   showArrow: true,
-  //   onTreeExpand: onExpand,
-  //   style: {
-  //     width: '100%',
-  //   },
-  // }
 
   const updateTreeData = (list, key, children) => {
     const data = list.map((node) => {
