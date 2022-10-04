@@ -220,7 +220,7 @@ const CityList = () => {
 
   const tableColumns = [
     {
-      title: 'State',
+      title: 'City',
       dataIndex: 'name',
       sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
     },

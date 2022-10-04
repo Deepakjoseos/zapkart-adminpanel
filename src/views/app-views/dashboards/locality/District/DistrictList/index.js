@@ -201,6 +201,12 @@ const DistrictList = () => {
       sorter: (a, b) => utils.antdTableSorter(a, b, 'status'),
     },
     {
+      title: 'Priority',
+      dataIndex: 'priority',
+     
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'priority'),
+    },
+    {
       title: '',
       dataIndex: 'actions',
       render: (_, elm) => (
