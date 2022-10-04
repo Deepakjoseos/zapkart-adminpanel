@@ -188,7 +188,36 @@ const Pincodelist = () => {
     {
       title: 'Pincode',
       dataIndex: 'name',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'pincodeName'),
+    },
+    {
+      title: 'City',
+      dataIndex: 'cityName',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'cityName'),
+    },
+    {
+      title: 'District',
+      dataIndex: 'districtName',
+     
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'districtName'),
+    },
+    {
+      title: 'State',
+      dataIndex: 'stateName',
+     
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'stateName'),
+    },
+    {
+      title: 'Country',
+      dataIndex: 'countryName',
+     
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'countryName'),
+    },
+    {
+      title: 'Priority',
+      dataIndex: 'priority',
+     
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'priority'),
     },
 
     {
@@ -199,12 +228,7 @@ const Pincodelist = () => {
       ),
       sorter: (a, b) => utils.antdTableSorter(a, b, 'status'),
     },
-    {
-      title: 'Priority',
-      dataIndex: 'priority',
-     
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'priority'),
-    },
+   
     {
       title: '',
       dataIndex: 'actions',

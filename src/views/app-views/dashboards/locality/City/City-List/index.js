@@ -222,7 +222,25 @@ const CityList = () => {
     {
       title: 'City',
       dataIndex: 'name',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'cityName'),
+    },
+    {
+      title: 'District',
+      dataIndex: 'districtName',
+     
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'districtName'),
+    },
+    {
+      title: 'State',
+      dataIndex: 'stateName',
+     
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'stateName'),
+    },
+    {
+      title: 'Country',
+      dataIndex: 'countryName',
+     
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'countryName'),
     },
     {
       title: 'Priority',
