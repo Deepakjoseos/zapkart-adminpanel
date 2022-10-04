@@ -101,8 +101,8 @@ const DistrictForm = (props) => {
           form.setFieldsValue({
             name: data.name,
             status: data.status,
-            stateId:data.stateId
-          
+            stateId:data.stateId,
+            priority:data.priority
 
           })
         } else {

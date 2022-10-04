@@ -186,7 +186,7 @@ const Pincodelist = () => {
 
   const tableColumns = [
     {
-      title: 'Country',
+      title: 'Pincode',
       dataIndex: 'name',
       sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
     },
@@ -198,6 +198,12 @@ const Pincodelist = () => {
         <Flex alignItems="center">{getStockStatus(status)}</Flex>
       ),
       sorter: (a, b) => utils.antdTableSorter(a, b, 'status'),
+    },
+    {
+      title: 'Priority',
+      dataIndex: 'priority',
+     
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'priority'),
     },
     {
       title: '',
