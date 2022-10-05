@@ -260,6 +260,15 @@ class Utils {
       deliveryList.push({
         title: del.name,
         key: del?.id,
+        parentlvlId: del?.cityId
+          ? del?.cityId
+          : del?.districtId
+          ? del?.districtId
+          : del?.stateId
+          ? del?.stateId
+          : del?.countryId
+          ? del?.countryId
+          : null,
 
         // {
         //   ...del,
