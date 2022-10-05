@@ -13,6 +13,7 @@ import vendorService from 'services/vendor'
 import userGroupService from 'services/userGroup'
 import constantsService from 'services/constants'
 import countryService from 'services/country'
+import _ from 'lodash'
 
 const { TabPane } = Tabs
 
@@ -33,7 +34,7 @@ const DeliveryZoneForm = (props) => {
   const [userGroups, setUserGroups] = useState([])
   const [form_statuses, setStatuses] = useState([])
   const [allTreesData, setAllTreesData] = useState([])
-  // const [defaultDeliveryLocations, setDefaultDeliveryLocations] = useState([])
+  const [sendingValuesDeliveryZones, setSendingDeliveryZones] = useState([])
   const [
     checkedDeliveryZoneSendingValues,
     setCheckedDeliveryZoneSendingValues,
@@ -79,7 +80,7 @@ const DeliveryZoneForm = (props) => {
   }
 
   const getCountry = async () => {
-    const data = await countryService.getCountry()
+    const data = await countryService.getCountry('', `status=Active`)
 
     if (data) {
       const list = Utils.createDeliveryLocationList(data?.data)
@@ -112,9 +113,11 @@ const DeliveryZoneForm = (props) => {
           })
           setCheckedDeliveryZoneSendingValues(
             data.deliveryLocations?.map((cur) => ({
+              ...cur,
               id: cur?.deliveryLocationId,
               key: cur?.deliveryLocationId,
               deliveryZoneName: cur?.deliveryLocationType,
+
               fromInitial: true,
             }))
           )
@@ -130,6 +133,110 @@ const DeliveryZoneForm = (props) => {
     }
   }, [form, mode, param, props])
 
+  const getParentBasedDeliveryZones = () => {
+    // const childrenObjs = []
+    // const parentObjs = []
+
+    // // Spliting up with parentIds object, and Children Objs
+    // checkedDeliveryZoneSendingValues.forEach((obj) =>
+    //   [childrenObjs, parentObjs][
+    //     +(
+    //       checkedDeliveryZoneSendingValues
+    //         .map((obj) => obj.parentlvlId)
+    //         .filter((id) => id === obj.id).length > 1
+    //     )
+    //   ].push(obj)
+    // )
+
+    // console.log(childrenObjs, parentObjs, 'gsoeuye')
+
+    // const parentIds = new Set(parentObjs.map(({ id }) => id))
+    // const combined = [
+    //   ...parentObjs,
+    //   ...childrenObjs.filter(({ parentlvlId }) => !parentIds.has(parentlvlId)),
+    // ]
+
+    // return combined
+
+    const cloneMergedNodes = [...checkedDeliveryZoneSendingValues]
+
+    // one
+    const partOne = cloneMergedNodes?.filter((cur) => !cur?.countryId)
+
+    const partOneIds = new Set(partOne.map(({ id }) => id))
+    //
+
+    // two
+    const partTwo = cloneMergedNodes?.filter(
+      (cur) =>
+        !partOneIds.has(cur.countryId) && cur.deliveryZoneName === 'STATE'
+    )
+
+    const partTwoIds = new Set(partTwo.map(({ id }) => id))
+    //
+
+    // three
+    const partThree = cloneMergedNodes?.filter(
+      (cur) =>
+        !partTwoIds.has(cur.stateId) &&
+        !partTwoIds.has(cur.countryId) &&
+        cur.deliveryZoneName === 'DISTRICT'
+    )
+    const partThreeIds = new Set(partThree.map(({ id }) => id))
+    //
+
+    // four
+    const partFour = cloneMergedNodes?.filter(
+      (cur) =>
+        !partThreeIds.has(cur.stateId) &&
+        !partThreeIds.has(cur.countryId) &&
+        !partThreeIds.has(cur.districtId) &&
+        cur.deliveryZoneName === 'CITY'
+    )
+    const partFourIds = new Set(partFour.map(({ id }) => id))
+
+    console.log('cities', partFourIds)
+    //
+
+    // FIVE
+    const partFive = cloneMergedNodes?.filter((cur) => {
+      return (
+        !partFourIds.has(cur.stateId) &&
+        !partFourIds.has(cur.countryId) &&
+        !partFourIds.has(cur.districtId) &&
+        !partFourIds.has(cur.cityId) &&
+        cur.deliveryZoneName === 'PINCODE'
+      )
+    })
+
+    // const partFiveIds = new Set(partFive.map(({ id }) => id))
+
+    console.log(partOne, partTwo, partThree, partFour, partFive, 'lolll')
+    //
+
+    return _.uniqBy(
+      [...partOne, ...partTwo, ...partThree, ...partFour, ...partFive],
+      'id'
+    )
+  }
+
+  function getNestedChildren(arr, parent) {
+    var out = []
+    for (var i in arr) {
+      if (arr[i].parentlvlId == parent) {
+        var children = getNestedChildren(arr, arr[i].id)
+
+        if (children.length) {
+          arr[i].children = children
+        }
+        out.push(arr[i])
+      }
+    }
+    return out
+  }
+
+  console.log(getNestedChildren(checkedDeliveryZoneSendingValues), 'ghkjghjkg')
+
   const onFinish = async () => {
     setSubmitLoading(true)
     form
@@ -138,10 +245,32 @@ const DeliveryZoneForm = (props) => {
         const sendingValues = {
           name: values?.name,
           status: values?.status,
-          deliveryLocations: checkedDeliveryZoneSendingValues?.map((cur) => ({
-            deliveryLocationId: cur?.id,
-            deliveryLocationType: cur?.deliveryZoneName,
-          })),
+          deliveryLocations: getParentBasedDeliveryZones(
+            checkedDeliveryZoneSendingValues
+          )?.map((cur) => {
+            const otherIds = {}
+            if (cur?.countryId) {
+              otherIds.countryId = cur?.countryId
+            }
+
+            if (cur?.stateId) {
+              otherIds.stateId = cur?.stateId
+            }
+
+            if (cur?.districtId) {
+              otherIds.districtId = cur?.districtId
+            }
+
+            if (cur?.cityId) {
+              otherIds.cityId = cur?.cityId
+            }
+
+            return {
+              deliveryLocationId: cur?.id,
+              deliveryLocationType: cur?.deliveryZoneName,
+              ...otherIds,
+            }
+          }),
         }
         console.log(sendingValues, 'sendinggggg')
         if (mode === ADD) {
@@ -173,6 +302,8 @@ const DeliveryZoneForm = (props) => {
         message.error('Please enter all required field ')
       })
   }
+
+  console.log(sendingValuesDeliveryZones, 'plss')
 
   return (
     <>
@@ -238,6 +369,7 @@ const DeliveryZoneForm = (props) => {
                 checkedDeliveryZoneSendingValues={
                   checkedDeliveryZoneSendingValues
                 }
+                setSendingDeliveryZones={setSendingDeliveryZones}
 
                 // isFinalTrue={isFinalTrue}
                 // setIsFinalTrue={setIsFinalTrue}

@@ -47,9 +47,13 @@ const GeneralField = ({
   setAllTreesData,
   setCheckedDeliveryZoneSendingValues,
   checkedDeliveryZoneSendingValues,
+  setSendingDeliveryZones,
 }) => {
   const getState = async (countryId) => {
-    const data = await stateService.getState('', `countryId=${countryId}`)
+    const data = await stateService.getState(
+      '',
+      `status=Active&countryId=${countryId}`
+    )
     console.log(countryId, 'idjhdjdk')
 
     if (data?.data?.length > 0) {
@@ -58,26 +62,37 @@ const GeneralField = ({
   }
 
   const getDistrict = async (stateId) => {
-    const data = await districtService.getDistrict('', `stateId=${stateId}`)
+    const data = await districtService.getDistrict(
+      '',
+      `status=Active&stateId=${stateId}`
+    )
     if (data?.data?.length > 0) {
       return Utils.createDeliveryLocationList(data?.data)
     }
   }
 
   const getCity = async (districtId) => {
-    const data = await cityService.getCity('', `districtId=${districtId}`)
+    const data = await cityService.getCity(
+      '',
+      `status=Active&districtId=${districtId}`
+    )
 
     if (data?.data?.length > 0) {
       return Utils.createDeliveryLocationList(data?.data)
     }
   }
   const getPincode = async (cityId) => {
-    const data = await pincodeService.getPincode('', `cityId[]=${cityId}`)
+    const data = await pincodeService.getPincode(
+      '',
+      `status=Active&cityId[]=${cityId}`
+    )
 
     if (data?.data?.length > 0) {
       return Utils.createDeliveryLocationList(data?.data)
     }
   }
+
+  console.log(checkedDeliveryZoneSendingValues, ';ssh')
 
   const onCheck = (checkedKeysValue, e) => {
     console.log('onCheck', checkedKeysValue, e)
@@ -85,19 +100,32 @@ const GeneralField = ({
     const checkDelivery = [...checkedDeliveryZoneSendingValues]
 
     const intialValues = checkDelivery?.filter(
-      (cur) => cur.fromInitial && e.node.id !== cur?.id
+      (cur) =>
+        cur.fromInitial &&
+        e.node.id !== cur?.id &&
+        cur.id !== e.node.countryId &&
+        cur.id !== e.node.stateId &&
+        cur.id !== e.node.districtId &&
+        cur.id !== e.node.cityId &&
+        // new
+        cur?.countryId !== e.node.id &&
+        cur?.stateId !== e.node.id &&
+        cur?.districtId !== e.node.id &&
+        cur?.cityId !== e.node.id
     )
+
+    console.log(intialValues, 'removed-one')
 
     // const initials = checkDelivery?.filter(
     //   (cur) => cur.fromInitial
     // )
 
-    setCheckedDeliveryZoneSendingValues(intialValues)
+    // setCheckedDeliveryZoneSendingValues(intialValues)
 
     // if (e.node.id === intia) {
     // }
 
-    const checkedNodes = [...e.checkedNodes, ...intialValues]
+    const checkedNodes = [...intialValues, ...e.checkedNodes]
 
     const mergedNodes = _.uniqBy(checkedNodes, 'id')
 
@@ -118,6 +146,7 @@ const GeneralField = ({
       if (node.children) {
         return {
           ...node,
+
           children: updateTreeData(node.children, key, children),
         }
       }
@@ -141,7 +170,7 @@ const GeneralField = ({
       // Check id deliveryzone
       if (deliveryZoneName === 'COUNTRY') {
         // setTimeout(async () => {
-        const newData = await getState(key)
+        let newData = await getState(key)
         if (newData) {
           setAllTreesData((origin) => updateTreeData(origin, key, newData))
         }
