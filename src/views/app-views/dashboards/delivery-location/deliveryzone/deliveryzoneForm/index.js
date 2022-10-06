@@ -220,23 +220,6 @@ const DeliveryZoneForm = (props) => {
     )
   }
 
-  function getNestedChildren(arr, parent) {
-    var out = []
-    for (var i in arr) {
-      if (arr[i].parentlvlId == parent) {
-        var children = getNestedChildren(arr, arr[i].id)
-
-        if (children.length) {
-          arr[i].children = children
-        }
-        out.push(arr[i])
-      }
-    }
-    return out
-  }
-
-  console.log(getNestedChildren(checkedDeliveryZoneSendingValues), 'ghkjghjkg')
-
   const onFinish = async () => {
     setSubmitLoading(true)
     form
