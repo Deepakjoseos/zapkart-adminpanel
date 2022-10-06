@@ -259,10 +259,10 @@ const ShipmentList = () => {
               Cancel Shipment
             </Button>
           )}
-
+          {/* 
           <div className="text-right">
             <EllipsisDropdown menu={dropdownMenu(elm)} />
-          </div>
+          </div> */}
         </Flex>
       ),
     },

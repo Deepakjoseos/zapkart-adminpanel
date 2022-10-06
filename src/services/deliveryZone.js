@@ -34,7 +34,7 @@ deliveryzoneService.getDeliveryZonesByVendorId = async function (vendorId) {
 deliveryzoneService.getDeliveryZoneById = async function (id) {
   try {
     const res = await fetch({
-      url: `/deliveryzones/${id}/public`,
+      url: `/deliveryzones/${id}/admin`,
       method: 'get',
     })
     return res.data

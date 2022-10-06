@@ -47,7 +47,6 @@ const GeneralField = ({
   setAllTreesData,
   setCheckedDeliveryZoneSendingValues,
   checkedDeliveryZoneSendingValues,
-  setSendingDeliveryZones,
 }) => {
   const getState = async (countryId) => {
     const data = await stateService.getState(
