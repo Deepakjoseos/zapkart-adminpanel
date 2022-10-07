@@ -146,7 +146,7 @@ shipmentService.checkIfDeliverable = async function (data) {
 
 // Generate Api's
 shipmentService.generateAwb = async function (data) {
-  console.log('data',data)
+  console.log('data', data)
   try {
     const res = await fetch({
       url: `${apiRoute}/generateAwb`,
@@ -188,6 +188,18 @@ shipmentService.generateInvoice = async function (data) {
   try {
     const res = await fetch({
       url: `${apiRoute}/generateInvoice`,
+      method: 'post',
+      data,
+    })
+    return res
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
+shipmentService.generatePickupInfo = async function (data) {
+  try {
+    const res = await fetch({
+      url: `${apiRoute}/generatePickupInfo`,
       method: 'post',
       data,
     })

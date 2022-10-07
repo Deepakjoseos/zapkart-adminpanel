@@ -157,24 +157,39 @@ const ShipmentView = () => {
   console.log(shipment, 'opskhsjlgbui')
   const requestPickupOrder = async () => {
     console.log('shipmentidpickuporder', id)
-    console.log('shipment_id',id)
-
+    console.log('shipment_id', id)
 
     const data = await shipmentService.requestPickupOrder({
       shipmentId: id,
-      courierId: selectedCourierId,
     })
     if (data) {
       notification.success({
         message: 'Success',
         description: 'Request pickup successful',
       })
-      setCheckIfDeliverableOpen(false)
+      // setCheckIfDeliverableOpen(false)
       setSelectedCourierId(null)
       setCurrentActionButton(null)
       window.location.reload(true)
       // getShipments()
       console.log('pickuprequested data', data)
+      // if (!shipment.shiprocket?.awbDetails && !shipment.shiprocket?.pickup) {
+      //   showAWBButton(true)
+      // }
+      // if (!shipment.shiprocket?.label && !shipment.shiprocket?.pickup) {
+      //   showLabelButton(true)
+      // }
+      // if (!shipment.shiprocket?.manifest && !shipment.shiprocket?.pickup) {
+      //   showManifestButton(true)
+      // }
+      // if (!shipment.shiprocket?.invoice) {
+      //   showInvoiceButton(true)
+      // }
+    }
+  }
+
+  useEffect(() => {
+    if (shipment?.shiprocket) {
       if (!shipment.shiprocket?.awbDetails) {
         showAWBButton(true)
       }
@@ -188,7 +203,45 @@ const ShipmentView = () => {
         showInvoiceButton(true)
       }
     }
+  }, [shipment])
+
+  const generatePickupInfo = async () => {
+    console.log('shipmentidpickuporder', id)
+    console.log('shipment_id', id)
+
+    const data = await shipmentService.generatePickupInfo({
+      shipmentId: id,
+      courierId: selectedCourierId,
+    })
+    if (data) {
+      notification.success({
+        message: 'Success',
+        description: 'Generated Pickup info details',
+      })
+      // setCheckIfDeliverableOpen(false)
+      setSelectedCourierId(null)
+      setCurrentActionButton(null)
+      setTimeout(() => {
+        window.location.reload(true)
+      }, 2000)
+
+      // getShipments()
+      console.log('pickuprequested data', data)
+      // if (!shipment.shiprocket?.awbDetails && !shipment.shiprocket?.pickup) {
+      //   showAWBButton(true)
+      // }
+      // if (!shipment.shiprocket?.label && !shipment.shiprocket?.pickup) {
+      //   showLabelButton(true)
+      // }
+      // if (!shipment.shiprocket?.manifest && !shipment.shiprocket?.pickup) {
+      //   showManifestButton(true)
+      // }
+      // if (!shipment.shiprocket?.invoice) {
+      //   showInvoiceButton(true)
+      // }
+    }
   }
+
   const generateAwb = async () => {
     const data = await shipmentService.generateAwb({
       shipmentId: id,
@@ -202,6 +255,10 @@ const ShipmentView = () => {
         message: 'Success',
         description: 'AWB Generated Successfully',
       })
+      setTimeout(() => {
+        window.location.reload(true)
+      }, 2000)
+
       // getShipments()
     }
   }
@@ -218,6 +275,10 @@ const ShipmentView = () => {
         message: 'Success',
         description: 'Manifest Generated Successfully',
       })
+      setTimeout(() => {
+        window.location.reload(true)
+      }, 2000)
+
       // getShipments()
       // window.open(data.data.shiprocket.manifest, '_blank', 'noopener,noreferrer')
     }
@@ -235,6 +296,10 @@ const ShipmentView = () => {
         message: 'Success',
         description: 'Label Generated Successfully',
       })
+      setTimeout(() => {
+        window.location.reload(true)
+      }, 2000)
+
       // getShipments()
       // window.open(data.data.shiprocket.label, '_blank', 'noopener,noreferrer')
     }
@@ -265,8 +330,8 @@ const ShipmentView = () => {
 
   useEffect(() => {
     if (selectedCourierId) {
-      if (currentActionButton === 'request-pickup') {
-        requestPickupOrder()
+      if (currentActionButton === 'generate-pickup-info') {
+        generatePickupInfo()
       } else if (currentActionButton === 'AWB') {
         generateAwb()
       }
@@ -388,19 +453,33 @@ const ShipmentView = () => {
                 </Button>
                 : ""} */}
 
-              {!shipment.shiprocket?.pickup ? (
+              {!shipment.shiprocket?.pickup &&
+              shipment?.shiprocket?.awbDetails ? (
                 <Button
                   onClick={() => {
                     // requestPickupOrder(id)
-                    setCheckIfDeliverableOpen(true)
-                    setCurrentActionButton('request-pickup')
+                    // setCheckIfDeliverableOpen(true)
+                    // setCurrentActionButton('generate-pickup-info')
+                    requestPickupOrder()
                   }}
                   type="primary"
                 >
                   <span className="ml-2">Request to Pickup Order</span>
                 </Button>
               ) : (
-                ''
+                !shipment?.shiprocket?.awbDetails &&
+                !shipment.shiprocket?.pickup && (
+                  <Button
+                    onClick={() => {
+                      // requestPickupOrder(id)
+                      setCheckIfDeliverableOpen(true)
+                      setCurrentActionButton('generate-pickup-info')
+                    }}
+                    type="primary"
+                  >
+                    <span className="ml-2">Generate Pickup Info</span>
+                  </Button>
+                )
               )}
             </div>
           )}
@@ -422,8 +501,8 @@ const ShipmentView = () => {
         {shipment.status} <br />
         <span>Shipped By Vendor:</span>
         {shipment.shippedByVendor ? 'Yes' : 'No'}
-        <Row>
-          <Col>
+        <Row style={{ width: '100%' }}>
+          <Col md={12} sm={24} lg={12}>
             {shipment.shiprocket?.awbDetails ? (
               <Card>
                 <div className="mt-3">
@@ -575,7 +654,7 @@ const ShipmentView = () => {
               ''
             )}
           </Col>
-          <Col>
+          <Col md={12} sm={24} lg={12}>
             {shipment.shiprocket?.pickup ? (
               <Card>
                 <div className="mt-3">
