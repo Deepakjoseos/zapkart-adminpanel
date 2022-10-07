@@ -176,7 +176,7 @@ const CheckIfDeliverable = ({
       render: (_, row) => (
         <Popconfirm
           title="Are you sure?"
-          onConfirm={() => setSelectedCourierId(row.id)}
+          onConfirm={() => setSelectedCourierId(row?.courier_company_id)}
           okText="Yes"
           cancelText="No"
         >

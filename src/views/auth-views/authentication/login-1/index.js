@@ -20,7 +20,7 @@ const LoginOne = (props) => {
             <Card>
               <div className="my-4">
                 <div className="text-center">
-                  {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+                  {process.env.REACT_APP_SITE_NAME === 'zapkart' ? (
                     <img
                       className="img-fluid"
                       src={`/img/${
@@ -28,6 +28,16 @@ const LoginOne = (props) => {
                       }`}
                       alt=""
                     />
+                  ) : (
+                    process.env.REACT_APP_SITE_NAME === 'athathy' && (
+                      <img
+                        className="img-fluid"
+                        src={`/img/${
+                          theme === 'light' ? 'athathy.png' : 'logo-white.png'
+                        }`}
+                        alt=""
+                      />
+                    )
                   )}
 
                   {/* <p>Don't have an account yet? <a href="/auth/register-1">Sign Up</a></p> */}

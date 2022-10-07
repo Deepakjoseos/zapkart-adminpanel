@@ -52,7 +52,6 @@ const ProductForm = (props) => {
   const [form_statuses, setStatuses] = useState([])
   const { imageCategories } = useSelector((state) => state.auth)
 
-
   // category Filter]
   const [selectPage, setSelectPage] = useState(1)
 
@@ -446,15 +445,14 @@ const ProductForm = (props) => {
         if (mode === ADD) {
           // Checking if image exists
           if (uploadedImg.length !== 0 && uploadedImg !== null) {
-
             console.log('uploadedImg', uploadedImg)
             const imageCategory = imageCategories.find(
               (imgCat) => imgCat.imageFor === 'ProductTemplates'
             )
 
             const imgValues = await multipleImageUpload(
-              uploadedImg,
-              imageCategory.id
+              imageCategory.id,
+              uploadedImg
             )
 
             sendingValues.images = imgValues
@@ -478,8 +476,8 @@ const ProductForm = (props) => {
             )
 
             const imgValues = await multipleImageUpload(
-              uploadedImg,
-              imageCategory.id
+              imageCategory.id,
+              uploadedImg
             )
             sendingValues.images = imgValues
           } else {

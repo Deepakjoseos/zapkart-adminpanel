@@ -20,12 +20,7 @@ const loadScript = (src) => {
   })
 }
 
-
 export default function Editor(props) {
-
-  
-
-
   window.tinymce.dom.Event.domLoaded = true
   const { editorHtml, placeholder, onChange, name } = props
   const [textarea, settextarea] = useState(false)
