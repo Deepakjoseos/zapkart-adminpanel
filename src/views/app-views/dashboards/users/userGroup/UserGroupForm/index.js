@@ -107,7 +107,7 @@ const ProductForm = (props) => {
                   className="mr-2"
                   onClick={() =>
                     history.push(
-                      '/app/dashboards/catalog/usergroup/usergroup-list'
+                      '/app/dashboards/users/usergroup/usergroup-list'
                     )
                   }
                 >
