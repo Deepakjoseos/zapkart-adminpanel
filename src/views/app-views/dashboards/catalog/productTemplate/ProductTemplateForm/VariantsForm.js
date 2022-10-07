@@ -20,6 +20,7 @@ import productTemplateService from 'services/productTemplate'
 import { useHistory, useParams } from 'react-router-dom'
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
 import attributeService from 'services/attribute'
+import { useSelector } from 'react-redux'
 
 const VariantsForm = ({
   form,
@@ -35,6 +36,7 @@ const VariantsForm = ({
   const [images, setImages] = useState([])
   const [attributes, setAttributes] = useState([])
   const [selectedAttributeValues, setSelectedAttributeValues] = useState([])
+  const { imageCategories } = useSelector((state) => state.auth)
 
   const { id } = useParams()
 
@@ -137,9 +139,13 @@ const VariantsForm = ({
         if (selectedVariant === null) {
           // Checking if image exists
           if (images.length !== 0 && images !== null) {
+            const imageCategory = imageCategories.find(
+              (imgCat) => imgCat.imageFor === 'ProductTemplates'
+            )
+
             const imgValues = await multipleImageUpload(
-              images,
-              'productTemplate-variant'
+              imageCategory.id,
+              images
             )
 
             values.images = imgValues
@@ -164,10 +170,15 @@ const VariantsForm = ({
           // Checking if image exists
           if (images.length !== 0 && images !== null) {
             console.log('images', images)
-            const imgValues = await multipleImageUpload(
-              images,
-              'productTemplate'
+            const imageCategory = imageCategories.find(
+              (imgCat) => imgCat.imageFor === 'ProductTemplates'
             )
+
+            const imgValues = await multipleImageUpload(
+              imageCategory.id,
+              images
+            )
+
             values.images = imgValues
 
             const edited =
@@ -203,7 +214,9 @@ const VariantsForm = ({
   const getAttributes = async () => {
     const data = await attributeService.getAttributes()
     if (data) {
-      const activeAttributes = data.data.filter((item) => item.status === 'Active')
+      const activeAttributes = data.data.filter(
+        (item) => item.status === 'Active'
+      )
       setAttributes(activeAttributes)
       return activeAttributes
     }

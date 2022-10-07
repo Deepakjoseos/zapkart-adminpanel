@@ -19,7 +19,7 @@ const RegisterOne = (props) => {
             <Card>
               <div className="my-2">
                 <div className="text-center">
-                  {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+                  {process.env.REACT_APP_SITE_NAME === 'zapkart' ? (
                     <img
                       className="img-fluid"
                       src={`/img/${
@@ -27,6 +27,16 @@ const RegisterOne = (props) => {
                       }`}
                       alt=""
                     />
+                  ) : (
+                    process.env.REACT_APP_SITE_NAME === 'athathy' && (
+                      <img
+                        className="img-fluid"
+                        src={`/img/${
+                          theme === 'light' ? 'athathy.png' : 'logo-white.png'
+                        }`}
+                        alt=""
+                      />
+                    )
                   )}
                   <p className="text-muted">Create a new account:</p>
                 </div>

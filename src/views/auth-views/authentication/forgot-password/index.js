@@ -31,6 +31,7 @@ const ForgotPassword = () => {
     // setLoading(false)
     // 	message.success('New password has send to your email!');
     // }, 1500);
+    // if(process.env.SITE_NAME === '')
     const config = {
       url: 'https://ecommercenewbackend.riolabz.com/auth/login',
       handleCodeInApp: true,
@@ -58,14 +59,24 @@ const ForgotPassword = () => {
             <Card>
               <div className="my-2">
                 <div className="text-center">
-                  {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+                  {process.env.REACT_APP_SITE_NAME === 'zapkart' ? (
                     <img
                       className="img-fluid"
                       src={`/img/${
                         theme === 'light' ? 'logo.png' : 'logo-white.png'
                       }`}
-                      alt=""
+                      alt="athathy.png"
                     />
+                  ) : (
+                    process.env.REACT_APP_SITE_NAME === 'athathy' && (
+                      <img
+                        className="img-fluid"
+                        src={`/img/${
+                          theme === 'light' ? 'athathy.png' : 'logo-white.png'
+                        }`}
+                        alt=""
+                      />
+                    )
                   )}
 
                   <h3 className="mt-3 font-weight-bold">Forgot Password?</h3>

@@ -18,12 +18,18 @@ let FirebaseConfig = {}
 // }
 if (process.env.REACT_APP_SITE_NAME === 'athathy') {
   FirebaseConfig = {
-    apiKey: 'AIzaSyDIQXZ_KL265rV0hgSvYH1f5EQo010Lnjo',
-    authDomain: 'athathy-13dd6.firebaseapp.com',
-    projectId: 'athathy-13dd6',
-    storageBucket: 'athathy-13dd6.appspot.com',
-    messagingSenderId: '295619267638',
-    appId: '1:295619267638:web:5bb8523b198a33959bdc97',
+    // apiKey: 'AIzaSyDIQXZ_KL265rV0hgSvYH1f5EQo010Lnjo',
+    // authDomain: 'athathy-13dd6.firebaseapp.com',
+    // projectId: 'athathy-13dd6',
+    // storageBucket: 'athathy-13dd6.appspot.com',
+    // messagingSenderId: '295619267638',
+    // appId: '1:295619267638:web:5bb8523b198a33959bdc97',
+    apiKey: 'AIzaSyBiN2BkR5RlgWKdaRa-psRzFCgPZ265zis',
+    authDomain: 'athathy-766b1.firebaseapp.com',
+    projectId: 'athathy-766b1',
+    storageBucket: 'athathy-766b1.appspot.com',
+    messagingSenderId: '685790667408',
+    appId: '1:685790667408:web:3b3cd5dd6b24815747ee15',
   }
 } else {
   switch (process.env.NODE_ENV) {
