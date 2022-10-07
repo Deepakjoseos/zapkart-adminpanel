@@ -159,10 +159,10 @@ const GeneralField = ({
       <Card title="Basic Info">
 
 
-        <Form.Item name="hsn" label="HSN">
-          <Input placeholder='HSN'/>
+     
+    
 
-        </Form.Item>
+    
         <Form.Item name="vendorId" label="Vendor" rules={rules.vendor}>
           <Select 
             showSearch
@@ -183,6 +183,14 @@ const GeneralField = ({
             ))}
           </Select>
         </Form.Item>
+        <Form.Item
+          name="hsn"
+          label="HSN"
+          rules={rules.hsn}
+        >
+          <Input placeholder="hsn" />
+        </Form.Item>
+
 
         <Form.Item
           name="deliveryZoneId"

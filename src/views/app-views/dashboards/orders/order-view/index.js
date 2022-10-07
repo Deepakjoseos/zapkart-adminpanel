@@ -201,9 +201,7 @@ const OrderView = () => {
           }
 
 
-        <Button type="primary" className="mb-4" onClick={handlePrint}>
-          Print this out!
-        </Button>
+       
       </Flex>
       <div>
         <Card>
@@ -336,6 +334,12 @@ const OrderView = () => {
                 }
               />
 
+              <Column 
+              title="Invoice Number"
+              dataIndex="invoiceId"
+              key="invoiceId"
+            />
+
               <Column title="Product Name" dataIndex="name" key="name" />
               <Column title="HSN" dataIndex="hsn" key="hsn" />
               <Column title="BATCH" dataIndex="batch" key="batch" />
@@ -354,8 +358,8 @@ const OrderView = () => {
                       {taxSplitup?.map((item) => (
                         <>
                           <p>Amount:{item.taxAmount}</p>
-                          <p>Percentage:{item.taxPercentage}</p>
-                          <p>Type:{item.taxType}</p>
+                          ({item.taxPercentage}%)
+                            {item.taxType}
                         </>
                       ))}
                     </>
@@ -575,8 +579,8 @@ const OrderView = () => {
                         {taxSplitup?.map((item) => (
                           <>
                             <p>Amount:{item.taxAmount}</p>
-                            <p>Percentage:{item.taxPercentage}</p>
-                            <p>Type:{item.taxType}</p>
+                            ({item.taxPercentage}%)
+                            -{item.taxType}
                           </>
                         ))}
                       </>

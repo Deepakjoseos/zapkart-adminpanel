@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { Input, Row, Col, Card, Form,Select, InputNumber } from 'antd'
+import { Input, Row, Col, Card, Form,Select, InputNumber ,TreeSelect} from 'antd'
 const {Option} = Select
 
-const GeneralField = ({ form ,vendors}) => {
+const GeneralField = ({ form ,vendors,state,pincode,city}) => {
   return (
     <Card>
       <Row gutter={16}>
@@ -20,6 +20,9 @@ const GeneralField = ({ form ,vendors}) => {
             <Input placeholder="Name" />
           </Form.Item>
         </Col>
+
+
+
         <Col span={12}>
           <Form.Item
             name="email"
@@ -35,6 +38,8 @@ const GeneralField = ({ form ,vendors}) => {
           </Form.Item>
         </Col>
       </Row>
+
+
       <Row gutter={16}>
         <Col span={12}>
           <Form.Item
@@ -50,51 +55,67 @@ const GeneralField = ({ form ,vendors}) => {
             <Input placeholder="Phone" type="tel" />
           </Form.Item>
         </Col>
+       
+      
+      
         <Col span={12}>
-          <Form.Item
-            name="city"
-            label="City"
-            rules={[
-              {
-                required: true,
-                message: 'Required',
-              },
-            ]}
-          >
-            <Input placeholder="City" />
-          </Form.Item>
-        </Col>
-      </Row>
-      <Row gutter={16}>
+
+
+
+       
+
+ <Form.Item name="stateId" label="state" >
+      <TreeSelect placeholder="State" showSearch
+        optionFilterProp="children"
+        filterOption={(input, option) =>
+          option.title.toLowerCase().indexOf(input.toLowerCase()) >= 0
+        } treeData={state} treeDefaultExpandAll>
+        {/* {deliveryLocations.map((cur) => (
+          <Option value={cur.id} key={cur.id}>
+            {cur.name}
+          </Option>
+        ))}  */}
+      </TreeSelect>
+    </Form.Item>
+    </Col>
+    </Row>
+    
+    <Row gutter={16}>
         <Col span={12}>
-          <Form.Item
-            name="state"
-            label="State"
-            rules={[
-              {
-                required: true,
-                message: 'Required',
-              },
-            ]}
-          >
-            <Input placeholder="State" />
-          </Form.Item>
-        </Col>
+ <Form.Item name="cityId" label="city" >
+      <TreeSelect placeholder="city" showSearch
+        optionFilterProp="children"
+        filterOption={(input, option) =>
+          option.title.toLowerCase().indexOf(input.toLowerCase()) >= 0
+        } treeData={city} treeDefaultExpandAll>
+        {/* {deliveryLocations.map((cur) => (
+          <Option value={cur.id} key={cur.id}>
+            {cur.name}
+          </Option>
+        ))}  */}
+      </TreeSelect>
+    </Form.Item>
+    </Col>
+   
+    
         <Col span={12}>
-          <Form.Item
-            name="pin_code"
-            label="Pincode"
-            rules={[
-              {
-                required: true,
-                message: 'Required',
-              },
-            ]}
-          >
-            <Input placeholder="Pincode" />
-          </Form.Item>
+    <Form.Item name="pincodeId" label="pincode" >
+      <TreeSelect placeholder="pincode" showSearch
+        optionFilterProp="children"
+        filterOption={(input, option) =>
+          option.title.toLowerCase().indexOf(input.toLowerCase()) >= 0
+        } treeData={pincode} treeDefaultExpandAll>
+        {/* {deliveryLocations.map((cur) => (
+          <Option value={cur.id} key={cur.id}>
+            {cur.name}
+          </Option>
+        ))}  */}
+      </TreeSelect>
+    </Form.Item>
+
         </Col>
-      </Row>
+        
+        </Row>
       <Row gutter={16}>
         <Col span={24}>
           <Form.Item

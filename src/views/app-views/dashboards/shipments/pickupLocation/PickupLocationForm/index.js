@@ -3,6 +3,10 @@ import PageHeaderAlt from 'components/layout-components/PageHeaderAlt'
 import { Tabs, Form, Button, message } from 'antd'
 import Flex from 'components/shared-components/Flex'
 import GeneralField from './GeneralField'
+import stateService from 'services/state'
+import pincodeService from 'services/pincode'
+import cityService from 'services/city'
+import Utils from 'utils'
 
 import shipmentService from 'services/shipment'
 import { useHistory } from 'react-router-dom'
@@ -18,11 +22,14 @@ const EDIT = 'EDIT'
 const ShipmentForm = (props) => {
   const { mode = ADD, param } = props
   const history = useHistory()
-
+  const [state ,setState]=useState([])
+  
   const [form] = Form.useForm()
+  const [city ,setCity]=useState([])
 
   const [submitLoading, setSubmitLoading] = useState(false)
   const [vendors,setVendors]= useState([])
+  const [pincode ,setPincode]=useState([])
   const getVendors = async () => {
     const data = await vendorService.getVendors()
     if (data) {
@@ -37,6 +44,80 @@ const ShipmentForm = (props) => {
   useEffect(()=>{
     getVendors()
   },[])
+
+  
+  const getPincode= async () => {
+    const data = await pincodeService.getPincode()
+    if (data) {
+      if (mode === EDIT) {
+     //   const deliveryLocs = data.filter(
+     //     (cur) => cur.isFinal !== true && cur.id !== param.id
+     //   )
+     //   setDeliveryLocations(deliveryLocs)
+     // } else {
+     //   const deliveryLocs = data.filter((cur) => cur.isFinal !== true)
+     //   setDeliveryLocations(deliveryLocs)
+     // }
+     const restCats = data.data.filter((cat) => cat.id !== param.id)
+       const list = Utils.createCategoryList(restCats)
+       setPincode(list)
+     } else {
+       const list = Utils.createCategoryList(data)
+       setPincode(list)
+     }
+   }
+  }
+  const getCity= async () => {
+    const data = await cityService.getCity()
+    if (data) {
+      if (mode === EDIT) {
+     //   const deliveryLocs = data.filter(
+     //     (cur) => cur.isFinal !== true && cur.id !== param.id
+     //   )
+     //   setDeliveryLocations(deliveryLocs)
+     // } else {
+     //   const deliveryLocs = data.filter((cur) => cur.isFinal !== true)
+     //   setDeliveryLocations(deliveryLocs)
+     // }
+     const restCats = data.data.filter((cat) => cat.id !== param.id)
+       const list = Utils.createCategoryList(restCats)
+       setCity(list)
+     } else {
+       const list = Utils.createCategoryList(data)
+       setCity(list)
+     }
+   }
+  }
+  const getState = async () => {
+    const data = await stateService.getState()
+    if (data) {
+      if (mode === EDIT) {
+     //   const deliveryLocs = data.filter(
+     //     (cur) => cur.isFinal !== true && cur.id !== param.id
+     //   )
+     //   setDeliveryLocations(deliveryLocs)
+     // } else {
+     //   const deliveryLocs = data.filter((cur) => cur.isFinal !== true)
+     //   setDeliveryLocations(deliveryLocs)
+     // }
+     const restCats = data.data.filter((cat) => cat.id !== param.id)
+       const list = Utils.createCategoryList(restCats)
+       setState(list)
+     } else {
+       const list = Utils.createCategoryList(data)
+       setState(list)
+     }
+   }
+  }
+ 
+
+ 
+  useEffect(() => {
+    getState()
+    getCity()
+    getPincode()
+  }, [])
+  
 
   // useEffect(() => {
   //   if (mode === EDIT) {
@@ -179,7 +260,8 @@ const ShipmentForm = (props) => {
         <div className="container">
           <Tabs defaultActiveKey="1" style={{ marginTop: 30 }}>
             <TabPane tab="General" key="1">
-              <GeneralField form={form} vendors={vendors}/>
+              <GeneralField form={form} vendors={vendors} state={state} pincode={pincode} city={city}
+             />
             </TabPane>
           </Tabs>
         </div>

@@ -289,13 +289,17 @@ const CreateInvoiceForm = ({
         ]}
         destroyOnClose
       >
+         <p>Batch</p>
         <Input
+        
           placeholder="Batch"
           className="mb-3"
           onChange={(e) => setBatch(e.target.value)}
           value={batch}
         />
+        <p>Expiry</p>
         <DatePicker
+        
           placeholder="Expiry Date"
           format="YYYY-MM-DD"
           value={expiry ? moment(expiry) : null}
