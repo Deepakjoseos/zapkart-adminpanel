@@ -30,18 +30,17 @@ const WidgetForm = (props) => {
   const [listItems, setListItems] = useState([])
   const [isStaticProviderSelected, setIsStaticProviderSelected] =
     useState(false)
- const [form_statuses,setStatuses]= useState([])
- const [listing_platforms,setListingPlatforms]=useState([])
- const fetchConstants = async () => {
-  const data = await constantsService.getConstants()
-  if (data) {
-    // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
+  const [form_statuses, setStatuses] = useState([])
+  const [listing_platforms, setListingPlatforms] = useState([])
+  const fetchConstants = async () => {
+    const data = await constantsService.getConstants()
+    if (data) {
+      // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
 
-    setStatuses(Object.values(data.GENERAL['FORM_STATUS']))
-    setListingPlatforms(Object.values(data.WIDGET['LISTING_PLATFORM']))
-
+      setStatuses(Object.values(data.GENERAL['FORM_STATUS']))
+      setListingPlatforms(Object.values(data.WIDGET['LISTING_PLATFORM']))
+    }
   }
-}
   useEffect(() => {
     fetchConstants()
     if (mode === EDIT) {
@@ -58,7 +57,7 @@ const WidgetForm = (props) => {
             listingItems: data?.listingItems?.map((item) => item.id),
             staticContent: data.staticContent,
             status: data.status,
-            listingPlatform:data.listingPlatform,
+            listingPlatform: data.listingPlatform,
             startEndDate: [
               moment(data.startDate, 'YYYY-MM-DD'),
               moment(data.endDate, 'YYYY-MM-DD'),
@@ -113,7 +112,7 @@ const WidgetForm = (props) => {
   }
 
   const fetchBrands = async () => {
-    const brands = await brandService.getBrands()
+    const brands = await brandService.getBrands('', 'status=Active')
 
     if (brands) {
       // Removes same list values brands
@@ -128,7 +127,7 @@ const WidgetForm = (props) => {
   }
 
   const fetchBanner = async () => {
-    const banners = await bannerService.getBanners()
+    const banners = await bannerService.getBanners('', 'status=Active')
 
     if (banners) {
       // Removes same list values brands
@@ -142,8 +141,11 @@ const WidgetForm = (props) => {
     }
   }
   const fetchMainBanner = async () => {
-    const mainBanners = await mainBannerService.getMainBanners()
-    console.log('mainBanners',mainBanners)
+    const mainBanners = await mainBannerService.getMainBanners(
+      '',
+      'status=Active'
+    )
+    console.log('mainBanners', mainBanners)
 
     if (mainBanners) {
       // Removes same list values brands
@@ -158,7 +160,7 @@ const WidgetForm = (props) => {
   }
 
   const fetchCategories = async () => {
-    const categories = await categoryService.getCategories()
+    const categories = await categoryService.getCategories('', 'status=Active')
 
     if (categories) {
       // Removes same list values brands
@@ -173,7 +175,10 @@ const WidgetForm = (props) => {
   }
 
   const fetchProductTemplates = async () => {
-    const productTemplates = await productTemplate.getProductTemplates()
+    const productTemplates = await productTemplate.getProductTemplates(
+      '',
+      'status=Active'
+    )
 
     if (productTemplates) {
       // Removes same list values brands
@@ -215,7 +220,7 @@ const WidgetForm = (props) => {
           tabTitle: values.tabTitle,
           status: values.status,
           priority: values.priority,
-          listingPlatform:values.listingPlatform,
+          listingPlatform: values.listingPlatform,
           numberOfItems: values?.numberOfItems
             ? values?.numberOfItems
             : form.getFieldValue('numberOfItems'),
@@ -317,7 +322,7 @@ const WidgetForm = (props) => {
         <div className="container">
           <Tabs defaultActiveKey="1" style={{ marginTop: 30 }}>
             <TabPane tab="General" key="1">
-              <GeneralField form_statuses={form_statuses}/>
+              <GeneralField form_statuses={form_statuses} />
             </TabPane>
             <TabPane tab="Widget" key="2">
               <WidgetField
@@ -326,7 +331,8 @@ const WidgetForm = (props) => {
                 form={form}
                 isStaticProviderSelected={isStaticProviderSelected}
                 listItems={listItems}
-                setListItems={setListItems} listing_platforms={listing_platforms}
+                setListItems={setListItems}
+                listing_platforms={listing_platforms}
               />
             </TabPane>
           </Tabs>
