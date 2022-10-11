@@ -52,21 +52,21 @@ const getStockStatus = (status) => {
 const InformationList = () => {
   let history = useHistory()
   const [form] = Form.useForm()
-  
+
   const [list, setList] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
-  
+
   // Added for Pagination
   const [loading, setLoading] = useState(false)
   const [filterEnabled, setFilterEnabled] = useState(false)
-  const [statuses,setStatuses] = useState([])
-  
+  const [statuses, setStatuses] = useState([])
+
   // pagination
   const [pagination, setPagination] = useState({
     current: 1,
     pageSize: 15,
   })
-  
+
   // Changed here for pagination
   const getInformations = async (paginationParams = {}, filterParams) => {
     setLoading(true)
@@ -74,10 +74,10 @@ const InformationList = () => {
       qs.stringify(getPaginationParams(paginationParams)),
       qs.stringify(filterParams)
     )
-  
+
     if (data) {
       setList(data.data)
-  
+
       // Pagination
       setPagination({
         ...paginationParams.pagination,
@@ -86,21 +86,21 @@ const InformationList = () => {
       setLoading(false)
     }
   }
-  
+
   useEffect(() => {
     getInformations({
       pagination,
     })
     fetchConstants()
   }, [])
-  
+
   // pagination generator
   const getPaginationParams = (params) => ({
     limit: params.pagination?.pageSize,
     page: params.pagination?.current,
     // ...params,
   })
-  
+
   // On pagination Change
   const handleTableChange = (newPagination) => {
     getInformations(
@@ -114,9 +114,8 @@ const InformationList = () => {
     const data = await constantsService.getConstants()
     if (data) {
       // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
-  
+
       setStatuses(Object.values(data.GENERAL['STATUS']))
-  
     }
   }
   const dropdownMenu = (row) => (
@@ -183,12 +182,12 @@ const InformationList = () => {
       ),
       sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
     },
-    {
-      title: 'Description',
-      dataIndex: 'description',
-      render:	(description)	=>			<div dangerouslySetInnerHTML={{ __html: description}} />
+    // {
+    //   title: 'Description',
+    //   dataIndex: 'description',
+    //   render:	(description)	=>			<div dangerouslySetInnerHTML={{ __html: description}} />
 
-    },
+    // },
     {
       title: 'Priority',
       dataIndex: 'priority',
@@ -257,90 +256,89 @@ const InformationList = () => {
   //   }
   // }
 
-
-
   const filtersComponent = () => (
     <Form
-    layout="vertical"
-    form={form}
-    name="filter_form"
-    className="ant-advanced-search-form"
-  >
-    <Row gutter={8} align="bottom">
-      <Col md={6} sm={24} xs={24} lg={6}>
-        <Form.Item name="search" label="Search">
-          <Input placeholder="Search" prefix={<SearchOutlined />} />
-        </Form.Item>
-      </Col>
-      <Col md={6} sm={24} xs={24} lg={6}>
-        <Form.Item name="status" label="Status">
-        <Select
+      layout="vertical"
+      form={form}
+      name="filter_form"
+      className="ant-advanced-search-form"
+    >
+      <Row gutter={8} align="bottom">
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="search" label="Search">
+            <Input placeholder="Search" prefix={<SearchOutlined />} />
+          </Form.Item>
+        </Col>
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="status" label="Status">
+            <Select
               className="w-100"
               style={{ minWidth: 180 }}
               placeholder="Status"
             >
               <Option value="">All</Option>
-            {statuses.map((item) => (
+              {statuses.map((item) => (
                 <Option key={item.id} value={item}>
                   {item}
                 </Option>
               ))}
             </Select>
-        </Form.Item>
-      </Col>
-      <Col md={6} sm={24} xs={24} lg={6}>
-        <Form.Item name="orderByPriority" label="Order By Priority">
-        <Select
-        className="w-100"
-        style={{ minWidth: 180 }}
-        // onChange={(value) => setSelectedorder(value)}
-        // onSelect={handleQuery}
-        // value={selectedOrder}
-        placeholder="OrderBy Priority">
+          </Form.Item>
+        </Col>
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="orderByPriority" label="Order By Priority">
+            <Select
+              className="w-100"
+              style={{ minWidth: 180 }}
+              // onChange={(value) => setSelectedorder(value)}
+              // onSelect={handleQuery}
+              // value={selectedOrder}
+              placeholder="OrderBy Priority"
+            >
+              <Option value="">All</Option>
+              <Option value="true">Yes</Option>
+              <Option value="false">No</Option>
+            </Select>
+          </Form.Item>
+        </Col>
 
-        <Option value="">All</Option>
-        <Option value="true">Yes</Option>
-        <Option value="false">No</Option>
-      </Select>
-        </Form.Item>
-      </Col>
-     
-      <Col className="mb-4">
-        <Button type="primary" onClick={handleFilterSubmit}>
-          Filter
-        </Button>
-      </Col>
-      <Col className="mb-4">
-        <Button type="primary" onClick={handleClearFilter}>
-          Clear
-        </Button>
-      </Col>
-    </Row>
-  </Form>
-
-
-   )
+        <Col className="mb-4">
+          <Button type="primary" onClick={handleFilterSubmit}>
+            Filter
+          </Button>
+        </Col>
+        <Col className="mb-4">
+          <Button type="primary" onClick={handleClearFilter}>
+            Clear
+          </Button>
+        </Col>
+      </Row>
+    </Form>
+  )
 
   return (
     <Card>
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
         {filtersComponent()}
-        
       </Flex>
       <div>
-          <Button
-            onClick={addProduct}
-            type="primary"
-            icon={<PlusCircleOutlined />}
-            
-          >
-            Add Information
-          </Button>
-        </div>
+        <Button
+          onClick={addProduct}
+          type="primary"
+          icon={<PlusCircleOutlined />}
+        >
+          Add Information
+        </Button>
+      </div>
       <div className="table-responsive">
-        <Table columns={tableColumns} dataSource={list} rowKey="id"  pagination={pagination}
-        loading={loading}
-        onChange={handleTableChange}/>
+        <Table
+          columns={tableColumns}
+          dataSource={list}
+          rowKey="id"
+          pagination={pagination}
+          loading={loading}
+          onChange={handleTableChange}
+        />
       </div>
     </Card>
   )
