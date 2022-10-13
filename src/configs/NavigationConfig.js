@@ -407,7 +407,10 @@ const dashBoardNavTree = [
           {
             key: 'dashboards-locality-state',
             path: `${APP_PREFIX_PATH}/dashboards/locality/state/statelist`,
-            title: 'State',
+            title:
+              process.env.REACT_APP_SITE_NAME === 'athathy'
+                ? 'Emirates'
+                : 'State',
             icon: AppstoreOutlined,
             breadcrumb: false,
             submenu: [],
