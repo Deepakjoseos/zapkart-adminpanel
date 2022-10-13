@@ -24,10 +24,9 @@ const MainBannerForm = (props) => {
   const [uploadedImg, setImage] = useState(null)
   const [uploadedMobileImg, setMobileImg] = useState(null)
   const [submitLoading, setSubmitLoading] = useState(false)
-  const [form_statuses,setStatuses]= useState([])
+  const [form_statuses, setStatuses] = useState([])
 
   const { imageCategories } = useSelector((state) => state.auth)
-
 
   // Normal Image
   const {
@@ -47,14 +46,12 @@ const MainBannerForm = (props) => {
     setFileList: setFileListMobileImages,
   } = useUpload(1)
 
-
   const fetchConstants = async () => {
     const data = await constantsService.getConstants()
     if (data) {
       // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
 
       setStatuses(Object.values(data.GENERAL['FORM_STATUS']))
-
     }
   }
   useEffect(() => {
@@ -100,7 +97,9 @@ const MainBannerForm = (props) => {
             forwardUrl: data.forwardUrl,
           })
         } else {
-          history.replace('/app/dashboards/catalog/main-banner/main-banner-list')
+          history.replace(
+            '/app/dashboards/catalog/main-banner/main-banner-list'
+          )
         }
       }
 
@@ -132,7 +131,6 @@ const MainBannerForm = (props) => {
   useEffect(() => {
     setMobileImg(fileListMobileImages)
   }, [fileListMobileImages])
-
   const onFinish = async () => {
     setSubmitLoading(true)
     form
@@ -149,6 +147,7 @@ const MainBannerForm = (props) => {
             const imageCategory = imageCategories.find(
               (imgCat) => imgCat.imageFor === 'MainBanners'
             )
+
             console.log('uploadedImg', uploadedImg)
             const imgValue = await singleImageUploader(
               uploadedImg[0].originFileObj,
@@ -209,7 +208,10 @@ const MainBannerForm = (props) => {
             values.image = imgValue
             values.mobileImage = mobileImgValue
 
-            const edited = await mainBannerService.editMainBanner(param.id, values)
+            const edited = await mainBannerService.editMainBanner(
+              param.id,
+              values
+            )
             if (edited) {
               message.success(`Edited ${values.name} to Main Banner list`)
               history.goBack()
@@ -253,7 +255,9 @@ const MainBannerForm = (props) => {
                 <Button
                   className="mr-2"
                   onClick={() =>
-                    history.push('/app/dashboards/catalog/main-banner/main-banner-list')
+                    history.push(
+                      '/app/dashboards/catalog/main-banner/main-banner-list'
+                    )
                   }
                 >
                   Discard
@@ -278,7 +282,8 @@ const MainBannerForm = (props) => {
                 // uploadLoading={uploadLoading}
                 // handleUploadChange={handleUploadChange}
                 propsImages={propsImages}
-                propsMobileImages={propsMobileImages} form_statuses={form_statuses}
+                propsMobileImages={propsMobileImages}
+                form_statuses={form_statuses}
               />
             </TabPane>
           </Tabs>
