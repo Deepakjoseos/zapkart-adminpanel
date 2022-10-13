@@ -137,4 +137,22 @@ const singleImageUploader = async (
   return imgValue
 }
 
-export { multipleImageUpload, singleImageUploader }
+const bulkImagesUpload = async (imageCategoryId, images) => {
+  const allImagesFiles = images.map((img) => img.originFileObj)
+  console.log(allImagesFiles, 'yaaaa')
+
+  try {
+    const uploadBulkImages = await fileManagerService.bulkuploadImages(
+      imageCategoryId,
+      allImagesFiles
+    )
+
+    return uploadBulkImages
+  } catch (err) {
+    notification.error({
+      message: 'Cannot upload Newly added Images',
+    })
+  }
+}
+
+export { multipleImageUpload, singleImageUploader, bulkImagesUpload }

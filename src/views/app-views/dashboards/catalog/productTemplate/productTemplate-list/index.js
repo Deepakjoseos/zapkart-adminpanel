@@ -9,14 +9,20 @@ import {
   Tag,
   Form,
   Row,
-  Col,Modal,notification,message
+  Col,
+  Modal,
+  notification,
+  message,
 } from 'antd'
 // import BrandListData from 'assets/data/product-list.data.json'
 import {
   EyeOutlined,
   DeleteOutlined,
   SearchOutlined,
-  PlusCircleOutlined,FileAddOutlined,DownloadOutlined
+  PlusCircleOutlined,
+  FileAddOutlined,
+  FileImageOutlined,
+  DownloadOutlined,
 } from '@ant-design/icons'
 import AvatarStatus from 'components/shared-components/AvatarStatus'
 import EllipsisDropdown from 'components/shared-components/EllipsisDropdown'
@@ -32,6 +38,7 @@ import manufacturerService from 'services/manufacturer'
 import categoryService from 'services/category'
 import medicineTypeService from 'services/medicineType'
 import constantsService from 'services/constants'
+import BulkProductTemplateImageUpload from './BulkProductTemplateImageUpload'
 
 const { Option } = Select
 
@@ -66,11 +73,22 @@ const ProductTemplateList = () => {
 
   const [list, setList] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
+  const [selectedRowKeys, setSelectedRowKeys] = useState([])
+  const [brands, setBrands] = useState([])
+  const [categories, setCategories] = useState([])
+  // const [selectedBrandId, setSelectedBrandId] = useState(null)
+  // const [selectedCategoryId, setSelectedCategoryId] = useState(null)
+  const [isExcelModalOpen, setIsExcelModalOpen] = useState(false)
+  const [isBulkImageModalOpen, setIsBulkImageModalOpen] = useState(false)
+  const [excelFile, setExcelFile] = useState(null)
+  const [medicineTypes, setMedicineTypes] = useState([])
+  // const [selectedMedicineTypeId, setSelectedMedicineTypeId] = useState(null)
+  const [manufacturers, setManufacturers] = useState([])
 
   // Added for Pagination
   const [loading, setLoading] = useState(false)
   const [filterEnabled, setFilterEnabled] = useState(false)
-  const [statuses,setStatuses]=useState([])
+  const [statuses, setStatuses] = useState([])
 
   // pagination
   const [pagination, setPagination] = useState({
@@ -118,7 +136,6 @@ const ProductTemplateList = () => {
     getCategories()
     getMedicineTypes()
     getManufacturers()
-
   }, [])
 
   // pagination generator
@@ -138,19 +155,10 @@ const ProductTemplateList = () => {
     )
   }
   // const [searchBackupList, setSearchBackupList] = useState([])
-  const [selectedRowKeys, setSelectedRowKeys] = useState([])
-  const [brands, setBrands] = useState([])
-  const [categories, setCategories] = useState([])
-  // const [selectedBrandId, setSelectedBrandId] = useState(null)
-  // const [selectedCategoryId, setSelectedCategoryId] = useState(null)
-  const [isExcelModalOpen, setIsExcelModalOpen] = useState(false)
-  const [excelFile, setExcelFile] = useState(null)
-  const [medicineTypes, setMedicineTypes] = useState([])
-  // const [selectedMedicineTypeId, setSelectedMedicineTypeId] = useState(null)
-  const [manufacturers, setManufacturers] = useState([])
+
   // const [selectedManufacturerId, setSelectedManufacturerId] = useState(null)
   // const [selectedPrescriptionrequired, setSelectedPrescriptionRequired] =
-  useState(null)
+  // useState(null)
 
   // const getProductTemplates = async () => {
   //   const data = await productTemplate.getProductTemplates()
@@ -162,13 +170,17 @@ const ProductTemplateList = () => {
   // }
   const getMedicineTypes = async () => {
     const data = await medicineTypeService.getMedicineTypes()
-    const activeMedicineTypes = data.data.filter((item) => item.status === 'Active')
+    const activeMedicineTypes = data.data.filter(
+      (item) => item.status === 'Active'
+    )
     setMedicineTypes(activeMedicineTypes)
   }
 
   const getManufacturers = async () => {
     const data = await manufacturerService.getManufacturers()
-    const activeManufacturers = data.data.filter((item) => item.status === 'Active')
+    const activeManufacturers = data.data.filter(
+      (item) => item.status === 'Active'
+    )
     setManufacturers(activeManufacturers)
   }
 
@@ -243,15 +255,13 @@ const ProductTemplateList = () => {
     }
   }
 
-
   const handleStatusChange = async (value, selectedRow) => {
     const sendingValues = {
       ...selectedRow,
       categoryId: selectedRow.category.id,
-      taxCategoryId:selectedRow.taxCategory.id,
+      taxCategoryId: selectedRow.taxCategory.id,
       status: value,
     }
-  
 
     const edited = await productTemplate.editProductTemplate(
       selectedRow.id,
@@ -335,25 +345,25 @@ const ProductTemplateList = () => {
       //   <Flex alignItems="center">{getStockStatus(status)}</Flex>
       // ),
       render: (status, row) => {
-        return (
-          status !=='Deleted' ? 
+        return status !== 'Deleted' ? (
           <Select
             defaultValue={status?.charAt(0)?.toUpperCase() + status?.slice(1)}
             // style={{ width: 120 }}
             onChange={(e) => handleStatusChange(e, row)}
           >
-         
-             <Option value="Active">
+            <Option value="Active">
               <Tag color="green">Active</Tag>
             </Option>
             <Option value="Hold">
               <Tag color="orange">Hold</Tag>
-            </Option> 
-           
+            </Option>
+
             {/* <Option value="Deleted">
               <Tag color="red">Deleted</Tag>
             </Option> */}
-          </Select> : getStockStatus(status)
+          </Select>
+        ) : (
+          getStockStatus(status)
         )
       },
       sorter: (a, b) => utils.antdTableSorter(a, b, 'status'),
@@ -387,7 +397,8 @@ const ProductTemplateList = () => {
         ),
       }
     )
-  } const resetPagination = () => ({
+  }
+  const resetPagination = () => ({
     ...pagination,
     current: 1,
     pageSize: 15,
@@ -396,9 +407,8 @@ const ProductTemplateList = () => {
     const data = await constantsService.getConstants()
     if (data) {
       // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
-  
+
       setStatuses(Object.values(data.GENERAL['STATUS']))
-  
     }
   }
   // Filter Submit
@@ -486,13 +496,13 @@ const ProductTemplateList = () => {
         </Col>
         <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item name="status" label="Status">
-          <Select
+            <Select
               className="w-100"
               style={{ minWidth: 180 }}
               placeholder="Status"
             >
               <Option value="">All</Option>
-            {statuses.map((item) => (
+              {statuses.map((item) => (
                 <Option key={item.id} value={item}>
                   {item}
                 </Option>
@@ -513,7 +523,7 @@ const ProductTemplateList = () => {
               // onChange={(value) => setSelectedBrandId(value)}
               // onSelect={handleQuery}
               placeholder="Brands"
-            // value={selectedBrandId}
+              // value={selectedBrandId}
             >
               <Option value="">All</Option>
               {brands.map((brand) => (
@@ -537,7 +547,7 @@ const ProductTemplateList = () => {
               // onChange={(value) => setSelectedBrandId(value)}
               // onSelect={handleQuery}
               placeholder="Categories"
-            // value={selectedBrandId}
+              // value={selectedBrandId}
             >
               <Option value="">All</Option>
               {categories.map((category) => (
@@ -561,7 +571,7 @@ const ProductTemplateList = () => {
               // onChange={(value) => setSelectedBrandId(value)}
               // onSelect={handleQuery}
               placeholder="Medicine Types"
-            // value={selectedBrandId}
+              // value={selectedBrandId}
             >
               <Option value="">All</Option>
               {medicineTypes.map((medicineType) => (
@@ -585,7 +595,7 @@ const ProductTemplateList = () => {
               // onChange={(value) => setSelectedBrandId(value)}
               // onSelect={handleQuery}
               placeholder="Manufacturers"
-            // value={selectedBrandId}
+              // value={selectedBrandId}
             >
               <Option value="">All</Option>
               {manufacturers.map((manufacturer) => (
@@ -598,29 +608,27 @@ const ProductTemplateList = () => {
         </Col>
         <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item name="prescriptionRequired" label="Prescription Required">
-          <Select
-          showSearch
-          optionFilterProp="children"
-          filterOption={(input, option) =>
-            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-          }
-          className="w-100"
-          style={{ minWidth: 180 }}
-          // onChange={(value) => setSelectedPrescriptionRequired(value)}
-          // onSelect={handleQuery}
-          // value={selectedPrescriptionrequired}
-          placeholder="Prescription Required"
-        >
-          <Option value="">All</Option>
-          <Option value="true">Yes</Option>
-          <Option value="false">No</Option>
-        </Select>
+            <Select
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              className="w-100"
+              style={{ minWidth: 180 }}
+              // onChange={(value) => setSelectedPrescriptionRequired(value)}
+              // onSelect={handleQuery}
+              // value={selectedPrescriptionrequired}
+              placeholder="Prescription Required"
+            >
+              <Option value="">All</Option>
+              <Option value="true">Yes</Option>
+              <Option value="false">No</Option>
+            </Select>
           </Form.Item>
         </Col>
 
-
-        
-    <Col className="mb-4">
+        <Col className="mb-4">
           <Button type="primary" onClick={handleFilterSubmit}>
             Filter
           </Button>
@@ -640,13 +648,24 @@ const ProductTemplateList = () => {
         {filtersComponent()}
       </Flex>
       <div className="mr-2 d-flex justify-content-between">
-        <Button
-          type="primary"
-          icon={<FileAddOutlined />}
-          onClick={() => setIsExcelModalOpen(true)}
-        >
-          Excel Upload
-        </Button>
+        <Flex>
+          <Button
+            className="mr-2"
+            type="primary"
+            icon={<FileAddOutlined />}
+            onClick={() => setIsExcelModalOpen(true)}
+          >
+            Excel Upload
+          </Button>
+          <Button
+            type="primary"
+            icon={<FileImageOutlined />}
+            onClick={() => setIsBulkImageModalOpen(true)}
+          >
+            Upload Bulk Images
+          </Button>
+        </Flex>
+
         <div>
           <Button
             onClick={addProduct}
@@ -694,6 +713,11 @@ const ProductTemplateList = () => {
         </Flex>
       </Modal>
 
+      <BulkProductTemplateImageUpload
+        setIsBulkImageModalOpen={setIsBulkImageModalOpen}
+        isBulkImageModalOpen={isBulkImageModalOpen}
+      />
+
       <div className="table-responsive">
         <Table
           scroll={{
@@ -701,11 +725,11 @@ const ProductTemplateList = () => {
           }}
           columns={tableColumns}
           dataSource={list}
-          rowKey="id" pagination={pagination}
+          rowKey="id"
+          pagination={pagination}
           loading={loading}
           onChange={handleTableChange}
         />
-        
       </div>
     </Card>
   )
