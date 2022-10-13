@@ -407,31 +407,10 @@ const dashBoardNavTree = [
           {
             key: 'dashboards-locality-state',
             path: `${APP_PREFIX_PATH}/dashboards/locality/state/statelist`,
-            title: 'State',
-            icon: AppstoreOutlined,
-            breadcrumb: false,
-            submenu: [],
-          },
-          {
-            key: 'dashboards-locality-district',
-            path: `${APP_PREFIX_PATH}/dashboards/locality/district/districtlist`,
-            title: 'District',
-            icon: AppstoreOutlined,
-            breadcrumb: false,
-            submenu: [],
-          },
-          {
-            key: 'dashboards-locality-city',
-            path: `${APP_PREFIX_PATH}/dashboards/locality/city/city-list`,
-            title: 'City',
-            icon: AppstoreOutlined,
-            breadcrumb: false,
-            submenu: [],
-          },
-          {
-            key: 'dashboards-locality-pincode',
-            path: `${APP_PREFIX_PATH}/dashboards/locality/pincode/pincodelist`,
-            title: 'Pincode',
+            title:
+              process.env.REACT_APP_SITE_NAME === 'athathy'
+                ? 'Emirates'
+                : 'State',
             icon: AppstoreOutlined,
             breadcrumb: false,
             submenu: [],
@@ -550,6 +529,31 @@ if (process.env.REACT_APP_SITE_NAME === 'zapkart') {
     path: `${APP_PREFIX_PATH}/dashboards/catalog/composition/composition-list`,
     title: 'Composition',
     icon: ExperimentOutlined,
+    breadcrumb: false,
+    submenu: [],
+  })
+
+  dashBoardNavTree[0].submenu[7].submenu.push({
+    key: 'dashboards-locality-district',
+    path: `${APP_PREFIX_PATH}/dashboards/locality/district/districtlist`,
+    title: 'District',
+    icon: AppstoreOutlined,
+    breadcrumb: false,
+    submenu: [],
+  })
+  dashBoardNavTree[0].submenu[7].submenu.push({
+    key: 'dashboards-locality-city',
+    path: `${APP_PREFIX_PATH}/dashboards/locality/city/city-list`,
+    title: 'City',
+    icon: AppstoreOutlined,
+    breadcrumb: false,
+    submenu: [],
+  })
+  dashBoardNavTree[0].submenu[7].submenu.push({
+    key: 'dashboards-locality-pincode',
+    path: `${APP_PREFIX_PATH}/dashboards/locality/pincode/pincodelist`,
+    title: 'Pincode',
+    icon: AppstoreOutlined,
     breadcrumb: false,
     submenu: [],
   })
