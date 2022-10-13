@@ -44,7 +44,7 @@ mainBannerService.getMainBannerById = async function (id) {
 mainBannerService.createMainBanner = async function (data) {
   try {
     const res = await fetch({
-      url: apiRoute,
+      url:`/mainbanners`,
       method: 'post',
       data: data,
     })

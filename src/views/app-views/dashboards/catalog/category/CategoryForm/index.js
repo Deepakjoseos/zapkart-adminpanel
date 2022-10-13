@@ -221,7 +221,7 @@ const ProductForm = (props) => {
         if (mode === EDIT) {
           // Checking if image exists
           if (uploadedImg.length !== 0 && uploadedImg !== null) {
-            console.log('uploadedImg', uploadedImg)
+            
             const imageCategory = imageCategories.find(
               (imgCat) => imgCat.imageFor === 'Categories'
             )
