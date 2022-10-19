@@ -149,7 +149,7 @@ const GeneralField = ({ form, propsImages, form_statuses, propsBannerImage }) =>
           size: 100px * 100px
 
         </Card>
-        <Card title="Banner">
+        <Card title="Brand">
           <Upload listType="picture-card" name="image" {...propsBannerImage}>
             <CustomIcon className="display-3" svg={ImageSvg} />
           </Upload>

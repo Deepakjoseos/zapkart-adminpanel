@@ -4,7 +4,7 @@ const dev = {
   //   https://ecommercelive.riolabz.com'
   API_ENDPOINT_URL:
     SITE_NAME === 'zapkart'
-      ? 'https://www.ecommerce.riolabz.com/api/v1'
+      ? 'https://ecommercelive.riolabz.com/api/v1'
       : SITE_NAME === 'athathy'
       ? 'https://api.athathy.ae/api/v1'
       : 'https://www.ecommerce.riolabz.com/api/v1',

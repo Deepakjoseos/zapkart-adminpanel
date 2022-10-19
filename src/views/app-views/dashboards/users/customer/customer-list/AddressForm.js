@@ -15,28 +15,27 @@ const AddressForm = ({
   setViewFormModal,
   selectedCustomerId,
   refetchData,
+  city,state,country
 }) => {
   const [form] = Form.useForm()
   const [submitLoading, setSubmitLoading] = useState(false)
-  const [state, setStates] = useState([])
-  const [country,setCountries]=useState([])
-
+  
   const rules = {}
-  const fetchConstants = async () => {
-    const data = await constantsService.getConstants()
-    if (data) {
-      // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
-        console.log( Object.values(data.GENERAL.STATES['INDIA']), 'constanttyys')
-          console.log('data',data)
+//   const fetchConstants = async () => {
+//     const data = await constantsService.getConstants()
+//     if (data) {
+//       // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
+//         console.log( Object.values(data.GENERAL.STATES['INDIA']), 'constanttyys')
+//           console.log('data',data)
 
-       setStates(Object.values(data.GENERAL.STATES['INDIA']))
-       setCountries(Object.values(data.GENERAL.COUNTRIES))
-      // setPaymentStatuses(Object.values(data.PAYMENT['PAYMENT_STATUS']))
-    }
-  }
-useEffect(()=>{
-fetchConstants()
-},[])
+//        setStates(Object.values(data.GENERAL.STATES['INDIA']))
+//        setCountries(Object.values(data.GENERAL.COUNTRIES))
+//       // setPaymentStatuses(Object.values(data.PAYMENT['PAYMENT_STATUS']))
+//     }
+//   }
+// useEffect(()=>{
+// fetchConstants()
+// },[])
   useEffect(() => {
     if (formMode === 'edit') {
       selectedFormAddress && form.setFieldsValue(selectedFormAddress)
@@ -114,35 +113,40 @@ fetchConstants()
               <Form.Item name="line1" label="Address" rules={rules.line1}>
                 <Input.TextArea rows={4} placeholder="Address" />
               </Form.Item>
-              <Form.Item name="city" label="City" rules={rules.city}>
-                <Input placeholder="City" />
-              </Form.Item>
-              <Form.Item name="state" label="State" rules={rules.state}>
-                {/* <Input placeholder="State" /> */}
-                <Select placeholder="State"
-                  style={{ width: 430 }}
-                // onChange={(e) => handleOrderStatusChange(e, row)}
-                >
-                  {state?.map((item) => (
-                    <Option key={item} value={item}>
-                      {item}
-                    </Option>
-                  ))}
-                </Select>
-              </Form.Item>
-              <Form.Item name="country" label="Country" rules={rules.country}>
-                {/* <Input placeholder="State" /> */}
-                <Select placeholder="Country"
-                  style={{ width: 430 }}
-                // onChange={(e) => handleOrderStatusChange(e, row)}
-                >
-                  {country?.map((item) => (
-                    <Option key={item} value={item}>
-                      {item}
-                    </Option>
-                  ))}
-                </Select>
-              </Form.Item>
+              <Form.Item name="stateId" label="state" >
+          <Select placeholder="state">
+              {state.map((item) => (
+                <Option key={item.id} value={item.id}>
+                  {item.name}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+   
+    
+  
+    <Form.Item name="cityId" label="City" >
+          <Select placeholder="City">
+              {city.map((item) => (
+                <Option key={item.id} value={item.id}>
+                  {item.name}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+    
+   
+    
+        <Form.Item name="countryId" label="Country" >
+          <Select placeholder="pincode">
+              {country.map((item) => (
+                <Option key={item.id} value={item.id}>
+                  {item.name}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+
               <Form.Item name="phone" label="Phone" rules={rules.phone}>
                 <Input type="tel" placeholder="Phone" />
               </Form.Item>

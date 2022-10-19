@@ -2,9 +2,9 @@ import fetch from 'auth/FetchInterceptor'
 
 const bannerService = {}
 const api = '/banners'
-bannerService.getBanners = async function (paginationQuery = '', query = '') {
+bannerService.getBanners = async function (paginationQuery = '', filterQuery = '') {
   try {
-    let url = `${api}?${paginationQuery}&${query}`
+    let url = `${api}?${paginationQuery}&${filterQuery}`
     const res = await fetch({
       url,
       method: 'get',

@@ -2,9 +2,9 @@ import fetch from 'auth/FetchInterceptor'
 
 const couponService = {}
 const apiRoute = '/coupon'
-couponService.getCoupons = async function (paginationQuery = '', query = '') {
+couponService.getCoupons = async function (paginationQuery = '', filterQuery = '') {
   try {
-    let url = `${apiRoute}?${paginationQuery}&${query}`
+    let url = `${apiRoute}?${paginationQuery}&${filterQuery}`
     const res = await fetch({
       url,
       method: 'get',

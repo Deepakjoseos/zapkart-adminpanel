@@ -5,6 +5,10 @@ import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
 import AddressForm from './AddressForm'
 import customerService from 'services/customer'
 import utils from 'utils'
+import countryService from 'services/country'
+import stateService from 'services/state'
+import cityService from 'services/city'
+
 
 
 const ViewAddresses = ({
@@ -18,6 +22,36 @@ const ViewAddresses = ({
   const [viewFormModal, setViewFormModal] = useState(false)
   const [formMode, setFormMode] = useState('add')
   const [selectedFormAddress, setSelectedFormAddress] = useState({})
+  const [country ,setCountry]=useState([])
+  const [city ,setCity]=useState([])
+  const [state ,setState]=useState([])
+
+  const getCity = async ()=>{
+    const data = await cityService.getCity()
+    if(data){
+      setCity(data.data)
+    }
+  }
+  const getState = async ()=>{
+    const data = await stateService.getState()
+    if(data){
+      setState(data.data)
+    }
+  }
+  const getCountry = async ()=>{
+    const data = await countryService.getCountry()
+    if(data){
+      setCountry(data.data)
+    }
+      }
+  
+  useEffect(()=>{
+ 
+  getCity()
+  getState()
+  getCountry()
+  
+  },[])
 
   const onDeleteAddress = async (addressId) => {
     const customerDelete = await customerService.deleteAddress(
@@ -83,6 +117,8 @@ const ViewAddresses = ({
             {'Phone: ' + address.phone} <br />
             {'State: ' + address.state} <br />
             {'Zipcode: ' + address.zipcode}
+
+            
           </Card>
         ))}
       {/* </Drawer> */}
@@ -96,6 +132,9 @@ const ViewAddresses = ({
         setViewFormModal={setViewFormModal}
         selectedCustomerId={selectedCustomerId}
         refetchData={refetchData}
+        city={city}
+        state={state}
+        country={country}
       />
 
     </div>

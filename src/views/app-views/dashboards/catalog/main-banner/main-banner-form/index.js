@@ -5,7 +5,7 @@ import Flex from 'components/shared-components/Flex'
 import GeneralField from './GeneralField'
 import useUpload from 'hooks/useUpload'
 import { singleImageUploader } from 'utils/s3/s3ImageUploader'
-import BannerService from 'services/banner'
+
 import Utils from 'utils'
 import { useHistory } from 'react-router-dom'
 import constantsService from 'services/constants'
@@ -57,7 +57,7 @@ const MainBannerForm = (props) => {
   useEffect(() => {
     fetchConstants()
     if (mode === EDIT) {
-      const fetchBannerById = async () => {
+      const fetchMainBannerById = async () => {
         const { id } = param
         const data = await mainBannerService.getMainBannerById(id)
         if (data) {
@@ -76,6 +76,8 @@ const MainBannerForm = (props) => {
             setFileListImages(himg)
           }
 
+          
+
           if (data.mobileImage) {
             himg = [
               {
@@ -85,7 +87,7 @@ const MainBannerForm = (props) => {
                 thumbUrl: data.mobileImage,
               },
             ]
-
+             
             setMobileImg(himg)
             setFileListMobileImages(himg)
           }
@@ -103,7 +105,7 @@ const MainBannerForm = (props) => {
         }
       }
 
-      fetchBannerById()
+      fetchMainBannerById()
     }
   }, [form, mode, param, props])
 
@@ -115,6 +117,7 @@ const MainBannerForm = (props) => {
     fileList: fileListImages,
   }
 
+ 
   const propsMobileImages = {
     multiple: false,
     beforeUpload: beforeUploadMobileImages,
@@ -122,11 +125,11 @@ const MainBannerForm = (props) => {
     onChange: onChangeMobileImages,
     fileList: fileListMobileImages,
   }
-
   useEffect(() => {
     console.log(fileListImages, 'hey-me')
     setImage(fileListImages)
   }, [fileListImages])
+
 
   useEffect(() => {
     setMobileImg(fileListMobileImages)
@@ -155,6 +158,7 @@ const MainBannerForm = (props) => {
               uploadedImg[0].url,
               imageCategory.id
             )
+            values.image = imgValue
             const imageCategoryMobile = imageCategories.find(
               (imgCat) => imgCat.imageFor === 'MainBannersMobile'
             )
@@ -165,7 +169,7 @@ const MainBannerForm = (props) => {
               imageCategoryMobile.id
             )
 
-            values.image = imgValue
+            
             values.mobileImage = mobileImgValue
 
             const created = await mainBannerService.createMainBanner(values)
@@ -249,7 +253,7 @@ const MainBannerForm = (props) => {
               alignItems="center"
             >
               <h2 className="mb-3">
-                {mode === 'ADD' ? 'Add New Main Banner' : `Edit Main Banner`}{' '}
+                {mode === 'ADD' ? 'Add New Main-Banner' : `Edit Main-Banner`}{' '}
               </h2>
               <div className="mb-3">
                 <Button

@@ -51,6 +51,42 @@ vendorService.addPickUpLocation = async function (data) {
     console.log(err, 'show-err')
   }
 }
+vendorService.verifyDocuments = async function (data,id) {
+  try {
+    const res = await fetch({
+      url: `${apiRoute}/document/${id}/verify`,
+      method: 'put',
+      data: data,
+    })
+    return res
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
+vendorService.uploadDocuments = async function (data,id) {
+  try {
+    const res = await fetch({
+      url: `vendors/document/${id}`,
+      method: 'put',
+      data: data,
+    })
+    return res
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
+vendorService.getDocuments = async function (data,id) {
+  try {
+    const res = await fetch({
+      url: `vendors/document/${id}`,
+      method: 'get',
+      data: data,
+    })
+    return res
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
 vendorService.editVendor = async function (id, data) {
   try {
     const res = await fetch({
