@@ -19,18 +19,18 @@ const rules = {
       message: 'Required',
     },
   ],
-  drugLicense: [
-    {
-      required: true,
-      message: 'Required',
-    },
-  ],
-  gst: [
-    {
-      required: true,
-      message: 'Required',
-    },
-  ],
+  // drugLicense: [
+  //   {
+  //     required: true,
+  //     message: 'Required',
+  //   },
+  // ],
+  // gst: [
+  //   {
+  //     required: true,
+  //     message: 'Required',
+  //   },
+  // ],
   email: [
     {
       required: true,
@@ -80,12 +80,12 @@ const GeneralField = ({ propsDisplayImages, form, mode, emailVerified, phoneVeri
           <Input placeholder="Last Name" />
         </Form.Item>
 
-        <Form.Item name="gst" label="GST" rules={rules.gst}>
-          <Input placeholder="GST" />
+        <Form.Item name="pan" label="Pan" rules={rules.pan}>
+          <Input placeholder="Pan" />
         </Form.Item>
-        <Form.Item name="drugLicense" label="Drug License Number" rules={rules.drugLicense}>
+        {/* <Form.Item name="drugLicense" label="Drug License Number" rules={rules.drugLicense}>
           <Input placeholder="Drug License Number" />
-        </Form.Item>
+        </Form.Item> */}
         <Form.Item
           name="groups"
           label="User Groups"
@@ -122,6 +122,31 @@ const GeneralField = ({ propsDisplayImages, form, mode, emailVerified, phoneVeri
               ))}
               </Select>
             </Form.Item>
+         
+
+   
+
+    <Form.Item name="signedContractCopy" label="signedContractCopy" rules={rules.signedContractCopy}>
+      <Select placeholder="signedContractCopy">
+        <Option value={true}>Yes</Option>
+        <Option value={false}>No</Option>
+      </Select>
+    </Form.Item>
+    <Form.Item name="passportOrVisa" label="passportOrVisa" rules={rules.passportOrVisa}>
+      <Select placeholder="passportOrVisa">
+        <Option value={true}>Yes</Option>
+        <Option value={false}>No</Option>
+      </Select>
+    </Form.Item>
+    <Form.Item name="vatTrnCertificate" label="vatTrnCertificate" rules={rules.vatTrnCertificate}>
+      <Select placeholder="vatTrnCertificate">
+        <Option value={true}>Yes</Option>
+        <Option value={false}>No</Option>
+      </Select>
+    </Form.Item>
+
+
+
             <Form.Item name="emailVerified" label="Emal Verified" rules={rules.emailVerified}>
               <Select placeholder="Email Verified">
                 <Option value={true}>Yes</Option>
@@ -140,9 +165,14 @@ const GeneralField = ({ propsDisplayImages, form, mode, emailVerified, phoneVeri
             </Form.Item>
 
 
+
+
             <Form.Item name="email" label="Email" rules={rules.email}>
               <Input />
             </Form.Item>
+
+
+
 
             <Form.Item name="tanNumber" label="Tan Number" rules={rules.tanNumber}>
               <Input placeholder="Tan Number" />
@@ -179,9 +209,9 @@ const GeneralField = ({ propsDisplayImages, form, mode, emailVerified, phoneVeri
         {/* <Form.Item >
           <Input disabled />
         </Form.Item> */}
-        <Form.Item name="pan" label="PAN" rules={rules.pan}>
+        {/* <Form.Item name="pan" label="PAN" rules={rules.pan}>
           <Input placeholder="Pan Number" />
-        </Form.Item>
+        </Form.Item> */}
 
       </Card>
 

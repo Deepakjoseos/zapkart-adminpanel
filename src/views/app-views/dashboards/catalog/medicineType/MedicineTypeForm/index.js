@@ -135,11 +135,7 @@ const ProductForm = (props) => {
           } else {
             message.error('Please upload image')
           }
-          const created = await medicineTypeService.createMedicineType(values)
-          if (created) {
-            message.success(`Created ${values.name} to Medicine Type list`)
-            history.goBack()
-          }
+         
         }
         if (mode === EDIT) {
           // Checking if image exists

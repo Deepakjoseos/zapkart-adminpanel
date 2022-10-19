@@ -197,7 +197,7 @@ const ShipmentCreateForm = ({
                 ]}
               >
                 <Select
-                  placeholder="Shipped By Vendoratus"
+                  placeholder="Shipped By Vendor"
                   onChange={(e) => {
                     setShippedByVendor(e)
                   }}
