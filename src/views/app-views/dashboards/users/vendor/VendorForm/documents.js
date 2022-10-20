@@ -157,17 +157,17 @@ const Documents = () => {
   const getVendorDocumentById = async () => {
     let getDoc = await vendorService.getDocumentsById(id)
     if (getDoc) {
-      setIsVerifiedEmiratesId(getDoc.emiratesID.isVerified)
-      setIsVerifiedTradeLicense(getDoc.tradelicense.isVerified)
-      setIsVerifiedSignedContractCopy(getDoc.signedContractCopy.isVerified)
-      setIsVerifiedPassportOrVisa(getDoc.passportOrVisa.isVerified)
-      setIsVerifiedVatTrnCertificate(getDoc.vatTrnCertificate.isVerified)
+      setIsVerifiedEmiratesId(getDoc?.emiratesID?.isVerified)
+      setIsVerifiedTradeLicense(getDoc?.tradelicense?.isVerified)
+      setIsVerifiedSignedContractCopy(getDoc?.signedContractCopy?.isVerified)
+      setIsVerifiedPassportOrVisa(getDoc?.passportOrVisa?.isVerified)
+      setIsVerifiedVatTrnCertificate(getDoc?.vatTrnCertificate?.isVerified)
       let himg = []
-      if (getDoc.emiratesID.url) {
+      if (getDoc?.emiratesID?.url) {
         himg = [
           {
             uid: Math.random() * 1000,
-            name: Utils.getBaseName(getDoc.emiratesID.url),
+            name: Utils.getBaseName(getDoc?.emiratesID?.url),
             url: getDoc.emiratesID.url,
             thumbUrl: getDoc.emiratesID.url,
           },
@@ -175,11 +175,11 @@ const Documents = () => {
         setEmiratesID(himg)
         setFileListEmiratesID(himg)
       }
-      if (getDoc.tradelicense.url) {
+      if (getDoc?.tradelicense?.url) {
         himg = [
           {
             uid: Math.random() * 1000,
-            name: Utils.getBaseName(getDoc.tradelicense.url),
+            name: Utils.getBaseName(getDoc?.tradelicense?.url),
             url: getDoc.tradelicense.url,
             thumbUrl: getDoc.tradelicense.url,
           },
@@ -187,11 +187,11 @@ const Documents = () => {
         setTradeLicense(himg)
         setFileListDisplaytradelicense(himg)
       }
-      if (getDoc.signedContractCopy.url) {
+      if (getDoc?.signedContractCopy?.url) {
         himg = [
           {
             uid: Math.random() * 1000,
-            name: Utils.getBaseName(getDoc.signedContractCopy.url),
+            name: Utils.getBaseName(getDoc?.signedContractCopy?.url),
             url: getDoc.signedContractCopy.url,
             thumbUrl: getDoc.signedContractCopy.url,
           },
@@ -199,23 +199,23 @@ const Documents = () => {
         setSignedContractCopy(himg)
         setFileListSignedContractCopy(himg)
       }
-      if (getDoc.signedContractCopy.url) {
+      if (getDoc?.passportOrVisa?.url) {
         himg = [
           {
             uid: Math.random() * 1000,
-            name: Utils.getBaseName(getDoc.signedContractCopy.url),
-            url: getDoc.signedContractCopy.url,
-            thumbUrl: getDoc.signedContractCopy.url,
+            name: Utils.getBaseName(getDoc?.passportOrVisa?.url),
+            url: getDoc.passportOrVisa.url,
+            thumbUrl: getDoc.passportOrVisa.url,
           },
         ]
         setPassportOrVisa(himg)
         setFileListPassportOrVisa(himg)
       }
-      if (getDoc.vatTrnCertificate.url) {
+      if (getDoc?.vatTrnCertificate?.url) {
         himg = [
           {
             uid: Math.random() * 1000,
-            name: Utils.getBaseName(getDoc.vatTrnCertificate.url),
+            name: Utils.getBaseName(getDoc?.vatTrnCertificate?.url),
             url: getDoc.vatTrnCertificate.url,
             thumbUrl: getDoc.vatTrnCertificate.url,
           },
@@ -239,7 +239,7 @@ const Documents = () => {
       vatTrnCertificateFileUrl
     setSubmitLoading(true)
     // for tradeLic ense
-    if (tradeLicense) {
+    if (tradeLicense?.length > 0) {
       const tradeLicenseFileValue = await fileDocUpload(
         tradeLicense[0].originFileObj,
         tradeLicense,
@@ -250,7 +250,7 @@ const Documents = () => {
       tradeLicenseFileUrl = tradeLicenseFileValue
     }
 
-    if (emiratesID) {
+    if (emiratesID?.length > 0) {
       const emiratesIDFileValue = await fileDocUpload(
         emiratesID[0].originFileObj,
         emiratesID,
@@ -261,7 +261,7 @@ const Documents = () => {
       emiratesIDFileUrl = emiratesIDFileValue
     }
 
-    if (signedContractCopy) {
+    if (signedContractCopy?.length > 0) {
       const signedContractCopyFileValue = await fileDocUpload(
         signedContractCopy[0].originFileObj,
         signedContractCopy,
@@ -272,7 +272,7 @@ const Documents = () => {
       signedContractCopyFileUrl = signedContractCopyFileValue
     }
 
-    if (passportOrVisa) {
+    if (passportOrVisa?.length > 0) {
       const passportOrVisaFileValue = await fileDocUpload(
         passportOrVisa[0].originFileObj,
         passportOrVisa,
@@ -283,7 +283,7 @@ const Documents = () => {
       passportOrVisaFileUrl = passportOrVisaFileValue
     }
 
-    if (vatTrnCertificate) {
+    if (vatTrnCertificate?.length > 0) {
       const vatTrnCertificateFileValue = await fileDocUpload(
         vatTrnCertificate[0].originFileObj,
         vatTrnCertificate,
