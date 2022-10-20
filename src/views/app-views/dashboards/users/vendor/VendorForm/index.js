@@ -40,80 +40,25 @@ const ProductForm = (props) => {
   const [form] = Form.useForm()
   const [displayImage, setDisplayImage] = useState(null)
   const [submitLoading, setSubmitLoading] = useState(false)
-  const[pickupLocation,setPickUpLocation] = useState(null)
+  const [pickupLocation, setPickUpLocation] = useState(null)
   const [phoneVerified, setPhoneVerified] = useState(false)
   const [emailVerified, setEmailVerified] = useState(false)
-  const [form_statuses,setStatuses] = useState([])
-  const [groupList,setGroupList] = useState([])
-  const [transactions,setTransactions] = useState([])
-  const [verifytradelicense,setverifytradelicense] = useState([])
-  const [verifyemiratesID,setverifyemiratesID] = useState([])
-  const [verifysignedContractCopy,setverifysignedContractCopy] = useState([])
-  const [verifypassportOrVisa,setverifypassportOrVisa] = useState([])
-  const [verifyvatTrnCertificate,setverifyvatTrnCertificate] = useState([])
-  const [uploadDocument,setUploadDocument] = useState([])
-  const [tradelicense,setUploadtradelicense] = useState([])
-  const [uploademiratesID,setUploademiratesID] = useState([])
-  const [signedContractCopy,setUploadsignedContractCopy] = useState([])
-  const [DisplaypassportOrVisa,setDisplaypassportOrVisa] = useState([])
-  const [DisplayvatTrnCertificate,setDisplayvatTrnCertificate] = useState([])
-  
-  const [wallet,setWallet] = useState({})
-  const[selectedVendorId,setSelectedVendorId] =useState(null)
+  const [form_statuses, setStatuses] = useState([])
+  const [groupList, setGroupList] = useState([])
+  const [transactions, setTransactions] = useState([])
+
+  const [wallet, setWallet] = useState({})
+  const [selectedVendorId, setSelectedVendorId] = useState(null)
   const { imageCategories } = useSelector((state) => state.auth)
-  
-  const {
-    fileList: fileListDisplaytradelicense,
-    beforeUpload: beforeUploadDisplaytradelicense,
-    onChange: onChangeDisplaytradelicense,
-    onRemove: onRemoveDisplaytradelicense,
-    setFileList: setFileListDisplaytradelicense,
-  } = useUpload(1)
-
 
   const {
-    fileList: fileListDisplaysignedContractCopy,
-    beforeUpload: beforeUploadDisplaysignedContractCopy,
-    onChange: onChangeDisplaysignedContractCopy,
-    onRemove: onRemoveDisplaysignedContractCopy,
-    setFileList: setFileListDisplaysignedContractCopy,
+    fileList: fileListDisplayImages,
+    beforeUpload: beforeUploadDisplayImages,
+    onChange: onChangeDisplayImages,
+    onRemove: onRemoveDisplayImages,
+    setFileList: setFileListDisplayImages,
   } = useUpload(1)
-  const {
-    fileList: fileListDisplayemiratesID,
-    beforeUpload: beforeUploadDisplayemiratesID,
-    onChange: onChangeDisplayemiratesID,
-    onRemove: onRemoveDisplayemiratesID,
-    setFileList: setFileListDisplayemiratesID,
-  } = useUpload(1)
-    const {
-    fileList: fileListDisplaypassportOrVisa,
-    beforeUpload: beforeUploadDisplaypassportOrVisa,
-    onChange: onChangeDisplaypassportOrVisa,
-    onRemove: onRemoveDisplaypassportOrVisa,
-    setFileList: setFileListDisplaypassportOrVisa,
-  } = useUpload(1)
-  const {
-    fileList: fileListDisplayvatTrnCertificate,
-    beforeUpload: beforeUploadDisplayvatTrnCertificate,
-    onChange: onChangeDisplayvatTrnCertificate,
-    onRemove: onRemoveDisplayvatTrnCertificate,
-    setFileList: setFileListDisplayvatTrnCertificate,
-  } = useUpload(1)
-
-
- 
-  
-
-
-
-   const {
-     fileList: fileListDisplayImages,
-     beforeUpload: beforeUploadDisplayImages,
-     onChange: onChangeDisplayImages,
-     onRemove: onRemoveDisplayImages,
-     setFileList: setFileListDisplayImages,
-   } = useUpload(1)
-   const getUserGroups = async () => {
+  const getUserGroups = async () => {
     const data = await userGroupService.getUserGroups()
     if (data) {
       const availableUserGroups = data.filter(
@@ -122,47 +67,45 @@ const ProductForm = (props) => {
       setGroupList(availableUserGroups)
     }
   }
-   const fetchConstants = async () => {
+  const fetchConstants = async () => {
     const data = await constantsService.getConstants()
     if (data) {
       // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
 
       setStatuses(Object.values(data.GENERAL['FORM_STATUS']))
-
     }
   }
-  const getTransactions = async() =>{
-   const data= await walletService.getTransactions({userId:id})
-   if(data){
-    setTransactions(data)
-   }
-   console.log('trans',data)
-  }
-  const getWallet = async() =>{
-    const data= await walletService.getVendorWallet(id)
-    if(data){
-     setWallet(data)
+  const getTransactions = async () => {
+    const data = await walletService.getTransactions({ userId: id })
+    if (data) {
+      setTransactions(data)
     }
-    console.log('trans',data)
-   }
-  useEffect(()=>{
+    console.log('trans', data)
+  }
+  const getWallet = async () => {
+    const data = await walletService.getVendorWallet(id)
+    if (data) {
+      setWallet(data)
+    }
+    console.log('trans', data)
+  }
+  useEffect(() => {
     getTransactions()
-    if(id){ getWallet()}
-   
-   fetchConstants()
-   getUserGroups()
-  },[id])
+    if (id) {
+      getWallet()
+    }
 
-
-
+    fetchConstants()
+    getUserGroups()
+  }, [id])
 
   const fetchVendorById = async () => {
     const { id } = param
     // console.log('id_vendor',param.id)
     const data = await vendorService.getVendorById(id)
     if (data) {
-     setSelectedVendorId(data.id)
-     console.log('datavendorid',data)
+      setSelectedVendorId(data.id)
+      console.log('datavendorid', data)
       setPickUpLocation(data.pickupLocations)
       let himg = []
       if (data.image) {
@@ -179,12 +122,6 @@ const ProductForm = (props) => {
         setFileListDisplayImages(himg)
       }
 
-
-
-
-
-      
-
       form.setFieldsValue({
         firstName: data.firstName,
         lastName: data.lastName,
@@ -192,10 +129,9 @@ const ProductForm = (props) => {
         phone: data?.phone,
         gst: data?.gst,
         tanNumber: data?.tanNumber,
-        pan:data?.pan,
-        drugLicense:data?.drugLicense,
-        groups: data?.groups.map((cur)=> cur.id),
-
+        pan: data?.pan,
+        drugLicense: data?.drugLicense,
+        groups: data?.groups.map((cur) => cur.id),
 
         // address:
         'address.line1': data?.address?.line1,
@@ -214,10 +150,8 @@ const ProductForm = (props) => {
         'business.address.phone': data?.business?.address?.phone,
         'business.address.zipcode': data?.business?.address?.zipcode,
       })
-      setEmailVerified(data?.emailVerified ? true :false)
-      setPhoneVerified(data?.phone ? true: false)
-      
-     
+      setEmailVerified(data?.emailVerified ? true : false)
+      setPhoneVerified(data?.phone ? true : false)
     } else {
       history.replace('/app/dashboards/users/vendor/vendor-list')
     }
@@ -228,119 +162,6 @@ const ProductForm = (props) => {
       fetchVendorById()
     }
   }, [form, mode, param, props])
-
-
-
-
-  const verifyDocuments = async() =>{
-    const data= await vendorService.verifyDocuments(id)
-    if(data){
-      setverifytradelicense(data?.tradelicense ? true: false)
-    }
-    console.log('trans',data)
-    if(data){
-      setverifyemiratesID(data?.emiratesID? true: false)
-    }
-    console.log('trans',data)
-    if(data){
-      setverifysignedContractCopy(data?.signedContractCopy ? true: false)
-    }
-    console.log('trans',data)
-    if(data){
-      setverifypassportOrVisa(data?.passportOrVisa ? true: false)
-    }
-    console.log('trans',data)
-    if(data){
-      setverifyvatTrnCertificate(data?.vatTrnCertificate ? true: false)
-    }
-    console.log('trans',data)
-   }
-   
-  useEffect(()=>{
-  verifyDocuments()
-  },[id])
-
-  // const uploadDocuments = async() =>{
-  //   const data= await vendorService.uploadDocuments(id)
-  //   if(data){
-  //    setUploadDocument(DataTransfer)
-  //   }
-  //   console.log('trans',data)
-  //  }
-  // useEffect(()=>{
- 
-   
-  // uploadDocuments()
-  // },[id])
-
-  const propsUploadtradelicense = {
-    multiple: false,
-    beforeUpload: beforeUploadDisplaytradelicense,
-    onRemove: onRemoveDisplaytradelicense,
-    onChange: onChangeDisplaytradelicense,
-    fileList: fileListDisplaytradelicense,
-  }
-
-  useEffect(() => {
-    setUploadDocument(fileListDisplaytradelicense)
-  }, [fileListDisplaytradelicense])
-
-
-  const propsUploademiratesID = {
-    multiple: false,
-    beforeUpload: beforeUploadDisplayemiratesID,
-    onRemove: onRemoveDisplayemiratesID,
-    onChange: onChangeDisplayemiratesID,
-    fileList: fileListDisplayemiratesID,
-  }
-
-  useEffect(() => {
-    setUploademiratesID(fileListDisplayemiratesID)
-  }, [fileListDisplayemiratesID])
-
-
-  const propssignedContractCopy = {
-    multiple: false,
-    beforeUpload: beforeUploadDisplaysignedContractCopy,
-    onRemove: onRemoveDisplaysignedContractCopy,
-    onChange: onChangeDisplaysignedContractCopy,
-    fileList: fileListDisplaysignedContractCopy,
-  }
-
-  useEffect(() => {
-    setUploadsignedContractCopy(fileListDisplaysignedContractCopy)
-  }, [fileListDisplaysignedContractCopy])
-  
-
-
-  const propsDisplaypassportOrVisa = {
-    multiple: false,
-    beforeUpload: beforeUploadDisplaypassportOrVisa,
-    onRemove: onRemoveDisplaypassportOrVisa,
-    onChange: onChangeDisplaypassportOrVisa,
-    fileList: fileListDisplaypassportOrVisa,
-  }
-
-  useEffect(() => {
-    setDisplaypassportOrVisa(fileListDisplaypassportOrVisa)
-  }, [fileListDisplaypassportOrVisa])
-
-
-  const propsDisplayvatTrnCertificate = {
-    multiple: false,
-    beforeUpload: beforeUploadDisplayvatTrnCertificate,
-    onRemove: onRemoveDisplayvatTrnCertificate,
-    onChange: onChangeDisplayvatTrnCertificate,
-    fileList: fileListDisplayvatTrnCertificate,
-  }
-
-  useEffect(() => {
-    setDisplayvatTrnCertificate(fileListDisplayvatTrnCertificate)
-  }, [fileListDisplayvatTrnCertificate])
-
-
-
-
 
   const propsDisplayImages = {
     multiple: false,
@@ -367,9 +188,9 @@ const ProductForm = (props) => {
           tanNumber: values.tanNumber,
           pan: values.pan,
           gst: values.gst,
-          drugLicense:values.drugLicense,
-          groups:values.groups,
-          tradelicense:values.tradeliscense,
+          drugLicense: values.drugLicense,
+          groups: values.groups,
+          tradelicense: values.tradeliscense,
           address: {
             line1: values['address.line1'],
             city: values['address.city'],
@@ -415,30 +236,28 @@ const ProductForm = (props) => {
             imageCategory.id
           )
           sendingValues.displayImage = displayImageValue
-          console.log('upload',sendingValues.displayImage)
+          console.log('upload', sendingValues.displayImage)
         } else {
           sendingValues.displayImage = null
         }
         if (mode === ADD) {
-          
-            sendingValues.phone = values.phone
-            sendingValues.password= values.password
-            sendingValues.email=values.email
-            sendingValues.emailVerified=values.emailVerified
-            sendingValues.tradelicense=values.tradelicense
-            sendingValues.emiratesID=values.emiratesID
-            sendingValues.signedContractCopy=values.signedContractCopy
-            sendingValues.passportOrVisa=values.passportOrVisa
-            sendingValues.vatTrnCertificate=values.vatTrnCertificate
-            sendingValues.status=values.status
-          
-        
+          sendingValues.phone = values.phone
+          sendingValues.password = values.password
+          sendingValues.email = values.email
+          sendingValues.emailVerified = values.emailVerified
+          sendingValues.tradelicense = values.tradelicense
+          sendingValues.emiratesID = values.emiratesID
+          sendingValues.signedContractCopy = values.signedContractCopy
+          sendingValues.passportOrVisa = values.passportOrVisa
+          sendingValues.vatTrnCertificate = values.vatTrnCertificate
+          sendingValues.status = values.status
+
           const created = await vendorService.addVendor(sendingValues)
           if (created) {
             message.success(`Created Vendor Success`)
             history.goBack()
           }
-        } 
+        }
         if (mode === EDIT) {
           // Checking if image exists
           console.log(sendingValues, 'heyyyy', values)
@@ -453,7 +272,6 @@ const ProductForm = (props) => {
           // } else {
           //   sendingValues.displayImage = null
           // }
-          
 
           const edited = await vendorService.editVendor(param.id, sendingValues)
           if (edited) {
@@ -518,30 +336,33 @@ const ProductForm = (props) => {
             <TabPane tab="General" key="1">
               <GeneralField
                 propsDisplayImages={propsDisplayImages}
-                form={form} mode={mode} emailVerified={emailVerified} phoneVerified={phoneVerified}
-               form_statuses={form_statuses} userGroups={groupList}
+                form={form}
+                mode={mode}
+                emailVerified={emailVerified}
+                phoneVerified={phoneVerified}
+                form_statuses={form_statuses}
+                userGroups={groupList}
               />
             </TabPane>
             {id && (
               <>
-            <TabPane tab="Transactions" key="2">
-           <VendorTransactions selectedVendorId={selectedVendorId} transactions={transactions} wallet={wallet} />
-            </TabPane>
-            <TabPane tab="Bank Accounts" key="3">
-               <BankAccount selectedVendorId={selectedVendorId}/>
-            </TabPane>
-            <TabPane tab="Document Upload" key="4">
-               <Documents  verifytradelicense={verifytradelicense} propsUploadtradelicense={propsUploadtradelicense}
-               propssignedContractCopy={propssignedContractCopy} propsDisplaypassportOrVisa={propsDisplaypassportOrVisa}
-               propsDisplayvatTrnCertificate={propsDisplayvatTrnCertificate}
-               verifyemiratesID={verifyemiratesID}  verifysignedContractCopy={verifysignedContractCopy } verifypassportOrVisa={verifypassportOrVisa}
-               verifyvatTrnCertificate={verifyvatTrnCertificate}
-
-               mode={mode} propsUploademiratesID={propsUploademiratesID}/>
-            </TabPane>
-            </>
+                <TabPane tab="Transactions" key="2">
+                  <VendorTransactions
+                    selectedVendorId={selectedVendorId}
+                    transactions={transactions}
+                    wallet={wallet}
+                  />
+                </TabPane>
+                <TabPane tab="Bank Accounts" key="3">
+                  <BankAccount selectedVendorId={selectedVendorId} />
+                </TabPane>
+                {process.env.REACT_APP_SITE_NAME === 'athathy' && (
+                  <TabPane tab="Document Upload" key="4">
+                    <Documents />
+                  </TabPane>
+                )}
+              </>
             )}
-        
           </Tabs>
         </div>
       </Form>

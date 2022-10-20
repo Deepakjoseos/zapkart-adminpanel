@@ -137,6 +137,7 @@ const singleImageUploader = async (
   return imgValue
 }
 
+// ypu can also used for uploading multiple images
 const bulkImagesUpload = async (imageCategoryId, images) => {
   const allImagesFiles = images.map((img) => img.originFileObj)
   console.log(allImagesFiles, 'yaaaa')
@@ -155,4 +156,32 @@ const bulkImagesUpload = async (imageCategoryId, images) => {
   }
 }
 
-export { multipleImageUpload, singleImageUploader, bulkImagesUpload }
+const fileDocUpload = async (file, fileValue, defaultValueUrl, imageFor) => {
+  if (file) {
+    console.log(file, 'show-correct')
+    try {
+      const asyncResult = await fileManagerService.uploadFile(
+        imageFor,
+        file
+        // formValues.images[1].originFileObj.name,
+      )
+      fileValue = asyncResult.file
+    } catch (err) {
+      // (await result).push(result.location);
+      notification.error({
+        message: 'Cannot upload Newly added File',
+      })
+
+      console.log(err.message, 'pls')
+    }
+  } else {
+    fileValue = defaultValueUrl
+  }
+  return fileValue
+}
+export {
+  multipleImageUpload,
+  singleImageUploader,
+  bulkImagesUpload,
+  fileDocUpload,
+}
