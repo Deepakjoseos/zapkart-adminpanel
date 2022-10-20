@@ -51,7 +51,7 @@ vendorService.addPickUpLocation = async function (data) {
     console.log(err, 'show-err')
   }
 }
-vendorService.verifyDocuments = async function (data,id) {
+vendorService.verifyDocument = async function (id, data) {
   try {
     const res = await fetch({
       url: `${apiRoute}/document/${id}/verify`,
@@ -63,10 +63,10 @@ vendorService.verifyDocuments = async function (data,id) {
     console.log(err, 'show-err')
   }
 }
-vendorService.uploadDocuments = async function (data,id) {
+vendorService.uploadDocuments = async function (id, data) {
   try {
     const res = await fetch({
-      url: `vendors/document/${id}`,
+      url: `${apiRoute}/documents/${id}`,
       method: 'put',
       data: data,
     })
@@ -75,14 +75,13 @@ vendorService.uploadDocuments = async function (data,id) {
     console.log(err, 'show-err')
   }
 }
-vendorService.getDocuments = async function (data,id) {
+vendorService.getDocumentsById = async function (id) {
   try {
     const res = await fetch({
-      url: `vendors/document/${id}`,
+      url: `${apiRoute}/documents/${id}`,
       method: 'get',
-      data: data,
     })
-    return res
+    return res.data
   } catch (err) {
     console.log(err, 'show-err')
   }
