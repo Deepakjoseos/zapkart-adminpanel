@@ -51,14 +51,13 @@ if (process.env.REACT_APP_SITE_NAME === 'athathy') {
       break
     case 'production':
       FirebaseConfig = {
-        apiKey: "AIzaSyDVRszGmdIg-Me-79_x9yuntOdt6Mz2LdM",
-  authDomain: "zapkartlive.firebaseapp.com",
-  projectId: "zapkartlive",
-  storageBucket: "zapkartlive.appspot.com",
-  messagingSenderId: "1010821971171",
-  appId: "1:1010821971171:web:dcd6a429a1f65cb3ead9d6",
-  measurementId: "G-MPNTK8NK93"
-
+        apiKey: 'AIzaSyDVRszGmdIg-Me-79_x9yuntOdt6Mz2LdM',
+        authDomain: 'zapkartlive.firebaseapp.com',
+        projectId: 'zapkartlive',
+        storageBucket: 'zapkartlive.appspot.com',
+        messagingSenderId: '1010821971171',
+        appId: '1:1010821971171:web:dcd6a429a1f65cb3ead9d6',
+        measurementId: 'G-MPNTK8NK93',
       }
       break
     case 'test':
