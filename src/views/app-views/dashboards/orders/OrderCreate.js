@@ -323,6 +323,8 @@ const OrderCreate = () => {
 
       if (process.env.REACT_APP_SITE_NAME === 'athathy') {
         baseurl = 'https://www.ecommercetest2.riolabz.com'
+      } else if (process.env.REACT_APP_SITE_NAME === 'awen') {
+        baseurl = 'https://www.ecommerce.riolabz.com'
       } else {
         if (process.env.NODE_ENV === 'development') {
           baseurl = 'https://www.ecommerce.riolabz.com'

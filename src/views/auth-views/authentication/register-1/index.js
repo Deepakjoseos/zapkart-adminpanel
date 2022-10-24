@@ -27,12 +27,20 @@ const RegisterOne = (props) => {
                       }`}
                       alt=""
                     />
+                  ) : process.env.REACT_APP_SITE_NAME === 'athathy' ? (
+                    <img
+                      className="img-fluid"
+                      src={`/img/${
+                        theme === 'light' ? 'athathy.png' : 'logo-white.png'
+                      }`}
+                      alt=""
+                    />
                   ) : (
-                    process.env.REACT_APP_SITE_NAME === 'athathy' && (
+                    process.env.REACT_APP_SITE_NAME === 'awen' && (
                       <img
                         className="img-fluid"
                         src={`/img/${
-                          theme === 'light' ? 'athathy.png' : 'logo-white.png'
+                          theme === 'light' ? 'awenlogo.png' : 'logo-white.png'
                         }`}
                         alt=""
                       />

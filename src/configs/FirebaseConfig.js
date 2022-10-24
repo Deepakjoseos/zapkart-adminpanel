@@ -31,6 +31,15 @@ if (process.env.REACT_APP_SITE_NAME === 'athathy') {
     messagingSenderId: '685790667408',
     appId: '1:685790667408:web:3b3cd5dd6b24815747ee15',
   }
+} else if (process.env.REACT_APP_SITE_NAME === 'awen') {
+  FirebaseConfig = {
+    apiKey: 'AIzaSyBUdVQKSYiMrWXKZLhpcR4pmtIUFa-40w0',
+    authDomain: 'zapkartnew2022-dc8a8.firebaseapp.com',
+    projectId: 'zapkartnew2022-dc8a8',
+    storageBucket: 'zapkartnew2022-dc8a8.appspot.com',
+    messagingSenderId: '812753080859',
+    appId: '1:812753080859:web:63d1a2c52ff2a2a5161ebe',
+  }
 } else {
   switch (process.env.NODE_ENV) {
     case 'development':
