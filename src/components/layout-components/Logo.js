@@ -29,19 +29,21 @@ const getLogoWidthGutter = (props, isMobile) => {
 
 const getLogo = (props) => {
   const { navCollapsed, logoType } = props
-  if (logoType === 'light') {
-    if (navCollapsed) {
-      return '/img/logo-sm-white.png'
-    }
-    return '/img/logo-white.png'
-  }
+  // if (logoType === 'light') {
+  //   if (navCollapsed) {
+  //     return '/img/logo-sm-white.png'
+  //   }
+  //   return '/img/logo-white.png'
+  // }
 
   if (navCollapsed) {
     return '/img/logo-sm.png'
   }
   return process.env.REACT_APP_SITE_NAME === 'zapkart'
     ? '/img/logo.png'
-    : process.env.REACT_APP_SITE_NAME === 'athathy' && '/img/athathy.png'
+    : process.env.REACT_APP_SITE_NAME === 'athathy'
+    ? '/img/athathy.png'
+    : process.env.REACT_APP_SITE_NAME === 'awen' && '/img/awenlogo.png'
 }
 
 const getLogoDisplay = (isMobile, mobileLogo) => {
@@ -60,7 +62,8 @@ export const Logo = (props) => {
       style={{ width: `${getLogoWidthGutter(props, isMobile)}` }}
     >
       {(process.env.REACT_APP_SITE_NAME === 'zapkart' ||
-        process.env.REACT_APP_SITE_NAME === 'athathy') && (
+        process.env.REACT_APP_SITE_NAME === 'athathy' ||
+        process.env.REACT_APP_SITE_NAME === 'awen') && (
         <img src={getLogo(props)} alt={`${APP_NAME} logo`} />
       )}
     </div>

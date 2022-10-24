@@ -23,9 +23,11 @@ export class Invoice extends Component {
             <div>
               {process.env.REACT_APP_SITE_NAME === 'zapkart' ? (
                 <img src="/img/logo.png" alt="" />
+              ) : process.env.REACT_APP_SITE_NAME === 'athathy' ? (
+                <img src="/img/athathy.png" alt="" />
               ) : (
-                process.env.REACT_APP_SITE_NAME === 'athathy' && (
-                  <img src="/img/athathy.png" alt="" />
+                process.env.REACT_APP_SITE_NAME === 'awen' && (
+                  <img src="/img/awenlogo.png" alt="" />
                 )
               )}
               <address>
