@@ -116,7 +116,10 @@ const MainBannerForm = (props) => {
     onChange: onChangeImages,
     fileList: fileListImages,
   }
-
+  useEffect(() => {
+    console.log(fileListImages, 'hey-me')
+    setImage(fileListImages)
+  }, [fileListImages])
  
   const propsMobileImages = {
     multiple: false,
@@ -125,10 +128,7 @@ const MainBannerForm = (props) => {
     onChange: onChangeMobileImages,
     fileList: fileListMobileImages,
   }
-  useEffect(() => {
-    console.log(fileListImages, 'hey-me')
-    setImage(fileListImages)
-  }, [fileListImages])
+  
 
 
   useEffect(() => {
@@ -171,7 +171,7 @@ const MainBannerForm = (props) => {
 
             
             values.mobileImage = mobileImgValue
-
+          
             const created = await mainBannerService.createMainBanner(values)
             if (created) {
               message.success(`Created ${values.name} to Main Banner list`)
