@@ -3,6 +3,8 @@ import { Input, Row, Col, Card, Form,Select, InputNumber ,TreeSelect} from 'antd
 const {Option} = Select
 
 const GeneralField = ({ form ,vendors,state,pincode,city}) => {
+  console.log("hiiii")
+  console.log(pincode)
   return (
     <Card>
       <Row gutter={16}>
@@ -64,7 +66,7 @@ const GeneralField = ({ form ,vendors,state,pincode,city}) => {
 
        
 
- <Form.Item name="stateId" label="state" >
+ <Form.Item name="state" label="state" >
       <TreeSelect placeholder="State" showSearch
         optionFilterProp="children"
         filterOption={(input, option) =>
@@ -82,7 +84,7 @@ const GeneralField = ({ form ,vendors,state,pincode,city}) => {
     
     <Row gutter={16}>
         <Col span={12}>
- <Form.Item name="cityId" label="city" >
+ <Form.Item name="city" label="city" >
       <TreeSelect placeholder="city" showSearch
         optionFilterProp="children"
         filterOption={(input, option) =>
@@ -99,12 +101,13 @@ const GeneralField = ({ form ,vendors,state,pincode,city}) => {
    
     
         <Col span={12}>
-    <Form.Item name="pincodeId" label="pincode" >
+    <Form.Item name="pincode" label="pincode" >
       <TreeSelect placeholder="pincode" showSearch
         optionFilterProp="children"
         filterOption={(input, option) =>
           option.title.toLowerCase().indexOf(input.toLowerCase()) >= 0
         } treeData={pincode} treeDefaultExpandAll>
+          
         {/* {deliveryLocations.map((cur) => (
           <Option value={cur.id} key={cur.id}>
             {cur.name}

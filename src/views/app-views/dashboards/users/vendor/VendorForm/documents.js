@@ -61,15 +61,7 @@ const Documents = ({ propsUploadtradelicense,mode,verifytradelicense,propsUpload
         <Option value={false}>No</Option>
       </Select>
     </Form.Item>
-            <Form.Item
-              hasFeedback
-              validateStatus={verifyemiratesID ? 'success' : 'error'}
-              name="emiratesID"
-              label="Verified"
-            >
-              <Input disabled id="success" />
-            </Form.Item>
-
+          
           </>
           : ""}
     
@@ -98,14 +90,7 @@ const Documents = ({ propsUploadtradelicense,mode,verifytradelicense,propsUpload
         <Option value={false}>No</Option>
       </Select>
     </Form.Item>
-            <Form.Item
-              hasFeedback
-              validateStatus={verifysignedContractCopy? 'success' : 'error'}
-              name="signedContractCopy"
-              label="Verified"
-            >
-              <Input disabled id="success" />
-            </Form.Item>
+           
 
           </>
           : ""}
@@ -130,14 +115,7 @@ const Documents = ({ propsUploadtradelicense,mode,verifytradelicense,propsUpload
         <Option value={false}>No</Option>
       </Select>
     </Form.Item>
-            <Form.Item
-              hasFeedback
-              validateStatus={verifypassportOrVisa? 'success' : 'error'}
-              name="passportOrVisa"
-              label="Verified"
-            >
-              <Input disabled id="success" />
-            </Form.Item>
+           
 
           </>
           : ""}
@@ -164,14 +142,7 @@ const Documents = ({ propsUploadtradelicense,mode,verifytradelicense,propsUpload
         <Option value={false}>No</Option>
       </Select>
     </Form.Item>
-            <Form.Item
-              hasFeedback
-              validateStatus={verifyvatTrnCertificate? 'success' : 'error'}
-              name="vatTrnCertificate"
-              label="Verified"
-            >
-              <Input disabled id="success" />
-            </Form.Item>
+           
 
           </>
           : ""}

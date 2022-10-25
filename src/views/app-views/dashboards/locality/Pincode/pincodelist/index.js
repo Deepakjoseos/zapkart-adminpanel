@@ -186,33 +186,33 @@ const Pincodelist = () => {
 
   const tableColumns = [
     {
-      title: 'Pincode',
+      title: 'City',
       dataIndex: 'name',
       sorter: (a, b) => utils.antdTableSorter(a, b, 'pincodeName'),
     },
-    {
-      title: 'City',
-      dataIndex: 'cityName',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'cityName'),
-    },
-    {
-      title: 'District',
-      dataIndex: 'districtName',
+    // {
+    //   title: 'City',
+    //   dataIndex: 'cityName',
+    //   sorter: (a, b) => utils.antdTableSorter(a, b, 'cityName'),
+    // },
+    // {
+    //   title: 'District',
+    //   dataIndex: 'districtName',
      
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'districtName'),
-    },
-    {
-      title: 'State',
-      dataIndex: 'stateName',
+    //   sorter: (a, b) => utils.antdTableSorter(a, b, 'districtName'),
+    // },
+    // {
+    //   title: 'State',
+    //   dataIndex: 'stateName',
      
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'stateName'),
-    },
-    {
-      title: 'Country',
-      dataIndex: 'countryName',
+    //   sorter: (a, b) => utils.antdTableSorter(a, b, 'stateName'),
+    // },
+    // {
+    //   title: 'Country',
+    //   dataIndex: 'countryName',
      
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'countryName'),
-    },
+    //   sorter: (a, b) => utils.antdTableSorter(a, b, 'countryName'),
+    // },
     {
       title: 'Priority',
       dataIndex: 'priority',
@@ -360,7 +360,7 @@ const Pincodelist = () => {
             icon={<PlusCircleOutlined />}
             block
           >
-            Add Pincode
+            Add City
           </Button>
         </div>
       </Flex>

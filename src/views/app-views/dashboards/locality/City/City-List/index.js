@@ -220,28 +220,28 @@ const CityList = () => {
 
   const tableColumns = [
     {
-      title: 'City',
+      title: 'Emirates',
       dataIndex: 'name',
       sorter: (a, b) => utils.antdTableSorter(a, b, 'cityName'),
     },
-    {
-      title: 'District',
-      dataIndex: 'districtName',
+    // {
+    //   title: 'District',
+    //   dataIndex: 'districtName',
      
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'districtName'),
-    },
-    {
-      title: 'State',
-      dataIndex: 'stateName',
+    //   sorter: (a, b) => utils.antdTableSorter(a, b, 'districtName'),
+    // },
+    // {
+    //   title: 'State',
+    //   dataIndex: 'stateName',
      
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'stateName'),
-    },
-    {
-      title: 'Country',
-      dataIndex: 'countryName',
+    //   sorter: (a, b) => utils.antdTableSorter(a, b, 'stateName'),
+    // },
+    // {
+    //   title: 'Country',
+    //   dataIndex: 'countryName',
      
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'countryName'),
-    },
+    //   sorter: (a, b) => utils.antdTableSorter(a, b, 'countryName'),
+    // },
     {
       title: 'Priority',
       dataIndex: 'priority',
@@ -355,7 +355,7 @@ const CityList = () => {
             icon={<PlusCircleOutlined />}
             block
           >
-            Add City
+            Add Emirates
           </Button>
         </div>
       </Flex>

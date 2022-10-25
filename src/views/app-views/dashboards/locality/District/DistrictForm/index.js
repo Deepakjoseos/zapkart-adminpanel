@@ -66,6 +66,7 @@ const DistrictForm = (props) => {
        setState(list)
      }
    }
+ 
   }
  
 
@@ -182,8 +183,8 @@ const DistrictForm = (props) => {
             >
               <h2 className="mb-3">
                 {mode === 'ADD'
-                  ? 'Add New District'
-                  : `Edit District`}
+                  ? 'Add New Country'
+                  : `Edit Country`}
               </h2>
               <div className="mb-3">
                 <Button
