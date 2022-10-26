@@ -48,30 +48,30 @@ districtService.getDistrictById = async function (id) {
 
 districtService.createDistrict = async function (data) {
   try {
-    let country = await countryService.getCountry();
-    if (country.data.length === 0)
-      country = await countryService.createCountry({
-        name: "COUNTRY_",
-        priority: 1,
-        status: "Active",
-      });
-
     let state = await stateService.getState();
-    if (state.data.length === 0)
+    if (state.data.length === 0) {
+      let country = await countryService.getCountry();
+      if (country.data.length === 0)
+        country = await countryService.createCountry({
+          name: "COUNTRY_",
+          priority: 1,
+          status: "Active",
+        });
+
       state = await stateService.createState({
         name: "STATE_",
         countryId: country.data.id || country.data[0].id,
         priority: 2,
         status: "Active",
       });
+    }
 
     const res = await fetch({
       url: `/district`,
       method: "post",
       data: {
         ...data,
-        countryId: country.data[0].id,
-        stateId: state.data[0].id,
+        stateId: state.data.id || state.data[0].id,
       },
     });
     return res;
