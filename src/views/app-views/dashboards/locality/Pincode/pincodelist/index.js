@@ -311,8 +311,8 @@ const Pincodelist = () => {
             </Select>
           </Form.Item>
         </Col>
-        <Col md={6} sm={24} xs={24} lg={6}>
-          <Form.Item name="cityId" label="City">
+        {/* <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="cityId" label="Emirates">
             <Select
               showSearch
               optionFilterProp="children"
@@ -323,11 +323,11 @@ const Pincodelist = () => {
               style={{ minWidth: 180 }}
               // onChange={(value) => setSelectedBrandId(value)}
               // onSelect={handleQuery}
-              placeholder="City"
+              placeholder="Country"
             // value={selectedBrandId}
             >
               <Option value="">All</Option>
-              {cities.map((item) => (
+              {city.map((item) => (
                 <Option key={item.id} value={item.id}>
                   {item.name}
                 </Option>
@@ -335,6 +335,8 @@ const Pincodelist = () => {
             </Select>
           </Form.Item>
         </Col>
+        */}
+        
         <Col className="mb-4">
           <Button type="primary" onClick={handleFilterSubmit}>
             Filter

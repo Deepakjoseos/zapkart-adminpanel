@@ -53,19 +53,15 @@ const GeneralField = ({ form_statuses,state}) => (
             ))}
           </Select>
         </Form.Item>
-        <Form.Item name="stateId" label="state" >
+        {/* <Form.Item name="stateId" label="state" >
       <TreeSelect placeholder="State" showSearch
         optionFilterProp="children"
         filterOption={(input, option) =>
           option.title.toLowerCase().indexOf(input.toLowerCase()) >= 0
         } treeData={state} treeDefaultExpandAll>
-        {/* {deliveryLocations.map((cur) => (
-          <Option value={cur.id} key={cur.id}>
-            {cur.name}
-          </Option>
-        ))}  */}
+ 
       </TreeSelect>
-    </Form.Item>
+    </Form.Item> */}
       </Card>
     </Col>
     <Col xs={24} sm={24} md={7}>

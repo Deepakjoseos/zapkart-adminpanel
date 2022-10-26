@@ -308,7 +308,7 @@ const CityList = () => {
           </Form.Item>
         </Col>
         <Col md={6} sm={24} xs={24} lg={6}>
-          <Form.Item name="districtId" label="District">
+          <Form.Item name="districtId" label="Country">
             <Select
               showSearch
               optionFilterProp="children"
@@ -319,7 +319,7 @@ const CityList = () => {
               style={{ minWidth: 180 }}
               // onChange={(value) => setSelectedBrandId(value)}
               // onSelect={handleQuery}
-              placeholder="District"
+              placeholder="Country"
             // value={selectedBrandId}
             >
               <Option value="">All</Option>
