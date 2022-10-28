@@ -186,23 +186,23 @@ const DistrictList = () => {
 
   const tableColumns = [
     {
-      title: 'District',
+      title: 'Country',
       dataIndex: 'name',
      
       sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
     },
-    {
-      title: 'State',
-      dataIndex: 'stateName',
+    // {
+    //   title: 'State',
+    //   dataIndex: 'stateName',
      
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'stateName'),
-    },
-    {
-      title: 'Country',
-      dataIndex: 'countryName',
+    //   sorter: (a, b) => utils.antdTableSorter(a, b, 'stateName'),
+    // },
+    // {
+    //   title: 'Country',
+    //   dataIndex: 'countryName',
      
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'countryName'),
-    },
+    //   sorter: (a, b) => utils.antdTableSorter(a, b, 'countryName'),
+    // },
     {
       title: 'Priority',
       dataIndex: 'priority',
@@ -301,30 +301,7 @@ const DistrictList = () => {
             </Select>
           </Form.Item>
         </Col>
-        <Col md={6} sm={24} xs={24} lg={6}>
-          <Form.Item name="stateId" label="State">
-            <Select
-              showSearch
-              optionFilterProp="children"
-              filterOption={(input, option) =>
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }
-              className="w-100"
-              style={{ minWidth: 180 }}
-              // onChange={(value) => setSelectedBrandId(value)}
-              // onSelect={handleQuery}
-              placeholder="States"
-            // value={selectedBrandId}
-            >
-              <Option value="">All</Option>
-              {states.map((item) => (
-                <Option key={item.id} value={item.id}>
-                  {item.name}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
-        </Col>
+      
         <Col className="mb-4">
           <Button type="primary" onClick={handleFilterSubmit}>
             Filter
@@ -350,7 +327,7 @@ const DistrictList = () => {
             icon={<PlusCircleOutlined />}
             block
           >
-            Add District
+            Add Country
           </Button>
         </div>
       </Flex>

@@ -51,8 +51,8 @@ const GeneralField = ({ form_statuses,state}) => (
             ))}
           </Select>
         </Form.Item>
-        <Form.Item name="cityId" label="city" >
-      <TreeSelect placeholder="city" showSearch
+        <Form.Item name="cityId" label="Emirates" >
+      <TreeSelect placeholder="Emirates" showSearch
         optionFilterProp="children"
         filterOption={(input, option) =>
           option.title.toLowerCase().indexOf(input.toLowerCase()) >= 0

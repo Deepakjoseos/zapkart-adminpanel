@@ -176,8 +176,8 @@ useEffect(() => {
             >
               <h2 className="mb-3">
                 {mode === 'ADD'
-                  ? 'Add New City'
-                  : `Edit City`}
+                  ? 'Add New Emirates'
+                  : `Edit Emirates`}
                   {' '}
               </h2>
               <div className="mb-3">

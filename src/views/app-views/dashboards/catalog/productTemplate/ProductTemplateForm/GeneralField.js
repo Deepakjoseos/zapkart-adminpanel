@@ -750,7 +750,7 @@ const GeneralField = ({
           >
             <CustomIcon className="display-3" svg={ImageSvg} />
           </Upload>
-          size: 600px * 405px
+          size: 570px * 430px
         </Card>
       </Col>
     </Row>

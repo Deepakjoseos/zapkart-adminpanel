@@ -50,14 +50,7 @@ const DistrictForm = (props) => {
     const data = await stateService.getState()
     if (data) {
       if (mode === EDIT) {
-     //   const deliveryLocs = data.filter(
-     //     (cur) => cur.isFinal !== true && cur.id !== param.id
-     //   )
-     //   setDeliveryLocations(deliveryLocs)
-     // } else {
-     //   const deliveryLocs = data.filter((cur) => cur.isFinal !== true)
-     //   setDeliveryLocations(deliveryLocs)
-     // }
+
      const restCats = data.data.filter((cat) => cat.id !== param.id)
        const list = Utils.createCategoryList(restCats)
        setState(list)
@@ -66,6 +59,7 @@ const DistrictForm = (props) => {
        setState(list)
      }
    }
+ 
   }
  
 
@@ -77,6 +71,7 @@ const DistrictForm = (props) => {
   
 
   
+ 
   useEffect(() => {
    
     if (mode === EDIT) {
@@ -84,42 +79,31 @@ const DistrictForm = (props) => {
         const data = await districtService.getDistrictById(param.id)
         if (data) {
           // For Image upload
-          let himg = []
-          if (data.image) {
-            himg = [
-              {
-                uid: Math.random() * 1000,
-                name: Utils.getBaseName(data.image),
-                url: data.image,
-                thumbUrl: data.image,
-              },
-            ]
-
-          
-           
-          }
+         
           form.setFieldsValue({
+           
+            
             name: data.name,
+            priority:data.priority,
             status: data.status,
-            stateId:data.stateId,
-            priority:data.priority
+            
+          
+        
 
           })
-        } else {
-          history.replace(
-            '/app/dashboards/locality/district/districtlist'
-          )
-        }
+        } 
       }
+      
 
       fetchDistrictById()
     }
+    
   }, [form, mode, param, props])
-
-    // Image Upload
-
-//Image Upload
+  
  
+
+
+   
 
   const onFinish = async () => {
     setSubmitLoading(false)
@@ -127,13 +111,15 @@ const DistrictForm = (props) => {
       .validateFields()
       .then(async (values) => {
         if (mode === ADD) {
-      
+            console.log(values, "hiiiiiii")
             const created = await districtService.createDistrict(values)
             if (created) {
+              
               message.success(`Created ${values.name} to Districtlist`)
               history.goBack()
             }
           }
+          
         
         
         if (mode === EDIT) {
@@ -182,8 +168,8 @@ const DistrictForm = (props) => {
             >
               <h2 className="mb-3">
                 {mode === 'ADD'
-                  ? 'Add New District'
-                  : `Edit District`}
+                  ? 'Add New Country'
+                  : `Edit Country`}
               </h2>
               <div className="mb-3">
                 <Button

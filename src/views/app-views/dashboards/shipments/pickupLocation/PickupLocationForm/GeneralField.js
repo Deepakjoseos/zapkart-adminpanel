@@ -3,6 +3,8 @@ import { Input, Row, Col, Card, Form,Select, InputNumber ,TreeSelect} from 'antd
 const {Option} = Select
 
 const GeneralField = ({ form ,vendors,state,pincode,city}) => {
+  console.log("hiiii")
+  console.log(pincode)
   return (
     <Card>
       <Row gutter={16}>
@@ -64,8 +66,8 @@ const GeneralField = ({ form ,vendors,state,pincode,city}) => {
 
        
 
- <Form.Item name="stateId" label="state" >
-      <TreeSelect placeholder="State" showSearch
+ <Form.Item name="state" label="Country" >
+      <TreeSelect placeholder="Country" showSearch
         optionFilterProp="children"
         filterOption={(input, option) =>
           option.title.toLowerCase().indexOf(input.toLowerCase()) >= 0
@@ -82,8 +84,8 @@ const GeneralField = ({ form ,vendors,state,pincode,city}) => {
     
     <Row gutter={16}>
         <Col span={12}>
- <Form.Item name="cityId" label="city" >
-      <TreeSelect placeholder="city" showSearch
+ <Form.Item name="city" label="Emirates" >
+      <TreeSelect placeholder="Emirates" showSearch
         optionFilterProp="children"
         filterOption={(input, option) =>
           option.title.toLowerCase().indexOf(input.toLowerCase()) >= 0
@@ -99,12 +101,13 @@ const GeneralField = ({ form ,vendors,state,pincode,city}) => {
    
     
         <Col span={12}>
-    <Form.Item name="pincodeId" label="pincode" >
-      <TreeSelect placeholder="pincode" showSearch
+    <Form.Item name="pincode" label="City" >
+      <TreeSelect placeholder="City" showSearch
         optionFilterProp="children"
         filterOption={(input, option) =>
           option.title.toLowerCase().indexOf(input.toLowerCase()) >= 0
         } treeData={pincode} treeDefaultExpandAll>
+          
         {/* {deliveryLocations.map((cur) => (
           <Option value={cur.id} key={cur.id}>
             {cur.name}

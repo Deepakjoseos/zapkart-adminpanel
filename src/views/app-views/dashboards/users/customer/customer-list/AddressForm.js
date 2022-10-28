@@ -4,6 +4,7 @@ import Flex from 'components/shared-components/Flex'
 import React, { useEffect, useState } from 'react'
 import customerService from 'services/customer'
 import constantsService from 'services/constants'
+
 const { Option } = Select
 
 const AddressForm = ({
@@ -15,7 +16,7 @@ const AddressForm = ({
   setViewFormModal,
   selectedCustomerId,
   refetchData,
-  city,state,country
+  city,state,country,pincode,district
 }) => {
   const [form] = Form.useForm()
   const [submitLoading, setSubmitLoading] = useState(false)
@@ -113,9 +114,20 @@ const AddressForm = ({
               <Form.Item name="line1" label="Address" rules={rules.line1}>
                 <Input.TextArea rows={4} placeholder="Address" />
               </Form.Item>
-              <Form.Item name="stateId" label="state" >
-          <Select placeholder="state">
-              {state.map((item) => (
+
+              <Form.Item name="countryId" label="Country" >
+          <Select placeholder="Country">
+              {district.map((item) => (
+                <Option key={item.id} value={item.id}>
+                  {item.name}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+
+              <Form.Item name="cityId" label="Emirates" >
+          <Select placeholder="Emirates">
+              {city.map((item) => (
                 <Option key={item.id} value={item.id}>
                   {item.name}
                 </Option>
@@ -125,11 +137,11 @@ const AddressForm = ({
    
     
   
-    <Form.Item name="cityId" label="City" >
+    <Form.Item name="pincodeId" label="City" >
           <Select placeholder="City">
-              {city.map((item) => (
-                <Option key={item.id} value={item.id}>
-                  {item.name}
+              {pincode.map((pincode) => (
+                <Option key={pincode.id} value={pincode.id}>
+                  {pincode.name}
                 </Option>
               ))}
             </Select>
@@ -137,15 +149,7 @@ const AddressForm = ({
     
    
     
-        <Form.Item name="countryId" label="Country" >
-          <Select placeholder="pincode">
-              {country.map((item) => (
-                <Option key={item.id} value={item.id}>
-                  {item.name}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
+      
 
               <Form.Item name="phone" label="Phone" rules={rules.phone}>
                 <Input type="tel" placeholder="Phone" />
