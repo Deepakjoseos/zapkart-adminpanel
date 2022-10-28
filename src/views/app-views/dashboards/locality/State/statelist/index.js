@@ -196,15 +196,15 @@ const Statelist = () => {
 
   const tableColumns = [
     {
-      title: 'State',
+      title: 'Emirates',
       dataIndex: 'name',
       sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
     },
-    {
-      title: 'Country',
-      dataIndex: 'countryName',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'countryName'),
-    },
+    // {
+    //   title: 'Country',
+    //   dataIndex: 'countryName',
+    //   sorter: (a, b) => utils.antdTableSorter(a, b, 'countryName'),
+    // },
     {
       title: 'Priority',
       dataIndex: 'priority',

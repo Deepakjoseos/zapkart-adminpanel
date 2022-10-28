@@ -158,7 +158,7 @@ const PincodeForm = (props) => {
               alignItems="center"
             >
               <h2 className="mb-3">
-                {mode === "ADD" ? "Add New Pincode" : `Edit Pincode`}
+                {mode === "ADD" ? "Add New City" : `Edit City`}
               </h2>
               <div className="mb-3">
                 <Button

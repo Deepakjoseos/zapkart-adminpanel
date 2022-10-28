@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import {
   Card,
   Table,
@@ -7,25 +7,25 @@ import {
   Button,
   Menu,
   Tag,
-  notification,
-  Drawer,
+  Form,
+  Row,
+  Col,
 } from 'antd'
-// import CustomerListData from 'assets/data/product-list.data.json'
+// import BrandListData from 'assets/data/product-list.data.json'
 import {
   EyeOutlined,
   DeleteOutlined,
   SearchOutlined,
-  EditOutlined,
   PlusCircleOutlined,
 } from '@ant-design/icons'
+import AvatarStatus from 'components/shared-components/AvatarStatus'
 import EllipsisDropdown from 'components/shared-components/EllipsisDropdown'
 import Flex from 'components/shared-components/Flex'
 import { useHistory } from 'react-router-dom'
+import qs from 'qs'
 import utils from 'utils'
-import customerService from 'services/customer'
-import AvatarStatus from 'components/shared-components/AvatarStatus'
-import { groupList } from 'views/app-views/pages/profile/profileData'
-import taxCategoryService from 'services/TaxCategory'
+import brandService from 'services/brand'
+import _ from 'lodash'
 import mainBannerService from 'services/MainBanner'
 import constantsService from 'services/constants'
 
@@ -49,43 +49,72 @@ const getStockStatus = (status) => {
   return null
 }
 const MainBannerList = () => {
-  let history = useHistory()
+let history = useHistory()
+const [form] = Form.useForm()
 
-  const [list, setList] = useState([])
-  const [searchBackupList, setSearchBackupList] = useState([])
-  const [selectedRows, setSelectedRows] = useState([])
-  const [selectedRowKeys, setSelectedRowKeys] = useState([])
-  const [statuses, setStatuses] = useState([])
+const [list, setList] = useState([])
+const [selectedRows, setSelectedRows] = useState([])
 
-  const getMainBanners = async () => {
-    const data = await mainBannerService.getMainBanners()
-    if (data) {
-      setList(data.data)
-      setSearchBackupList(data.data)
+// Added for Pagination
+const [loading, setLoading] = useState(false)
+const [filterEnabled, setFilterEnabled] = useState(false)
+const[statuses,setStatuses]= useState([])
 
+// pagination
+const [pagination, setPagination] = useState({
+  current: 1,
+  pageSize: 15,
+})
 
-    }
+// Changed here for pagination
+const getMainBanners = async (paginationParams = {}, filterParams) => {
+  setLoading(true)
+  const data = await mainBannerService.getMainBanners(
+    qs.stringify(getPaginationParams(paginationParams)),
+    qs.stringify(filterParams)
+  )
+
+  if (data) {
+    setList(data.data)
+
+    // Pagination
+    setPagination({
+      ...paginationParams.pagination,
+      total: data.total,
+    })
+    setLoading(false)
   }
-  const fetchConstants = async () => {
-    const data = await constantsService.getConstants()
-    if (data) {
-      // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
+}
 
-      setStatuses(Object.values(data.GENERAL['STATUS']))
+useEffect(() => {
+  getMainBanners({
+    pagination,
+  })
+  fetchConstants()
+}, [])
 
-    }
-  }
+// pagination generator
+const getPaginationParams = (params) => ({
+  limit: params.pagination?.pageSize,
+  page: params.pagination?.current,
+  // ...params,
+})
 
-  useEffect(() => {
-    getMainBanners()
-    fetchConstants()
-  }, [])
+// On pagination Change
+const handleTableChange = (newPagination) => {
+  getMainBanners(
+    {
+      pagination: newPagination,
+    },
+    filterEnabled ? _.pickBy(form.getFieldsValue(), _.identity) : {}
+  )
+}
 
   const dropdownMenu = (row) => (
     <Menu>
-      <Menu.Item onClick={() => editMainBanner(row.id)}>
+      <Menu.Item onClick={() => viewDetails(row)}>
         <Flex alignItems="center">
-          <EditOutlined />
+          <EyeOutlined />
           <span className="ml-2">View Details</span>
         </Flex>
       </Menu.Item>
@@ -99,9 +128,16 @@ const MainBannerList = () => {
           </span>
         </Flex>
       </Menu.Item>
-
     </Menu>
   )
+
+  const addProduct = () => {
+    history.push(`/app/dashboards/catalog/main-banner/add-main-banner`)
+  }
+
+  const viewDetails = (row) => {
+    history.push(`/app/dashboards/catalog/main-banner/edit-main-banner/${row.id}`)
+  }
 
   const deleteRow = async (row) => {
     const resp = await mainBannerService.deleteMainBanner(row.id)
@@ -121,35 +157,51 @@ const MainBannerList = () => {
       }
     }
   }
+   // Pagination
+   const resetPagination = () => ({
+    ...pagination,
+    current: 1,
+    pageSize: 10,
+  })
 
-  const editMainBanner = (id) => {
-    history.push(`/app/dashboards/catalog/main-banner/edit-main-banner/${id}`)
+  // Filter Submit
+  const handleFilterSubmit = async () => {
+    setPagination(resetPagination())
+
+    form
+      .validateFields()
+      .then(async (values) => {
+        setFilterEnabled(true)
+        // Removing falsy Values from values
+        const sendingValues = _.pickBy(values, _.identity)
+        getMainBanners({ pagination: resetPagination() }, sendingValues)
+      })
+      .catch((info) => {
+        console.log('info', info)
+        setFilterEnabled(false)
+      })
   }
 
-  // const deleteRow = async (row) => {
-  //   const resp = await customerService.deleteUserGroup(row.id)
+  // Clear Filter
+  const handleClearFilter = async () => {
+    form.resetFields()
 
-  //   if (resp) {
-  //     const objKey = 'id'
-  //     let data = list
-  //     if (selectedRows.length > 1) {
-  //       selectedRows.forEach((elm) => {
-  //         data = utils.deleteArrayRow(data, objKey, elm.id)
-  //         setList(data)
-  //         setSelectedRows([])
-  //       })
-  //     } else {
-  //       data = utils.deleteArrayRow(data, objKey, row.id)
-  //       setList(data)
-  //     }
-  //   }
-  // }
-  const addMainBanner = () => {
-    history.push(`/app/dashboards/catalog/main-banner/add-main-banner`)
+    setPagination(resetPagination())
+    getMainBanners({ pagination: resetPagination() }, {})
+    setFilterEnabled(false)
   }
-
-
-
+  
+  
+  const fetchConstants = async () => {
+    const data = await constantsService.getConstants()
+    if (data) {
+      // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
+  
+      setStatuses(Object.values(data.GENERAL['STATUS']))
+  
+    }
+  }
+  
   const tableColumns = [
     {
       title: 'Main Banner',
@@ -195,73 +247,87 @@ const MainBannerList = () => {
     },
   ]
 
-  const onSearch = (e) => {
-    const value = e.currentTarget.value
-    const searchArray = e.currentTarget.value ? list : searchBackupList
-    const data = utils.wildCardSearch(searchArray, value)
-    setList(data)
-    setSelectedRowKeys([])
-  }
 
-  const handleShowStatus = (value) => {
-    if (value !== 'All') {
-      const key = 'status'
-      const data = utils.filterArray(searchBackupList, key, value)
-      setList(data)
-    } else {
-      setList(searchBackupList)
-    }
-  }
 
-  const filters = () => (
-    <Flex className="mb-1" mobileFlex={false}>
-      <div className="mr-md-3 mb-3">
-        <Input
-          placeholder="Search"
-          prefix={<SearchOutlined />}
-          onChange={(e) => onSearch(e)}
-        />
-      </div>
-      <div className="mb-3">
 
-        <Select
-          className="w-100"
-          style={{ minWidth: 180 }}
-          placeholder="Status"
-        >
-          <Option value="">All</Option>
-          {statuses.map((item) => (
-            <Option key={item.id} value={item}>
-              {item}
-            </Option>
-          ))}
-        </Select>
 
-      </div>
-    </Flex>
+   // Table Filters JSX Elements
+  const filtersComponent = () => (
+    <Form
+      layout="vertical"
+      form={form}
+      name="filter_form"
+      className="ant-advanced-search-form"
+    >
+      <Row gutter={8} align="bottom">
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="search" label="Search">
+            <Input placeholder="Search" prefix={<SearchOutlined />} />
+          </Form.Item>
+        </Col>
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="status" label="Status">
+          <Select
+              className="w-100"
+              style={{ minWidth: 180 }}
+              placeholder="Status"
+            >
+              <Option value="">All</Option>
+            {statuses.map((item) => (
+                <Option key={item.id} value={item}>
+                  {item}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </Col>
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="orderByPriority" label="OrderByPriority">
+            <Select className="w-100" placeholder="OrderBy Priority">
+              <Option value="">All</Option>
+              <Option value="true">Yes</Option>
+              <Option value="false">No</Option>
+            </Select>
+          </Form.Item>
+        </Col>
+        <Col className="mb-4">
+          <Button type="primary" onClick={handleFilterSubmit}>
+            Filter
+          </Button>
+        </Col>
+        <Col className="mb-4">
+          <Button type="primary" onClick={handleClearFilter}>
+            Clear
+          </Button>
+        </Col>
+      </Row>
+    </Form>
   )
-
   return (
     <Card>
-      <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
-        {filters()}
-        <div>
-          <Button
-            onClick={addMainBanner}
-            type="primary"
-            icon={<PlusCircleOutlined />}
-            block
-          >
-            Add Main Banner
-          </Button>
-        </div>
-      </Flex>
-      <div className="table-responsive">
-        <Table columns={tableColumns} dataSource={list} rowKey="id" />
-
-
-      </div>
-    </Card>
+    {/* <Flex alignItems="center" justifyContent="between" mobileFlex={false}> */}
+    {filtersComponent()}
+    {/* </Flex> */}
+    <div>
+      <Button
+        onClick={addProduct}
+        type="primary"
+        icon={<PlusCircleOutlined />}
+      >
+        Add Banner
+      </Button>
+    </div>
+    <div className="table-responsive">
+      <Table
+        columns={tableColumns}
+        dataSource={list}
+        rowKey="id"
+        pagination={pagination}
+        loading={loading}
+        onChange={handleTableChange}
+      />
+    </div>
+  </Card>
   )
 }
 

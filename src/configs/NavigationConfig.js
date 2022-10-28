@@ -395,30 +395,30 @@ const dashBoardNavTree = [
         icon: HomeOutlined,
         breadcrumb: false,
         submenu: [
-          {
-            key: 'dashboards-locality-country',
-            path: `${APP_PREFIX_PATH}/dashboards/locality/country/country-list`,
-            title: 'Country',
-            icon: AppstoreOutlined,
-            breadcrumb: false,
-            submenu: [],
-          },
+          // {
+          //   key: 'dashboards-locality-country',
+          //   path: `${APP_PREFIX_PATH}/dashboards/locality/country/country-list`,
+          //   title: 'Country',
+          //   icon: AppstoreOutlined,
+          //   breadcrumb: false,
+          //   submenu: [],
+          // },
 
-          {
-            key: 'dashboards-locality-state',
-            path: `${APP_PREFIX_PATH}/dashboards/locality/state/statelist`,
-            title:
-              process.env.REACT_APP_SITE_NAME === 'athathy'
-                ? 'Emirates'
-                : 'State',
-            icon: AppstoreOutlined,
-            breadcrumb: false,
-            submenu: [],
-          },
+          // {
+          //   key: 'dashboards-locality-state',
+          //   path: `${APP_PREFIX_PATH}/dashboards/locality/state/statelist`,
+          //   title:
+          //     process.env.REACT_APP_SITE_NAME === 'athathy'
+          //       ? 'Emirates'
+          //       : 'State',
+          //   icon: AppstoreOutlined,
+          //   breadcrumb: false,
+          //   submenu: [],
+          // },
           {
             key: 'dashboards-locality-district',
             path: `${APP_PREFIX_PATH}/dashboards/locality/district/districtlist`,
-            title: 'District',
+            title: 'Country',
             icon: AppstoreOutlined,
             breadcrumb: false,
             submenu: [],
@@ -426,7 +426,7 @@ const dashBoardNavTree = [
           {
             key: 'dashboards-locality-city',
             path: `${APP_PREFIX_PATH}/dashboards/locality/city/city-list`,
-            title: 'City',
+            title: 'Emirates',
             icon: AppstoreOutlined,
             breadcrumb: false,
             submenu: [],
@@ -434,7 +434,7 @@ const dashBoardNavTree = [
           {
             key: 'dashboards-locality-pincode',
             path: `${APP_PREFIX_PATH}/dashboards/locality/pincode/pincodelist`,
-            title: 'Pincode',
+            title: 'City',
             icon: AppstoreOutlined,
             breadcrumb: false,
             submenu: [],

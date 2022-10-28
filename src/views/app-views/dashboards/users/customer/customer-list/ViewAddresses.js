@@ -8,6 +8,8 @@ import utils from 'utils'
 import countryService from 'services/country'
 import stateService from 'services/state'
 import cityService from 'services/city'
+import districtService from 'services/district'
+import pincodeService from 'services/pincode'
 
 
 
@@ -25,6 +27,8 @@ const ViewAddresses = ({
   const [country ,setCountry]=useState([])
   const [city ,setCity]=useState([])
   const [state ,setState]=useState([])
+  const [pincode ,setPincode]=useState([])
+  const [district ,setDistrict]=useState([])
 
   const getCity = async ()=>{
     const data = await cityService.getCity()
@@ -44,12 +48,26 @@ const ViewAddresses = ({
       setCountry(data.data)
     }
       }
+      const getPincode = async ()=>{
+        const data = await pincodeService.getPincode()
+        if(data){
+          setPincode(data.data)
+        }
+      }
+      const getDistrict = async ()=>{
+        const data = await districtService.getDistrict()
+        if(data){
+          setDistrict(data.data)
+        }
+          }
   
   useEffect(()=>{
  
   getCity()
   getState()
   getCountry()
+  getDistrict()
+  getPincode()
   
   },[])
 
@@ -135,6 +153,8 @@ const ViewAddresses = ({
         city={city}
         state={state}
         country={country}
+        pincode={pincode}
+        district ={district}
       />
 
     </div>

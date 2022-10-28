@@ -3,10 +3,10 @@ import fetch from 'auth/FetchInterceptor'
 const mainBannerService = {}
 const apiRoute = '/mainbanners'
 
-mainBannerService.getMainBanners = async function () {
+mainBannerService.getMainBanners = async function (paginationQuery = '', filterQuery = '') {
     try {
       const res = await fetch({
-        url: `${apiRoute}/public`,
+        url: `${apiRoute}?${paginationQuery}&${filterQuery}`,
         method: 'get',
       })
       const data = res.data.filter((cur) => cur.status !== 'Deleted')

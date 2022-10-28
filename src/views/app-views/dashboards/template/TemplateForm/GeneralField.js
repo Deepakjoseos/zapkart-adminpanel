@@ -198,14 +198,24 @@ const GeneralField = ({ form, tempConstants, form_statuses }) => {
                 label="SMS Content"
                 rules={rules.smsContent}
               >
-                <Editor
+                <Input
                   placeholder="Write something..."
-                  editorHtml={form.getFieldValue('smsContent') || ''}
-                  onChange={(e) => form.setFieldsValue({ smsContent: e })}
+                  // editorHtml={form.getFieldValue('smsContent') || ''}
+                  // onChange={(e) => form.setFieldsValue({ smsContent: e })}
                   name="smsContent"
                 />
               </Form.Item>
+              <Form.Item name="smsStatus" label="Status" rules={rules.status}>
+                <Select placeholder="Status">
+                  {form_statuses.map((item) => (
+                    <Option key={item.id} value={item}>
+                      {item}
+                    </Option>
+                  ))}
+                </Select>
+              </Form.Item>
             </Col>
+           
             <Col xs={24} sm={24} md={8}>
               <h5>Copy Keys</h5>
               <div
@@ -241,17 +251,7 @@ const GeneralField = ({ form, tempConstants, form_statuses }) => {
                 />
               </div>
             </Col>
-            <Col xs={24} sm={24} md={16}>
-              <Form.Item name="smsStatus" label="Status" rules={rules.status}>
-                <Select placeholder="Status">
-                  {form_statuses.map((item) => (
-                    <Option key={item.id} value={item}>
-                      {item}
-                    </Option>
-                  ))}
-                </Select>
-              </Form.Item>
-            </Col>
+           
           </Row>
         </Card>
 

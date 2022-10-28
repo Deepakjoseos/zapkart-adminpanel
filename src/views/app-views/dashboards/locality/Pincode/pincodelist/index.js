@@ -186,33 +186,33 @@ const Pincodelist = () => {
 
   const tableColumns = [
     {
-      title: 'Pincode',
+      title: 'City',
       dataIndex: 'name',
       sorter: (a, b) => utils.antdTableSorter(a, b, 'pincodeName'),
     },
-    {
-      title: 'City',
-      dataIndex: 'cityName',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'cityName'),
-    },
-    {
-      title: 'District',
-      dataIndex: 'districtName',
+    // {
+    //   title: 'City',
+    //   dataIndex: 'cityName',
+    //   sorter: (a, b) => utils.antdTableSorter(a, b, 'cityName'),
+    // },
+    // {
+    //   title: 'District',
+    //   dataIndex: 'districtName',
      
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'districtName'),
-    },
-    {
-      title: 'State',
-      dataIndex: 'stateName',
+    //   sorter: (a, b) => utils.antdTableSorter(a, b, 'districtName'),
+    // },
+    // {
+    //   title: 'State',
+    //   dataIndex: 'stateName',
      
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'stateName'),
-    },
-    {
-      title: 'Country',
-      dataIndex: 'countryName',
+    //   sorter: (a, b) => utils.antdTableSorter(a, b, 'stateName'),
+    // },
+    // {
+    //   title: 'Country',
+    //   dataIndex: 'countryName',
      
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'countryName'),
-    },
+    //   sorter: (a, b) => utils.antdTableSorter(a, b, 'countryName'),
+    // },
     {
       title: 'Priority',
       dataIndex: 'priority',
@@ -311,8 +311,8 @@ const Pincodelist = () => {
             </Select>
           </Form.Item>
         </Col>
-        <Col md={6} sm={24} xs={24} lg={6}>
-          <Form.Item name="cityId" label="City">
+        {/* <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="cityId" label="Emirates">
             <Select
               showSearch
               optionFilterProp="children"
@@ -323,11 +323,11 @@ const Pincodelist = () => {
               style={{ minWidth: 180 }}
               // onChange={(value) => setSelectedBrandId(value)}
               // onSelect={handleQuery}
-              placeholder="City"
+              placeholder="Country"
             // value={selectedBrandId}
             >
               <Option value="">All</Option>
-              {cities.map((item) => (
+              {city.map((item) => (
                 <Option key={item.id} value={item.id}>
                   {item.name}
                 </Option>
@@ -335,6 +335,8 @@ const Pincodelist = () => {
             </Select>
           </Form.Item>
         </Col>
+        */}
+        
         <Col className="mb-4">
           <Button type="primary" onClick={handleFilterSubmit}>
             Filter
@@ -360,7 +362,7 @@ const Pincodelist = () => {
             icon={<PlusCircleOutlined />}
             block
           >
-            Add Pincode
+            Add City
           </Button>
         </div>
       </Flex>

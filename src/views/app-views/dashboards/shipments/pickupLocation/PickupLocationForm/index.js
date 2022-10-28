@@ -63,8 +63,11 @@ const ShipmentForm = (props) => {
        setPincode(list)
      } else {
        const list = Utils.createCategoryList(data)
+       
        setPincode(list)
      }
+   
+     
    }
   }
   const getCity= async () => {
@@ -116,6 +119,7 @@ const ShipmentForm = (props) => {
     getState()
     getCity()
     getPincode()
+    
   }, [])
   
 
