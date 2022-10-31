@@ -1,7 +1,15 @@
 import React from 'react'
-import { Input, Row, Col, Card, Form, Upload, InputNumber, Select, TreeSelect } from 'antd'
-
-
+import {
+  Input,
+  Row,
+  Col,
+  Card,
+  Form,
+  Upload,
+  InputNumber,
+  Select,
+  TreeSelect,
+} from 'antd'
 
 // const { Dragger } = Upload
 const { Option } = Select
@@ -20,10 +28,6 @@ const rules = {
     },
   ],
 
-
-  
-  
- 
   status: [
     {
       required: true,
@@ -32,14 +36,14 @@ const rules = {
   ],
 }
 
-const GeneralField = ({ form_statuses,state}) => (
+const GeneralField = ({ form_statuses, state }) => (
   <Row gutter={16}>
     <Col xs={24} sm={24} md={17}>
       <Card title="Basic Info">
         <Form.Item name="name" label="Name" rules={rules.name}>
           <Input placeholder="Name" />
         </Form.Item>
-      
+
         <Form.Item name="priority" label="Priority" rules={rules.priority}>
           <InputNumber placeholder="Priority" min={0} max={100000} />
         </Form.Item>
@@ -53,6 +57,20 @@ const GeneralField = ({ form_statuses,state}) => (
             ))}
           </Select>
         </Form.Item>
+        {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+          <Form.Item name="stateId" label="state">
+            <TreeSelect
+              placeholder="State"
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.title.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              treeData={state}
+              treeDefaultExpandAll
+            ></TreeSelect>
+          </Form.Item>
+        )}
         {/* <Form.Item name="stateId" label="state" >
       <TreeSelect placeholder="State" showSearch
         optionFilterProp="children"
@@ -64,10 +82,7 @@ const GeneralField = ({ form_statuses,state}) => (
     </Form.Item> */}
       </Card>
     </Col>
-    <Col xs={24} sm={24} md={7}>
-    
-     
-    </Col>
+    <Col xs={24} sm={24} md={7}></Col>
   </Row>
 )
 

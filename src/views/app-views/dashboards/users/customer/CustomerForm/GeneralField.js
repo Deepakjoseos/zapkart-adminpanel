@@ -20,13 +20,24 @@ const rules = {
   ],
 }
 
-const GeneralField = ({ propsDisplayImages, mode, userGroups, form, phoneVerified, emailVerified, form_statuses }) => {
-
+const GeneralField = ({
+  propsDisplayImages,
+  mode,
+  userGroups,
+  form,
+  phoneVerified,
+  emailVerified,
+  form_statuses,
+}) => {
   return (
     <Row gutter={16}>
       <Col xs={24} sm={24} md={17}>
         <Card title="Basic Info">
-          <Form.Item name="firstName" label="First Name" rules={rules.firstName}>
+          <Form.Item
+            name="firstName"
+            label="First Name"
+            rules={rules.firstName}
+          >
             <Input placeholder="First Name" />
           </Form.Item>
           <Form.Item name="lastName" label="Last Name" rules={rules.lastName}>
@@ -34,17 +45,15 @@ const GeneralField = ({ propsDisplayImages, mode, userGroups, form, phoneVerifie
           </Form.Item>
           <Form.Item name="status" label="Status" rules={rules.status}>
             <Select placeholder="Status">
-            {form_statuses.map((item) => (
+              {form_statuses.map((item) => (
                 <Option key={item.id} value={item}>
                   {item}
                 </Option>
               ))}
             </Select>
           </Form.Item>
-          {mode === 'EDIT' ?
+          {mode === 'EDIT' ? (
             <>
-
-
               <Form.Item
                 hasFeedback
                 validateStatus={phoneVerified ? 'success' : 'error'}
@@ -62,11 +71,10 @@ const GeneralField = ({ propsDisplayImages, mode, userGroups, form, phoneVerifie
               >
                 <Input disabled id="success" />
               </Form.Item>
-
-
-
             </>
-            : ""}
+          ) : (
+            ''
+          )}
 
           {mode === 'ADD' ? (
             <>
@@ -81,11 +89,19 @@ const GeneralField = ({ propsDisplayImages, mode, userGroups, form, phoneVerifie
               <Form.Item name="phone" label="Phone" placeholder="Phone">
                 <Input />
               </Form.Item>
-              <Form.Item label="Password" name="password" rules={rules.password}>
-                <Input.Password placeholder='Password' />
+              <Form.Item
+                label="Password"
+                name="password"
+                rules={rules.password}
+              >
+                <Input.Password placeholder="Password" />
               </Form.Item>
 
-              <Form.Item name="emailVerified" label="Email Verified" rules={rules.emailVerified}>
+              <Form.Item
+                name="emailVerified"
+                label="Email Verified"
+                rules={rules.emailVerified}
+              >
                 <Select placeholder="Email Verified">
                   <Option value={true}>Yes</Option>
                   <Option value={false}>NO</Option>
@@ -99,11 +115,7 @@ const GeneralField = ({ propsDisplayImages, mode, userGroups, form, phoneVerifie
           {/* <Form.Item >
           <Input disabled />
         </Form.Item> */}
-          <Form.Item
-            name="groups"
-            label="User Groups"
-            rules={rules.userGroups}
-          >
+          <Form.Item name="groups" label="User Groups" rules={rules.userGroups}>
             <Select
               optionFilterProp="children"
               filterOption={(input, option) =>
@@ -121,8 +133,6 @@ const GeneralField = ({ propsDisplayImages, mode, userGroups, form, phoneVerifie
               ))}
             </Select>
           </Form.Item>
-
-
         </Card>
       </Col>
       <Col xs={24} sm={24} md={7}>
@@ -140,6 +150,5 @@ const GeneralField = ({ propsDisplayImages, mode, userGroups, form, phoneVerifie
     </Row>
   )
 }
-
 
 export default GeneralField

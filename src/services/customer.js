@@ -104,8 +104,8 @@ customerService.addAddress = async function (customerId, data) {
   }
 }
 
-
 customerService.editAddress = async function (customerId, addressId, data) {
+  console.log(data, 'hjh')
   try {
     const res = await fetch({
       url: `${apiRoute}/address/${customerId}/${addressId}/admin`,

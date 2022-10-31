@@ -57,18 +57,19 @@ const getStockStatus = (status) => {
   return null
 }
 const DistrictList = () => {
+  const SITE_NAME = process.env.REACT_APP_SITE_NAME
   let history = useHistory()
   const [form] = Form.useForm()
-  
+
   const [list, setList] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
-  
+
   // Added for Pagination
   const [loading, setLoading] = useState(false)
   const [filterEnabled, setFilterEnabled] = useState(false)
-  const [statuses,setStatuses] = useState([])
-  const [states,setStates] = useState([])
-  
+  const [statuses, setStatuses] = useState([])
+  const [states, setStates] = useState([])
+
   // pagination
   const [pagination, setPagination] = useState({
     current: 1,
@@ -80,26 +81,25 @@ const DistrictList = () => {
       // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
 
       setStatuses(Object.values(data.GENERAL['STATUS']))
-
     }
   }
-  const getStates = async () =>{
+  const getStates = async () => {
     const data = await stateService.getState()
-    if(data){
+    if (data) {
       setStates(data.data)
     }
   }
   // Changed here for pagination
-  const getDistrict= async (paginationParams = {}, filterParams) => {
+  const getDistrict = async (paginationParams = {}, filterParams) => {
     setLoading(true)
     const data = await districtService.getDistrict(
       qs.stringify(getPaginationParams(paginationParams)),
       qs.stringify(filterParams)
     )
-  
+
     if (data) {
       setList(data.data)
-  
+
       // Pagination
       setPagination({
         ...paginationParams.pagination,
@@ -108,7 +108,7 @@ const DistrictList = () => {
       setLoading(false)
     }
   }
-  
+
   useEffect(() => {
     getDistrict({
       pagination,
@@ -116,14 +116,14 @@ const DistrictList = () => {
     fetchConstants()
     getStates()
   }, [])
-  
+
   // pagination generator
   const getPaginationParams = (params) => ({
     limit: params.pagination?.pageSize,
     page: params.pagination?.current,
     // ...params,
   })
-  
+
   // On pagination Change
   const handleTableChange = (newPagination) => {
     getDistrict(
@@ -160,9 +160,7 @@ const DistrictList = () => {
   }
 
   const viewDetails = (row) => {
-    history.push(
-      `/app/dashboards/locality/district/editdistrict/${row.id}`
-    )
+    history.push(`/app/dashboards/locality/district/editdistrict/${row.id}`)
   }
 
   const deleteRow = async (row) => {
@@ -186,27 +184,27 @@ const DistrictList = () => {
 
   const tableColumns = [
     {
-      title: 'Country',
+      title: SITE_NAME === 'zapkart' ? 'District' : 'Country',
       dataIndex: 'name',
-     
+
       sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
     },
     // {
     //   title: 'State',
     //   dataIndex: 'stateName',
-     
+
     //   sorter: (a, b) => utils.antdTableSorter(a, b, 'stateName'),
     // },
     // {
     //   title: 'Country',
     //   dataIndex: 'countryName',
-     
+
     //   sorter: (a, b) => utils.antdTableSorter(a, b, 'countryName'),
     // },
     {
       title: 'Priority',
       dataIndex: 'priority',
-     
+
       sorter: (a, b) => utils.antdTableSorter(a, b, 'priority'),
     },
 
@@ -218,7 +216,7 @@ const DistrictList = () => {
       ),
       sorter: (a, b) => utils.antdTableSorter(a, b, 'status'),
     },
-   
+
     {
       title: '',
       dataIndex: 'actions',
@@ -277,7 +275,6 @@ const DistrictList = () => {
         </Col>
         <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item name="status" label="Status">
-
             <Select
               className="w-100"
               style={{ minWidth: 180 }}
@@ -293,7 +290,11 @@ const DistrictList = () => {
           </Form.Item>
         </Col>
         <Col md={6} sm={24} xs={24} lg={6}>
-          <Form.Item name="orderByPriority" label="OrderByPriority" className='ml-2'>
+          <Form.Item
+            name="orderByPriority"
+            label="OrderByPriority"
+            className="ml-2"
+          >
             <Select className="w-100" placeholder="OrderBy Priority">
               <Option value="">All</Option>
               <Option value="true">Yes</Option>
@@ -301,7 +302,7 @@ const DistrictList = () => {
             </Select>
           </Form.Item>
         </Col>
-      
+
         <Col className="mb-4">
           <Button type="primary" onClick={handleFilterSubmit}>
             Filter
@@ -327,14 +328,19 @@ const DistrictList = () => {
             icon={<PlusCircleOutlined />}
             block
           >
-            Add Country
+            {SITE_NAME === 'zapkart' ? 'Add District' : 'Add Country'}
           </Button>
         </div>
       </Flex>
       <div className="table-responsive">
-        <Table columns={tableColumns} dataSource={list} rowKey="id" pagination={pagination}
-        loading={loading}
-        onChange={handleTableChange}/>
+        <Table
+          columns={tableColumns}
+          dataSource={list}
+          rowKey="id"
+          pagination={pagination}
+          loading={loading}
+          onChange={handleTableChange}
+        />
       </div>
     </Card>
   )

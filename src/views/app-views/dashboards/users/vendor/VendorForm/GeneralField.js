@@ -69,7 +69,18 @@ const rules = {
   ],
 }
 
-const GeneralField = ({ propsDisplayImages, form, mode, emailVerified, phoneVerified, pickupLocations, form_statuses, userGroups }) => (
+const SITE_NAME = process.env.REACT_APP_SITE_NAME
+
+const GeneralField = ({
+  propsDisplayImages,
+  form,
+  mode,
+  emailVerified,
+  phoneVerified,
+  pickupLocations,
+  form_statuses,
+  userGroups,
+}) => (
   <Row gutter={16}>
     <Col xs={24} sm={24} md={17}>
       <Card title="Basic Info">
@@ -79,18 +90,25 @@ const GeneralField = ({ propsDisplayImages, form, mode, emailVerified, phoneVeri
         <Form.Item name="lastName" label="Last Name" rules={rules.lastName}>
           <Input placeholder="Last Name" />
         </Form.Item>
+        {SITE_NAME === 'zapkart' && (
+          <>
+            <Form.Item name="pan" label="Pan" rules={rules.pan}>
+              <Input placeholder="Pan" />
+            </Form.Item>
 
-        <Form.Item name="pan" label="Pan" rules={rules.pan}>
-          <Input placeholder="Pan" />
-        </Form.Item>
+            <Form.Item name="drugLicense" label="Drug License">
+              <Input placeholder="drugLicense" />
+            </Form.Item>
+            <Form.Item name="tanNumber" label="Tan Number">
+              <Input placeholder="tanNumber" />
+            </Form.Item>
+          </>
+        )}
+
         {/* <Form.Item name="drugLicense" label="Drug License Number" rules={rules.drugLicense}>
           <Input placeholder="Drug License Number" />
         </Form.Item> */}
-        <Form.Item
-          name="groups"
-          label="User Groups"
-          rules={rules.userGroups}
-        >
+        <Form.Item name="groups" label="User Groups" rules={rules.userGroups}>
           <Select
             optionFilterProp="children"
             filterOption={(input, option) =>
@@ -109,45 +127,23 @@ const GeneralField = ({ propsDisplayImages, form, mode, emailVerified, phoneVeri
           </Select>
         </Form.Item>
 
-
-
-        {mode === 'ADD' ?
+        {mode === 'ADD' ? (
           <>
             <Form.Item name="status" label="Status" rules={rules.status}>
               <Select placeholder="Status">
-              {form_statuses.map((item) => (
-                <Option key={item.id} value={item}>
-                  {item}
-                </Option>
-              ))}
+                {form_statuses.map((item) => (
+                  <Option key={item.id} value={item}>
+                    {item}
+                  </Option>
+                ))}
               </Select>
             </Form.Item>
-         
 
-   
-
-    <Form.Item name="signedContractCopy" label="signedContractCopy" rules={rules.signedContractCopy}>
-      <Select placeholder="signedContractCopy">
-        <Option value={true}>Yes</Option>
-        <Option value={false}>No</Option>
-      </Select>
-    </Form.Item>
-    <Form.Item name="passportOrVisa" label="passportOrVisa" rules={rules.passportOrVisa}>
-      <Select placeholder="passportOrVisa">
-        <Option value={true}>Yes</Option>
-        <Option value={false}>No</Option>
-      </Select>
-    </Form.Item>
-    <Form.Item name="vatTrnCertificate" label="vatTrnCertificate" rules={rules.vatTrnCertificate}>
-      <Select placeholder="vatTrnCertificate">
-        <Option value={true}>Yes</Option>
-        <Option value={false}>No</Option>
-      </Select>
-    </Form.Item>
-
-
-
-            <Form.Item name="emailVerified" label="Emal Verified" rules={rules.emailVerified}>
+            <Form.Item
+              name="emailVerified"
+              label="Email Verified"
+              rules={rules.emailVerified}
+            >
               <Select placeholder="Email Verified">
                 <Option value={true}>Yes</Option>
                 <Option value={false}>No</Option>
@@ -156,33 +152,20 @@ const GeneralField = ({ propsDisplayImages, form, mode, emailVerified, phoneVeri
             <Form.Item name="phone" label="Phone" rules={rules.pone}>
               <Input placeholder="Phone" />
             </Form.Item>
-            <Form.Item
-              label="Password"
-              name="password"
-              rules={rules.password}
-            >
+            <Form.Item label="Password" name="password" rules={rules.password}>
               <Input.Password />
             </Form.Item>
-
-
-
 
             <Form.Item name="email" label="Email" rules={rules.email}>
               <Input />
             </Form.Item>
-
-
-
-
-            <Form.Item name="tanNumber" label="Tan Number" rules={rules.tanNumber}>
-              <Input placeholder="Tan Number" />
-            </Form.Item>
           </>
-          : ""}
+        ) : (
+          ''
+        )}
 
-        {mode === 'EDIT' ?
+        {mode === 'EDIT' ? (
           <>
-
             <Form.Item
               hasFeedback
               validateStatus={phoneVerified ? 'success' : 'error'}
@@ -200,11 +183,10 @@ const GeneralField = ({ propsDisplayImages, form, mode, emailVerified, phoneVeri
             >
               <Input disabled id="success" />
             </Form.Item>
-
           </>
-          : ""}
-
-
+        ) : (
+          ''
+        )}
 
         {/* <Form.Item >
           <Input disabled />
@@ -212,7 +194,6 @@ const GeneralField = ({ propsDisplayImages, form, mode, emailVerified, phoneVeri
         {/* <Form.Item name="pan" label="PAN" rules={rules.pan}>
           <Input placeholder="Pan Number" />
         </Form.Item> */}
-
       </Card>
 
       {/* <Card title="Address">
@@ -249,7 +230,7 @@ const GeneralField = ({ propsDisplayImages, form, mode, emailVerified, phoneVeri
         'business.address.phone': data?.business?.address?.phone,
         'business.address.zipcode': data?.business?.address?.zipcode, */}
 
-      {mode === 'EDIT' ?
+      {mode === 'EDIT' ? (
         <Card title="Business">
           <Form.Item name="business.name" label="Bussiness Name">
             <Input placeholder="Bussiness Name" />
@@ -279,21 +260,23 @@ const GeneralField = ({ propsDisplayImages, form, mode, emailVerified, phoneVeri
           <Form.Item name="business.address.zipcode" label="Zipcode">
             <Input placeholder="Zipcode" />
           </Form.Item>
-
-
-        </Card> : " "}
-
-
+        </Card>
+      ) : (
+        ' '
+      )}
     </Col>
-
 
     <Col xs={24} sm={24} md={7}>
       <Card title="Display Image">
-        <Upload listType="picture-card" name="image" {...propsDisplayImages} accept="image/*">
+        <Upload
+          listType="picture-card"
+          name="image"
+          {...propsDisplayImages}
+          accept="image/*"
+        >
           <CustomIcon className="display-3" svg={ImageSvg} />
-         
         </Upload>
-       size: 150px * 150px
+        size: 150px * 150px
       </Card>
     </Col>
   </Row>

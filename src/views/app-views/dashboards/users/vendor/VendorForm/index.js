@@ -32,6 +32,7 @@ const ADD = 'ADD'
 const EDIT = 'EDIT'
 
 const ProductForm = (props) => {
+  const SITE_NAME = process.env.REACT_APP_SITE_NAME
   const { mode = ADD, param } = props
   const id = param?.id
 
@@ -127,9 +128,9 @@ const ProductForm = (props) => {
         lastName: data.lastName,
         email: data?.email,
         phone: data?.phone,
-        gst: data?.gst,
-        tanNumber: data?.tanNumber,
-        pan: data?.pan,
+        gst: SITE_NAME === 'zapkart' ? data?.gst : null,
+        tanNumber: SITE_NAME === 'zapkart' ? data?.tanNumber : null,
+        pan: SITE_NAME === 'zapkart' ? data?.pan : null,
         drugLicense: data?.drugLicense,
         groups: data?.groups.map((cur) => cur.id),
 
@@ -190,7 +191,6 @@ const ProductForm = (props) => {
           gst: values.gst,
           drugLicense: values.drugLicense,
           groups: values.groups,
-          tradelicense: values.tradeliscense,
           address: {
             line1: values['address.line1'],
             city: values['address.city'],
@@ -210,6 +210,12 @@ const ProductForm = (props) => {
               zipcode: values['business.address.zipcode'],
             },
           },
+        }
+
+        if (SITE_NAME !== 'zapkart') {
+          delete sendingValues.drugLicense
+          delete sendingValues.gst
+          delete sendingValues.pan
         }
 
         if (JSON.stringify(sendingValues.address) === '{}') {
@@ -238,18 +244,14 @@ const ProductForm = (props) => {
           sendingValues.displayImage = displayImageValue
           console.log('upload', sendingValues.displayImage)
         } else {
-          sendingValues.displayImage = null
+          delete sendingValues.displayImage
         }
         if (mode === ADD) {
           sendingValues.phone = values.phone
           sendingValues.password = values.password
           sendingValues.email = values.email
           sendingValues.emailVerified = values.emailVerified
-          sendingValues.tradelicense = values.tradelicense
-          sendingValues.emiratesID = values.emiratesID
-          sendingValues.signedContractCopy = values.signedContractCopy
-          sendingValues.passportOrVisa = values.passportOrVisa
-          sendingValues.vatTrnCertificate = values.vatTrnCertificate
+
           sendingValues.status = values.status
 
           const created = await vendorService.addVendor(sendingValues)

@@ -59,16 +59,15 @@ const getStockStatus = (status) => {
 const Statelist = () => {
   let history = useHistory()
   const [form] = Form.useForm()
-  
+
   const [list, setList] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
 
-  
   // Added for Pagination
   const [loading, setLoading] = useState(false)
   const [filterEnabled, setFilterEnabled] = useState(false)
-  const [statuses,setStatuses] = useState([])
-  const [countries,setCountries] = useState([])
+  const [statuses, setStatuses] = useState([])
+  const [countries, setCountries] = useState([])
   const getCountries = async () => {
     const data = await countryService.getCountry()
     if (data) {
@@ -86,30 +85,25 @@ const Statelist = () => {
       // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
 
       setStatuses(Object.values(data.GENERAL['STATUS']))
-
     }
   }
-  const getCountryName =(countryId) =>{
-     let country= countryService.getCountryById(countryId)
-     if (country) 
-     {
-      return  country?.name
-     }
-     
-     
-    
+  const getCountryName = (countryId) => {
+    let country = countryService.getCountryById(countryId)
+    if (country) {
+      return country?.name
+    }
   }
   // Changed here for pagination
-  const getState= async (paginationParams = {}, filterParams) => {
+  const getState = async (paginationParams = {}, filterParams) => {
     setLoading(true)
     const data = await stateService.getState(
       qs.stringify(getPaginationParams(paginationParams)),
       qs.stringify(filterParams)
     )
-  
+
     if (data) {
       setList(data.data)
-  
+
       // Pagination
       setPagination({
         ...paginationParams.pagination,
@@ -118,7 +112,7 @@ const Statelist = () => {
       setLoading(false)
     }
   }
-  
+
   useEffect(() => {
     getCountries()
     getState({
@@ -126,14 +120,14 @@ const Statelist = () => {
     })
     fetchConstants()
   }, [])
-  
+
   // pagination generator
   const getPaginationParams = (params) => ({
     limit: params.pagination?.pageSize,
     page: params.pagination?.current,
     // ...params,
   })
-  
+
   // On pagination Change
   const handleTableChange = (newPagination) => {
     getState(
@@ -170,9 +164,7 @@ const Statelist = () => {
   }
 
   const viewDetails = (row) => {
-    history.push(
-      `/app/dashboards/locality/state/editstate/${row.id}`
-    )
+    history.push(`/app/dashboards/locality/state/editstate/${row.id}`)
   }
 
   const deleteRow = async (row) => {
@@ -196,7 +188,7 @@ const Statelist = () => {
 
   const tableColumns = [
     {
-      title: 'Emirates',
+      title: 'State',
       dataIndex: 'name',
       sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
     },
@@ -210,7 +202,6 @@ const Statelist = () => {
       dataIndex: 'priority',
       sorter: (a, b) => utils.antdTableSorter(a, b, 'priority'),
     },
-   
 
     {
       title: 'Status',
@@ -278,7 +269,6 @@ const Statelist = () => {
         </Col>
         <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item name="status" label="Status">
-
             <Select
               className="w-100"
               style={{ minWidth: 180 }}
@@ -294,7 +284,11 @@ const Statelist = () => {
           </Form.Item>
         </Col>
         <Col md={6} sm={24} xs={24} lg={6}>
-          <Form.Item name="orderByPriority" label="OrderByPriority" className='ml-2'>
+          <Form.Item
+            name="orderByPriority"
+            label="OrderByPriority"
+            className="ml-2"
+          >
             <Select className="w-100" placeholder="OrderBy Priority">
               <Option value="">All</Option>
               <Option value="true">Yes</Option>
@@ -315,7 +309,7 @@ const Statelist = () => {
               // onChange={(value) => setSelectedBrandId(value)}
               // onSelect={handleQuery}
               placeholder="Countries"
-            // value={selectedBrandId}
+              // value={selectedBrandId}
             >
               <Option value="">All</Option>
               {countries.map((item) => (
@@ -356,9 +350,14 @@ const Statelist = () => {
         </div>
       </Flex>
       <div className="table-responsive">
-        <Table columns={tableColumns} dataSource={list} rowKey="id" pagination={pagination}
-        loading={loading}
-        onChange={handleTableChange}/>
+        <Table
+          columns={tableColumns}
+          dataSource={list}
+          rowKey="id"
+          pagination={pagination}
+          loading={loading}
+          onChange={handleTableChange}
+        />
       </div>
     </Card>
   )

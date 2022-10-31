@@ -33,12 +33,13 @@ if (process.env.REACT_APP_SITE_NAME === 'athathy') {
   }
 } else if (process.env.REACT_APP_SITE_NAME === 'awen') {
   FirebaseConfig = {
-    apiKey: 'AIzaSyBUdVQKSYiMrWXKZLhpcR4pmtIUFa-40w0',
-    authDomain: 'zapkartnew2022-dc8a8.firebaseapp.com',
-    projectId: 'zapkartnew2022-dc8a8',
-    storageBucket: 'zapkartnew2022-dc8a8.appspot.com',
-    messagingSenderId: '812753080859',
-    appId: '1:812753080859:web:63d1a2c52ff2a2a5161ebe',
+    apiKey: 'AIzaSyDs31T2CaZCjSEhdRs4ey-q0YAVg_hqEbw',
+    authDomain: 'awen-45e2a.firebaseapp.com',
+    projectId: 'awen-45e2a',
+    storageBucket: 'awen-45e2a.appspot.com',
+    messagingSenderId: '161411040182',
+    appId: '1:161411040182:web:538a946a0ced1f3eda7717',
+    measurementId: 'G-LT6JKD6T8F',
   }
 } else {
   switch (process.env.NODE_ENV) {
@@ -50,22 +51,32 @@ if (process.env.REACT_APP_SITE_NAME === 'athathy') {
         // storageBucket: 'zapkartnew2022-dc8a8.appspot.com',
         // messagingSenderId: '812753080859',
         // appId: '1:812753080859:web:63d1a2c52ff2a2a5161ebe',
-        apiKey: 'AIzaSyDE96sBpGy5JJKHNwTHP3OuUSChRCIgH_U',
-        authDomain: 'ecommerce-74b71.firebaseapp.com',
-        projectId: 'ecommerce-74b71',
-        storageBucket: 'ecommerce-74b71.appspot.com',
-        messagingSenderId: '1031062435017',
-        appId: '1:1031062435017:web:d6b5ac03cd40d344480918',
+
+        // TODO: CHANGE NEEDED FOR PROD
+
+        // apiKey: 'AIzaSyDE96sBpGy5JJKHNwTHP3OuUSChRCIgH_U',
+        // authDomain: 'ecommerce-74b71.firebaseapp.com',
+        // projectId: 'ecommerce-74b71',
+        // storageBucket: 'ecommerce-74b71.appspot.com',
+        // messagingSenderId: '1031062435017',
+        // appId: '1:1031062435017:web:d6b5ac03cd40d344480918',
+
+        apiKey: 'AIzaSyDVRszGmdIg-Me-79_x9yuntOdt6Mz2LdM',
+        authDomain: 'zapkartlive.firebaseapp.com',
+        projectId: 'zapkartlive',
+        storageBucket: 'zapkartlive.appspot.com',
+        messagingSenderId: '1010821971171',
+        appId: '1:1010821971171:web:dcd6a429a1f65cb3ead9d6',
       }
       break
     case 'production':
       FirebaseConfig = {
-        apiKey: "AIzaSyDVRszGmdIg-Me-79_x9yuntOdt6Mz2LdM",
-        authDomain: "zapkartlive.firebaseapp.com",
-        projectId: "zapkartlive",
-        storageBucket: "zapkartlive.appspot.com",
-        messagingSenderId: "1010821971171",
-        appId: "1:1010821971171:web:dcd6a429a1f65cb3ead9d6",
+        apiKey: 'AIzaSyDVRszGmdIg-Me-79_x9yuntOdt6Mz2LdM',
+        authDomain: 'zapkartlive.firebaseapp.com',
+        projectId: 'zapkartlive',
+        storageBucket: 'zapkartlive.appspot.com',
+        messagingSenderId: '1010821971171',
+        appId: '1:1010821971171:web:dcd6a429a1f65cb3ead9d6',
       }
       break
     case 'test':
