@@ -90,6 +90,16 @@ const DeliveryZoneForm = (props) => {
     }
   }
 
+  // const getDistrict = async (stateId) => {
+  //   const data = await districtService.getDistrict(
+  //     '',
+  //     `status=Active&stateId=${stateId}`
+  //   )
+  //   if (data?.data?.length > 0) {
+  //     return Utils.createDeliveryLocationList(data?.data)
+  //   }
+  // }
+
   console.log(allTreesData, 'hgdjkvb')
 
   useEffect(() => {

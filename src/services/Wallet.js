@@ -5,20 +5,20 @@ const apiRoute = '/wallet'
 
 //Transactions
 walletService.getTransactions = async function (query) {
-    try {
-      let url=  `${apiRoute}/all/transactions`
-      const userId= query.userId
-      if (userId)  url = `${url}?userId=${userId}`;
-      const res = await fetch({
-        url: url,
-        method: 'post',
-      })
-      // const data = res.data.filter((cur) => cur.status !== 'Deleted')
-      return res
-    } catch (err) {
-      console.log(err, 'show-err')
-    }
+  try {
+    let url = `${apiRoute}/all/transactions`
+    const userId = query.userId
+    if (userId) url = `${url}?userId=${userId}`
+    const res = await fetch({
+      url: url,
+      method: 'get',
+    })
+    // const data = res.data.filter((cur) => cur.status !== 'Deleted')
+    return res
+  } catch (err) {
+    console.log(err, 'show-err')
   }
+}
 
 //   walletService.deleteTaxCategory = async function (id) {
 //   try {
@@ -57,8 +57,7 @@ walletService.getVendorWallet = async function (userId) {
   }
 }
 
-
-walletService.withdrawBalanceofVendor = async function (userId,data) {
+walletService.withdrawBalanceofVendor = async function (userId, data) {
   try {
     const res = await fetch({
       url: `${apiRoute}/withdraw/${userId}`,

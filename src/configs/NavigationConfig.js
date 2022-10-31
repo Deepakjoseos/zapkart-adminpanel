@@ -418,7 +418,10 @@ const dashBoardNavTree = [
           {
             key: 'dashboards-locality-district',
             path: `${APP_PREFIX_PATH}/dashboards/locality/district/districtlist`,
-            title: 'Country',
+            title:
+              process.env.REACT_APP_SITE_NAME === 'zapkart'
+                ? 'District'
+                : 'Country',
             icon: AppstoreOutlined,
             breadcrumb: false,
             submenu: [],
@@ -426,7 +429,10 @@ const dashBoardNavTree = [
           {
             key: 'dashboards-locality-city',
             path: `${APP_PREFIX_PATH}/dashboards/locality/city/city-list`,
-            title: 'Emirates',
+            title:
+              process.env.REACT_APP_SITE_NAME === 'zapkart'
+                ? 'City'
+                : 'Emirates',
             icon: AppstoreOutlined,
             breadcrumb: false,
             submenu: [],
@@ -434,16 +440,15 @@ const dashBoardNavTree = [
           {
             key: 'dashboards-locality-pincode',
             path: `${APP_PREFIX_PATH}/dashboards/locality/pincode/pincodelist`,
-            title: 'City',
+            title:
+              process.env.REACT_APP_SITE_NAME === 'zapkart'
+                ? 'Pincode'
+                : 'City',
             icon: AppstoreOutlined,
             breadcrumb: false,
             submenu: [],
           },
-
-         
-         
         ],
-
       },
 
       {
@@ -561,7 +566,25 @@ if (process.env.REACT_APP_SITE_NAME === 'zapkart') {
     submenu: [],
   })
 
- 
+  // For locality
+
+  dashBoardNavTree[0].submenu[7].submenu.unshift({
+    key: 'dashboards-locality-state',
+    path: `${APP_PREFIX_PATH}/dashboards/locality/state/statelist`,
+    title: 'State',
+    icon: AppstoreOutlined,
+    breadcrumb: false,
+    submenu: [],
+  })
+
+  dashBoardNavTree[0].submenu[7].submenu.unshift({
+    key: 'dashboards-locality-country',
+    path: `${APP_PREFIX_PATH}/dashboards/locality/country/country-list`,
+    title: 'Country',
+    icon: AppstoreOutlined,
+    breadcrumb: false,
+    submenu: [],
+  })
 }
 
 const appsNavTree = [

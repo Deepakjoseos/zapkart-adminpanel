@@ -57,18 +57,19 @@ const getStockStatus = (status) => {
   return null
 }
 const Pincodelist = () => {
+  const SITE_NAME = process.env.REACT_APP_SITE_NAME
   let history = useHistory()
   const [form] = Form.useForm()
-  
+
   const [list, setList] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
-  
+
   // Added for Pagination
   const [loading, setLoading] = useState(false)
   const [filterEnabled, setFilterEnabled] = useState(false)
-  const [statuses,setStatuses] = useState([])
-  const [cities,setCities]=useState([])
-  
+  const [statuses, setStatuses] = useState([])
+  const [cities, setCities] = useState([])
+
   // pagination
   const [pagination, setPagination] = useState({
     current: 1,
@@ -80,26 +81,25 @@ const Pincodelist = () => {
       // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
 
       setStatuses(Object.values(data.GENERAL['STATUS']))
-
     }
   }
-  const getCities = async ()=>{
+  const getCities = async () => {
     const data = await cityService.getCity()
-    if (data){
+    if (data) {
       setCities(data.data)
     }
   }
   // Changed here for pagination
-  const getPincode= async (paginationParams = {}, filterParams) => {
+  const getPincode = async (paginationParams = {}, filterParams) => {
     setLoading(true)
     const data = await pincodeService.getPincode(
       qs.stringify(getPaginationParams(paginationParams)),
       qs.stringify(filterParams)
     )
-  
+
     if (data) {
       setList(data.data)
-  
+
       // Pagination
       setPagination({
         ...paginationParams.pagination,
@@ -108,7 +108,7 @@ const Pincodelist = () => {
       setLoading(false)
     }
   }
-  
+
   useEffect(() => {
     getPincode({
       pagination,
@@ -116,14 +116,14 @@ const Pincodelist = () => {
     fetchConstants()
     getCities()
   }, [])
-  
+
   // pagination generator
   const getPaginationParams = (params) => ({
     limit: params.pagination?.pageSize,
     page: params.pagination?.current,
     // ...params,
   })
-  
+
   // On pagination Change
   const handleTableChange = (newPagination) => {
     getPincode(
@@ -160,9 +160,7 @@ const Pincodelist = () => {
   }
 
   const viewDetails = (row) => {
-    history.push(
-      `/app/dashboards/locality/pincode/editpincode/${row.id}`
-    )
+    history.push(`/app/dashboards/locality/pincode/editpincode/${row.id}`)
   }
 
   const deleteRow = async (row) => {
@@ -186,7 +184,7 @@ const Pincodelist = () => {
 
   const tableColumns = [
     {
-      title: 'City',
+      title: SITE_NAME === 'zapkart' ? 'Pincode' : 'City',
       dataIndex: 'name',
       sorter: (a, b) => utils.antdTableSorter(a, b, 'pincodeName'),
     },
@@ -198,25 +196,25 @@ const Pincodelist = () => {
     // {
     //   title: 'District',
     //   dataIndex: 'districtName',
-     
+
     //   sorter: (a, b) => utils.antdTableSorter(a, b, 'districtName'),
     // },
     // {
     //   title: 'State',
     //   dataIndex: 'stateName',
-     
+
     //   sorter: (a, b) => utils.antdTableSorter(a, b, 'stateName'),
     // },
     // {
     //   title: 'Country',
     //   dataIndex: 'countryName',
-     
+
     //   sorter: (a, b) => utils.antdTableSorter(a, b, 'countryName'),
     // },
     {
       title: 'Priority',
       dataIndex: 'priority',
-     
+
       sorter: (a, b) => utils.antdTableSorter(a, b, 'priority'),
     },
 
@@ -228,7 +226,7 @@ const Pincodelist = () => {
       ),
       sorter: (a, b) => utils.antdTableSorter(a, b, 'status'),
     },
-   
+
     {
       title: '',
       dataIndex: 'actions',
@@ -287,7 +285,6 @@ const Pincodelist = () => {
         </Col>
         <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item name="status" label="Status">
-
             <Select
               className="w-100"
               style={{ minWidth: 180 }}
@@ -303,7 +300,11 @@ const Pincodelist = () => {
           </Form.Item>
         </Col>
         <Col md={6} sm={24} xs={24} lg={6}>
-          <Form.Item name="orderByPriority" label="OrderByPriority" className='ml-2'>
+          <Form.Item
+            name="orderByPriority"
+            label="OrderByPriority"
+            className="ml-2"
+          >
             <Select className="w-100" placeholder="OrderBy Priority">
               <Option value="">All</Option>
               <Option value="true">Yes</Option>
@@ -336,7 +337,7 @@ const Pincodelist = () => {
           </Form.Item>
         </Col>
         */}
-        
+
         <Col className="mb-4">
           <Button type="primary" onClick={handleFilterSubmit}>
             Filter
@@ -362,14 +363,19 @@ const Pincodelist = () => {
             icon={<PlusCircleOutlined />}
             block
           >
-            Add City
+            {SITE_NAME === 'zapkart' ? 'Add Pincode' : 'Add City'}
           </Button>
         </div>
       </Flex>
       <div className="table-responsive">
-        <Table columns={tableColumns} dataSource={list} rowKey="id" pagination={pagination}
-        loading={loading}
-        onChange={handleTableChange}/>
+        <Table
+          columns={tableColumns}
+          dataSource={list}
+          rowKey="id"
+          pagination={pagination}
+          loading={loading}
+          onChange={handleTableChange}
+        />
       </div>
     </Card>
   )

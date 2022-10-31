@@ -58,6 +58,8 @@ const getStockStatus = (status) => {
   return null
 }
 const CityList = () => {
+  const SITE_NAME = process.env.REACT_APP_SITE_NAME
+
   let history = useHistory()
   const [form] = Form.useForm()
 
@@ -68,7 +70,7 @@ const CityList = () => {
   const [loading, setLoading] = useState(false)
   const [filterEnabled, setFilterEnabled] = useState(false)
   const [statuses, setStatuses] = useState([])
-  const [districts,setDistricts]= useState([])
+  const [districts, setDistricts] = useState([])
 
   // pagination
   const [pagination, setPagination] = useState({
@@ -81,15 +83,14 @@ const CityList = () => {
       // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
 
       setStatuses(Object.values(data.GENERAL['STATUS']))
-
     }
   }
-  const getDistricts = async ()=>{
+  const getDistricts = async () => {
     const data = await districtService.getDistrict()
-    if (data){
+    if (data) {
       setDistricts(data.data)
     }
-    }
+  }
   // Changed here for pagination
   const getCity = async (paginationParams = {}, filterParams) => {
     setLoading(true)
@@ -161,9 +162,7 @@ const CityList = () => {
   }
 
   const viewDetails = (row) => {
-    history.push(
-      `/app/dashboards/locality/city/edit-city/${row.id}`
-    )
+    history.push(`/app/dashboards/locality/city/edit-city/${row.id}`)
   }
 
   const deleteRow = async (row) => {
@@ -217,29 +216,28 @@ const CityList = () => {
     setFilterEnabled(false)
   }
 
-
   const tableColumns = [
     {
-      title: 'Emirates',
+      title: SITE_NAME === 'zapkart' ? 'City' : 'Emirates',
       dataIndex: 'name',
       sorter: (a, b) => utils.antdTableSorter(a, b, 'cityName'),
     },
     // {
     //   title: 'District',
     //   dataIndex: 'districtName',
-     
+
     //   sorter: (a, b) => utils.antdTableSorter(a, b, 'districtName'),
     // },
     // {
     //   title: 'State',
     //   dataIndex: 'stateName',
-     
+
     //   sorter: (a, b) => utils.antdTableSorter(a, b, 'stateName'),
     // },
     // {
     //   title: 'Country',
     //   dataIndex: 'countryName',
-     
+
     //   sorter: (a, b) => utils.antdTableSorter(a, b, 'countryName'),
     // },
     {
@@ -267,7 +265,6 @@ const CityList = () => {
     },
   ]
 
-
   const filtersComponent = () => (
     <Form
       layout="vertical"
@@ -283,7 +280,6 @@ const CityList = () => {
         </Col>
         <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item name="status" label="Status">
-
             <Select
               className="w-100"
               style={{ minWidth: 180 }}
@@ -299,7 +295,11 @@ const CityList = () => {
           </Form.Item>
         </Col>
         <Col md={6} sm={24} xs={24} lg={6}>
-          <Form.Item name="orderByPriority" label="OrderByPriority" className='ml-2'>
+          <Form.Item
+            name="orderByPriority"
+            label="OrderByPriority"
+            className="ml-2"
+          >
             <Select className="w-100" placeholder="OrderBy Priority">
               <Option value="">All</Option>
               <Option value="true">Yes</Option>
@@ -308,7 +308,10 @@ const CityList = () => {
           </Form.Item>
         </Col>
         <Col md={6} sm={24} xs={24} lg={6}>
-          <Form.Item name="districtId" label="Country">
+          <Form.Item
+            name="districtId"
+            label={SITE_NAME === 'zapkart' ? 'District' : 'Country'}
+          >
             <Select
               showSearch
               optionFilterProp="children"
@@ -319,8 +322,8 @@ const CityList = () => {
               style={{ minWidth: 180 }}
               // onChange={(value) => setSelectedBrandId(value)}
               // onSelect={handleQuery}
-              placeholder="Country"
-            // value={selectedBrandId}
+              placeholder={SITE_NAME === 'zapkart' ? 'District' : 'Country'}
+              // value={selectedBrandId}
             >
               <Option value="">All</Option>
               {districts.map((item) => (
@@ -355,14 +358,19 @@ const CityList = () => {
             icon={<PlusCircleOutlined />}
             block
           >
-            Add Emirates
+            {SITE_NAME === 'zapkart' ? 'Add City' : 'Add Emirates'}
           </Button>
         </div>
       </Flex>
       <div className="table-responsive">
-        <Table columns={tableColumns} dataSource={list} rowKey="id" pagination={pagination}
+        <Table
+          columns={tableColumns}
+          dataSource={list}
+          rowKey="id"
+          pagination={pagination}
           loading={loading}
-          onChange={handleTableChange} />
+          onChange={handleTableChange}
+        />
       </div>
     </Card>
   )

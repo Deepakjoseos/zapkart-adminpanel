@@ -1,4 +1,14 @@
-import { Button, Card, Col, Form, Input, message, Modal, Row, Select } from 'antd'
+import {
+  Button,
+  Card,
+  Col,
+  Form,
+  Input,
+  message,
+  Modal,
+  Row,
+  Select,
+} from 'antd'
 import PageHeaderAlt from 'components/layout-components/PageHeaderAlt'
 import Flex from 'components/shared-components/Flex'
 import React, { useEffect, useState } from 'react'
@@ -16,27 +26,34 @@ const AddressForm = ({
   setViewFormModal,
   selectedCustomerId,
   refetchData,
-  city,state,country,pincode,district
+  city,
+  state,
+  country,
+  pincode,
+  district,
+  getPincode,
+  getCity,
 }) => {
+  const SITE_NAME = process.env.REACT_APP_SITE_NAME
   const [form] = Form.useForm()
   const [submitLoading, setSubmitLoading] = useState(false)
-  
-  const rules = {}
-//   const fetchConstants = async () => {
-//     const data = await constantsService.getConstants()
-//     if (data) {
-//       // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
-//         console.log( Object.values(data.GENERAL.STATES['INDIA']), 'constanttyys')
-//           console.log('data',data)
 
-//        setStates(Object.values(data.GENERAL.STATES['INDIA']))
-//        setCountries(Object.values(data.GENERAL.COUNTRIES))
-//       // setPaymentStatuses(Object.values(data.PAYMENT['PAYMENT_STATUS']))
-//     }
-//   }
-// useEffect(()=>{
-// fetchConstants()
-// },[])
+  const rules = {}
+  //   const fetchConstants = async () => {
+  //     const data = await constantsService.getConstants()
+  //     if (data) {
+  //       // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
+  //         console.log( Object.values(data.GENERAL.STATES['INDIA']), 'constanttyys')
+  //           console.log('data',data)
+
+  //        setStates(Object.values(data.GENERAL.STATES['INDIA']))
+  //        setCountries(Object.values(data.GENERAL.COUNTRIES))
+  //       // setPaymentStatuses(Object.values(data.PAYMENT['PAYMENT_STATUS']))
+  //     }
+  //   }
+  // useEffect(()=>{
+  // fetchConstants()
+  // },[])
   useEffect(() => {
     if (formMode === 'edit') {
       selectedFormAddress && form.setFieldsValue(selectedFormAddress)
@@ -55,7 +72,9 @@ const AddressForm = ({
         if (formMode === 'add') {
           const addAddress = await customerService.addAddress(
             selectedCustomerId,
-            values
+            SITE_NAME === 'zapkart'
+              ? { ...values, country: country[0].name }
+              : { ...values, country: country[0].name, state: state[0].name }
           )
           if (addAddress) {
             refetchData()
@@ -67,7 +86,9 @@ const AddressForm = ({
           const editAddress = await customerService.editAddress(
             selectedCustomerId,
             selectedFormAddress.id,
-            values
+            SITE_NAME === 'zapkart'
+              ? { ...values, country: country[0].name }
+              : { ...values, country: country[0].name, state: state[0].name }
           )
           if (editAddress) {
             refetchData()
@@ -106,57 +127,70 @@ const AddressForm = ({
           status: 'Hold',
         }}
       >
-       
-
         <Row gutter={16}>
           <Col xs={24} sm={24} md={24}>
             <Card>
               <Form.Item name="line1" label="Address" rules={rules.line1}>
                 <Input.TextArea rows={4} placeholder="Address" />
               </Form.Item>
+              {SITE_NAME === 'zapkart' && (
+                <Form.Item name="state" label="State">
+                  <Select
+                    placeholder="State"
+                    onChange={(val) => {
+                      form.setFieldsValue({ city: null, zipcode: null })
+                      getCity(`stateName=${val}`)
+                    }}
+                  >
+                    {state.map((item) => (
+                      <Option key={item.name} value={item.name}>
+                        {item.name}
+                      </Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+              )}
 
-              <Form.Item name="countryId" label="Country" >
-          <Select placeholder="Country">
-              {district.map((item) => (
-                <Option key={item.id} value={item.id}>
-                  {item.name}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
+              <Form.Item
+                name="city"
+                label={SITE_NAME === 'zapkart' ? 'City' : 'Emirates'}
+              >
+                <Select
+                  placeholder={SITE_NAME === 'zapkart' ? 'City' : 'Emirates'}
+                  onChange={(val) => {
+                    form.setFieldsValue({ zipcode: null })
+                    getPincode(`cityName=${val}`)
+                  }}
+                >
+                  {city.map((item) => (
+                    <Option key={item.name} value={item.name}>
+                      {item.name}
+                    </Option>
+                  ))}
+                </Select>
+              </Form.Item>
 
-              <Form.Item name="cityId" label="Emirates" >
-          <Select placeholder="Emirates">
-              {city.map((item) => (
-                <Option key={item.id} value={item.id}>
-                  {item.name}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
-   
-    
-  
-    <Form.Item name="pincodeId" label="City" >
-          <Select placeholder="City">
-              {pincode.map((pincode) => (
-                <Option key={pincode.id} value={pincode.id}>
-                  {pincode.name}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
-    
-   
-    
-      
+              <Form.Item
+                name="zipcode"
+                label={SITE_NAME === 'zapkart' ? 'Zipcode' : 'City'}
+              >
+                <Select
+                  placeholder={SITE_NAME === 'zapkart' ? 'Zipcode' : 'City'}
+                >
+                  {pincode.map((pincode) => (
+                    <Option key={pincode.name} value={pincode.name}>
+                      {pincode.name}
+                    </Option>
+                  ))}
+                </Select>
+              </Form.Item>
 
               <Form.Item name="phone" label="Phone" rules={rules.phone}>
                 <Input type="tel" placeholder="Phone" />
               </Form.Item>
-              <Form.Item name="zipcode" label="Zipcode" rules={rules.zipcode}>
+              {/* <Form.Item name="zipcode" label="Zipcode" rules={rules.zipcode}>
                 <Input placeholder="Zipcode" />
-              </Form.Item>
+              </Form.Item> */}
 
               <Flex justifyContent="end">
                 <Button
