@@ -14,6 +14,7 @@ import userGroupService from 'services/userGroup'
 import constantsService from 'services/constants'
 import countryService from 'services/country'
 import _ from 'lodash'
+import districtService from 'services/district'
 
 const { TabPane } = Tabs
 
@@ -90,22 +91,24 @@ const DeliveryZoneForm = (props) => {
     }
   }
 
-  // const getDistrict = async (stateId) => {
-  //   const data = await districtService.getDistrict(
-  //     '',
-  //     `status=Active&stateId=${stateId}`
-  //   )
-  //   if (data?.data?.length > 0) {
-  //     return Utils.createDeliveryLocationList(data?.data)
-  //   }
-  // }
+  const getDistrict = async () => {
+    const data = await districtService.getDistrict('', `status=Active`)
+    if (data?.data?.length > 0) {
+      const list = Utils.createDeliveryLocationList(data?.data)
+      setAllTreesData(list)
+    }
+  }
 
   console.log(allTreesData, 'hgdjkvb')
 
   useEffect(() => {
     getVendors()
     fetchConstants()
-    getCountry()
+    if (process.env.REACT_APP_SITE_NAME === 'zapkart') {
+      getCountry()
+    } else {
+      getDistrict()
+    }
   }, [])
 
   console.log(allTreesData, 'opdjksgduk')
@@ -238,7 +241,7 @@ const DeliveryZoneForm = (props) => {
         const sendingValues = {
           name: values?.name,
           status: values?.status,
-          vendorId:values?.vendorId,
+          vendorId: values?.vendorId,
           deliveryLocations: getParentBasedDeliveryZones(
             checkedDeliveryZoneSendingValues
           )?.map((cur) => {
@@ -269,8 +272,7 @@ const DeliveryZoneForm = (props) => {
         console.log(sendingValues, 'sendinggggg')
         if (mode === ADD) {
           const created = await deliveryzoneService.createDeliveryZone(
-           
-           
+            sendingValues
           )
           if (created) {
             message.success(`Created ${values.name} to Delivery zones List`)
@@ -280,8 +282,7 @@ const DeliveryZoneForm = (props) => {
         if (mode === EDIT) {
           const edited = await deliveryzoneService.editDeliveryZone(
             param.id,
-            
-          
+            sendingValues
           )
           if (edited) {
             message.success(`Edited ${values.name} to Delivery zone list`)
