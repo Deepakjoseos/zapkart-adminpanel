@@ -46,29 +46,11 @@ const ShipmentForm = (props) => {
   },[])
 
   
-  const getPincode= async () => {
-    const data = await pincodeService.getPincode()
+  const getPincode = async (query) => {
+    const data = await pincodeService.getPincode(query)
     if (data) {
-      if (mode === EDIT) {
-     //   const deliveryLocs = data.filter(
-     //     (cur) => cur.isFinal !== true && cur.id !== param.id
-     //   )
-     //   setDeliveryLocations(deliveryLocs)
-     // } else {
-     //   const deliveryLocs = data.filter((cur) => cur.isFinal !== true)
-     //   setDeliveryLocations(deliveryLocs)
-     // }
-     const restCats = data.data.filter((cat) => cat.id !== param.id)
-       const list = Utils.createCategoryList(restCats)
-       setPincode(list)
-     } else {
-       const list = Utils.createCategoryList(data)
-       
-       setPincode(list)
-     }
-   
-     
-   }
+      setPincode(data.data)
+    }
   }
   const getCity= async () => {
     const data = await cityService.getCity()
@@ -168,6 +150,7 @@ const ShipmentForm = (props) => {
       .then(async (values) => {
         if (mode === ADD) {
           values.country = 'India'
+                                                                                                                              
           const data = await shipmentService.createPickupLocation(values)
 
           if (data) {

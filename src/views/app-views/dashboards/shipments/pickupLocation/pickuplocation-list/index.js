@@ -128,12 +128,12 @@ const PickupLocationList = () => {
 
   // Antd Table Columns
   const tableColumns = [
-    {
-      title: 'Pickup Location Name',
-      dataIndex: 'pickup_location',
+    // {
+    //   title: 'Pickup Location Name',
+    //   dataIndex: 'pickup_location',
 
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
-    },
+    //   sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
+    // },
     {
       title: 'Name',
       dataIndex: 'name',

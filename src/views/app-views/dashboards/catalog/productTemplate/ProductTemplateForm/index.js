@@ -378,19 +378,19 @@ const ProductForm = (props) => {
               return { id: comp.id, qty: comp.qty }
             }),
 
-            shippingDetail: {
-              lengthClass: values.lengthClass,
-              weightClass: values.weightClass,
-              height: values.height,
-              length: values.length,
-              width: values.width,
-              weight: values.weight,
-            },
+            // shippingDetail: {
+            //   lengthClass: values.lengthClass,
+            //   weightClass: values.weightClass,
+            //   height: values.height,
+            //   length: values.length,
+            //   width: values.width,
+            //   weight: values.weight,
+            // },
           }
 
           if (sendingValues.productType === 'Medicine') {
             sendingValues.pregnancyInteraction = values.pregnancyInteraction
-            sendingValues.expertAdvice = values.expertAdvice
+            // sendingValues.expertAdvice = values.expertAdvice
             sendingValues.sideEffects = values.sideEffects
             sendingValues.howToUse = values.howToUse
             sendingValues.faq = values.faq

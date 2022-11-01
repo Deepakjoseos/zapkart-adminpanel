@@ -42,22 +42,25 @@ deliveryzoneService.getDeliveryZoneById = async function (id) {
     console.log(err, 'show-err')
   }
 }
-deliveryzoneService.createDeliveryZone = async function (vendorId, data) {
+deliveryzoneService.createDeliveryZone = async function (data) {
   try {
     const res = await fetch({
-      url: `/deliveryzones/${vendorId}/admin`,
+      url: `/deliveryzones/admin?${data?.vendorId}`,
       method: 'post',
       data: data,
+      
     })
+   
+   
     return res
   } catch (err) {
-    console.log(err, 'show-err')
+    console.log(data, 'HElloooooooo')
   }
 }
-deliveryzoneService.editDeliveryZone = async function (id, vendorId, data) {
+deliveryzoneService.editDeliveryZone = async function (id, data) {
   try {
     const res = await fetch({
-      url: `/deliveryzones/${id}/${vendorId}/admin`,
+      url: `/deliveryzones/${id}/admin?${data?.vendorId}`,
       method: 'put',
       data: data,
     })

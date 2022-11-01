@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Input, Row, Col, Card, Form,Select, InputNumber ,TreeSelect} from 'antd'
 const {Option} = Select
+const SITE_NAME = process.env.REACT_APP_SITE_NAME
 
 const GeneralField = ({ form ,vendors,state,pincode,city}) => {
   console.log("hiiii")
@@ -66,8 +67,8 @@ const GeneralField = ({ form ,vendors,state,pincode,city}) => {
 
        
 
- <Form.Item name="state" label="Country" >
-      <TreeSelect placeholder="Country" showSearch
+ <Form.Item name="state" label={SITE_NAME === 'zapkart' ? 'State' : 'Emirates'} >
+      <TreeSelect placeholder={SITE_NAME === 'zapkart' ? 'State' : 'Emirates'} showSearch
         optionFilterProp="children"
         filterOption={(input, option) =>
           option.title.toLowerCase().indexOf(input.toLowerCase()) >= 0
@@ -84,8 +85,8 @@ const GeneralField = ({ form ,vendors,state,pincode,city}) => {
     
     <Row gutter={16}>
         <Col span={12}>
- <Form.Item name="city" label="Emirates" >
-      <TreeSelect placeholder="Emirates" showSearch
+ <Form.Item name="city" label={SITE_NAME === 'zapkart' ? 'City' : 'Emirates'} >
+      <TreeSelect placeholder={SITE_NAME === 'zapkart' ? 'City' : 'Emirates'}showSearch
         optionFilterProp="children"
         filterOption={(input, option) =>
           option.title.toLowerCase().indexOf(input.toLowerCase()) >= 0
@@ -101,19 +102,23 @@ const GeneralField = ({ form ,vendors,state,pincode,city}) => {
    
     
         <Col span={12}>
-    <Form.Item name="pincode" label="City" >
-      <TreeSelect placeholder="City" showSearch
-        optionFilterProp="children"
-        filterOption={(input, option) =>
-          option.title.toLowerCase().indexOf(input.toLowerCase()) >= 0
-        } treeData={pincode} treeDefaultExpandAll>
-          
-        {/* {deliveryLocations.map((cur) => (
-          <Option value={cur.id} key={cur.id}>
-            {cur.name}
-          </Option>
-        ))}  */}
-      </TreeSelect>
+    <Form.Item name="pin_code" label={SITE_NAME === 'zapkart' ? 'Pincode' : 'City'} >
+    <Select
+          //  disabled={mode === 'EDIT' ? true : false}
+            showSearch
+            optionFilterProp="children"
+            filterOption={(input, option) =>
+              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
+            placeholder="Pincode"
+        
+          >
+            {pincode.map((pincode) => (
+              <Option value={pincode.name}>
+                {pincode.name}
+              </Option>
+            ))}
+          </Select>
     </Form.Item>
 
         </Col>

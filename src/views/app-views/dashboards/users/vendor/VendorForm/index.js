@@ -47,6 +47,7 @@ const ProductForm = (props) => {
   const [form_statuses, setStatuses] = useState([])
   const [groupList, setGroupList] = useState([])
   const [transactions, setTransactions] = useState([])
+  const [Logo, setLogo] = useState(null)
 
   const [wallet, setWallet] = useState({})
   const [selectedVendorId, setSelectedVendorId] = useState(null)
@@ -58,6 +59,13 @@ const ProductForm = (props) => {
     onChange: onChangeDisplayImages,
     onRemove: onRemoveDisplayImages,
     setFileList: setFileListDisplayImages,
+  } = useUpload(1)
+  const {
+    fileList: fileListLogo,
+    beforeUpload: beforeUploadLogo,
+    onChange: onChangeLogo,
+    onRemove: onRemoveLogo,
+    setFileList: setFileListLogo,
   } = useUpload(1)
   const getUserGroups = async () => {
     const data = await userGroupService.getUserGroups()
@@ -121,6 +129,21 @@ const ProductForm = (props) => {
 
         setDisplayImage(himg)
         setFileListDisplayImages(himg)
+       
+      }
+
+
+      if (data.logo) {
+        himg = [
+          {
+            uid: Math.random() * 1000,
+            name: Utils.getBaseName(data.logo),
+            url: data.logo,
+            thumbUrl: data.logo,
+          },
+        ]
+        setLogo(himg)
+        setFileListLogo(himg)
       }
 
       form.setFieldsValue({
@@ -145,6 +168,7 @@ const ProductForm = (props) => {
         // Bussiness
         'business.name': data?.business?.name,
         'business.address.line1': data?.business?.address?.line1,
+        'business.address.logo': data?.business?.address?.logo,
         'business.address.city': data?.business?.address?.city,
         'business.address.state': data?.business?.address?.state,
         'business.address.country': data?.business?.address?.country,
@@ -176,6 +200,21 @@ const ProductForm = (props) => {
     setDisplayImage(fileListDisplayImages)
   }, [fileListDisplayImages])
 
+
+  const propsLogo = {
+    multiple: false,
+    beforeUpload: beforeUploadLogo,
+    onRemove: onRemoveLogo,
+    onChange: onChangeLogo,
+    fileList: fileListLogo,
+  }
+
+  useEffect(() => {
+    setLogo(fileListLogo)
+  }, [fileListLogo])
+
+
+
   const onFinish = async () => {
     setSubmitLoading(true)
     form
@@ -203,6 +242,7 @@ const ProductForm = (props) => {
             name: values['business.name'],
             address: {
               line1: values['business.address.line1'],
+              logo: values['business.address.logo'],
               city: values['business.address.city'],
               state: values['business.address.state'],
               country: values['business.address.country'],
@@ -246,6 +286,7 @@ const ProductForm = (props) => {
         } else {
           delete sendingValues.displayImage
         }
+        
         if (mode === ADD) {
           sendingValues.phone = values.phone
           sendingValues.password = values.password
@@ -338,6 +379,7 @@ const ProductForm = (props) => {
             <TabPane tab="General" key="1">
               <GeneralField
                 propsDisplayImages={propsDisplayImages}
+                propsLogo={propsLogo}
                 form={form}
                 mode={mode}
                 emailVerified={emailVerified}

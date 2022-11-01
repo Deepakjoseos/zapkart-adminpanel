@@ -32,6 +32,12 @@ const rules = {
             message: 'Required',
         },
     ],
+    priority: [
+        {
+          required: true,
+          message: 'Required',
+        },
+      ],
     percent: [
         {
             required: true,
@@ -59,6 +65,14 @@ const GeneralField = ({
                             <Option value="Hold">Hold</Option>
                         </Select>
                     </Form.Item>
+                    <Form.Item name="priority" label="Priority" rules={rules.priority}>
+            <InputNumber
+              placeholder="Priority"
+              size="large"
+              min={0}
+              max={100000}
+            />
+          </Form.Item>
                     <p>Taxes</p>
                     <Form.List name="taxes">
                         {(fields, { add, remove }) => {
@@ -86,6 +100,7 @@ const GeneralField = ({
                                                 />
 
                                             </Form.Item>
+                                  
                                             <Form.Item label="Percent"
                                                 {...field}
                                                 rules={[

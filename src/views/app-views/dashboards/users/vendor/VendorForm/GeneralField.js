@@ -79,6 +79,7 @@ const GeneralField = ({
   phoneVerified,
   pickupLocations,
   form_statuses,
+  propsLogo,
   userGroups,
 }) => (
   <Row gutter={16}>
@@ -159,6 +160,51 @@ const GeneralField = ({
             <Form.Item name="email" label="Email" rules={rules.email}>
               <Input />
             </Form.Item>
+
+
+            <Card title="Business">
+          <Form.Item name="business.name" label="Bussiness Name">
+            <Input placeholder="Bussiness Name" />
+          </Form.Item>
+
+
+          <Card  title="Business logo">
+        <Upload className='flex-column'
+          listType="picture-card"
+          name="business.address.logo"
+          {...propsLogo}
+          accept="image/*"
+        >
+          <CustomIcon className="display-3 " svg={ImageSvg} />
+        </Upload>
+        
+      </Card>
+          <br />
+          <h4>Bussiness Address</h4>
+          <Form.Item name="business.address.line1" label="Line1">
+            <Input placeholder="Line1" />
+          </Form.Item>
+
+          <Form.Item name="business.address.city" label="City">
+            <Input placeholder="City" />
+          </Form.Item>
+
+          <Form.Item name="business.address.state" label="State">
+            <Input placeholder="State" />
+          </Form.Item>
+
+          <Form.Item name="business.address.country" label="Country">
+            <Input placeholder="Country" />
+          </Form.Item>
+
+          <Form.Item name="business.address.phone" label="Phone">
+            <Input placeholder="Phone" />
+          </Form.Item>
+
+          <Form.Item name="business.address.zipcode" label="Zipcode">
+            <Input placeholder="Zipcode" />
+          </Form.Item>
+        </Card>
           </>
         ) : (
           ''
@@ -235,11 +281,31 @@ const GeneralField = ({
           <Form.Item name="business.name" label="Bussiness Name">
             <Input placeholder="Bussiness Name" />
           </Form.Item>
+
+
+          <Card  title="Business logo">
+        <Upload className='flex-column'
+          listType="picture-card"
+          name="business.address.logo"
+          {...propsLogo}
+          accept="image/*"
+        >
+          <CustomIcon className="display-3 " svg={ImageSvg} />
+        </Upload>
+        
+      </Card>
           <br />
           <h4>Bussiness Address</h4>
           <Form.Item name="business.address.line1" label="Line1">
             <Input placeholder="Line1" />
           </Form.Item>
+
+
+
+
+       
+     
+  
 
           <Form.Item name="business.address.city" label="City">
             <Input placeholder="City" />
