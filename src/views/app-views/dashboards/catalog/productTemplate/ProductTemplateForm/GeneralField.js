@@ -112,42 +112,42 @@ const rules = {
     },
   ],
 
-  lengthClass: [
-    {
-      required: true,
-      message: 'Required',
-    },
-  ],
-  weightClass: [
-    {
-      required: true,
-      message: 'Required',
-    },
-  ],
-  height: [
-    {
-      required: true,
-      message: 'Required',
-    },
-  ],
-  length: [
-    {
-      required: true,
-      message: 'Required',
-    },
-  ],
-  width: [
-    {
-      required: true,
-      message: 'Required',
-    },
-  ],
-  weight: [
-    {
-      required: true,
-      message: 'Required',
-    },
-  ],
+  // lengthClass: [
+  //   {
+  //     required: true,
+  //     message: 'Required',
+  //   },
+  // ],
+  // weightClass: [
+  //   {
+  //     required: true,
+  //     message: 'Required',
+  //   },
+  // ],
+  // height: [
+  //   {
+  //     required: true,
+  //     message: 'Required',
+  //   },
+  // ],
+  // length: [
+  //   {
+  //     required: true,
+  //     message: 'Required',
+  //   },
+  // ],
+  // width: [
+  //   {
+  //     required: true,
+  //     message: 'Required',
+  //   },
+  // ],
+  // weight: [
+  //   {
+  //     required: true,
+  //     message: 'Required',
+  //   },
+  // ],
 
   slug: [
     {
@@ -586,7 +586,7 @@ const GeneralField = ({
             <Form.Item
               name="expertAdvice"
               label="Expert Advice"
-              rules={rules.expertAdvice}
+              // rules={rules.expertAdvice}
             >
               <Editor
                 placeholder="Write something..."
@@ -750,7 +750,7 @@ const GeneralField = ({
           >
             <CustomIcon className="display-3" svg={ImageSvg} />
           </Upload>
-          size: 570px * 430px
+          size: 321px * 220px
         </Card>
       </Col>
     </Row>

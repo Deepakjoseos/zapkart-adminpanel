@@ -159,9 +159,19 @@ const TaxCategoryList = () => {
 
   const tableColumns = [
     {
+      title: 'taxCategoryId',
+      dataIndex: 'id'
+    },
+    {
       title: 'Name',
       dataIndex: 'name'
     },
+    {
+      title: 'Priority',
+      dataIndex: 'priority'
+    },
+   
+    
     // {
     //   title: 'Taxes',
     //   dataIndex: 'taxes',
