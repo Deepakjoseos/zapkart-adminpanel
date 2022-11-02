@@ -168,7 +168,7 @@ const ProductForm = (props) => {
         // Bussiness
         'business.name': data?.business?.name,
         'business.address.line1': data?.business?.address?.line1,
-        'business.address.logo': data?.business?.address?.logo,
+        'business.address.logo': data?.business?.logo,
         'business.address.city': data?.business?.address?.city,
         'business.address.state': data?.business?.address?.state,
         'business.address.country': data?.business?.address?.country,

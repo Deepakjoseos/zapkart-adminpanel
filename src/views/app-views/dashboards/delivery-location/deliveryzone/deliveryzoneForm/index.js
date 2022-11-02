@@ -238,7 +238,7 @@ const DeliveryZoneForm = (props) => {
         const sendingValues = {
           name: values?.name,
           status: values?.status,
-          vendorId:values?.vendorId,
+          vendorid:values?.vendorid,
           deliveryLocations: getParentBasedDeliveryZones(
             checkedDeliveryZoneSendingValues
           )?.map((cur) => {
@@ -279,7 +279,7 @@ const DeliveryZoneForm = (props) => {
         }
         if (mode === EDIT) {
           const edited = await deliveryzoneService.editDeliveryZone(
-            param.id,
+            param.id
             
           
           )
