@@ -171,7 +171,7 @@ const GeneralField = ({
           <Card  title="Business logo">
         <Upload className='flex-column'
           listType="picture-card"
-          name="business.address.logo"
+          name="business.logo"
           {...propsLogo}
           accept="image/*"
         >

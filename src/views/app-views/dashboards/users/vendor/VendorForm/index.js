@@ -242,7 +242,7 @@ const ProductForm = (props) => {
             name: values['business.name'],
             address: {
               line1: values['business.address.line1'],
-              logo: values['business.address.logo'],
+              logo: values['business.logo'],
               city: values['business.address.city'],
               state: values['business.address.state'],
               country: values['business.address.country'],
