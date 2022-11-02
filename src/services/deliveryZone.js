@@ -45,7 +45,7 @@ deliveryzoneService.getDeliveryZoneById = async function (id) {
 deliveryzoneService.createDeliveryZone = async function (data) {
   try {
     const res = await fetch({
-      url: `/deliveryzones/${data?.vendorId}/admin`,
+      url: `/deliveryzones/admin?vendorId=${data?.vendorId}`,
       method: 'post',
       data: data,
     })
@@ -58,7 +58,7 @@ deliveryzoneService.createDeliveryZone = async function (data) {
 deliveryzoneService.editDeliveryZone = async function (id, data) {
   try {
     const res = await fetch({
-      url: `/deliveryzones/${id}/${data?.vendorId}/admin`,
+      url: `/deliveryzones/${id}/admin?vendorId=${data?.vendorId}`,
       method: 'put',
       data: data,
     })
