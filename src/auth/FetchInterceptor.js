@@ -5,6 +5,7 @@ import { AUTH_TOKEN } from 'redux/constants/Auth'
 import { notification } from 'antd'
 import FirebaseService from 'services/FirebaseService'
 import Utils from 'utils'
+import { currentUser } from './FirebaseAuth'
 
 const service = axios.create({
   baseURL: API_BASE_URL,
@@ -47,19 +48,53 @@ service.interceptors.response.use(
   (response) => {
     return response.data
   },
-  (error) => {
+  async (error) => {
     let notificationParam = {
       message: '',
     }
+    const originalRequest = error.config
 
     // Remove token and redirect
     if (error.response.status === 401 || error.response.status === 403) {
-      notificationParam.message = 'Authentication Fail'
-      notificationParam.description = 'Please login again'
-      FirebaseService.signOutRequest()
-      localStorage.removeItem(AUTH_TOKEN)
-      history.push(ENTRY_ROUTE)
-      window.location.reload()
+      if (currentUser) {
+        const refreshed = await FirebaseService.refreshToken()
+
+        if (refreshed) {
+          originalRequest._retry = true
+
+          axios.defaults.headers.common['authorization'] = 'Bearer ' + refreshed
+          return service(originalRequest)
+        } else {
+          FirebaseService.signOutRequest()
+          localStorage.removeItem(AUTH_TOKEN)
+          history.push(ENTRY_ROUTE)
+          window.location.reload()
+          notificationParam.message = 'Authentication Fail'
+          notificationParam.description = 'Please login again'
+        }
+      } else {
+        FirebaseService.signOutRequest()
+        localStorage.removeItem(AUTH_TOKEN)
+        history.push(ENTRY_ROUTE)
+        window.location.reload()
+        notificationParam.message = 'Authentication Fail'
+        notificationParam.description = 'Please login again'
+      }
+      // const refreshed = await FirebaseService.refreshToken()
+
+      // if (refreshed && currentUser) {
+      //   originalRequest._retry = true
+
+      //   axios.defaults.headers.common['authorization'] = 'Bearer ' + refreshed
+      //   return service(originalRequest)
+      // } else {
+      //   FirebaseService.signOutRequest()
+      //   localStorage.removeItem(AUTH_TOKEN)
+      //   history.push(ENTRY_ROUTE)
+      //   window.location.reload()
+      //   notificationParam.message = 'Authentication Fail'
+      //   notificationParam.description = 'Please login again'
+      // }
     }
 
     if (error.response.status === 404) {

@@ -3,6 +3,7 @@ import {
   googleAuthProvider,
   facebookAuthProvider,
 } from 'auth/FirebaseAuth'
+import { AUTH_TOKEN } from 'redux/constants/Auth'
 
 const FirebaseService = {}
 
@@ -11,6 +12,14 @@ FirebaseService.signInEmailRequest = async (email, password) =>
     .signInWithEmailAndPassword(email, password)
     .then((user) => user)
     .catch((err) => err)
+
+FirebaseService.refreshToken = async () => {
+  const idToken = await auth.currentUser.getIdTokenResult(true)
+  const token = idToken.token
+
+  window.localStorage.setItem(AUTH_TOKEN, token)
+  return token ? token : null
+}
 
 FirebaseService.signInEmailRequest = async (email, password) =>
   await auth
