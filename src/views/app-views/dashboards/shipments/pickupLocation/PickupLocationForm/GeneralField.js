@@ -3,7 +3,7 @@ import { Input, Row, Col, Card, Form,Select, InputNumber ,TreeSelect} from 'antd
 const {Option} = Select
 const SITE_NAME = process.env.REACT_APP_SITE_NAME
 
-const GeneralField = ({ form ,vendors,state,pincode,city}) => {
+const GeneralField = ({ form ,vendors,state,pincode,city,setFieldValue,getPincode,getCity}) => {
   console.log("hiiii")
   console.log(pincode)
   return (
@@ -68,17 +68,22 @@ const GeneralField = ({ form ,vendors,state,pincode,city}) => {
        
 
  <Form.Item name="state" label={SITE_NAME === 'zapkart' ? 'State' : 'Emirates'} >
-      <TreeSelect placeholder={SITE_NAME === 'zapkart' ? 'State' : 'Emirates'} showSearch
-        optionFilterProp="children"
-        filterOption={(input, option) =>
-          option.title.toLowerCase().indexOf(input.toLowerCase()) >= 0
-        } treeData={state} treeDefaultExpandAll>
-        {/* {deliveryLocations.map((cur) => (
-          <Option value={cur.id} key={cur.id}>
-            {cur.name}
-          </Option>
-        ))}  */}
-      </TreeSelect>
+      <Select placeholder={SITE_NAME === 'zapkart' ? 'State' : 'Emirates'} 
+      
+      
+     
+                   
+                    onChange={(val) => {
+                      form.setFieldsValue({ city: null })
+                      getCity("",`stateName=${val}`)
+                    }}
+                  >
+                    {state.map((item) => (
+                      <Option key={item.name} value={item.name}>
+                        {item.name}
+                      </Option>
+                    ))}
+                  </Select>
     </Form.Item>
     </Col>
     </Row>
@@ -86,17 +91,18 @@ const GeneralField = ({ form ,vendors,state,pincode,city}) => {
     <Row gutter={16}>
         <Col span={12}>
  <Form.Item name="city" label={SITE_NAME === 'zapkart' ? 'City' : 'Emirates'} >
-      <TreeSelect placeholder={SITE_NAME === 'zapkart' ? 'City' : 'Emirates'}showSearch
-        optionFilterProp="children"
-        filterOption={(input, option) =>
-          option.title.toLowerCase().indexOf(input.toLowerCase()) >= 0
-        } treeData={city} treeDefaultExpandAll>
-        {/* {deliveryLocations.map((cur) => (
-          <Option value={cur.id} key={cur.id}>
-            {cur.name}
-          </Option>
-        ))}  */}
-      </TreeSelect>
+      <Select placeholder={SITE_NAME === 'zapkart' ? 'City' : 'Emirates'}
+
+     
+       >
+         <Option value=""></Option>
+         {city.map((city) => (
+           <Option key={city.name} value={city.name}>
+             {city.name}
+           </Option>
+         ))}
+                </Select>
+
     </Form.Item>
     </Col>
    
@@ -114,7 +120,7 @@ const GeneralField = ({ form ,vendors,state,pincode,city}) => {
         
           >
             {pincode.map((pincode) => (
-              <Option value={pincode.name}>
+              <Option key={pincode.name} value={pincode.name}>
                 {pincode.name}
               </Option>
             ))}

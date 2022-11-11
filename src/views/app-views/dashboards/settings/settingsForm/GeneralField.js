@@ -4,6 +4,7 @@ import EllipsisDropdown from "components/shared-components/EllipsisDropdown";
 import { useState } from "react";
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
 
+import Editor from 'components/shared-components/Editor'
 
 
 const { Option } = Select;
@@ -62,7 +63,7 @@ const rules = {
   ],
 };
 
-const GeneralField = ({ setmode }) => {
+const GeneralField = ({ setmode,form }) => {
   const [deliveryCharges, setDeliveryCharges] = useState([])
   return (
     // <Row gutter={16}>
@@ -134,6 +135,30 @@ const GeneralField = ({ setmode }) => {
           >
             <Input placeholder="Razor Pay Account" type="text" />
           </Form.Item>
+          {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+          <Form.Item
+            name="agreement"
+            label="Agreement"
+           
+          >
+            <Input placeholder="Agreement" type="text" />
+          </Form.Item>
+        
+          )}
+            {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+              <Form.Item
+                name="footer"
+                label="Footer"
+                
+              >
+                <Editor
+                  placeholder="Write something..."
+                  editorHtml={form.getFieldValue('footer') || ''}
+                  onChange={(e) => form.setFieldsValue({ footer: e })}
+                  name="fcmDescription"
+                />
+              </Form.Item>)}
+           
           {/* <Form.Item
             name="vendorCommission"
             label="Vendor Commission"

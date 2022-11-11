@@ -16,6 +16,7 @@ import {
   EyeOutlined,
   DeleteOutlined,
   SearchOutlined,
+  FileImageOutlined,
   PlusCircleOutlined, FileAddOutlined, DownloadOutlined
 } from '@ant-design/icons'
 import AvatarStatus from 'components/shared-components/AvatarStatus'
@@ -79,6 +80,7 @@ const ProductList = () => {
   const [vendors, setVendors] = useState([])
   const [brands, setBrands] = useState([])
   const [categories, setCategories] = useState([])
+  const[orderbyname,setOrderbyname]= useState([])
   const [pagination, setPagination] = useState({
     current: 1,
     pageSize: 10,
@@ -89,6 +91,7 @@ const ProductList = () => {
       // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
   
       setStatuses(Object.values(data.GENERAL['STATUS']))
+      setOrderbyname(Object.values(data.GENERAL['NAME_SORT']))
   
     }
   }
@@ -176,7 +179,13 @@ const ProductList = () => {
           <span className="ml-2">View Details</span>
         </Flex>
       </Menu.Item>
-      {/* <Menu.Item onClick={() => deleteRow(row)}>
+      <Menu.Item onClick={() => Newtab(row)}>
+        <Flex alignItems="center">
+          <EyeOutlined />
+          <span className="ml-2">Open In New Tab</span>
+        </Flex>
+      </Menu.Item>
+      <Menu.Item onClick={() => deleteRow(row)}>
         <Flex alignItems="center">
           <DeleteOutlined />
           <span className="ml-2">
@@ -185,7 +194,7 @@ const ProductList = () => {
               : 'Delete'}
           </span>
         </Flex>
-      </Menu.Item> */}
+      </Menu.Item>
     </Menu>
   )
 
@@ -252,25 +261,28 @@ const ProductList = () => {
   const viewDetails = (row) => {
     history.push(`/app/dashboards/catalog/product/edit-product/${row.id}`)
   }
+  const Newtab = (row) => {
+    window.open(`/app/dashboards/catalog/product/edit-product/${row.id}`)
+  }
+  const deleteRow = async (row) => {
+    const resp = await productService.deleteProduct(row.id,row.userId)
+    console.log(row,"hiiiii")
+    if (resp) {
+      const objKey = 'id'
+      let data = list
+      if (selectedRows.length > 1) {
+        selectedRows.forEach((elm) => {
+          data = utils.deleteArrayRow(data, objKey, elm.id)
+          setList(data)
+          setSelectedRows([])
+        })
+      } else {
+        data = utils.deleteArrayRow(data, objKey, row.id)
+        setList(data)
+      }
+    }
+  }
 
-  // const deleteRow = async (row) => {
-  //   const resp = await productService.deleteProduct(row.id)
-
-  //   if (resp) {
-  //     const objKey = 'id'
-  //     let data = list
-  //     if (selectedRows.length > 1) {
-  //       selectedRows.forEach((elm) => {
-  //         data = utils.deleteArrayRow(data, objKey, elm.id)
-  //         setList(data)
-  //         setSelectedRows([])
-  //       })
-  //     } else {
-  //       data = utils.deleteArrayRow(data, objKey, row.id)
-  //       setList(data)
-  //     }
-  //   }
-  // }
 
   const handleApprovalChange = async (value, selectedRow) => {
     const updatedProductApproval = await productService.approvalProduct(
@@ -657,7 +669,21 @@ const ProductList = () => {
             </Select>
           </Form.Item>
         </Col> */}
-
+<Form.Item name="orderByName" label="orderByName">
+     
+     <Select
+       className="w-100"
+       style={{ minWidth: 180 }}
+       placeholder="Status"
+     >
+       <Option value="">All</Option>
+       {orderbyname.map((item) => (
+         <Option key={item.id} value={item}>
+           {item}
+         </Option>
+       ))}
+     </Select>
+   </Form.Item>
         <Col className="mb-4">
           <Button type="primary" onClick={handleFilterSubmit}>
             Filter
@@ -836,6 +862,7 @@ const ProductList = () => {
         <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
           {filtersComponent()}
         </Flex>
+       
         <div className="mr-2 d-flex justify-content-between">
           <Button
             type="primary"
@@ -844,7 +871,28 @@ const ProductList = () => {
           >
             Excel Upload
           </Button>
+          
+
+       
+    
+               
+
+         <div className="mr-2 d-flex justify-content-between">
+        <Button  
+            icon={<FileImageOutlined />}>      <a
+  href={process.env.PUBLIC_URL + "/Sample Excel.xlsx"}
+  download={"file-name-to-use.xlsx"}
+>
+    Download Sample File
+</a>
+      </Button>
+      </div>
+            
+       
+        
           <div>
+        
+              
             <Button
               onClick={addProduct}
               type="primary"

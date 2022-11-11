@@ -65,8 +65,8 @@ const TaxCategoryForm = (props) => {
         
           form.setFieldsValue({
             status: data.status,
-            name:data.name,
-            taxes:data.taxes,
+            name: data.name,
+            taxes: data.taxes,
             priority: data.priority,
        
             

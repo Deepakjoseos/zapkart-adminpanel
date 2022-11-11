@@ -7,30 +7,31 @@ import CustomIcon from 'components/util-components/CustomIcon'
 const { Option } = Select
 
 const rules = {
-  firstName: [
-    {
-      required: true,
-      message: 'Required',
-    },
-  ],
-  lastName: [
-    {
-      required: true,
-      message: 'Required',
-    },
-  ],
+  // firstName: [
+  //   {
+  //     required: true,
+  //     message: 'Required',
+  //   },
+  // ],
+  // lastName: [
+  //   {
+  //     required: true,
+  //     message: 'Required',
+  //   },
+  // ],
   // drugLicense: [
   //   {
   //     required: true,
   //     message: 'Required',
   //   },
   // ],
-  // gst: [
-  //   {
-  //     required: true,
-  //     message: 'Required',
-  //   },
-  // ],
+  
+  gst: [
+    {
+      required: true,
+      message: 'Required',
+    },
+  ],
   email: [
     {
       required: true,
@@ -85,14 +86,47 @@ const GeneralField = ({
   <Row gutter={16}>
     <Col xs={24} sm={24} md={17}>
       <Card title="Basic Info">
-        <Form.Item name="firstName" label="First Name" rules={rules.firstName}>
+      
+
+        {mode === 'ADD' ? (
+          <>
+
+
+<Form.Item name="firstName" label="First Name">
           <Input placeholder="First Name" />
         </Form.Item>
-        <Form.Item name="lastName" label="Last Name" rules={rules.lastName}>
+        <Form.Item name="lastName" label="Last Name" >
           <Input placeholder="Last Name" />
         </Form.Item>
         {SITE_NAME === 'zapkart' && (
           <>
+           <Form.Item name="email" label="Email" rules={rules.email}>
+              <Input />
+            </Form.Item>
+          <Form.Item
+              name="emailVerified"
+              label="Email Verified"
+              rules={rules.emailVerified}
+            >
+              <Select placeholder="Email Verified">
+                <Option value={true}>Yes</Option>
+                <Option value={false}>No</Option>
+              </Select>
+            </Form.Item>
+          
+            <Form.Item label="Password" name="password" rules={rules.password}>
+              <Input.Password />
+            </Form.Item>
+            <Form.Item name="phone" label="Phone" rules={rules.pone}>
+              <Input placeholder="Phone" />
+            </Form.Item>
+            {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+
+            <Form.Item name="gst" label="GST" rules={rules.gst}>
+              <Input placeholder="Gst" />
+            </Form.Item>
+            )}
+           
             <Form.Item name="pan" label="Pan" rules={rules.pan}>
               <Input placeholder="Pan" />
             </Form.Item>
@@ -127,9 +161,6 @@ const GeneralField = ({
             ))}
           </Select>
         </Form.Item>
-
-        {mode === 'ADD' ? (
-          <>
             <Form.Item name="status" label="Status" rules={rules.status}>
               <Select placeholder="Status">
                 {form_statuses.map((item) => (
@@ -140,34 +171,17 @@ const GeneralField = ({
               </Select>
             </Form.Item>
 
-            <Form.Item
-              name="emailVerified"
-              label="Email Verified"
-              rules={rules.emailVerified}
-            >
-              <Select placeholder="Email Verified">
-                <Option value={true}>Yes</Option>
-                <Option value={false}>No</Option>
-              </Select>
-            </Form.Item>
-            <Form.Item name="phone" label="Phone" rules={rules.pone}>
-              <Input placeholder="Phone" />
-            </Form.Item>
-            <Form.Item label="Password" name="password" rules={rules.password}>
-              <Input.Password />
-            </Form.Item>
-
-            <Form.Item name="email" label="Email" rules={rules.email}>
-              <Input />
-            </Form.Item>
+            
+         
 
 
             <Card title="Business">
+            {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
           <Form.Item name="business.name" label="Bussiness Name">
             <Input placeholder="Bussiness Name" />
           </Form.Item>
-
-
+)}
+ {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
           <Card  title="Business logo">
         <Upload className='flex-column'
           listType="picture-card"
@@ -179,31 +193,41 @@ const GeneralField = ({
         </Upload>
         
       </Card>
+ )}
           <br />
+          {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
           <h4>Bussiness Address</h4>
+          )}
+          {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
           <Form.Item name="business.address.line1" label="Line1">
             <Input placeholder="Line1" />
           </Form.Item>
-
+  )}
+   {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
           <Form.Item name="business.address.city" label="City">
             <Input placeholder="City" />
           </Form.Item>
-
+)}
+   {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
           <Form.Item name="business.address.state" label="State">
             <Input placeholder="State" />
           </Form.Item>
-
+)}
+ {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
           <Form.Item name="business.address.country" label="Country">
             <Input placeholder="Country" />
           </Form.Item>
-
+)}
+ {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
           <Form.Item name="business.address.phone" label="Phone">
             <Input placeholder="Phone" />
           </Form.Item>
-
+ )}
+  {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
           <Form.Item name="business.address.zipcode" label="Zipcode">
             <Input placeholder="Zipcode" />
           </Form.Item>
+  )}
         </Card>
           </>
         ) : (
@@ -212,7 +236,15 @@ const GeneralField = ({
 
         {mode === 'EDIT' ? (
           <>
-            <Form.Item
+          <Form.Item name="firstName" label="First Name" >
+          <Input placeholder="First Name" />
+        </Form.Item>
+        <Form.Item name="lastName" label="Last Name" >
+          <Input placeholder="Last Name" />
+        </Form.Item>
+       
+          <>
+          <Form.Item
               hasFeedback
               validateStatus={phoneVerified ? 'success' : 'error'}
               name="phone"
@@ -229,6 +261,46 @@ const GeneralField = ({
             >
               <Input disabled id="success" />
             </Form.Item>
+            {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+            <Form.Item name="pan" label="Pan" rules={rules.pan}>
+              <Input placeholder="Pan" />
+            </Form.Item>
+            )}
+            {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+            <Form.Item name="drugLicense" label="Drug License">
+              <Input placeholder="drugLicense" />
+            </Form.Item>
+            )}
+            {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+            <Form.Item name="tanNumber" label="Tan Number">
+              <Input placeholder="tanNumber" />
+            </Form.Item>
+            )}
+          </>
+     
+
+        {/* <Form.Item name="drugLicense" label="Drug License Number" rules={rules.drugLicense}>
+          <Input placeholder="Drug License Number" />
+        </Form.Item> */}
+        <Form.Item name="groups" label="User Groups" rules={rules.userGroups}>
+          <Select
+            optionFilterProp="children"
+            filterOption={(input, option) =>
+              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
+            mode="multiple"
+            allowClear
+            style={{ width: '100%' }}
+            placeholder="User Groups"
+          >
+            {userGroups.map((group) => (
+              <Option key={group.id} value={group.id}>
+                {group.name}
+              </Option>
+            ))}
+          </Select>
+        </Form.Item>
+          
           </>
         ) : (
           ''
@@ -277,10 +349,13 @@ const GeneralField = ({
         'business.address.zipcode': data?.business?.address?.zipcode, */}
 
       {mode === 'EDIT' ? (
+       
         <Card title="Business">
+           
           <Form.Item name="business.name" label="Bussiness Name">
             <Input placeholder="Bussiness Name" />
           </Form.Item>
+
 
 
           <Card  title="Business logo">
@@ -294,38 +369,46 @@ const GeneralField = ({
         </Upload>
         
       </Card>
-          <br />
+   
+      {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+         
           <h4>Bussiness Address</h4>
+      )}
+        {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
           <Form.Item name="business.address.line1" label="Line1">
             <Input placeholder="Line1" />
           </Form.Item>
 
-
+        )}
 
 
        
-     
-  
+{process.env.REACT_APP_SITE_NAME === 'zapkart' && (
 
           <Form.Item name="business.address.city" label="City">
             <Input placeholder="City" />
           </Form.Item>
-
+)}
+{process.env.REACT_APP_SITE_NAME === 'zapkart' && (
           <Form.Item name="business.address.state" label="State">
             <Input placeholder="State" />
           </Form.Item>
-
+)}
+{process.env.REACT_APP_SITE_NAME === 'zapkart' && (
           <Form.Item name="business.address.country" label="Country">
             <Input placeholder="Country" />
           </Form.Item>
-
+)}
+{process.env.REACT_APP_SITE_NAME === 'zapkart' && (
           <Form.Item name="business.address.phone" label="Phone">
             <Input placeholder="Phone" />
           </Form.Item>
-
+)}
+{process.env.REACT_APP_SITE_NAME === 'zapkart' && (
           <Form.Item name="business.address.zipcode" label="Zipcode">
             <Input placeholder="Zipcode" />
           </Form.Item>
+)}
         </Card>
       ) : (
         ' '

@@ -46,7 +46,7 @@ const GeneralField = ({ props, propsImages, form_statuses }) => (
         <Upload listType="picture-card" name="image" {...propsImages} accept="image/*">
           <CustomIcon className="display-3" svg={ImageSvg} />
         </Upload>
-        size: 100px * 100px
+        size: 291px * 220px
 
       </Card>
     </Col>

@@ -183,11 +183,11 @@ const GeneralField = ({ propsImages, categories, handleChange, form, form_status
           size: 80px * 80px
         
         </Card>
-        <Card title="Mobile Image">
+        <Card title="Banner">
         <Upload listType="picture-card" name="image" {...propsBannerImage}>
           <CustomIcon className="display-3" svg={ImageSvg} />
         </Upload>
-        size: 80px * 80px
+        size: 1586px * 205px
       </Card>
       
 

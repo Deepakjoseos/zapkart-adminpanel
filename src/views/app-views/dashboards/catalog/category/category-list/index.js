@@ -70,7 +70,7 @@ const [statuses,setStatuses] = useState([])
 // pagination
 const [pagination, setPagination] = useState({
   current: 1,
-  pageSize: 15,
+  pageSize:30,
 })
 const fetchConstants = async () => {
   const data = await constantsService.getConstants()
@@ -139,6 +139,12 @@ const handleTableChange = (newPagination) => {
           <span className="ml-2">View Details</span>
         </Flex>
       </Menu.Item>
+      <Menu.Item onClick={() => Newtab(row)}>
+        <Flex alignItems="center">
+          <EyeOutlined />
+          <span className="ml-2">Open In New Tab</span>
+        </Flex>
+      </Menu.Item>
       <Menu.Item onClick={() => deleteRow(row)}>
         <Flex alignItems="center">
           <DeleteOutlined />
@@ -158,6 +164,9 @@ const handleTableChange = (newPagination) => {
 
   const viewDetails = (row) => {
     history.push(`/app/dashboards/catalog/category/edit-category/${row.id}`)
+  }
+  const Newtab = (row) => {
+    window.open(`/app/dashboards/catalog/category/edit-category/${row.id}`)
   }
 
   const deleteRow = async (row) => {

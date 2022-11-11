@@ -4,6 +4,7 @@ import { Tabs, Form, Button, message } from 'antd'
 import Flex from 'components/shared-components/Flex'
 import GeneralField from './GeneralField'
 import useUpload from 'hooks/useUpload'
+import Cart from '../customer-list/cart'
 import {
   multipleImageUpload,
   singleImageUploader,
@@ -268,6 +269,13 @@ const ProductForm = (props) => {
                     setSelectedPrescriptionCustomerId={setSelectedPrescriptionCustomerId}
                   /> */}
                   <ViewOrders selectedCustomerId={selectedCustomerId} />
+                </TabPane>
+                <TabPane tab="Cart" key="5">
+                  {/* <Orders
+                    selectedPrescriptionCustomerId={selectedPrescriptionCustomerId}
+                    setSelectedPrescriptionCustomerId={setSelectedPrescriptionCustomerId}
+                  /> */}
+                  <Cart selectedCustomerId={selectedCustomerId} />
                 </TabPane>
                 
               </>

@@ -223,7 +223,7 @@ const GeneralField = ({
             ))}
           </Select>
         </Form.Item>
-        <Form.Item name="vendorId" label="Vendor" >
+        <Form.Item name="vendorId" label="Vendor" rules={rules.vendor} >
           <Select
             disabled={mode === 'EDIT' ? true : false}
             showSearch

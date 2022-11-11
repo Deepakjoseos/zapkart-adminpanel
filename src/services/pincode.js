@@ -56,6 +56,21 @@ pincodeService.createPincode= async function (data) {
     console.log(err, 'show-err')
   }
 }
+pincodeService.createPincodeFromExcel = async function (data) {
+  const formData = new FormData()
+  formData.append('file', data.file)
+
+  try {
+    const res = await fetch({
+      url: `/pincode/createFromExcel`,
+      method: 'post',
+      data: formData,
+    })
+    return res
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
 
 pincodeService.editPincode = async function (id, data) {
   try {

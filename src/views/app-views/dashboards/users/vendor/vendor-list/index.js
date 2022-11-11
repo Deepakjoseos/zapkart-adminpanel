@@ -172,16 +172,16 @@ const VendorList = () => {
       dataIndex: 'state',
       sorter: (a, b) => utils.antdTableSorter(a, b, 'state'),
     },
+    // {
+
+    //   title: 'Country',
+    //   dataIndex: 'country',
+    //   sorter: (a, b) => utils.antdTableSorter(a, b, 'country'),
+    // },
+
     {
 
-      title: 'Country',
-      dataIndex: 'country',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'country'),
-    },
-
-    {
-
-      title: 'Pin Code',
+      title: 'PinCode',
       dataIndex: 'pin_code',
       sorter: (a, b) => utils.antdTableSorter(a, b, 'pin_code'),
     },
@@ -344,7 +344,7 @@ const VendorList = () => {
         /> */}
         </div>
       </Card>
-      <Modal title="Basic Modal" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+      <Modal title="Basic Model" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
         <Table columns={pickUpLocationsColumns} dataSource={pickUpLocations} />
 
       </Modal>

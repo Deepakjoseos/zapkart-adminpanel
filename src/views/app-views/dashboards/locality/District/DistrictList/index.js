@@ -26,6 +26,7 @@ import qs from 'qs'
 import utils from 'utils'
 import districtService from 'services/district'
 import _ from 'lodash'
+import cityService from 'services/city'
 
 import constantsService from 'services/constants'
 import stateService from 'services/state'
@@ -69,8 +70,8 @@ const DistrictList = () => {
   const [filterEnabled, setFilterEnabled] = useState(false)
   const [statuses, setStatuses] = useState([])
   const [states, setStates] = useState([])
-
-  // pagination
+  const [city, setCity] = useState([])
+  // paginatn
   const [pagination, setPagination] = useState({
     current: 1,
     pageSize: 10,
@@ -87,6 +88,12 @@ const DistrictList = () => {
     const data = await stateService.getState()
     if (data) {
       setStates(data.data)
+    }
+  }
+  const getCity = async () => {
+    const data = await cityService.getCity()
+    if (data) {
+      setCity(data.data)
     }
   }
   // Changed here for pagination
@@ -115,6 +122,7 @@ const DistrictList = () => {
     })
     fetchConstants()
     getStates()
+    getCity()
   }, [])
 
   // pagination generator
@@ -289,6 +297,38 @@ const DistrictList = () => {
             </Select>
           </Form.Item>
         </Col>
+
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item
+            name="stateId"
+            label="State"
+          >
+            <Select
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              className="w-100"
+              style={{ minWidth: 180 }}
+              // onChange={(value) => setSelectedBrandId(value)}
+              // onSelect={handleQuery}
+              placeholder="city"
+              // value={selectedBrandId}
+            >
+              <Option value="">All</Option>
+              {states.map((item) => (
+                <Option key={item.id} value={item.id}>
+                  {item.name}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </Col>
+
+
+
+
         <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item
             name="orderByPriority"
