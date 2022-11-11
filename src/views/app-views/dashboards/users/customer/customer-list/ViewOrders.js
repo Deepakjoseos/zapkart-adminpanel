@@ -181,7 +181,13 @@ const ViewOrders = ({
           // render: (items, record) => <div>{items?.length}</div>,
         },
         
-    
+        {
+          title: 'Payment Type',
+          dataIndex: 'payment',
+          render: (payment) => {
+            return <Flex alignItems="centre">{payment?.type}</Flex>
+          },
+        },
         // {
         //   title: 'Products Count',
         //   dataIndex: 'items',

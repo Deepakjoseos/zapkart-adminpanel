@@ -70,7 +70,7 @@ const MedicineTypeList = () => {
   // pagination
   const [pagination, setPagination] = useState({
     current: 1,
-    pageSize: 10,
+    pageSize: 30,
   })
   const fetchConstants = async () => {
     const data = await constantsService.getConstants()

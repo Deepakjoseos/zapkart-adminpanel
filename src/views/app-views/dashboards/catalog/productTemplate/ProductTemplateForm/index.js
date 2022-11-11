@@ -218,7 +218,6 @@ const ProductForm = (props) => {
           brandId: data?.brand?.id,
           taxCategoryId: data?.taxCategory?.id,
           manufacturerId: data.manufacturer?.id,
-
           description: data?.description,
           returnPeriod: data.returnPeriod,
           allowedQuantityPerOrder: data.allowedQuantityPerOrder,
@@ -230,12 +229,12 @@ const ProductForm = (props) => {
           tags: data.tags,
           commission: data.commission,
 
-          lengthClass: data.shippingDetail.lengthClass,
-          weightClass: data.shippingDetail.weightClass,
-          height: data.shippingDetail.height,
-          weight: data.shippingDetail.weight,
-          length: data.shippingDetail.length,
-          width: data.shippingDetail.width,
+          // lengthClass: data.shippingDetail.lengthClass,
+          // weightClass: data.shippingDetail.weightClass,
+          // height: data.shippingDetail.height,
+          // weight: data.shippingDetail.weight,
+          // length: data.shippingDetail.length,
+          // width: data.shippingDetail.width,
 
           // shippingDetail: {
           //   lengthClass: data.shippingDetail.lengthClass,
@@ -250,7 +249,7 @@ const ProductForm = (props) => {
           medicineTypeId: data.medicineTypeId,
           medicinePackaging: data.medicinePackaging,
           composition: data.composition,
-
+          highlights:data.highlights,
           // productType =============> 'Medicine'
           pregnancyInteraction: data.pregnancyInteraction,
           expertAdvice: data.expertAdvice,
@@ -276,6 +275,7 @@ const ProductForm = (props) => {
           returnPeriod: data.returnPeriod,
           allowedQuantityPerOrder: data.allowedQuantityPerOrder,
           minQty: data.minQty,
+          highlights:data.highlights,
           productType: 'nonMedicine',
           // slug: data.slug,
           // tags: tags,
@@ -283,12 +283,12 @@ const ProductForm = (props) => {
           // metaDescription: data.metaDescription,
           // keywords: data.keywords,
 
-          lengthClass: data.shippingDetail.lengthClass,
-          weightClass: data.shippingDetail.weightClass,
-          height: data.shippingDetail.height,
-          weight: data.shippingDetail.weight,
-          length: data.shippingDetail.length,
-          width: data.shippingDetail.width,
+          // lengthClass: data.shippingDetail.lengthClass,
+          // weightClass: data.shippingDetail.weightClass,
+          // height: data.shippingDetail.height,
+          // weight: data.shippingDetail.weight,
+          // length: data.shippingDetail.length,
+          // width: data.shippingDetail.width,
           // shippingDetail: {
           //   lengthClass: data.shippingDetail.lengthClass,
           //   weightClass: data.shippingDetail.weightClass,
@@ -373,7 +373,7 @@ const ProductForm = (props) => {
             keywords: values.keywords,
             status: values.status,
             commission: values.commission,
-
+            highlights:values.highlights,
             composition: values?.composition?.map((comp) => {
               return { id: comp.id, qty: comp.qty }
             }),
@@ -431,14 +431,14 @@ const ProductForm = (props) => {
             // metaDescription: values.metaDescription,
             // keywords: values.keywords,
             // status: values.status,
-            shippingDetail: {
-              lengthClass: values.lengthClass,
-              weightClass: values.weightClass,
-              height: values.height,
-              length: values.length,
-              width: values.width,
-              weight: values.weight,
-            },
+            // shippingDetail: {
+            //   lengthClass: values.lengthClass,
+            //   weightClass: values.weightClass,
+            //   height: values.height,
+            //   length: values.length,
+            //   width: values.width,
+            //   weight: values.weight,
+            // },
           }
         }
 

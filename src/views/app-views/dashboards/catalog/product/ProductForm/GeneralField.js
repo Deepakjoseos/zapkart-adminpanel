@@ -49,6 +49,12 @@ const rules = {
       message: 'Required',
     },
   ],
+  commission: [
+    {
+      required: true,
+      message: 'Required',
+    },
+  ],
   productTemplateId: [
     {
       required: true,

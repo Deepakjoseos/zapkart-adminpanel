@@ -9,7 +9,9 @@ import {
   Tag,
   Form,
   Row,
+  Modal,
   Col,
+  notification,
 } from 'antd'
 // import BrandListData from 'assets/data/product-list.data.json'
 import {
@@ -17,12 +19,15 @@ import {
   DeleteOutlined,
   SearchOutlined,
   PlusCircleOutlined,
+  FileAddOutlined,
+  DownloadOutlined,
 } from '@ant-design/icons'
 import AvatarStatus from 'components/shared-components/AvatarStatus'
 import EllipsisDropdown from 'components/shared-components/EllipsisDropdown'
 import Flex from 'components/shared-components/Flex'
 import { useHistory } from 'react-router-dom'
 import qs from 'qs'
+
 import utils from 'utils'
 import pincodeService from 'services/pincode'
 import _ from 'lodash'
@@ -59,17 +64,20 @@ const getStockStatus = (status) => {
 const Pincodelist = () => {
   const SITE_NAME = process.env.REACT_APP_SITE_NAME
   let history = useHistory()
+  const fileInputRef = React.useRef(null)
   const [form] = Form.useForm()
 
   const [list, setList] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
-
+  const [isExcelModalOpen, setIsExcelModalOpen] = useState(false)
+  const [excelFile, setExcelFile] = useState(null)
   // Added for Pagination
   const [loading, setLoading] = useState(false)
   const [filterEnabled, setFilterEnabled] = useState(false)
   const [statuses, setStatuses] = useState([])
   const [cities, setCities] = useState([])
 
+  
   // pagination
   const [pagination, setPagination] = useState({
     current: 1,
@@ -125,14 +133,7 @@ const Pincodelist = () => {
   })
 
   // On pagination Change
-  const handleTableChange = (newPagination) => {
-    getPincode(
-      {
-        pagination: newPagination,
-      },
-      filterEnabled ? _.pickBy(form.getFieldsValue(), _.identity) : {}
-    )
-  }
+ 
 
   const dropdownMenu = (row) => (
     <Menu>
@@ -270,6 +271,42 @@ const Pincodelist = () => {
     getPincode({ pagination: resetPagination() }, {})
     setFilterEnabled(false)
   }
+
+
+
+  const handleTableChange = (newPagination) => {
+    getPincode(
+      {
+        pagination: newPagination,
+      },
+      filterEnabled ? _.pickBy(form.getFieldsValue(), _.identity) : {}
+    )
+  }
+
+  const handleExcelUpload = (e) => {
+    let file = e.target.files[0]
+
+    setExcelFile(file)
+  }
+
+  const onExcelSubmit = async () => {
+    const sendingData = {
+      file: excelFile,
+    }
+
+    const sendExcelFile = await pincodeService.createPincodeFromExcel(
+      sendingData
+    )
+
+    if (sendExcelFile) {
+      setIsExcelModalOpen(false)
+      setExcelFile(null)
+      notification.success({
+        message: 'Pincode Excel File Uploaded',
+      })
+      getPincode(pagination)
+    }
+  }
   const filtersComponent = () => (
     <Form
       layout="vertical"
@@ -312,6 +349,28 @@ const Pincodelist = () => {
             </Select>
           </Form.Item>
         </Col>
+        <Form.Item name="cityId" label="City">
+            <Select
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              className="w-100"
+              style={{ minWidth: 180 }}
+              // onChange={(value) => setSelectedBrandId(value)}
+              // onSelect={handleQuery}
+              placeholder="city"
+              // value={selectedBrandId}
+            >
+              <Option value="">All</Option>
+              {cities.map((item) => (
+                <Option key={item.id} value={item.id}>
+                  {item.name}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
         {/* <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item name="cityId" label="Emirates">
             <Select
@@ -356,6 +415,53 @@ const Pincodelist = () => {
     <Card>
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
         {filtersComponent()}
+        <Flex>
+          <Button
+            className="mr-2"
+            type="primary"
+            icon={<FileAddOutlined />}
+            onClick={() => setIsExcelModalOpen(true)}
+          >
+            Excel Upload
+          </Button>
+         
+        </Flex>
+        <Modal
+        title="Pincode Excel Upload"
+        visible={isExcelModalOpen}
+        onCancel={() => {
+          setIsExcelModalOpen(false)
+          setExcelFile(null)
+        }}
+        footer={false}
+      >
+        <Flex flexDirection="column" alignItems="center">
+          <div className="mb-4 mt-4">
+            <Button
+              type="primary"
+              icon={<DownloadOutlined />}
+              onClick={() => fileInputRef.current.click()}
+            >
+              Upload Excel File
+            </Button>
+            <input
+              accept=".xls,.xlsx"
+              multiple={false}
+              ref={fileInputRef}
+              type="file"
+              onChange={handleExcelUpload}
+              hidden
+            />
+            <p> {excelFile && excelFile?.name}</p>
+          </div>
+
+          <Button type="primary" disabled={!excelFile} onClick={onExcelSubmit}>
+            Submit
+          </Button>
+        </Flex>
+      </Modal>
+
+
         <div>
           <Button
             onClick={addProduct}

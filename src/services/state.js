@@ -5,7 +5,8 @@ const api = `/state`
 
 stateService.getState = async function (
   paginationQuery = '',
-  filterQuery = ''
+  filterQuery = '',
+  
 ) {
   try {
     let url = `${api}?${paginationQuery}&${filterQuery}`

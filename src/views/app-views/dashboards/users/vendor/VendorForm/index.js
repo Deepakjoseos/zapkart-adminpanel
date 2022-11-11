@@ -16,6 +16,8 @@ import walletService from 'services/Wallet'
 import BankAccount from './bankAccount'
 import { useSelector } from 'react-redux'
 import Documents from './documents'
+import PickupLocations from '../VendorForm/pickuplocation'
+
 
 // const getAllPickUpLocations = async ()=>{
 //   const data = await shipmentService.getAllPickUpLocations()
@@ -47,7 +49,7 @@ const ProductForm = (props) => {
   const [form_statuses, setStatuses] = useState([])
   const [groupList, setGroupList] = useState([])
   const [transactions, setTransactions] = useState([])
-  const [Logo, setLogo] = useState(null)
+  const [logo, setLogo] = useState(null)
 
   const [wallet, setWallet] = useState({})
   const [selectedVendorId, setSelectedVendorId] = useState(null)
@@ -60,6 +62,8 @@ const ProductForm = (props) => {
     onRemove: onRemoveDisplayImages,
     setFileList: setFileListDisplayImages,
   } = useUpload(1)
+
+
   const {
     fileList: fileListLogo,
     beforeUpload: beforeUploadLogo,
@@ -67,6 +71,9 @@ const ProductForm = (props) => {
     onRemove: onRemoveLogo,
     setFileList: setFileListLogo,
   } = useUpload(1)
+
+
+
   const getUserGroups = async () => {
     const data = await userGroupService.getUserGroups()
     if (data) {
@@ -156,6 +163,7 @@ const ProductForm = (props) => {
         pan: SITE_NAME === 'zapkart' ? data?.pan : null,
         drugLicense: data?.drugLicense,
         groups: data?.groups.map((cur) => cur.id),
+        business:data?.business,
 
         // address:
         'address.line1': data?.address?.line1,
@@ -168,7 +176,7 @@ const ProductForm = (props) => {
         // Bussiness
         'business.name': data?.business?.name,
         'business.address.line1': data?.business?.address?.line1,
-        'business.address.logo': data?.business?.address?.logo,
+        'business.address.logo': data?.business?.logo,
         'business.address.city': data?.business?.address?.city,
         'business.address.state': data?.business?.address?.state,
         'business.address.country': data?.business?.address?.country,
@@ -242,7 +250,7 @@ const ProductForm = (props) => {
             name: values['business.name'],
             address: {
               line1: values['business.address.line1'],
-              logo: values['business.address.logo'],
+              logo: values['business.logo'],
               city: values['business.address.city'],
               state: values['business.address.state'],
               country: values['business.address.country'],
@@ -286,13 +294,28 @@ const ProductForm = (props) => {
         } else {
           delete sendingValues.displayImage
         }
+        if (logo.length !== 0 && logo !== null) {
+          const imageCategory = imageCategories.find(
+            (imgCat) => imgCat.imageFor === 'Users'
+          )
+          const logoValue = await singleImageUploader(
+            logo[0].originFileObj,
+            logo,
+            logo[0].url,
+            imageCategory.id
+          )
+          sendingValues.logo = logoValue
+          console.log('upload', sendingValues.displayImage)
+        } else {
+          delete sendingValues.logo
+        }
         
         if (mode === ADD) {
           sendingValues.phone = values.phone
           sendingValues.password = values.password
           sendingValues.email = values.email
           sendingValues.emailVerified = values.emailVerified
-
+          sendingValues.business = values.business
           sendingValues.status = values.status
 
           const created = await vendorService.addVendor(sendingValues)
@@ -318,7 +341,7 @@ const ProductForm = (props) => {
 
           const edited = await vendorService.editVendor(param.id, sendingValues)
           if (edited) {
-            message.success(`Edited ${values.firstName} to Vendor list`)
+            message.success(`Edited  to Vendor list`)
             history.goBack()
           }
         }
@@ -400,6 +423,11 @@ const ProductForm = (props) => {
                 <TabPane tab="Bank Accounts" key="3">
                   <BankAccount selectedVendorId={selectedVendorId} />
                 </TabPane>
+                {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+                <TabPane tab="Pickuplocation" key="4">
+                    <PickupLocations />
+                  </TabPane>
+                )}
                 {process.env.REACT_APP_SITE_NAME === 'athathy' && (
                   <TabPane tab="Document Upload" key="4">
                     <Documents />

@@ -65,18 +65,6 @@ productService.getProducts = async function (paginationQuery = '', query = '') {
 //     console.log(err, 'show-err')
 //   }
 // }
-productService.deleteProduct = async function (id) {
-  try {
-    const res = await fetch({
-      url: `/products/${id}`,
-      method: 'delete',
-    })
-    //   const data = res.data.filter((cur) => cur.status !== 'Deleted')
-    return res
-  } catch (err) {
-    console.log(err, 'show-err')
-  }
-}
 
 productService.getProductById = async function (id) {
   try {
@@ -140,6 +128,19 @@ productService.createProductFromExcel = async function (data) {
       method: 'post',
       data: formData,
     })
+    return res
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
+
+productService.deleteProduct= async function (id,vendorId) {
+  try {
+    const res = await fetch({
+      url: `/products/${id}/${vendorId}`,
+      method: 'delete',
+    })
+    //   const data = res.data.filter((cur) => cur.status !== 'Deleted')
     return res
   } catch (err) {
     console.log(err, 'show-err')

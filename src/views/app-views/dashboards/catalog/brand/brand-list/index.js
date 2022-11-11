@@ -133,6 +133,12 @@ const BrandList = () => {
           <span className="ml-2">View Details</span>
         </Flex>
       </Menu.Item>
+      <Menu.Item onClick={() => Newtab(row)}>
+        <Flex alignItems="center">
+          <EyeOutlined />
+          <span className="ml-2">Open In New Tab</span>
+        </Flex>
+      </Menu.Item>
       <Menu.Item onClick={() => deleteRow(row)}>
         <Flex alignItems="center">
           <DeleteOutlined />
@@ -152,6 +158,9 @@ const BrandList = () => {
 
   const viewDetails = (row) => {
     history.push(`/app/dashboards/catalog/brand/edit-brand/${row.id}`)
+  }
+  const Newtab = (row) => {
+    window.open(`/app/dashboards/catalog/brand/edit-brand/${row.id}`)
   }
 
   // For deleting a row

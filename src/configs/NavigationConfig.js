@@ -492,14 +492,15 @@ const dashBoardNavTree = [
         breadcrumb: false,
         submenu: [],
       },
-      {
-        key: 'dashboards-imagecategories',
-        path: `${APP_PREFIX_PATH}/dashboards/image-categories/image-list`,
-        title: 'Images',
-        icon: DotChartOutlined,
-        breadcrumb: false,
-        submenu: [],
-      },
+      
+      // {
+      //   key: 'dashboards-imagecategories',
+      //   path: `${APP_PREFIX_PATH}/dashboards/image-categories/image-list`,
+      //   title: 'Images',
+      //   icon: DotChartOutlined,
+      //   breadcrumb: false,
+      //   submenu: [],
+      // },
 
       {
         key: 'dashboards-settings',

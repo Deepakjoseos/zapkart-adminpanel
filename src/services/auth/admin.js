@@ -31,6 +31,21 @@ authAdminService.editProfile = async function (data) {
   }
 }
 
+authAdminService.updatePhone = async function (data) {
+  try {
+    const res = await fetch({
+      url: '/admin/update-user-phone/userId',
+      method: 'put',
+      data,
+    })
+
+    return res
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
+
+
 authAdminService.getStatistics = async function () {
   try {
     const res = await fetch({

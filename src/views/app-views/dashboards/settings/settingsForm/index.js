@@ -44,7 +44,9 @@ const[setmode,setMode]=useState('')
             metaDescription: data.metaDescription,
             keywords: data.keywords,
             whatsappNo:data.whatsappNo,
-            razorPayPayoutAccountNumber:data.razorPayPayoutAccountNumber
+            razorPayPayoutAccountNumber:data.razorPayPayoutAccountNumber,
+            agreement:data.agreement,
+            footer:data.footer
           })
         
         setSettings(data)
@@ -85,8 +87,9 @@ const[setmode,setMode]=useState('')
           vendorCommission:values?.vendorCommission,
           deliveryCharges: values?.deliveryCharges,
           whatsappNo:values?.whatsappNo,
-          razorPayPayoutAccountNumber:values?.razorPayPayoutAccountNumber
-
+          razorPayPayoutAccountNumber:values?.razorPayPayoutAccountNumber,
+          agreement:values?.agreement,
+          footer:values?.footer
         }
 
 
@@ -175,7 +178,7 @@ const[setmode,setMode]=useState('')
         <div className="container">
           <Tabs defaultActiveKey="1" style={{ marginTop: 30 }}>
             <TabPane tab="General" key="1">
-              <GeneralField mode={setmode} />
+              <GeneralField form={form} mode={setmode}  />
             </TabPane>
           </Tabs>
         </div>

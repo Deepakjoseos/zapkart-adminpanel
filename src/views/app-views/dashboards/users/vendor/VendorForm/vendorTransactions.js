@@ -124,7 +124,7 @@ const VendorTransactions = ({
             <Card>
                 <div className="table-responsive">
                     <div>
-                        <Flex justifyContent='end'>
+                        <Flex justifyContent='start'>
 
 
                             <div>
@@ -133,17 +133,24 @@ const VendorTransactions = ({
                                 <p>Balance:{wallet.balance}</p>
                                 <p>Pending Balance:{wallet.pendingBalance}</p>
                             </div>
+                               
+                            <Flex justifyContent='end'>
                             <Button className='ml-2' type="primary" onClick={() => { setisFormOpen(true) }} > Withdraw Balance From Wallet</Button>
                             <Button className='ml-2' type="primary" onClick={() => { setAddBalanceForm(true) }} > Add Balance to Wallet</Button>
                             <Button className='ml-2' type="primary" onClick={() => { setRemoveBalanceForm(true) }} > Remove Balance to From Wallet</Button>
+                            </Flex>
+                            </Flex>
+                            
 
+                        
+                         
                             {/* <Button
                         type="primary"
                         className="mr-1"
                         icon={<PlusCircleOutlined />}
                         onClick={() => setOpenBankAccountForm(true)}
                     >Add Bank account</Button> */}
-                        </Flex>
+                        
                     </div>
                     <Table columns={tableColumns} dataSource={transactions} rowKey="id" />
                 </div>

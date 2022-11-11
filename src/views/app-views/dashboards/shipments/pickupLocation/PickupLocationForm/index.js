@@ -3,16 +3,19 @@ import PageHeaderAlt from 'components/layout-components/PageHeaderAlt'
 import { Tabs, Form, Button, message } from 'antd'
 import Flex from 'components/shared-components/Flex'
 import GeneralField from './GeneralField'
+
 import stateService from 'services/state'
 import pincodeService from 'services/pincode'
 import cityService from 'services/city'
+import vendorService from 'services/vendor'
 import Utils from 'utils'
 
 import shipmentService from 'services/shipment'
 import { useHistory } from 'react-router-dom'
 import Shipment from '..'
 import moment from 'moment'
-import vendorService from 'services/vendor'
+
+import PickupLocations from 'views/app-views/dashboards/users/vendor/VendorForm/pickuplocation'
 
 const { TabPane } = Tabs
 
@@ -52,49 +55,18 @@ const ShipmentForm = (props) => {
       setPincode(data.data)
     }
   }
-  const getCity= async () => {
+  const getState = async (query) => {
+    const data = await stateService.getState(query)
+    if (data) {
+      setState(data.data)
+    }
+  }
+  const getCity = async () => {
     const data = await cityService.getCity()
     if (data) {
-      if (mode === EDIT) {
-     //   const deliveryLocs = data.filter(
-     //     (cur) => cur.isFinal !== true && cur.id !== param.id
-     //   )
-     //   setDeliveryLocations(deliveryLocs)
-     // } else {
-     //   const deliveryLocs = data.filter((cur) => cur.isFinal !== true)
-     //   setDeliveryLocations(deliveryLocs)
-     // }
-     const restCats = data.data.filter((cat) => cat.id !== param.id)
-       const list = Utils.createCategoryList(restCats)
-       setCity(list)
-     } else {
-       const list = Utils.createCategoryList(data)
-       setCity(list)
-     }
-   }
+      setCity(data.data)
+    }
   }
-  const getState = async () => {
-    const data = await stateService.getState()
-    if (data) {
-      if (mode === EDIT) {
-     //   const deliveryLocs = data.filter(
-     //     (cur) => cur.isFinal !== true && cur.id !== param.id
-     //   )
-     //   setDeliveryLocations(deliveryLocs)
-     // } else {
-     //   const deliveryLocs = data.filter((cur) => cur.isFinal !== true)
-     //   setDeliveryLocations(deliveryLocs)
-     // }
-     const restCats = data.data.filter((cat) => cat.id !== param.id)
-       const list = Utils.createCategoryList(restCats)
-       setState(list)
-     } else {
-       const list = Utils.createCategoryList(data)
-       setState(list)
-     }
-   }
-  }
- 
 
  
   useEffect(() => {
@@ -247,10 +219,12 @@ const ShipmentForm = (props) => {
         <div className="container">
           <Tabs defaultActiveKey="1" style={{ marginTop: 30 }}>
             <TabPane tab="General" key="1">
-              <GeneralField form={form} vendors={vendors} state={state} pincode={pincode} city={city}
+              <GeneralField form={form} vendors={vendors} getPincode={getPincode} getCity={getCity} state={state} pincode={pincode} city={city}
              />
+             
             </TabPane>
           </Tabs>
+         
         </div>
       </Form>
     </>
