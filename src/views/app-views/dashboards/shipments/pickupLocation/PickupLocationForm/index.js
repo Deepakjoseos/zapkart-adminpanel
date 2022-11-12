@@ -16,6 +16,7 @@ import Shipment from '..'
 import moment from 'moment'
 
 import PickupLocations from 'views/app-views/dashboards/users/vendor/VendorForm/pickuplocation'
+import countryService from 'services/country'
 
 const { TabPane } = Tabs
 
@@ -23,59 +24,118 @@ const ADD = 'ADD'
 const EDIT = 'EDIT'
 
 const ShipmentForm = (props) => {
+  const SITE_NAME = process.env.REACT_APP_SITE_NAME
   const { mode = ADD, param } = props
   const history = useHistory()
-  const [state ,setState]=useState([])
-  
+  const [state, setState] = useState([])
+
   const [form] = Form.useForm()
-  const [city ,setCity]=useState([])
+  const [city, setCity] = useState([])
 
   const [submitLoading, setSubmitLoading] = useState(false)
-  const [vendors,setVendors]= useState([])
-  const [pincode ,setPincode]=useState([])
+  const [vendors, setVendors] = useState([])
+  const [pincode, setPincode] = useState([])
+  const [country, setCountry] = useState([])
+
   const getVendors = async () => {
     const data = await vendorService.getVendors()
     if (data) {
-      const vendorsList = data.map(cur => {
+      const vendorsList = data.map((cur) => {
         return {
-          ...cur, fullName: `${cur.firstName} ${cur.lastName}`
+          ...cur,
+          fullName: `${cur.firstName} ${cur.lastName}`,
         }
       })
       setVendors(vendorsList)
     }
   }
-  useEffect(()=>{
+  useEffect(() => {
     getVendors()
-  },[])
+  }, [])
 
-  
+  // const getPincode = async (query) => {
+  //   const data = await pincodeService.getPincode(query)
+  //   if (data) {
+  //     setPincode(data.data)
+  //   }
+  // }
+  // const getState = async (query) => {
+  //   const data = await stateService.getState(query)
+  //   if (data) {
+  //     setState(data.data)
+  //   }
+  // }
+  // const getCity = async () => {
+  //   const data = await cityService.getCity()
+  //   if (data) {
+  //     setCity(data.data)
+  //   }
+  // }
+
+  // useEffect(() => {
+  //   getState()
+  //   getCity()
+  //   getPincode()
+
+  // }, [])
+
+  const getCity = async (query) => {
+    const data = await cityService.getCity(query)
+    if (data) {
+      setCity(data.data)
+    }
+  }
+  const getState = async () => {
+    const data = await stateService.getState()
+    if (data) {
+      setState(data.data)
+    }
+  }
+  const getCountry = async () => {
+    const data = await countryService.getCountry()
+    if (data) {
+      setCountry(data.data)
+    }
+  }
   const getPincode = async (query) => {
     const data = await pincodeService.getPincode(query)
     if (data) {
       setPincode(data.data)
     }
   }
-  const getState = async (query) => {
-    const data = await stateService.getState(query)
-    if (data) {
-      setState(data.data)
-    }
-  }
-  const getCity = async () => {
-    const data = await cityService.getCity()
-    if (data) {
-      setCity(data.data)
-    }
-  }
+  // const getDistrict = async () => {
+  //   const data = await districtService.getDistrict()
+  //   if (data) {
+  //     setDistrict(data.data)
+  //   }
+  // }
 
- 
   useEffect(() => {
-    getState()
-    getCity()
-    getPincode()
-    
+    // getCity()
+    if (SITE_NAME !== 'zapkart') {
+      getState()
+    }
+
+    getCountry()
+    // getDistrict()
+    // getPincode()
   }, [])
-  
+
+  useEffect(() => {
+    if (SITE_NAME === 'zapkart') {
+      if (country?.length > 0) {
+        getState(`countryName=${country[0].name}`)
+      }
+    }
+  }, [country])
+
+  useEffect(() => {
+    if (SITE_NAME !== 'zapkart') {
+      if (state?.length > 0) {
+        getCity(`stateName=${state[0]?.name}`)
+      }
+    }
+  }, [state])
 
   // useEffect(() => {
   //   if (mode === EDIT) {
@@ -121,9 +181,13 @@ const ShipmentForm = (props) => {
       .validateFields()
       .then(async (values) => {
         if (mode === ADD) {
-          values.country = 'India'
-                                                                                                                              
-          const data = await shipmentService.createPickupLocation(values)
+          // values.country = 'India'
+
+          const data = await shipmentService.createPickupLocation(
+            SITE_NAME === 'zapkart'
+              ? { ...values, country: country[0].name }
+              : { ...values, country: country[0].name, state: state[0].name }
+          )
 
           if (data) {
             message.success('Pickup Location Added Successfully')
@@ -219,12 +283,18 @@ const ShipmentForm = (props) => {
         <div className="container">
           <Tabs defaultActiveKey="1" style={{ marginTop: 30 }}>
             <TabPane tab="General" key="1">
-              <GeneralField form={form} vendors={vendors} getPincode={getPincode} getCity={getCity} state={state} pincode={pincode} city={city}
-             />
-             
+              <GeneralField
+                form={form}
+                vendors={vendors}
+                city={city}
+                state={state}
+                country={country}
+                pincode={pincode}
+                getPincode={getPincode}
+                getCity={getCity}
+              />
             </TabPane>
           </Tabs>
-         
         </div>
       </Form>
     </>
