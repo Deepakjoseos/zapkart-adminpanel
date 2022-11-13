@@ -9,7 +9,9 @@ import {
   Tag,
   Form,
   Row,
-  Col, Modal, notification
+  Col,
+  Modal,
+  notification,
 } from 'antd'
 // import BrandListData from 'assets/data/product-list.data.json'
 import {
@@ -17,7 +19,9 @@ import {
   DeleteOutlined,
   SearchOutlined,
   FileImageOutlined,
-  PlusCircleOutlined, FileAddOutlined, DownloadOutlined
+  PlusCircleOutlined,
+  FileAddOutlined,
+  DownloadOutlined,
 } from '@ant-design/icons'
 import AvatarStatus from 'components/shared-components/AvatarStatus'
 import EllipsisDropdown from 'components/shared-components/EllipsisDropdown'
@@ -60,17 +64,14 @@ const ProductList = () => {
   const [searchBackupList, setSearchBackupList] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
-  const [statuses,setStatuses] = useState([])
+  const [statuses, setStatuses] = useState([])
 
   let history = useHistory()
   const [form] = Form.useForm()
 
-
   // Added for Pagination
   const [loading, setLoading] = useState(false)
   const [filterEnabled, setFilterEnabled] = useState(false)
-
-
 
   const [isExcelModalOpen, setIsExcelModalOpen] = useState(false)
   const [deliveryZones, setDeliveryZones] = useState([])
@@ -80,7 +81,7 @@ const ProductList = () => {
   const [vendors, setVendors] = useState([])
   const [brands, setBrands] = useState([])
   const [categories, setCategories] = useState([])
-  const[orderbyname,setOrderbyname]= useState([])
+  const [orderbyname, setOrderbyname] = useState([])
   const [pagination, setPagination] = useState({
     current: 1,
     pageSize: 10,
@@ -89,10 +90,11 @@ const ProductList = () => {
     const data = await constantsService.getConstants()
     if (data) {
       // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
-  
-      setStatuses(Object.values(data.GENERAL['STATUS']))
-      setOrderbyname(Object.values(data.GENERAL['NAME_SORT']))
-  
+
+      data.GENERAL['STATUS'] &&
+        setStatuses(Object.values(data.GENERAL['STATUS']))
+      data.GENERAL['NAME_SORT'] &&
+        setOrderbyname(Object.values(data.GENERAL['NAME_SORT']))
     }
   }
   // Changed here for pagination
@@ -265,8 +267,8 @@ const ProductList = () => {
     window.open(`/app/dashboards/catalog/product/edit-product/${row.id}`)
   }
   const deleteRow = async (row) => {
-    const resp = await productService.deleteProduct(row.id,row.userId)
-    console.log(row,"hiiiii")
+    const resp = await productService.deleteProduct(row.id, row.userId)
+    console.log(row, 'hiiiii')
     if (resp) {
       const objKey = 'id'
       let data = list
@@ -282,7 +284,6 @@ const ProductList = () => {
       }
     }
   }
-
 
   const handleApprovalChange = async (value, selectedRow) => {
     const updatedProductApproval = await productService.approvalProduct(
@@ -319,13 +320,13 @@ const ProductList = () => {
       render: (_, row) => {
         return (
           <Flex flexDirection="column" justifyContent="center">
-
-            {row.name}{row?.variant && `(${row.variant.name})`}      </Flex>
+            {row.name}
+            {row?.variant && `(${row.variant.name})`}{' '}
+          </Flex>
         )
-      }
+      },
       // sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
     },
-
 
     // {
     //   title: 'MRP Price',
@@ -383,11 +384,11 @@ const ProductList = () => {
       render: (_, row) => {
         return (
           <Flex flexDirection="column" justifyContent="center">
-            {row.username}{row?.commission &&  `(${row.commission+ '%'})` }
-       
+            {row.username}
+            {row?.commission && `(${row.commission + '%'})`}
           </Flex>
         )
-      }
+      },
     },
     {
       title: 'Approval',
@@ -538,13 +539,13 @@ const ProductList = () => {
         </Col>
         <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item name="status" label="Status">
-          <Select
+            <Select
               className="w-100"
               style={{ minWidth: 180 }}
               placeholder="Status"
             >
               <Option value="">All</Option>
-            {statuses.map((item) => (
+              {statuses.map((item) => (
                 <Option key={item.id} value={item}>
                   {item}
                 </Option>
@@ -565,7 +566,7 @@ const ProductList = () => {
               // onChange={(value) => setSelectedBrandId(value)}
               // onSelect={handleQuery}
               placeholder="Brands"
-            // value={selectedBrandId}
+              // value={selectedBrandId}
             >
               <Option value="">All</Option>
               {brands.map((brand) => (
@@ -589,7 +590,7 @@ const ProductList = () => {
               // onChange={(value) => setSelectedBrandId(value)}
               // onSelect={handleQuery}
               placeholder="Categories"
-            // value={selectedBrandId}
+              // value={selectedBrandId}
             >
               <Option value="">All</Option>
               {categories.map((category) => (
@@ -669,21 +670,20 @@ const ProductList = () => {
             </Select>
           </Form.Item>
         </Col> */}
-<Form.Item name="orderByName" label="orderByName">
-     
-     <Select
-       className="w-100"
-       style={{ minWidth: 180 }}
-       placeholder="Status"
-     >
-       <Option value="">All</Option>
-       {orderbyname.map((item) => (
-         <Option key={item.id} value={item}>
-           {item}
-         </Option>
-       ))}
-     </Select>
-   </Form.Item>
+        <Form.Item name="orderByName" label="orderByName">
+          <Select
+            className="w-100"
+            style={{ minWidth: 180 }}
+            placeholder="Status"
+          >
+            <Option value="">All</Option>
+            {orderbyname.map((item) => (
+              <Option key={item.id} value={item}>
+                {item}
+              </Option>
+            ))}
+          </Select>
+        </Form.Item>
         <Col className="mb-4">
           <Button type="primary" onClick={handleFilterSubmit}>
             Filter
@@ -862,7 +862,7 @@ const ProductList = () => {
         <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
           {filtersComponent()}
         </Flex>
-       
+
         <div className="mr-2 d-flex justify-content-between">
           <Button
             type="primary"
@@ -871,28 +871,20 @@ const ProductList = () => {
           >
             Excel Upload
           </Button>
-          
 
-       
-    
-               
+          <div className="mr-2 d-flex justify-content-between">
+            <Button icon={<FileImageOutlined />}>
+              {' '}
+              <a
+                href={process.env.PUBLIC_URL + '/Sample Excel.xlsx'}
+                download={'file-name-to-use.xlsx'}
+              >
+                Download Sample File
+              </a>
+            </Button>
+          </div>
 
-         <div className="mr-2 d-flex justify-content-between">
-        <Button  
-            icon={<FileImageOutlined />}>      <a
-  href={process.env.PUBLIC_URL + "/Sample Excel.xlsx"}
-  download={"file-name-to-use.xlsx"}
->
-    Download Sample File
-</a>
-      </Button>
-      </div>
-            
-       
-        
           <div>
-        
-              
             <Button
               onClick={addProduct}
               type="primary"
@@ -910,7 +902,8 @@ const ProductList = () => {
             scroll={{
               x: true,
             }}
-            rowKey="id" pagination={pagination}
+            rowKey="id"
+            pagination={pagination}
             loading={loading}
             onChange={handleTableChange}
           />

@@ -25,7 +25,7 @@ const rules = {
   //     message: 'Required',
   //   },
   // ],
-  
+
   gst: [
     {
       required: true,
@@ -86,81 +86,85 @@ const GeneralField = ({
   <Row gutter={16}>
     <Col xs={24} sm={24} md={17}>
       <Card title="Basic Info">
-      
-
         {mode === 'ADD' ? (
           <>
+            <Form.Item name="firstName" label="First Name">
+              <Input placeholder="First Name" />
+            </Form.Item>
+            <Form.Item name="lastName" label="Last Name">
+              <Input placeholder="Last Name" />
+            </Form.Item>
+            {SITE_NAME === 'zapkart' && (
+              <>
+                <Form.Item name="email" label="Email" rules={rules.email}>
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  name="emailVerified"
+                  label="Email Verified"
+                  rules={rules.emailVerified}
+                >
+                  <Select placeholder="Email Verified">
+                    <Option value={true}>Yes</Option>
+                    <Option value={false}>No</Option>
+                  </Select>
+                </Form.Item>
 
+                <Form.Item
+                  label="Password"
+                  name="password"
+                  rules={rules.password}
+                >
+                  <Input.Password />
+                </Form.Item>
+                <Form.Item name="phone" label="Phone" rules={rules.pone}>
+                  <Input placeholder="Phone" />
+                </Form.Item>
+                {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+                  <Form.Item name="gst" label="GST" rules={rules.gst}>
+                    <Input placeholder="Gst" />
+                  </Form.Item>
+                )}
 
-<Form.Item name="firstName" label="First Name">
-          <Input placeholder="First Name" />
-        </Form.Item>
-        <Form.Item name="lastName" label="Last Name" >
-          <Input placeholder="Last Name" />
-        </Form.Item>
-        {SITE_NAME === 'zapkart' && (
-          <>
-           <Form.Item name="email" label="Email" rules={rules.email}>
-              <Input />
-            </Form.Item>
-          <Form.Item
-              name="emailVerified"
-              label="Email Verified"
-              rules={rules.emailVerified}
-            >
-              <Select placeholder="Email Verified">
-                <Option value={true}>Yes</Option>
-                <Option value={false}>No</Option>
-              </Select>
-            </Form.Item>
-          
-            <Form.Item label="Password" name="password" rules={rules.password}>
-              <Input.Password />
-            </Form.Item>
-            <Form.Item name="phone" label="Phone" rules={rules.pone}>
-              <Input placeholder="Phone" />
-            </Form.Item>
-            {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+                <Form.Item name="pan" label="Pan" rules={rules.pan}>
+                  <Input placeholder="Pan" />
+                </Form.Item>
 
-            <Form.Item name="gst" label="GST" rules={rules.gst}>
-              <Input placeholder="Gst" />
-            </Form.Item>
+                <Form.Item name="drugLicense" label="Drug License">
+                  <Input placeholder="drugLicense" />
+                </Form.Item>
+                <Form.Item name="tanNumber" label="Tan Number">
+                  <Input placeholder="tanNumber" />
+                </Form.Item>
+              </>
             )}
-           
-            <Form.Item name="pan" label="Pan" rules={rules.pan}>
-              <Input placeholder="Pan" />
-            </Form.Item>
 
-            <Form.Item name="drugLicense" label="Drug License">
-              <Input placeholder="drugLicense" />
-            </Form.Item>
-            <Form.Item name="tanNumber" label="Tan Number">
-              <Input placeholder="tanNumber" />
-            </Form.Item>
-          </>
-        )}
-
-        {/* <Form.Item name="drugLicense" label="Drug License Number" rules={rules.drugLicense}>
+            {/* <Form.Item name="drugLicense" label="Drug License Number" rules={rules.drugLicense}>
           <Input placeholder="Drug License Number" />
         </Form.Item> */}
-        <Form.Item name="groups" label="User Groups" rules={rules.userGroups}>
-          <Select
-            optionFilterProp="children"
-            filterOption={(input, option) =>
-              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-            }
-            mode="multiple"
-            allowClear
-            style={{ width: '100%' }}
-            placeholder="User Groups"
-          >
-            {userGroups.map((group) => (
-              <Option key={group.id} value={group.id}>
-                {group.name}
-              </Option>
-            ))}
-          </Select>
-        </Form.Item>
+            <Form.Item
+              name="groups"
+              label="User Groups"
+              rules={rules.userGroups}
+            >
+              <Select
+                optionFilterProp="children"
+                filterOption={(input, option) =>
+                  option.children.toLowerCase().indexOf(input.toLowerCase()) >=
+                  0
+                }
+                mode="multiple"
+                allowClear
+                style={{ width: '100%' }}
+                placeholder="User Groups"
+              >
+                {userGroups.map((group) => (
+                  <Option key={group.id} value={group.id}>
+                    {group.name}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
             <Form.Item name="status" label="Status" rules={rules.status}>
               <Select placeholder="Status">
                 {form_statuses.map((item) => (
@@ -171,64 +175,60 @@ const GeneralField = ({
               </Select>
             </Form.Item>
 
-            
-         
-
-
             <Card title="Business">
-            {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
-          <Form.Item name="business.name" label="Bussiness Name">
-            <Input placeholder="Bussiness Name" />
-          </Form.Item>
-)}
- {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
-          <Card  title="Business logo">
-        <Upload className='flex-column'
-          listType="picture-card"
-          name="business.logo"
-          {...propsLogo}
-          accept="image/*"
-        >
-          <CustomIcon className="display-3 " svg={ImageSvg} />
-        </Upload>
-        
-      </Card>
- )}
-          <br />
-          {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
-          <h4>Bussiness Address</h4>
-          )}
-          {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
-          <Form.Item name="business.address.line1" label="Line1">
-            <Input placeholder="Line1" />
-          </Form.Item>
-  )}
-   {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
-          <Form.Item name="business.address.city" label="City">
-            <Input placeholder="City" />
-          </Form.Item>
-)}
-   {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
-          <Form.Item name="business.address.state" label="State">
-            <Input placeholder="State" />
-          </Form.Item>
-)}
- {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
-          <Form.Item name="business.address.country" label="Country">
-            <Input placeholder="Country" />
-          </Form.Item>
-)}
- {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
-          <Form.Item name="business.address.phone" label="Phone">
-            <Input placeholder="Phone" />
-          </Form.Item>
- )}
-  {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
-          <Form.Item name="business.address.zipcode" label="Zipcode">
-            <Input placeholder="Zipcode" />
-          </Form.Item>
-  )}
-        </Card>
+              {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+                <Form.Item name="business.name" label="Bussiness Name">
+                  <Input placeholder="Bussiness Name" />
+                </Form.Item>
+              )}
+              {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+                <Card title="Business logo">
+                  <Upload
+                    className="flex-column"
+                    listType="picture-card"
+                    name="business.logo"
+                    {...propsLogo}
+                    accept="image/*"
+                  >
+                    <CustomIcon className="display-3 " svg={ImageSvg} />
+                  </Upload>
+                </Card>
+              )}
+              <br />
+              {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+                <h4>Bussiness Address</h4>
+              )}
+              {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+                <Form.Item name="business.address.line1" label="Line1">
+                  <Input placeholder="Line1" />
+                </Form.Item>
+              )}
+              {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+                <Form.Item name="business.address.city" label="City">
+                  <Input placeholder="City" />
+                </Form.Item>
+              )}
+              {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+                <Form.Item name="business.address.state" label="State">
+                  <Input placeholder="State" />
+                </Form.Item>
+              )}
+              {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+                <Form.Item name="business.address.country" label="Country">
+                  <Input placeholder="Country" />
+                </Form.Item>
+              )}
+              {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+                <Form.Item name="business.address.phone" label="Phone">
+                  <Input placeholder="Phone" />
+                </Form.Item>
+              )}
+              {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+                <Form.Item name="business.address.zipcode" label="Zipcode">
+                  <Input placeholder="Zipcode" />
+                </Form.Item>
+              )}
+            </Card>
           </>
         ) : (
           ''
@@ -236,71 +236,74 @@ const GeneralField = ({
 
         {mode === 'EDIT' ? (
           <>
-          <Form.Item name="firstName" label="First Name" >
-          <Input placeholder="First Name" />
-        </Form.Item>
-        <Form.Item name="lastName" label="Last Name" >
-          <Input placeholder="Last Name" />
-        </Form.Item>
-       
-          <>
-          <Form.Item
-              hasFeedback
-              validateStatus={phoneVerified ? 'success' : 'error'}
-              name="phone"
-              label="Phone"
-            >
-              <Input disabled id="success" />
+            <Form.Item name="firstName" label="First Name">
+              <Input placeholder="First Name" />
+            </Form.Item>
+            <Form.Item name="lastName" label="Last Name">
+              <Input placeholder="Last Name" />
             </Form.Item>
 
-            <Form.Item
-              hasFeedback
-              validateStatus={emailVerified ? 'success' : 'error'}
-              name="email"
-              label="Email"
-            >
-              <Input disabled id="success" />
-            </Form.Item>
-            {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
-            <Form.Item name="pan" label="Pan" rules={rules.pan}>
-              <Input placeholder="Pan" />
-            </Form.Item>
-            )}
-            {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
-            <Form.Item name="drugLicense" label="Drug License">
-              <Input placeholder="drugLicense" />
-            </Form.Item>
-            )}
-            {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
-            <Form.Item name="tanNumber" label="Tan Number">
-              <Input placeholder="tanNumber" />
-            </Form.Item>
-            )}
-          </>
-     
+            <>
+              <Form.Item
+                hasFeedback
+                validateStatus={phoneVerified ? 'success' : 'error'}
+                name="phone"
+                label="Phone"
+              >
+                <Input disabled id="success" />
+              </Form.Item>
 
-        {/* <Form.Item name="drugLicense" label="Drug License Number" rules={rules.drugLicense}>
+              <Form.Item
+                hasFeedback
+                validateStatus={emailVerified ? 'success' : 'error'}
+                name="email"
+                label="Email"
+              >
+                <Input disabled id="success" />
+              </Form.Item>
+              {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+                <Form.Item name="pan" label="Pan" rules={rules.pan}>
+                  <Input placeholder="Pan" />
+                </Form.Item>
+              )}
+              {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+                <Form.Item name="drugLicense" label="Drug License">
+                  <Input placeholder="drugLicense" />
+                </Form.Item>
+              )}
+              {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+                <Form.Item name="tanNumber" label="Tan Number">
+                  <Input placeholder="tanNumber" />
+                </Form.Item>
+              )}
+            </>
+
+            {/* <Form.Item name="drugLicense" label="Drug License Number" rules={rules.drugLicense}>
           <Input placeholder="Drug License Number" />
         </Form.Item> */}
-        <Form.Item name="groups" label="User Groups" rules={rules.userGroups}>
-          <Select
-            optionFilterProp="children"
-            filterOption={(input, option) =>
-              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-            }
-            mode="multiple"
-            allowClear
-            style={{ width: '100%' }}
-            placeholder="User Groups"
-          >
-            {userGroups.map((group) => (
-              <Option key={group.id} value={group.id}>
-                {group.name}
-              </Option>
-            ))}
-          </Select>
-        </Form.Item>
-          
+            <Form.Item
+              name="groups"
+              label="User Groups"
+              rules={rules.userGroups}
+            >
+              <Select
+                optionFilterProp="children"
+                filterOption={(input, option) =>
+                  option.children.toLowerCase().indexOf(input.toLowerCase()) >=
+                  0
+                }
+                mode="multiple"
+                allowClear
+                style={{ width: '100%' }}
+                placeholder="User Groups"
+              >
+                {userGroups.map((group) => (
+                  <Option key={group.id} value={group.id}>
+                    {group.name}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
           </>
         ) : (
           ''
@@ -349,66 +352,57 @@ const GeneralField = ({
         'business.address.zipcode': data?.business?.address?.zipcode, */}
 
       {mode === 'EDIT' ? (
-       
         <Card title="Business">
-           
           <Form.Item name="business.name" label="Bussiness Name">
             <Input placeholder="Bussiness Name" />
           </Form.Item>
 
+          <Card title="Business logo">
+            <Upload
+              className="flex-column"
+              listType="picture-card"
+              name="business.address.logo"
+              {...propsLogo}
+              accept="image/*"
+            >
+              <CustomIcon className="display-3 " svg={ImageSvg} />
+            </Upload>
+          </Card>
 
+          {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+            <h4>Bussiness Address</h4>
+          )}
+          {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+            <Form.Item name="business.address.line1" label="Line1">
+              <Input placeholder="Line1" />
+            </Form.Item>
+          )}
 
-          <Card  title="Business logo">
-        <Upload className='flex-column'
-          listType="picture-card"
-          name="business.address.logo"
-          {...propsLogo}
-          accept="image/*"
-        >
-          <CustomIcon className="display-3 " svg={ImageSvg} />
-        </Upload>
-        
-      </Card>
-   
-      {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
-         
-          <h4>Bussiness Address</h4>
-      )}
-        {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
-          <Form.Item name="business.address.line1" label="Line1">
-            <Input placeholder="Line1" />
-          </Form.Item>
-
-        )}
-
-
-       
-{process.env.REACT_APP_SITE_NAME === 'zapkart' && (
-
-          <Form.Item name="business.address.city" label="City">
-            <Input placeholder="City" />
-          </Form.Item>
-)}
-{process.env.REACT_APP_SITE_NAME === 'zapkart' && (
-          <Form.Item name="business.address.state" label="State">
-            <Input placeholder="State" />
-          </Form.Item>
-)}
-{process.env.REACT_APP_SITE_NAME === 'zapkart' && (
-          <Form.Item name="business.address.country" label="Country">
-            <Input placeholder="Country" />
-          </Form.Item>
-)}
-{process.env.REACT_APP_SITE_NAME === 'zapkart' && (
-          <Form.Item name="business.address.phone" label="Phone">
-            <Input placeholder="Phone" />
-          </Form.Item>
-)}
-{process.env.REACT_APP_SITE_NAME === 'zapkart' && (
-          <Form.Item name="business.address.zipcode" label="Zipcode">
-            <Input placeholder="Zipcode" />
-          </Form.Item>
-)}
+          {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+            <Form.Item name="business.address.city" label="City">
+              <Input placeholder="City" />
+            </Form.Item>
+          )}
+          {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+            <Form.Item name="business.address.state" label="State">
+              <Input placeholder="State" />
+            </Form.Item>
+          )}
+          {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+            <Form.Item name="business.address.country" label="Country">
+              <Input placeholder="Country" />
+            </Form.Item>
+          )}
+          {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+            <Form.Item name="business.address.phone" label="Phone">
+              <Input placeholder="Phone" />
+            </Form.Item>
+          )}
+          {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+            <Form.Item name="business.address.zipcode" label="Zipcode">
+              <Input placeholder="Zipcode" />
+            </Form.Item>
+          )}
         </Card>
       ) : (
         ' '
