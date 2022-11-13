@@ -28,7 +28,7 @@ import {
 import AvatarStatus from 'components/shared-components/AvatarStatus'
 import EllipsisDropdown from 'components/shared-components/EllipsisDropdown'
 import Flex from 'components/shared-components/Flex'
-import { useHistory,Link } from 'react-router-dom'
+import { useHistory, Link } from 'react-router-dom'
 import qs from 'qs'
 import utils from 'utils'
 import brandService from 'services/brand'
@@ -86,7 +86,7 @@ const ProductTemplateList = () => {
   const [medicineTypes, setMedicineTypes] = useState([])
   // const [selectedMedicineTypeId, setSelectedMedicineTypeId] = useState(null)
   const [manufacturers, setManufacturers] = useState([])
-  const[orderbyname,setOrderbyname]= useState([])
+  const [orderbyname, setOrderbyname] = useState([])
 
   // Added for Pagination
   const [loading, setLoading] = useState(false)
@@ -98,8 +98,6 @@ const ProductTemplateList = () => {
     current: 1,
     pageSize: 30,
   })
-
-
 
   // const handleDownload=()=>{
   //   let sliceSize =1024;
@@ -192,14 +190,12 @@ const ProductTemplateList = () => {
   //   }
   // }
   const getMedicineTypes = async () => {
-
     const data = await medicineTypeService.getMedicineTypes()
-   
+
     const activeMedicineTypes = data.data.filter(
-      (item) => item.status === 'Active' 
+      (item) => item.status === 'Active'
     )
-    setMedicineTypes(activeMedicineTypes,)
-   
+    setMedicineTypes(activeMedicineTypes)
   }
 
   const getManufacturers = async () => {
@@ -210,11 +206,6 @@ const ProductTemplateList = () => {
     setManufacturers(activeManufacturers)
   }
 
-
-
-
-
- 
   useEffect(() => {
     // const getBrands = async () => {
     //   const data = await brandService.getBrands()
@@ -268,7 +259,7 @@ const ProductTemplateList = () => {
   }
 
   const viewDetails = (row) => {
-    history.push (
+    history.push(
       `/app/dashboards/catalog/producttemplate/edit-producttemplate/${row.id}`
     )
   }
@@ -327,7 +318,7 @@ const ProductTemplateList = () => {
           />
         </div>
       ),
-      sorter: (asc,dec) => utils.antdTableSorter(asc,dec, 'name'),
+      sorter: (asc, dec) => utils.antdTableSorter(asc, dec, 'name'),
     },
 
     {
@@ -450,8 +441,10 @@ const ProductTemplateList = () => {
     if (data) {
       // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
 
-      setStatuses(Object.values(data.GENERAL['STATUS']))
-      setOrderbyname(Object.values(data.GENERAL['NAME_SORT']))
+      data.GENERAL['STATUS'] &&
+        setStatuses(Object.values(data.GENERAL['STATUS']))
+      data.GENERAL['NAME_SORT'] &&
+        setOrderbyname(Object.values(data.GENERAL['NAME_SORT']))
     }
   }
   // Filter Submit
@@ -504,7 +497,6 @@ const ProductTemplateList = () => {
 
     setExcelFile(file)
   }
-  
 
   const onExcelSubmit = async () => {
     const sendingData = {
@@ -670,43 +662,41 @@ const ProductTemplateList = () => {
               <Option value="false">No</Option>
             </Select>
           </Form.Item>
-        
         </Col>
         <Form.Item name="returnable" label="Returnable">
-            <Select
-              showSearch
-              optionFilterProp="children"
-              filterOption={(input, option) =>
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }
-              className="w-100"
-              style={{ minWidth: 180 }}
-              // onChange={(value) => setSelectedPrescriptionRequired(value)}
-              // onSelect={handleQuery}
-              // value={selectedPrescriptionrequired}
-              placeholder="Returnable"
-            >
-              <Option value="">All</Option>
-              <Option value="true">Yes</Option>
-              <Option value="false">No</Option>
-            </Select>
-          </Form.Item>
-          <Form.Item name="orderByName" label="orderByName">
-     
-            <Select
-              className="w-100"
-              style={{ minWidth: 180 }}
-              placeholder="Status"
-            >
-              <Option value="">All</Option>
-              {orderbyname.map((item) => (
-                <Option key={item.id} value={item}>
-                  {item}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
-          &nbsp;
+          <Select
+            showSearch
+            optionFilterProp="children"
+            filterOption={(input, option) =>
+              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
+            className="w-100"
+            style={{ minWidth: 180 }}
+            // onChange={(value) => setSelectedPrescriptionRequired(value)}
+            // onSelect={handleQuery}
+            // value={selectedPrescriptionrequired}
+            placeholder="Returnable"
+          >
+            <Option value="">All</Option>
+            <Option value="true">Yes</Option>
+            <Option value="false">No</Option>
+          </Select>
+        </Form.Item>
+        <Form.Item name="orderByName" label="orderByName">
+          <Select
+            className="w-100"
+            style={{ minWidth: 180 }}
+            placeholder="Status"
+          >
+            <Option value="">All</Option>
+            {orderbyname.map((item) => (
+              <Option key={item.id} value={item}>
+                {item}
+              </Option>
+            ))}
+          </Select>
+        </Form.Item>
+        &nbsp;
         <Col className="mb-4">
           <Button type="primary" onClick={handleFilterSubmit}>
             Filter
@@ -743,24 +733,18 @@ const ProductTemplateList = () => {
           >
             Upload Bulk Images
           </Button>
-
-&nbsp;
+          &nbsp;
           <div>
-          <Button  
-            icon={<FileImageOutlined />}>      <a
-  href={process.env.PUBLIC_URL + "/Sample Excel.xlsx"}
-  download={"file-name-to-use.xlsx"}
->
-    Download Sample File
-</a>
-      </Button>
-              
-               
-
-        
-            
-       
-        </div>
+            <Button icon={<FileImageOutlined />}>
+              {' '}
+              <a
+                href={process.env.PUBLIC_URL + '/Sample Excel.xlsx'}
+                download={'file-name-to-use.xlsx'}
+              >
+                Download Sample File
+              </a>
+            </Button>
+          </div>
         </Flex>
 
         <div>

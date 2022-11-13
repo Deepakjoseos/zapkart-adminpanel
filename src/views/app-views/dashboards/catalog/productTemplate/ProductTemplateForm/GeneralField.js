@@ -161,12 +161,12 @@ const rules = {
       message: 'Required',
     },
   ],
-  composition:[
+  composition: [
     {
       required: true,
-      message:'required'
-    }
-  ]
+      message: 'required',
+    },
+  ],
 }
 
 const GeneralField = ({
@@ -217,8 +217,8 @@ const GeneralField = ({
         >
           <Input placeholder="Description" />
         </Form.Item> */}
-         
-         <Form.Item name="status" label="Status" rules={rules.status}>
+
+          <Form.Item name="status" label="Status" rules={rules.status}>
             <Select placeholder="Status">
               <Option value="Active">Active</Option>
               <Option value="Hold"></Option>Hold
@@ -262,7 +262,7 @@ const GeneralField = ({
               </Select>
             </Form.Item>
           )}
-         
+
           {/* <Form.Item
           name="productType"
           label="Product Type"
@@ -270,9 +270,6 @@ const GeneralField = ({
         >
           <Input placeholder="Product Type" />
         </Form.Item> */}
-         
-
-        
 
           {/* <Form.Item name="status" label="Status" rules={rules.status}>
             <Select placeholder="Status">
@@ -323,10 +320,9 @@ const GeneralField = ({
             >
               <InputNumber type="number" min={0} max={100000} />
             </Form.Item>
-            
           )}
 
-<Form.Item name="slug" label="Slug" rules={rules.slug}>
+          <Form.Item name="slug" label="Slug" rules={rules.slug}>
             <Input placeholder="Slug" />
           </Form.Item>
 
@@ -375,29 +371,26 @@ const GeneralField = ({
             </Form.Item>
           )}
 
-<Form.Item
-name="commission"
-label="Vendor Commission"
-rules={rules.commission}
->
-<Input placeholder="Vendor Commission" />
-</Form.Item>
+          <Form.Item
+            name="commission"
+            label="Vendor Commission"
+            rules={rules.commission}
+          >
+            <Input placeholder="Vendor Commission" />
+          </Form.Item>
 
           {/* Compostion */}
-          
-           
+
           {SITE_NAME === 'zapkart' && (
+            <Form.Item
+              name="medicinePackaging"
+              label="Packing"
+              // rules={rules.medicinePackaging}
+            >
+              <Input placeholder="Packing" />
+            </Form.Item>
+          )}
 
-
-<Form.Item
-          name="medicinePackaging"
-          label="Packing"
-          // rules={rules.medicinePackaging}
-        >
-          <Input placeholder="Packing" />
-        </Form.Item>
-         )} 
-        
           <Form.Item name="taxCategoryId" label="Tax Category">
             <Select
               placeholder="Tax Category"
@@ -418,8 +411,7 @@ rules={rules.commission}
               ))}
             </Select>
           </Form.Item>
-       
-        
+
           <Form.Item name="brandId" label="Brand">
             <Select
               placeholder="Brand"
@@ -447,22 +439,21 @@ rules={rules.commission}
             </Select>
           </Form.Item>
 
+          <Form.Item
+            name="storageTemperature"
+            label="Storage Temperature"
+            rules={rules.storageTemperature}
+          >
+            <Input placeholder="Storage Temperature" />
+          </Form.Item>
 
           <Form.Item
-              name="storageTemperature"
-              label="Storage Temperature"
-              rules={rules.storageTemperature}
-            >
-              <Input placeholder="Storage Temperature" />
-            </Form.Item>
-
-            <Form.Item
-              name="saltComposition"
-              label="Salt Composition"
-              rules={rules.saltComposition}
-            >
-              <Input placeholder="Salt Composition" />
-            </Form.Item>
+            name="saltComposition"
+            label="Salt Composition"
+            rules={rules.saltComposition}
+          >
+            <Input placeholder="Salt Composition" />
+          </Form.Item>
           <Form.Item
             name="description"
             label="Description"
@@ -474,27 +465,22 @@ rules={rules.commission}
               onChange={(e) => form.setFieldsValue({ description: e })}
               name="description"
             />
-             </Form.Item>
-             {SITE_NAME === 'zapkart' && (
-                
-                 <Form.Item
-            name="highlights"
-            label="Highlights"
-            // rules={rules.description}
-          >
-            <Editor
-              placeholder="Write something..."
-              editorHtml={form.getFieldValue('highlights') || ''}
-              onChange={(e) => form.setFieldsValue({ highlights: e })}
+          </Form.Item>
+          {SITE_NAME === 'zapkart' && (
+            <Form.Item
               name="highlights"
-            />
-                 </Form.Item>
-             )}
-         {SITE_NAME === 'zapkart' && (
-
-
-
-
+              label="Highlights"
+              // rules={rules.description}
+            >
+              <Editor
+                placeholder="Write something..."
+                editorHtml={form.getFieldValue('highlights') || ''}
+                onChange={(e) => form.setFieldsValue({ highlights: e })}
+                name="highlights"
+              />
+            </Form.Item>
+          )}
+          {SITE_NAME === 'zapkart' && (
             <Form.Item
               name="productType"
               label="ProductType"
@@ -514,58 +500,44 @@ rules={rules.commission}
                 <Option value="NonMedicine">Non Medicine</Option>
               </Select>
             </Form.Item>
-          )} 
+          )}
         </Card>
-       
-
 
         {/* Medicine Informations */}
         {productType === 'Medicine' && SITE_NAME === 'zapkart' && (
           <Card title="Medicine Information">
-
-
-
-
-<>
+            <>
               <label style={{ fontWeight: 500, marginBottom: '10px' }}>
                 Composition
               </label>
               <br></br>
               <br></br>
               <Select
-                              showSearch
-                              optionFilterProp="children"
-                              filterOption={(input, option) =>
-                                option.children
-                                  .toLowerCase()
-                                  .indexOf(input.toLowerCase()) >= 0
-                              }
-                              placeholder="Composition"
-                              onChange={() => onCompositionChange()}
-                            >
-                              {compositions?.map((composition) => (
-                                <Option
-                                  key={composition.id}
-                                  value={composition.id}
-                                >
-                                  {composition.name}
-                                </Option>
-                              ))}
-                            </Select>
-                            
-                            <br></br>
-                            <br></br>
+                showSearch
+                optionFilterProp="children"
+                filterOption={(input, option) =>
+                  option.children.toLowerCase().indexOf(input.toLowerCase()) >=
+                  0
+                }
+                placeholder="Composition"
+                onChange={() => onCompositionChange()}
+              >
+                {compositions?.map((composition) => (
+                  <Option key={composition.id} value={composition.id}>
+                    {composition.name}
+                  </Option>
+                ))}
+              </Select>
+
+              <br></br>
+              <br></br>
               <Form.List name="composition">
-             
                 {(fields, { add, remove }) => {
                   console.log(fields, 'show-filelds')
                   return (
                     <>
-                    
                       {fields.map((field) => (
                         <Space
-                       
-
                           key={field.key}
                           style={{ display: 'flex' }}
                           align="baseline"
@@ -628,12 +600,8 @@ rules={rules.commission}
                 }}
               </Form.List>
             </>
-          
 
-
-
-
-<Form.Item
+            <Form.Item
               name="prescriptionRequired"
               label="PrescriptionRequired"
               rules={rules.prescriptionRequired}
@@ -644,15 +612,13 @@ rules={rules.commission}
               </Select>
             </Form.Item>
 
-<Form.Item
+            <Form.Item
               name="medicineTypeId"
               label="Medicine Type"
               // rules={rules.medicineTypeId}
             >
               <Select
-              
                 placeholder="Medicine Type"
-                
                 showSearch
                 optionFilterProp="children"
                 filterOption={(input, option) =>
@@ -660,17 +626,13 @@ rules={rules.commission}
                   0
                 }
               >
-               
                 {medicineTypes.map((medicineType) => (
                   <Option key={medicineType.id} value={medicineType.id}>
                     {medicineType.name}
                   </Option>
                 ))}
               </Select>
-              
             </Form.Item>
-
-
 
             <Form.Item
               name="pregnancyInteraction"
@@ -743,8 +705,6 @@ rules={rules.commission}
                 name="uses"
               />
             </Form.Item>
-
-        
           </Card>
         )}
 
@@ -814,7 +774,6 @@ rules={rules.commission}
               placeholder="Keywords"
             ></Select>
           </Form.Item>
-         
 
           <Form.Item name="tags" label="Tags">
             <Select

@@ -101,6 +101,12 @@ const GeneralField = ({
           {SITE_NAME === 'zapkart' && (
             <Form.Item name="state" label="State">
               <Select
+                showSearch
+                optionFilterProp="children"
+                filterOption={(input, option) =>
+                  option.children.toLowerCase().indexOf(input.toLowerCase()) >=
+                  0
+                }
                 placeholder="State"
                 onChange={(val) => {
                   form.setFieldsValue({ city: null, zipcode: null })
@@ -123,6 +129,11 @@ const GeneralField = ({
           >
             <Select
               placeholder={SITE_NAME === 'zapkart' ? 'City' : 'Emirates'}
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
               onChange={(val) => {
                 form.setFieldsValue({ zipcode: null })
                 getPincode(`cityName=${val}`)
@@ -142,7 +153,14 @@ const GeneralField = ({
             name="pin_code"
             label={SITE_NAME === 'zapkart' ? 'Zipcode' : 'City'}
           >
-            <Select placeholder={SITE_NAME === 'zapkart' ? 'Zipcode' : 'City'}>
+            <Select
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              placeholder={SITE_NAME === 'zapkart' ? 'Zipcode' : 'City'}
+            >
               {pincode.map((pincode) => (
                 <Option key={pincode.name} value={pincode.name}>
                   {pincode.name}
