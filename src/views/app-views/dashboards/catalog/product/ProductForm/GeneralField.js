@@ -127,15 +127,13 @@ const GeneralField = ({
   setProductBuyType,
   vendors,
   getDeliveryZones,
-  statuses
+  statuses,
   // subscriptionPrice,
   // bulkPrice,
-}) => 
-{
-
+}) => {
   console.log(productTemplates, 'plss')
-  const [variants, setVariants] = useState([]) 
-  const [selectedVendorId,setSelectedVendorId]= useState(null)
+  const [variants, setVariants] = useState([])
+  const [selectedVendorId, setSelectedVendorId] = useState(null)
 
   const getVariants = (id) => {
     const curTemp = productTemplates.find((cur) => cur.id === id)
@@ -163,14 +161,8 @@ const GeneralField = ({
   return (
     <>
       <Card title="Basic Info">
-
-
-     
-    
-
-    
         <Form.Item name="vendorId" label="Vendor" rules={rules.vendor}>
-          <Select 
+          <Select
             showSearch
             optionFilterProp="children"
             filterOption={(input, option) =>
@@ -178,7 +170,7 @@ const GeneralField = ({
             }
             placeholder="Vendor"
             onChange={(e) => {
-              getDeliveryZones("", {vendorId:e})
+              getDeliveryZones('', { vendorId: e })
               form.setFieldsValue({
                 deliveryZoneId: '',
               })
@@ -189,14 +181,9 @@ const GeneralField = ({
             ))}
           </Select>
         </Form.Item>
-        <Form.Item
-          name="hsn"
-          label="HSN"
-          rules={rules.hsn}
-        >
+        <Form.Item name="hsn" label="HSN" rules={rules.hsn}>
           <Input placeholder="hsn" />
         </Form.Item>
-
 
         <Form.Item
           name="deliveryZoneId"
@@ -329,24 +316,41 @@ const GeneralField = ({
           </Form.Item>
         )}
 
-        <Form.Item name="mrpPrice" label="MRP Price" rules={rules.mrpPrice}>
-          <InputNumber
-            placeholder="mrp Price"
-            type="number"
-            min={0}
-            max={100000}
-          />
-        </Form.Item>
-        <Form.Item name="price" label="Sale Price" rules={rules.price}>
-          <InputNumber
-            placeholder="Sale Price"
-            type="number"
-            min={0}
-            max={100000}
-          />
-        </Form.Item>
+        {productBuyType === 'Purchase' && (
+          <Form.Item name="mrpPrice" label="MRP Price" rules={rules.mrpPrice}>
+            <InputNumber
+              placeholder="mrp Price"
+              type="number"
+              min={0}
+              max={100000}
+            />
+          </Form.Item>
+        )}
 
-        {(productBuyType === 'Rent' || productBuyType === 'Lend') && (
+        {productBuyType !== 'Giveaway' && (
+          <Form.Item
+            name="price"
+            label={
+              productBuyType === 'Rent' || productBuyType === 'Lend'
+                ? 'Security Deposit'
+                : 'Sale Price'
+            }
+            rules={rules.price}
+          >
+            <InputNumber
+              placeholder={
+                productBuyType === 'Rent' || productBuyType === 'Lend'
+                  ? 'Security Deposit'
+                  : 'Sale Price'
+              }
+              type="number"
+              min={0}
+              max={100000}
+            />
+          </Form.Item>
+        )}
+
+        {productBuyType === 'Rent' && (
           <>
             <label style={{ fontWeight: 500 }}>subscriptionPrice</label>
             <Form.List name="subscriptionPrice">
@@ -392,50 +396,56 @@ const GeneralField = ({
           </>
         )}
 
-        <label style={{ fontWeight: 500 }}>Bulk Price</label>
-        <Form.List name="bulkPrice">
-          {(fields, { add, remove }) => {
-            console.log(fields, 'show-filelds')
-            return (
-              <>
-                {fields.map((field) => (
-                  <Space
-                    key={field.key}
-                    style={{ display: 'flex' }}
-                    align="baseline"
-                  >
-                    <Form.Item
-                      {...field}
-                      rules={[{ required: true, message: 'required' }]}
-                      name={[field.name, 'price']}
-                      fieldKey={[field.fieldKey, 'price']}
-                    >
-                      <Input placeholder="price" />
+        {productBuyType === 'Purchase' && (
+          <>
+            <label style={{ fontWeight: 500 }}>Bulk Price</label>
+            <Form.List name="bulkPrice">
+              {(fields, { add, remove }) => {
+                console.log(fields, 'show-filelds')
+                return (
+                  <>
+                    {fields.map((field) => (
+                      <Space
+                        key={field.key}
+                        style={{ display: 'flex' }}
+                        align="baseline"
+                      >
+                        <Form.Item
+                          {...field}
+                          rules={[{ required: true, message: 'required' }]}
+                          name={[field.name, 'price']}
+                          fieldKey={[field.fieldKey, 'price']}
+                        >
+                          <Input placeholder="price" />
+                        </Form.Item>
+                        <Form.Item
+                          {...field}
+                          rules={[{ required: true, message: 'required' }]}
+                          name={[field.name, 'qty']}
+                          fieldKey={[field.fieldKey, 'qty']}
+                        >
+                          <Input placeholder="Qty" />
+                        </Form.Item>
+                        <MinusCircleOutlined
+                          onClick={() => remove(field.name)}
+                        />
+                      </Space>
+                    ))}
+                    <Form.Item>
+                      <Button
+                        type="dashed"
+                        onClick={() => add()}
+                        icon={<PlusOutlined />}
+                      >
+                        Add item
+                      </Button>
                     </Form.Item>
-                    <Form.Item
-                      {...field}
-                      rules={[{ required: true, message: 'required' }]}
-                      name={[field.name, 'qty']}
-                      fieldKey={[field.fieldKey, 'qty']}
-                    >
-                      <Input placeholder="Qty" />
-                    </Form.Item>
-                    <MinusCircleOutlined onClick={() => remove(field.name)} />
-                  </Space>
-                ))}
-                <Form.Item>
-                  <Button
-                    type="dashed"
-                    onClick={() => add()}
-                    icon={<PlusOutlined />}
-                  >
-                    Add item
-                  </Button>
-                </Form.Item>
-              </>
-            )
-          }}
-        </Form.List>
+                  </>
+                )
+              }}
+            </Form.List>
+          </>
+        )}
       </Card>
     </>
   )

@@ -34,11 +34,11 @@ const ProductForm = (props) => {
   const [bulkPrice, setBulkPrice] = useState([])
   //   const [uploadLoading, setUploadLoading] = useState(false)
   const [submitLoading, setSubmitLoading] = useState(false)
-  const [productBuyType, setProductBuyType] = useState(null)
-  const [statuses,setStatuses] = useState([])
-  const[pickupLocations,setPickupLocations] = useState([])
-  const [selectedVendorId,setSelectedVendorId]=useState(null)
-  
+  const [productBuyType, setProductBuyType] = useState('Purchase')
+  const [statuses, setStatuses] = useState([])
+  const [pickupLocations, setPickupLocations] = useState([])
+  const [selectedVendorId, setSelectedVendorId] = useState(null)
+
   // const [deliveryZones,setDeliveryZones] = useState([])
 
   // // For selecting DELIVERY LOCATION PARENT
@@ -69,21 +69,21 @@ const ProductForm = (props) => {
       // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
 
       setStatuses(Object.values(data.GENERAL['STATUS']))
-
     }
   }
-  const getPickupLocations = async ()=>{
-    const data= await shipmentService.getPickupLocations()
-    if(data){
+  const getPickupLocations = async () => {
+    const data = await shipmentService.getPickupLocations()
+    if (data) {
       setPickupLocations(data)
     }
   }
   const getVendors = async () => {
     const data = await vendorService.getVendors()
     if (data) {
-      const vendorsList = data.map(cur => {
+      const vendorsList = data.map((cur) => {
         return {
-          ...cur, fullName: `${cur.firstName} ${cur.lastName}`
+          ...cur,
+          fullName: `${cur.firstName} ${cur.lastName}`,
         }
       })
       setVendors(vendorsList)
@@ -92,13 +92,13 @@ const ProductForm = (props) => {
 
   const getProductTemplates = async () => {
     const data = await productTemplateService.getProductTemplates()
-    const activeProductTemplates = data.data.filter((cur) => cur.status === 'Active')
+    const activeProductTemplates = data.data.filter(
+      (cur) => cur.status === 'Active'
+    )
     if (activeProductTemplates) {
       setTemplates(activeProductTemplates)
     }
   }
-
- 
 
   useEffect(() => {
     fetchConstants()
@@ -122,14 +122,13 @@ const ProductForm = (props) => {
             bulkPrice: data?.bulkPrice,
             productCode: data?.productCode,
             vendorId: data?.userId,
-            commission:data?.commission,
-            hsn:data?.hsn,
-
+            commission: data?.commission,
+            hsn: data?.hsn,
           })
           setSelectedVendorId(data?.userId)
           setProductTemplateId(data.productTemplateId)
           setProductBuyType(data.acquirementMethod)
-          getDeliveryZones({}, {vendorId: data?.userId})
+          getDeliveryZones({}, { vendorId: data?.userId })
 
           // const subscriptionPrice = data.subscriptionPrice.map((item) => {
           //   return {
@@ -165,17 +164,20 @@ const ProductForm = (props) => {
     // ...params,
   })
 
-  const getDeliveryZones = async (paginationParams = {}, filterParams={vendorId:selectedVendorId}) => {
+  const getDeliveryZones = async (
+    paginationParams = {},
+    filterParams = { vendorId: selectedVendorId }
+  ) => {
     // setLoading(true)
-    console.log('selectedVendorId',selectedVendorId)
+    console.log('selectedVendorId', selectedVendorId)
     const data = await deliveryZoneService.getDeliveryZones(
       qs.stringify(getPaginationParams(paginationParams)),
       qs.stringify(filterParams)
     )
-  
+
     if (data) {
       setDeliveryZones(data.data)
-  
+
       // // Pagination
       // setPagination({
       //   ...paginationParams.pagination,
@@ -207,6 +209,9 @@ const ProductForm = (props) => {
         }
 
         if (mode === ADD) {
+          if (productBuyType === 'Giveaway') {
+            values.price = 0
+          }
           const created = await productService.createProduct(values)
           if (created) {
             message.success(`Created Product Success`)
@@ -214,6 +219,9 @@ const ProductForm = (props) => {
           }
         }
         if (mode === EDIT) {
+          if (productBuyType === 'Giveaway') {
+            values.price = 0
+          }
           const edited = await productService.editProduct(param.id, values)
           if (edited) {
             message.success(`Edited Product Success`)

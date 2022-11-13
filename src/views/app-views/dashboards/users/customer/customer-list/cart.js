@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from 'react'
 import {
   Card,
   Table,
@@ -11,76 +11,136 @@ import {
   Row,
   Col,
   notification,
-} from "antd";
+} from 'antd'
 // import BrandListData from 'assets/data/product-list.data.json'
 import {
   EyeOutlined,
   DeleteOutlined,
   SearchOutlined,
   PlusCircleOutlined,
-} from "@ant-design/icons";
-import AvatarStatus from "components/shared-components/AvatarStatus";
-import EllipsisDropdown from "components/shared-components/EllipsisDropdown";
-import Flex from "components/shared-components/Flex";
-import qs from "qs";
-import utils from "utils";
-import cartService from "services/cart";
-import _ from "lodash";
-import { useHistory, Link } from "react-router-dom";
-import constantsService from "services/constants";
-import orderService from "services/orders";
-import moment from "moment";
+} from '@ant-design/icons'
+import AvatarStatus from 'components/shared-components/AvatarStatus'
+import EllipsisDropdown from 'components/shared-components/EllipsisDropdown'
+import Flex from 'components/shared-components/Flex'
+import qs from 'qs'
+import utils from 'utils'
+import cartService from 'services/cart'
+import _ from 'lodash'
+import { useHistory, Link } from 'react-router-dom'
+import constantsService from 'services/constants'
+import orderService from 'services/orders'
+import moment from 'moment'
 
-const { Option } = Select;
+const { Option } = Select
 
 const Cart = ({
   selectedCustomerId,
   refetchData,
-  sendingValues
+  sendingValues,
   //   ordersList
 }) => {
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] = useState([])
+  const SITE_NAME = process.env.REACT_APP_SITE_NAME
 
   const getCart = async () => {
-    const data = await cartService.getCart(selectedCustomerId,sendingValues);
+    const data = await cartService.getCart(selectedCustomerId, sendingValues)
     if (data) {
-      setCart(data.data);
+      setCart(data.items)
     }
-  };
+  }
 
   useEffect(() => {
-    getCart();
-  }, [selectedCustomerId]);
+    if (selectedCustomerId) {
+      getCart()
+    }
+  }, [selectedCustomerId])
 
   const tableColumns = [
     {
-        title: 'name',
-        dataIndex: 'name',
-        // sorter: (a, b) => utils.antdTableSorter(a, b, 'totalAmount'),
-  
-        // render: (items, record) => <div>{items?.length}</div>,
+      title: 'name',
+      dataIndex: 'product',
+      // sorter: (a, b) => utils.antdTableSorter(a, b, 'totalAmount'),
+
+      render: (product) => (
+        <Link
+          to={`/app/dashboards/catalog/product/edit-product/${product?.id}`}
+          className="flex"
+        >
+          <AvatarStatus
+            size={60}
+            type="square"
+            src={product.images[0]}
+            name={product.name}
+          />
+        </Link>
+      ),
+    },
+
+    {
+      title: 'Quantity',
+      dataIndex: 'quantity',
+      // sorter: (a, b) => utils.antdTableSorter(a, b, 'totalAmount'),
+
+      // render: (items, record) => <div>{items?.length}</div>,
+    },
+
+    {
+      title: 'Price',
+      dataIndex: 'product',
+      render: (product) => {
+        return (
+          <Flex alignItems="centre">
+            {SITE_NAME === 'zapkart'
+              ? `₹ ${product?.price}`
+              : `AED ${product?.price}`}
+          </Flex>
+        )
       },
-      {
-        title: 'Payment Status',
-        dataIndex: 'productTemplate',
-        render: (items) => {
-          return <Flex alignItems="centre">{items?.product?.productTemplate?.name}</Flex>
-        },
+    },
+
+    {
+      title: 'Variant',
+      dataIndex: 'product',
+      render: (product) => {
+        return (
+          <Flex alignItems="centre">
+            {product?.variant ? product?.variant?.name : '-'}
+          </Flex>
+        )
       },
-      {
-        title: 'Shipping Charge',
-        dataIndex: 'product',
-        sorter: (a, b) => utils.antdTableSorter(a, b, 'data?.items?.productid'),
-        // render: (items, record) => <div>{items?.length}</div>,
+    },
+    {
+      title: 'Vendor Name',
+      dataIndex: 'product',
+      render: (product) => {
+        return <Flex alignItems="centre">{product?.vendorName}</Flex>
       },
-      {
-        title: 'name',
-        dataIndex: 'name',
-        // sorter: (a, b) => utils.antdTableSorter(a, b, 'totalAmount'),
-  
-        // render: (items, record) => <div>{items?.length}</div>,
+    },
+  ]
+
+  if (SITE_NAME === 'awen') {
+    tableColumns.push({
+      title: 'Acquirement Method',
+      dataIndex: 'product',
+      render: (product) => {
+        return <Flex alignItems="centre">{product?.acquirementMethod}</Flex>
       },
-  ];
+    })
+  }
+
+  if (SITE_NAME === 'zapkart') {
+    tableColumns.push({
+      title: 'Prescription Required',
+      dataIndex: 'product',
+      render: (product) => {
+        return (
+          <Flex alignItems="centre">
+            {product?.prescriptionRequired ? 'Yes' : 'No'}
+          </Flex>
+        )
+      },
+    })
+  }
 
   return (
     <Table
@@ -91,7 +151,7 @@ const Cart = ({
       dataSource={cart}
       rowKey="id"
     />
-  );
-};
+  )
+}
 
-export default Cart;
+export default Cart
