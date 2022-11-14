@@ -119,7 +119,7 @@ const GeneralField = ({
   userGroups,
   valueTypes,
   availableTypes,
-  form_statuses
+  form_statuses,
 }) => {
   const [availableType, setAvailableType] = useState(null)
   console.log('availableType', availableType)
@@ -135,8 +135,13 @@ const GeneralField = ({
             <Input placeholder="Code" />
           </Form.Item>
 
-          <Form.Item name="valueType" label="Value Type" rules={rules.valueType}>
-            <Select showSearch
+          <Form.Item
+            name="valueType"
+            label="Value Type"
+            rules={rules.valueType}
+          >
+            <Select
+              showSearch
               optionFilterProp="children"
               filterOption={(input, option) =>
                 option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
@@ -152,7 +157,12 @@ const GeneralField = ({
           </Form.Item>
 
           <Form.Item name="value" label="Value" rules={rules.priority}>
-            <InputNumber placeholder="Value" size="large" min={0} max={1000000} />
+            <InputNumber
+              placeholder="Value"
+              size="large"
+              min={0}
+              max={1000000}
+            />
           </Form.Item>
 
           <Form.Item name="maxAmount" label="MaxAmount" rules={rules.maxAmount}>
@@ -173,36 +183,43 @@ const GeneralField = ({
                 label="Available Type"
                 rules={rules.availableType}
               >
-                <Select placeholder="Available Type" onChange={value => {
-                  setAvailableType(value)
-                }} showSearch
+                <Select
+                  placeholder="Available Type"
+                  onChange={(value) => {
+                    setAvailableType(value)
+                  }}
+                  showSearch
                   optionFilterProp="children"
                   filterOption={(input, option) =>
-                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                  }>
-
+                    option.children
+                      .toLowerCase()
+                      .indexOf(input.toLowerCase()) >= 0
+                  }
+                >
                   {availableTypes?.map((item) => (
                     <Option key={item} value={item}>
                       {item}
                     </Option>
                   ))}
                 </Select>
-
               </Form.Item>
             </Col>
-            {availableType === "Limited" ?
-              <span className="ml-3" >
-                <Col span={16} >
-                  <Form.Item name="available" label="Available" rules={rules.available}>
+            {availableType === 'Limited' ? (
+              <span className="ml-3">
+                <Col span={16}>
+                  <Form.Item
+                    name="available"
+                    label="Available"
+                    rules={rules.available}
+                  >
                     <InputNumber placeholder="Available" min={0} max={100000} />
                   </Form.Item>
-                </Col></span> : ""}
-
-
+                </Col>
+              </span>
+            ) : (
+              ''
+            )}
           </Row>
-
-
-
 
           <Form.Item name="products" label="Products" rules={rules.products}>
             <Select

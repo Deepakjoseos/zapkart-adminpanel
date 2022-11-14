@@ -37,12 +37,12 @@ const ProductForm = (props) => {
   const [selectedCustomerId, setSelectedCustomerId] = useState(null)
   const [customers, setCustomers] = useState([])
   const [selectedPrescriptionCustomerId, setSelectedPrescriptionCustomerId] =
-  useState(null)
-  const [userGroups,setUserGroups]= useState([])
-  const [groupList,setGroupList] = useState([])
+    useState(null)
+  const [userGroups, setUserGroups] = useState([])
+  const [groupList, setGroupList] = useState([])
   const [phoneVerified, setPhoneVerified] = useState(false)
   const [emailVerified, setEmailVerified] = useState(false)
-  const [form_statuses,setStatuses] = useState([])
+  const [form_statuses, setStatuses] = useState([])
   const { imageCategories } = useSelector((state) => state.auth)
 
   const {
@@ -53,37 +53,36 @@ const ProductForm = (props) => {
     setFileList: setFileListDisplayImages,
   } = useUpload(1)
 
-   const getUserGroups = async () => {
-     const data = await userGroupService.getUserGroups()
-     if (data) {
-       const availableUserGroups = data.filter(
-         (userGroups) => userGroups.type === 'Customer'
-       )
-       setGroupList(availableUserGroups)
-     }
-   }
+  const getUserGroups = async () => {
+    const data = await userGroupService.getUserGroups()
+    if (data) {
+      const availableUserGroups = data.filter(
+        (userGroups) => userGroups.type === 'Customer'
+      )
+      setGroupList(availableUserGroups)
+    }
+  }
   const fetchConstants = async () => {
     const data = await constantsService.getConstants()
     if (data) {
       // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
 
       setStatuses(Object.values(data.GENERAL['FORM_STATUS']))
-
     }
   }
-  useEffect(()=>{
-   getUserGroups()
+  useEffect(() => {
+    getUserGroups()
     fetchConstants()
-  },[])
+  }, [])
 
   const fetchCustomerById = async () => {
     const { id } = param
-  
+
     const data = await customerService.getCustomerById(id)
     if (data) {
       setAddressList(data.address)
-      setSelectedCustomerId(data.id)
-      setSelectedPrescriptionCustomerId(data.id)
+      setSelectedCustomerId(data?.id || id)
+      setSelectedPrescriptionCustomerId(data?.id || id)
       // setGroupList(data.groups)
       let himg = []
       if (data.displayImage) {
@@ -105,15 +104,14 @@ const ProductForm = (props) => {
         lastName: data.lastName,
         email: data?.email,
         phone: data?.phone,
-        status:data?.status,
-        password:data?.password,
-        emailVerified:data?.emailVerified,
-        groups: data?.groups.map((cur)=> cur.id)
+        status: data?.status,
+        password: data?.password,
+        emailVerified: data?.emailVerified,
+        groups: data?.groups.map((cur) => cur.id),
       })
 
       setEmailVerified(data?.emailVerified)
-      setPhoneVerified(data?.phone ? true: false)
-   
+      setPhoneVerified(data?.phone ? true : false)
     } else {
       // history.replace('/app/dashboards/users/customer/customer-list')
     }
@@ -133,7 +131,6 @@ const ProductForm = (props) => {
     fileList: fileListDisplayImages,
   }
 
-
   useEffect(() => {
     setDisplayImage(fileListDisplayImages)
   }, [fileListDisplayImages])
@@ -148,24 +145,23 @@ const ProductForm = (props) => {
         const sendingValues = {
           firstName: values.firstName,
           lastName: values.lastName,
-          groups:values.groups,
+          groups: values.groups,
 
           email: values.email,
-           phone: values.phone,
-           status:values.status,
-           password:values.password,
-          emailVerified:values.emailVerified
+          phone: values.phone,
+          status: values.status,
+          password: values.password,
+          emailVerified: values.emailVerified,
         }
 
         if (mode === ADD) {
-    
           const created = await customerService.addCustomer(sendingValues)
           if (created) {
             message.success(`Created Customer Success`)
             history.goBack()
           }
         }
-        console.log('mode',mode)
+        console.log('mode', mode)
         if (mode === EDIT) {
           // Checking if image exists
           if (displayImage.length !== 0 && displayImage !== null) {
@@ -247,20 +243,33 @@ const ProductForm = (props) => {
         <div className="container">
           <Tabs defaultActiveKey="1" style={{ marginTop: 30 }}>
             <TabPane tab="General" key="1">
-              <GeneralField propsDisplayImages={propsDisplayImages} mode={mode} userGroups={groupList} form={form} emailVerified={emailVerified} phoneVerified={phoneVerified} form_statuses={form_statuses}/>
+              <GeneralField
+                propsDisplayImages={propsDisplayImages}
+                mode={mode}
+                userGroups={groupList}
+                form={form}
+                emailVerified={emailVerified}
+                phoneVerified={phoneVerified}
+                form_statuses={form_statuses}
+              />
             </TabPane>
             {id && (
               <>
                 <TabPane tab="Address" key="2">
                   <ViewAddresses
-
-                    addressList={addressList} selectedCustomerId={selectedCustomerId} refetchData={fetchCustomerById}
+                    addressList={addressList}
+                    selectedCustomerId={selectedCustomerId}
+                    refetchData={fetchCustomerById}
                   />
                 </TabPane>
                 <TabPane tab="Prescriptions" key="3">
                   <ViewPrescriptions
-                    selectedPrescriptionCustomerId={selectedPrescriptionCustomerId}
-                    setSelectedPrescriptionCustomerId={setSelectedPrescriptionCustomerId}
+                    selectedPrescriptionCustomerId={
+                      selectedPrescriptionCustomerId
+                    }
+                    setSelectedPrescriptionCustomerId={
+                      setSelectedPrescriptionCustomerId
+                    }
                   />
                 </TabPane>
                 <TabPane tab="Orders" key="4">
@@ -277,7 +286,6 @@ const ProductForm = (props) => {
                   /> */}
                   <Cart selectedCustomerId={selectedCustomerId} />
                 </TabPane>
-                
               </>
             )}
           </Tabs>

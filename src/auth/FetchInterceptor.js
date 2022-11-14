@@ -19,11 +19,17 @@ const PUBLIC_REQUEST_KEY = 'public-request'
 
 // API Request interceptor
 service.interceptors.request.use(
-  (config) => {
+  async (config) => {
     const jwtToken = localStorage.getItem(AUTH_TOKEN)
 
-    if (jwtToken) {
-      config.headers[TOKEN_PAYLOAD_KEY] = `Bearer ${jwtToken}`
+    const refreshedToken = await FirebaseService.refreshToken()
+
+    // .then((token) => {
+    //   console.log(token, 'heyteg')
+    // })
+
+    if (refreshedToken || jwtToken) {
+      config.headers[TOKEN_PAYLOAD_KEY] = `Bearer ${refreshedToken || jwtToken}`
       config.headers.deviceToken = window.localStorage.getItem('deviceToken')
     }
 
@@ -56,30 +62,30 @@ service.interceptors.response.use(
 
     // Remove token and redirect
     if (error.response.status === 401 || error.response.status === 403) {
-      if (currentUser) {
-        const refreshed = await FirebaseService.refreshToken()
+      // if (currentUser) {
+      //   const refreshed = await FirebaseService.refreshToken()
 
-        if (refreshed) {
-          originalRequest._retry = true
+      //   if (refreshed) {
+      //     originalRequest._retry = true
 
-          axios.defaults.headers.common['authorization'] = 'Bearer ' + refreshed
-          return service(originalRequest)
-        } else {
-          FirebaseService.signOutRequest()
-          localStorage.removeItem(AUTH_TOKEN)
-          history.push(ENTRY_ROUTE)
-          window.location.reload()
-          notificationParam.message = 'Authentication Fail'
-          notificationParam.description = 'Please login again'
-        }
-      } else {
-        FirebaseService.signOutRequest()
-        localStorage.removeItem(AUTH_TOKEN)
-        history.push(ENTRY_ROUTE)
-        window.location.reload()
-        notificationParam.message = 'Authentication Fail'
-        notificationParam.description = 'Please login again'
-      }
+      //     axios.defaults.headers.common['authorization'] = 'Bearer ' + refreshed
+      //     return service(originalRequest)
+      //   } else {
+      //     FirebaseService.signOutRequest()
+      //     localStorage.removeItem(AUTH_TOKEN)
+      //     history.push(ENTRY_ROUTE)
+      //     window.location.reload()
+      //     notificationParam.message = 'Authentication Fail'
+      //     notificationParam.description = 'Please login again'
+      //   }
+      // } else {
+      FirebaseService.signOutRequest()
+      localStorage.removeItem(AUTH_TOKEN)
+      history.push(ENTRY_ROUTE)
+      window.location.reload()
+      notificationParam.message = 'Authentication Fail'
+      notificationParam.description = 'Please login again'
+      // }
       // const refreshed = await FirebaseService.refreshToken()
 
       // if (refreshed && currentUser) {

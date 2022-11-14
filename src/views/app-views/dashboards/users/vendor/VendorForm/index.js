@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import PageHeaderAlt from 'components/layout-components/PageHeaderAlt'
-import { Tabs, Form, Button, message } from 'antd'
+import { Tabs, Form, Button, message, notification } from 'antd'
 import Flex from 'components/shared-components/Flex'
 import GeneralField from './GeneralField'
 import useUpload from 'hooks/useUpload'
@@ -17,7 +17,6 @@ import BankAccount from './bankAccount'
 import { useSelector } from 'react-redux'
 import Documents from './documents'
 import PickupLocations from '../VendorForm/pickuplocation'
-
 
 // const getAllPickUpLocations = async ()=>{
 //   const data = await shipmentService.getAllPickUpLocations()
@@ -63,7 +62,6 @@ const ProductForm = (props) => {
     setFileList: setFileListDisplayImages,
   } = useUpload(1)
 
-
   const {
     fileList: fileListLogo,
     beforeUpload: beforeUploadLogo,
@@ -71,8 +69,6 @@ const ProductForm = (props) => {
     onRemove: onRemoveLogo,
     setFileList: setFileListLogo,
   } = useUpload(1)
-
-
 
   const getUserGroups = async () => {
     const data = await userGroupService.getUserGroups()
@@ -124,7 +120,7 @@ const ProductForm = (props) => {
       console.log('datavendorid', data)
       setPickUpLocation(data.pickupLocations)
       let himg = []
-      if (data.image) {
+      if (data?.displayImage) {
         himg = [
           {
             uid: Math.random() * 1000,
@@ -136,17 +132,15 @@ const ProductForm = (props) => {
 
         setDisplayImage(himg)
         setFileListDisplayImages(himg)
-       
       }
 
-
-      if (data.logo) {
+      if (data?.business?.logo) {
         himg = [
           {
             uid: Math.random() * 1000,
-            name: Utils.getBaseName(data.logo),
-            url: data.logo,
-            thumbUrl: data.logo,
+            name: Utils.getBaseName(data?.business?.logo),
+            url: data?.business?.logo,
+            thumbUrl: data?.business?.logo,
           },
         ]
         setLogo(himg)
@@ -163,7 +157,7 @@ const ProductForm = (props) => {
         pan: SITE_NAME === 'zapkart' ? data?.pan : null,
         drugLicense: data?.drugLicense,
         groups: data?.groups.map((cur) => cur.id),
-        business:data?.business,
+        business: data?.business,
 
         // address:
         'address.line1': data?.address?.line1,
@@ -208,7 +202,6 @@ const ProductForm = (props) => {
     setDisplayImage(fileListDisplayImages)
   }, [fileListDisplayImages])
 
-
   const propsLogo = {
     multiple: false,
     beforeUpload: beforeUploadLogo,
@@ -220,8 +213,6 @@ const ProductForm = (props) => {
   useEffect(() => {
     setLogo(fileListLogo)
   }, [fileListLogo])
-
-
 
   const onFinish = async () => {
     setSubmitLoading(true)
@@ -279,6 +270,8 @@ const ProductForm = (props) => {
             delete sendingValues.business
           }
         }
+
+        // This is for vendor profile photo
         if (displayImage.length !== 0 && displayImage !== null) {
           const imageCategory = imageCategories.find(
             (imgCat) => imgCat.imageFor === 'Users'
@@ -294,6 +287,8 @@ const ProductForm = (props) => {
         } else {
           delete sendingValues.displayImage
         }
+
+        // This is for vendor company logo
         if (logo.length !== 0 && logo !== null) {
           const imageCategory = imageCategories.find(
             (imgCat) => imgCat.imageFor === 'Users'
@@ -304,12 +299,19 @@ const ProductForm = (props) => {
             logo[0].url,
             imageCategory.id
           )
-          sendingValues.logo = logoValue
-          console.log('upload', sendingValues.displayImage)
+          if (sendingValues?.business) {
+            sendingValues.business['logo'] = logoValue
+          } else {
+            notification.warn({
+              message: 'Please fill out Bussiness Name to Save Logo',
+            })
+          }
+
+          console.log('upload', logoValue)
         } else {
-          delete sendingValues.logo
+          delete sendingValues.business.logo
         }
-        
+
         if (mode === ADD) {
           sendingValues.phone = values.phone
           sendingValues.password = values.password
@@ -424,7 +426,7 @@ const ProductForm = (props) => {
                   <BankAccount selectedVendorId={selectedVendorId} />
                 </TabPane>
                 {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
-                <TabPane tab="Pickuplocation" key="4">
+                  <TabPane tab="Pickuplocation" key="4">
                     <PickupLocations />
                   </TabPane>
                 )}
