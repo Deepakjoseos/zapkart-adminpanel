@@ -1,11 +1,20 @@
-import { Input, Row, Col, Card, Form, Select, Button, Space, InputNumber } from "antd";
+import {
+  Input,
+  Row,
+  Col,
+  Card,
+  Form,
+  Select,
+  Button,
+  Space,
+  InputNumber,
+} from "antd";
 import { SearchOutlined, EyeOutlined } from "@ant-design/icons";
 import EllipsisDropdown from "components/shared-components/EllipsisDropdown";
 import { useState } from "react";
-import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
+import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 
-import Editor from 'components/shared-components/Editor'
-
+import Editor from "components/shared-components/Editor";
 
 const { Option } = Select;
 
@@ -20,14 +29,12 @@ const rules = {
     {
       required: false,
       message: "Required",
-
     },
   ],
   email: [
     {
       required: false,
       message: "Required",
-
     },
   ],
 
@@ -55,7 +62,7 @@ const rules = {
       message: "Required",
     },
   ],
-  vendorCommission: [
+  tdsPercentage: [
     {
       required: true,
       message: "Required",
@@ -63,41 +70,24 @@ const rules = {
   ],
 };
 
-const GeneralField = ({ setmode,form }) => {
-  const [deliveryCharges, setDeliveryCharges] = useState([])
+const GeneralField = ({ setmode, form }) => {
+  const [deliveryCharges, setDeliveryCharges] = useState([]);
   return (
     // <Row gutter={16}>
     //   <Col xs={24} sm={24} md={24}>
     <>
       <Card title="User Info">
         <>
-         
-          <Form.Item
-            name="name"
-            label="Website Name"
-            rules={rules.name}
-          >
+          <Form.Item name="name" label="Website Name" rules={rules.name}>
             <Input placeholder="Name" type="text" />
           </Form.Item>
-          <Form.Item
-            name="address"
-            label="Address"
-            rules={rules.address}
-          >
+          <Form.Item name="address" label="Address" rules={rules.address}>
             <Input placeholder="Address" type="text" />
           </Form.Item>
-          <Form.Item
-            name="email"
-            label="Email"
-            rules={rules.email}
-          >
+          <Form.Item name="email" label="Email" rules={rules.email}>
             <Input placeholder="Email" type="text" />
           </Form.Item>
-          <Form.Item
-            name="phone"
-            label="Phone"
-            rules={rules.phone}
-          >
+          <Form.Item name="phone" label="Phone" rules={rules.phone}>
             <Input placeholder="Phone" type="text" />
           </Form.Item>
           <Form.Item
@@ -114,11 +104,7 @@ const GeneralField = ({ setmode,form }) => {
           >
             <Input placeholder="Instagram" type="text" />
           </Form.Item>
-          <Form.Item
-            name="twitterUrl"
-            label="Twitter"
-            rules={rules.twitterUrl}
-          >
+          <Form.Item name="twitterUrl" label="Twitter" rules={rules.twitterUrl}>
             <Input placeholder="Twitter" type="text" />
           </Form.Item>
           <Form.Item
@@ -135,112 +121,96 @@ const GeneralField = ({ setmode,form }) => {
           >
             <Input placeholder="Razor Pay Account" type="text" />
           </Form.Item>
-          {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
-          <Form.Item
-            name="agreement"
-            label="Agreement"
-           
-          >
-            <Input placeholder="Agreement" type="text" />
-          </Form.Item>
-        
+          {process.env.REACT_APP_SITE_NAME === "zapkart" && (
+            <Form.Item name="agreement" label="Agreement">
+              <Input placeholder="Agreement" type="text" />
+            </Form.Item>
           )}
-            {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
-              <Form.Item
-                name="footer"
-                label="Footer"
-                
-              >
-                <Editor
-                  placeholder="Write something..."
-                  editorHtml={form.getFieldValue('footer') || ''}
-                  onChange={(e) => form.setFieldsValue({ footer: e })}
-                  name="fcmDescription"
-                />
-              </Form.Item>)}
-           
-          {/* <Form.Item
-            name="vendorCommission"
-            label="Vendor Commission"
-            rules={rules.vendorCommission}
-          >
-            <Input placeholder="Vendor Commission" type="text" />
-          </Form.Item> */}
-          {/* </div> */}
+          {process.env.REACT_APP_SITE_NAME === "zapkart" && (
+            <Form.Item name="footer" label="Footer">
+              <Editor
+                placeholder="Write something..."
+                editorHtml={form.getFieldValue("footer") || ""}
+                onChange={(e) => form.setFieldsValue({ footer: e })}
+                name="fcmDescription"
+              />
+            </Form.Item>
+          )}
 
+          <Form.Item
+            name="tdsPercentage"
+            label="TDS Percentage"
+            rules={rules.tdsPercentage}
+          >
+            <Input placeholder="TDS Percentage" type="number" />
+          </Form.Item>
+          {/* </div> */}
         </>
         <div>
-         <p>Delivery Charges</p>
+          <p>Delivery Charges</p>
           <Form.List name="deliveryCharges">
             {(fields, { add, remove }) => {
-              console.log(fields, 'show-filelds')
+              console.log(fields, "show-filelds");
               return (
                 <>
                   {fields.map((field) => (
                     <Space
                       key={field.key}
-                      style={{ display: 'flex', width: '100%' }}
+                      style={{ display: "flex", width: "100%" }}
                       align="baseline"
                     >
                       <Form.Item
-                        {...field} label="Start Amount"
-                        rules={[
-                          { required: true, message: 'required' },
-                        ]}
-                        name={[field.name, 'startAmount']}
-                        fieldKey={[field.fieldKey, 'startAmount']}
+                        {...field}
+                        label="Start Amount"
+                        rules={[{ required: true, message: "required" }]}
+                        name={[field.name, "startAmount"]}
+                        fieldKey={[field.fieldKey, "startAmount"]}
                       >
                         <InputNumber
                           placeholder="Start Amount"
-                          style={{ width: '100%' }}
-
+                          style={{ width: "100%" }}
                         />
-                      
                       </Form.Item>
-                      <Form.Item label="end Amount"
+                      <Form.Item
+                        label="end Amount"
                         {...field}
-                        rules={[
-                          { required: true, message: 'required' },
-                        ]}
-                        name={[field.name, 'endAmount']}
-                        fieldKey={[field.fieldKey, 'quantity']}
+                        rules={[{ required: true, message: "required" }]}
+                        name={[field.name, "endAmount"]}
+                        fieldKey={[field.fieldKey, "quantity"]}
                       >
                         <InputNumber
                           placeholder="End Amount"
-                          style={{ width: '100%' }}
-
-
+                          style={{ width: "100%" }}
                         />
                       </Form.Item>
-                      <Form.Item label="Charge"
+                      <Form.Item
+                        label="Charge"
                         {...field}
-                        rules={[
-                          { required: true, message: 'required' },
-                        ]}
-                        name={[field.name, 'charge']}
-                        fieldKey={[field.fieldKey, 'charge']}
+                        rules={[{ required: true, message: "required" }]}
+                        name={[field.name, "charge"]}
+                        fieldKey={[field.fieldKey, "charge"]}
                       >
                         <InputNumber
                           placeholder="Charge"
-                          style={{ width: '100%' }}
+                          style={{ width: "100%" }}
                         />
                       </Form.Item>
                       {fields.length > 1 && (
-                      <MinusCircleOutlined
-                           onClick={() => {
-                                // onAttributeChange()
-                             remove(field.name)
-                              // checkPrescriptionRequired()
-                           }}
-                         />   
-                       )} 
+                        <MinusCircleOutlined
+                          onClick={() => {
+                            // onAttributeChange()
+                            remove(field.name);
+                            // checkPrescriptionRequired()
+                          }}
+                        />
+                      )}
                     </Space>
                   ))}
                   <Form.Item>
                     <Button
                       type="primary"
                       onClick={() => {
-                        add()
+                        add();
                         // checkPrescriptionRequired()
                       }}
                       icon={<PlusOutlined />}
@@ -249,44 +219,39 @@ const GeneralField = ({ setmode,form }) => {
                     </Button>
                   </Form.Item>
                 </>
-              )
+              );
             }}
           </Form.List>
         </div>
-
       </Card>
       <Card title="SEO">
-          <Form.Item name="metaTitle" label="Meta Title">
-            <Input placeholder="Meta Title" />
-          </Form.Item>
-          <Form.Item name="metaDescription" label="Meta Description">
-            <Input placeholder="Meta Description" />
-          </Form.Item>
-          {/* <Form.Item name="keywords" label="Keywords">
+        <Form.Item name="metaTitle" label="Meta Title">
+          <Input placeholder="Meta Title" />
+        </Form.Item>
+        <Form.Item name="metaDescription" label="Meta Description">
+          <Input placeholder="Meta Description" />
+        </Form.Item>
+        {/* <Form.Item name="keywords" label="Keywords">
             <Input placeholder="Keywords" />
           </Form.Item> */}
-          <Form.Item name="keywords" label="Meta Keywords">
-            <Select
-              dropdownStyle={{ display: 'none' }}
-              mode="tags"
-              style={{
-                width: '100%',
-              }}
-              placeholder="Keywords"
-            ></Select>
-          </Form.Item>
-          {/* <Form.Item name="slug" label="Slug" rules={rules.slug}>
+        <Form.Item name="keywords" label="Maeta Keywords">
+          <Select
+            dropdownStyle={{ display: "none" }}
+            mode="tags"
+            style={{
+              width: "100%",
+            }}
+            placeholder="Keywords"
+          ></Select>
+        </Form.Item>
+        {/* <Form.Item name="slug" label="Slug" rules={rules.slug}>
             <Input placeholder="Slug" />
           </Form.Item> */}
-         
-        
-        </Card>
-      
-
+      </Card>
     </>
     //   </Col>
     // </Row>
-  )
-}
+  );
+};
 
 export default GeneralField;
