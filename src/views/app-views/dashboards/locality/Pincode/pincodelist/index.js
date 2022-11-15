@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
+
 import {
   Card,
   Table,
@@ -37,7 +38,7 @@ import _, { get } from 'lodash'
 
 import constantsService from 'services/constants'
 import cityService from 'services/city'
-
+import './pincode.css'
 const { Option } = Select
 
 const getStockStatus = (status) => {
@@ -345,12 +346,12 @@ const Pincodelist = () => {
       className="ant-advanced-search-form"
     >
       <Row gutter={8} align="bottom">
-        <Col md={6} sm={24} xs={24} lg={6}>
+        <Col md={6} sm={24} xs={24} lg={4}>
           <Form.Item name="search" label="Search">
             <Input placeholder="Search" prefix={<SearchOutlined />} />
           </Form.Item>
         </Col>
-        <Col md={6} sm={24} xs={24} lg={6}>
+        <Col md={6} sm={24} xs={24} lg={4}>
           <Form.Item name="status" label="Status">
             <Select
               className="w-100"
@@ -384,7 +385,7 @@ const Pincodelist = () => {
 
 
 
-<Col md={6} sm={24} xs={24} lg={6}>
+<Col md={6} sm={24} xs={24} lg={4}>
           <Form.Item
             name="pincodeId"
             label="Pincode"
@@ -415,7 +416,7 @@ const Pincodelist = () => {
 
 
 
-        <Col md={6} sm={24} xs={24} lg={6}>
+        <Col md={6} sm={24} xs={24} lg={4}>
           <Form.Item
             name="districtId"
             label={SITE_NAME === 'zapkart' ? 'District' : 'Country'}
@@ -448,7 +449,7 @@ const Pincodelist = () => {
 
 
 
-        <Col md={6} sm={24} xs={24} lg={6}>
+        <Col md={6} sm={24} xs={24} lg={4}>
           <Form.Item
             name="countryId"
             label="country"
@@ -481,7 +482,7 @@ const Pincodelist = () => {
 
 
 
-        <Col md={6} sm={24} xs={24} lg={6}>
+        <Col md={6} sm={24} xs={24} lg={4}>
           <Form.Item
             name="stateId"
             label="state"
@@ -509,7 +510,7 @@ const Pincodelist = () => {
           </Form.Item>
         </Col>
 
-
+        <Col md={6} sm={24} xs={24} lg={4}>
         <Form.Item name="cityId" label="City">
             <Select
               showSearch
@@ -557,6 +558,7 @@ const Pincodelist = () => {
           </Form.Item>
         </Col>
         */}
+         </Col>
 
         <Col className="mb-4">
           <Button type="primary" onClick={handleFilterSubmit}>
@@ -567,16 +569,10 @@ const Pincodelist = () => {
           <Button type="primary" onClick={handleClearFilter}>
             Clear
           </Button>
-        </Col>
-      </Row>
-    </Form>
-  )
-
-  return (
-    <Card>
-      <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
-        {filtersComponent()}
-        <Flex>
+          </Col>
+          <Col className="spider">
+          <Flex>
+         
           <Button
             className="mr-2"
             type="primary"
@@ -586,7 +582,32 @@ const Pincodelist = () => {
             Excel Upload
           </Button>
          
+        
+
+        <div>
+          <Button
+            onClick={addProduct}
+            type="primary"
+            icon={<PlusCircleOutlined />}
+            block
+          >
+            {SITE_NAME === 'zapkart' ? 'Add Pincode' : 'Add City'}
+          </Button>
+        </div>
         </Flex>
+        </Col>
+        
+      </Row>
+      
+    </Form>
+    
+  )
+
+  return (
+    <Card>
+      <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
+        {filtersComponent()}
+       
         <Modal
         title="Pincode Excel Upload"
         visible={isExcelModalOpen}
@@ -621,18 +642,7 @@ const Pincodelist = () => {
           </Button>
         </Flex>
       </Modal>
-
-
-        <div>
-          <Button
-            onClick={addProduct}
-            type="primary"
-            icon={<PlusCircleOutlined />}
-            block
-          >
-            {SITE_NAME === 'zapkart' ? 'Add Pincode' : 'Add City'}
-          </Button>
-        </div>
+     
       </Flex>
       <div className="table-responsive">
         <Table

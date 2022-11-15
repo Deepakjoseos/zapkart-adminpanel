@@ -381,7 +381,7 @@ const dashBoardNavTree = [
         icon: DeliveredProcedureOutlined,
         breadcrumb: false,
         submenu: [],
-
+      },
         // key: 'dashboards-deliverylocation',
         // path: `${APP_PREFIX_PATH}/dashboards/delivery-location`,
         // title: 'Delivery Location',
@@ -397,7 +397,7 @@ const dashBoardNavTree = [
         //     submenu: [],
         //   },
         // ],
-      },
+     
       {
         key: 'dashboards-locality',
         path: `${APP_PREFIX_PATH}/dashboards/locality`,
@@ -579,7 +579,7 @@ if (process.env.REACT_APP_SITE_NAME === 'zapkart') {
 
   // For locality
 
-  dashBoardNavTree[0].submenu[7].submenu.unshift({
+  dashBoardNavTree[0].submenu[8].submenu.unshift({
     key: 'dashboards-locality-state',
     path: `${APP_PREFIX_PATH}/dashboards/locality/state/statelist`,
     title: 'State',
@@ -588,7 +588,7 @@ if (process.env.REACT_APP_SITE_NAME === 'zapkart') {
     submenu: [],
   })
 
-  dashBoardNavTree[0].submenu[7].submenu.unshift({
+  dashBoardNavTree[0].submenu[8].submenu.unshift({
     key: 'dashboards-locality-country',
     path: `${APP_PREFIX_PATH}/dashboards/locality/country/country-list`,
     title: 'Country',

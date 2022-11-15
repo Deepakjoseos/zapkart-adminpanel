@@ -99,4 +99,22 @@ deliveryzoneService.removeDeliveryLocationZone = async function (
   }
 }
 
+deliveryzoneService.deleteDeliveryZone = async function (
+  deliveryZoneId,
+  deliveryLocationId,
+  vendorId,
+  data
+) {
+  try {
+    const res = await fetch({
+      url: `/deliveryZones/${deliveryZoneId}/admin?vendorId=${data?.vendorId}`,
+      method: 'delete',
+    })
+    return res
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
+
+
 export default deliveryzoneService
