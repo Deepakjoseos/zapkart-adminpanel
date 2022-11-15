@@ -338,6 +338,16 @@ const dashBoardNavTree = [
         breadcrumb: false,
         submenu: [],
       },
+      
+      {
+        key: 'dashboards-review',
+        path: `${APP_PREFIX_PATH}/dashboards/Review/Review-List`,
+        title: 'Review',
+        // icon: DotChartOutlined,
+        icon: InfoCircleOutlined,
+        breadcrumb: false,
+        submenu: [],
+      },
       {
         key: 'dashboards-template',
         path: `${APP_PREFIX_PATH}/dashboards/template/template-list`,

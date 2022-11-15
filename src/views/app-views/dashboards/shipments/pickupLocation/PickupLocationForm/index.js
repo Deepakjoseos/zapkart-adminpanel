@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import PageHeaderAlt from 'components/layout-components/PageHeaderAlt'
+
 import { Tabs, Form, Button, message } from 'antd'
+import PageHeaderAlt from 'components/layout-components/PageHeaderAlt'
 import Flex from 'components/shared-components/Flex'
 import GeneralField from './GeneralField'
 
@@ -15,7 +16,7 @@ import { useHistory } from 'react-router-dom'
 import Shipment from '..'
 import moment from 'moment'
 
-import PickupLocations from 'views/app-views/dashboards/users/vendor/VendorForm/pickuplocation'
+
 import countryService from 'services/country'
 
 const { TabPane } = Tabs
@@ -295,6 +296,8 @@ const ShipmentForm = (props) => {
               />
             </TabPane>
           </Tabs>
+
+         
         </div>
       </Form>
     </>
