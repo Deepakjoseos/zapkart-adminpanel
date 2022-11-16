@@ -302,7 +302,7 @@ const DistrictList = () => {
           <Form.Item
             name="stateId"
             label="State"
-          >
+            >
             <Select
               showSearch
               optionFilterProp="children"

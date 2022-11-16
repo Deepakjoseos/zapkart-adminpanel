@@ -148,7 +148,7 @@ const DeliveryZonesList = () => {
           <span className="ml-2">Add Delivery Zone Location</span>
         </Flex>
       </Menu.Item> */}
-      {/* <Menu.Item onClick={() => deleteRow(row)}>
+       <Menu.Item onClick={() => deleteRow(row)}>
         <Flex alignItems="center">
           <DeleteOutlined />
           <span className="ml-2">
@@ -157,7 +157,7 @@ const DeliveryZonesList = () => {
               : 'Delete'}
           </span>
         </Flex>
-      </Menu.Item> */}
+      </Menu.Item>
     </Menu>
   )
 
@@ -174,24 +174,24 @@ const DeliveryZonesList = () => {
     )
   }
 
-  //   const deleteRow = async (row) => {
-  //     const resp = await deliveryLocationService.dele(row.id)
+    const deleteRow = async (row,vendorId) => {
+      const resp = await deliveryzoneService.deleteDeliveryZone(row.id,vendorId)
 
-  //     if (resp) {
-  //       const objKey = 'id'
-  //       let data = list
-  //       if (selectedRows.length > 1) {
-  //         selectedRows.forEach((elm) => {
-  //           data = utils.deleteArrayRow(data, objKey, elm.id)
-  //           setList(data)
-  //           setSelectedRows([])
-  //         })
-  //       } else {
-  //         data = utils.deleteArrayRow(data, objKey, row.id)
-  //         setList(data)
-  //       }
-  //     }
-  //   }
+      if (resp) {
+        const objKey = 'id'
+        let data = list
+        if (selectedRows.length > 1) {
+          selectedRows.forEach((elm) => {
+            data = utils.deleteArrayRow(data, objKey, elm.id,vendorId)
+            setList(data)
+            setSelectedRows([])
+          })
+        } else {
+          data = utils.deleteArrayRow(data, objKey, row.id,vendorId)
+          setList(data)
+        }
+      }
+    }
   const addDeliveryZoneLocation = (row) => {
     history.push(
       `/app/dashboards/deliverylocation/deliveryzone/add-deliveryzone-location/${row.id}`

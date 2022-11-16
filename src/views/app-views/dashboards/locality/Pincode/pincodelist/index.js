@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
+
 import {
   Card,
   Table,
@@ -30,11 +31,14 @@ import qs from 'qs'
 
 import utils from 'utils'
 import pincodeService from 'services/pincode'
-import _ from 'lodash'
+import districtService from 'services/district'
+import stateService from 'services/state'
+import countryService from 'services/country'
+import _, { get } from 'lodash'
 
 import constantsService from 'services/constants'
 import cityService from 'services/city'
-
+import './pincode.css'
 const { Option } = Select
 
 const getStockStatus = (status) => {
@@ -76,6 +80,11 @@ const Pincodelist = () => {
   const [filterEnabled, setFilterEnabled] = useState(false)
   const [statuses, setStatuses] = useState([])
   const [cities, setCities] = useState([])
+  const [state, setState] = useState([])
+  const [country, setCountry] = useState([])
+  const [pincode, setPincode] = useState([])
+  const [district, setDistrict] = useState([])
+
 
   
   // pagination
@@ -97,6 +106,24 @@ const Pincodelist = () => {
       setCities(data.data)
     }
   }
+  const getState = async () => {
+    const data = await stateService.getState()
+    if (data) {
+      setState(data.data)
+    }
+  }
+  const getDistrict = async () => {
+    const data = await districtService.getDistrict()
+    if (data) {
+      setDistrict(data.data)
+    }
+  }
+  const getCountry = async () => {
+    const data = await countryService.getCountry()
+    if (data) {
+      setCountry(data.data)
+    }
+  }
   // Changed here for pagination
   const getPincode = async (paginationParams = {}, filterParams) => {
     setLoading(true)
@@ -107,6 +134,7 @@ const Pincodelist = () => {
 
     if (data) {
       setList(data.data)
+      setPincode(data.data)
 
       // Pagination
       setPagination({
@@ -123,6 +151,9 @@ const Pincodelist = () => {
     })
     fetchConstants()
     getCities()
+    getDistrict()
+    getCountry()
+    getState()
   }, [])
 
   // pagination generator
@@ -315,12 +346,12 @@ const Pincodelist = () => {
       className="ant-advanced-search-form"
     >
       <Row gutter={8} align="bottom">
-        <Col md={6} sm={24} xs={24} lg={6}>
+        <Col md={6} sm={24} xs={24} lg={4}>
           <Form.Item name="search" label="Search">
             <Input placeholder="Search" prefix={<SearchOutlined />} />
           </Form.Item>
         </Col>
-        <Col md={6} sm={24} xs={24} lg={6}>
+        <Col md={6} sm={24} xs={24} lg={4}>
           <Form.Item name="status" label="Status">
             <Select
               className="w-100"
@@ -336,7 +367,7 @@ const Pincodelist = () => {
             </Select>
           </Form.Item>
         </Col>
-        <Col md={6} sm={24} xs={24} lg={6}>
+        {/* <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item
             name="orderByPriority"
             label="OrderByPriority"
@@ -348,7 +379,138 @@ const Pincodelist = () => {
               <Option value="false">No</Option>
             </Select>
           </Form.Item>
+        </Col> */}
+
+
+
+
+
+<Col md={6} sm={24} xs={24} lg={4}>
+          <Form.Item
+            name="pincodeId"
+            label="Pincode"
+          >
+            <Select
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              className="w-100"
+              style={{ minWidth: 180 }}
+              // onChange={(value) => setSelectedBrandId(value)}
+              // onSelect={handleQuery}
+              placeholder={SITE_NAME === 'zapkart' ? 'District' : 'Country'}
+              // value={selectedBrandId}
+            >
+              <Option value="">All</Option>
+              {pincode.map((item) => (
+                <Option key={item.id} value={item.id}>
+                  {item.name}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
         </Col>
+
+
+
+
+        <Col md={6} sm={24} xs={24} lg={4}>
+          <Form.Item
+            name="districtId"
+            label={SITE_NAME === 'zapkart' ? 'District' : 'Country'}
+          >
+            <Select
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              className="w-100"
+              style={{ minWidth: 180 }}
+              // onChange={(value) => setSelectedBrandId(value)}
+              // onSelect={handleQuery}
+              placeholder={SITE_NAME === 'zapkart' ? 'District' : 'Country'}
+              // value={selectedBrandId}
+            >
+              <Option value="">All</Option>
+              {district.map((item) => (
+                <Option key={item.id} value={item.id}>
+                  {item.name}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </Col>
+
+
+
+
+
+
+        <Col md={6} sm={24} xs={24} lg={4}>
+          <Form.Item
+            name="countryId"
+            label="country"
+          >
+            <Select
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              className="w-100"
+              style={{ minWidth: 180 }}
+              // onChange={(value) => setSelectedBrandId(value)}
+              // onSelect={handleQuery}
+              placeholder="country"
+              // value={selectedBrandId}
+            >
+              <Option value="">All</Option>
+              {country.map((item) => (
+                <Option key={item.id} value={item.id}>
+                  {item.name}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </Col>
+
+
+
+
+
+
+        <Col md={6} sm={24} xs={24} lg={4}>
+          <Form.Item
+            name="stateId"
+            label="state"
+          >
+            <Select
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              className="w-100"
+              style={{ minWidth: 180 }}
+              // onChange={(value) => setSelectedBrandId(value)}
+              // onSelect={handleQuery}
+              placeholder="state"
+              // value={selectedBrandId}
+            >
+              <Option value="">All</Option>
+              {state.map((item) => (
+                <Option key={item.id} value={item.id}>
+                  {item.name}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </Col>
+
+        <Col md={6} sm={24} xs={24} lg={4}>
         <Form.Item name="cityId" label="City">
             <Select
               showSearch
@@ -396,6 +558,7 @@ const Pincodelist = () => {
           </Form.Item>
         </Col>
         */}
+         </Col>
 
         <Col className="mb-4">
           <Button type="primary" onClick={handleFilterSubmit}>
@@ -406,16 +569,10 @@ const Pincodelist = () => {
           <Button type="primary" onClick={handleClearFilter}>
             Clear
           </Button>
-        </Col>
-      </Row>
-    </Form>
-  )
-
-  return (
-    <Card>
-      <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
-        {filtersComponent()}
-        <Flex>
+          </Col>
+          <Col className="spider">
+          <Flex>
+         
           <Button
             className="mr-2"
             type="primary"
@@ -425,7 +582,32 @@ const Pincodelist = () => {
             Excel Upload
           </Button>
          
+        
+
+        <div>
+          <Button
+            onClick={addProduct}
+            type="primary"
+            icon={<PlusCircleOutlined />}
+            block
+          >
+            {SITE_NAME === 'zapkart' ? 'Add Pincode' : 'Add City'}
+          </Button>
+        </div>
         </Flex>
+        </Col>
+        
+      </Row>
+      
+    </Form>
+    
+  )
+
+  return (
+    <Card>
+      <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
+        {filtersComponent()}
+       
         <Modal
         title="Pincode Excel Upload"
         visible={isExcelModalOpen}
@@ -460,18 +642,7 @@ const Pincodelist = () => {
           </Button>
         </Flex>
       </Modal>
-
-
-        <div>
-          <Button
-            onClick={addProduct}
-            type="primary"
-            icon={<PlusCircleOutlined />}
-            block
-          >
-            {SITE_NAME === 'zapkart' ? 'Add Pincode' : 'Add City'}
-          </Button>
-        </div>
+     
       </Flex>
       <div className="table-responsive">
         <Table

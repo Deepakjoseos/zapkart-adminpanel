@@ -235,7 +235,7 @@ const GeneralField = ({
           </Form.Item>
         </Col>
       </Row>
-      <Row gutter={16}>
+      {/* <Row gutter={16}>
         <Col span={24}>
           <Form.Item name="lat" label="Lattitude">
             <InputNumber placeholder="Lattitude" />
@@ -248,7 +248,7 @@ const GeneralField = ({
             <InputNumber placeholder="Longitude" />
           </Form.Item>
         </Col>
-      </Row>
+      </Row> */}
       <Row gutter={16}>
         <Col span={24}>
           <Form.Item name="vendorId" label="Vendor">

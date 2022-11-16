@@ -225,10 +225,12 @@ const ProductForm = (props) => {
           firstName: values.firstName,
           lastName: values.lastName,
           tanNumber: values.tanNumber,
+          name:values.name,
           pan: values.pan,
           gst: values.gst,
           drugLicense: values.drugLicense,
           groups: values.groups,
+          
           address: {
             line1: values['address.line1'],
             city: values['address.city'],
@@ -427,7 +429,7 @@ const ProductForm = (props) => {
                 </TabPane>
                 {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
                   <TabPane tab="Pickuplocation" key="4">
-                    <PickupLocations />
+                    <PickupLocations selectedVendorId={selectedVendorId} />
                   </TabPane>
                 )}
                 {process.env.REACT_APP_SITE_NAME === 'athathy' && (

@@ -30,7 +30,8 @@ import _ from 'lodash'
 
 import constantsService from 'services/constants'
 import districtService from 'services/district'
-
+import stateService from 'services/state'
+import countryService from 'services/country'
 const { Option } = Select
 
 const getStockStatus = (status) => {
@@ -71,6 +72,7 @@ const CityList = () => {
   const [filterEnabled, setFilterEnabled] = useState(false)
   const [statuses, setStatuses] = useState([])
   const [districts, setDistricts] = useState([])
+  const [state, setState] = useState([])
 
   // pagination
   const [pagination, setPagination] = useState({
@@ -89,6 +91,12 @@ const CityList = () => {
     const data = await districtService.getDistrict()
     if (data) {
       setDistricts(data.data)
+    }
+  }
+  const getState = async () => {
+    const data = await stateService.getState()
+    if (data) {
+      setState(data.data)
     }
   }
   // Changed here for pagination
@@ -117,6 +125,7 @@ const CityList = () => {
     })
     fetchConstants()
     getDistricts()
+    getState()
   }, [])
 
   // pagination generator
@@ -294,7 +303,7 @@ const CityList = () => {
             </Select>
           </Form.Item>
         </Col>
-        <Col md={6} sm={24} xs={24} lg={6}>
+        {/* <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item
             name="orderByPriority"
             label="OrderByPriority"
@@ -306,7 +315,7 @@ const CityList = () => {
               <Option value="false">No</Option>
             </Select>
           </Form.Item>
-        </Col>
+        </Col> */}
         <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item
             name="districtId"
@@ -334,6 +343,47 @@ const CityList = () => {
             </Select>
           </Form.Item>
         </Col>
+
+
+
+      
+
+
+
+
+
+
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item
+            name="stateName"
+            label="state"
+          >
+            <Select
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              className="w-100"
+              style={{ minWidth: 180 }}
+              // onChange={(value) => setSelectedBrandId(value)}
+              // onSelect={handleQuery}
+              placeholder="state"
+              // value={selectedBrandId}
+            >
+              <Option value="">All</Option>
+              {state.map((item) => (
+                <Option key={item.id} value={item.id}>
+                  {item.name}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </Col>
+
+
+
+
         <Col className="mb-4 ml-3">
           <Button type="primary" onClick={handleFilterSubmit}>
             Filter
