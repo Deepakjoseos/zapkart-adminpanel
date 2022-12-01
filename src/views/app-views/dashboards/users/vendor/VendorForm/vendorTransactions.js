@@ -59,6 +59,10 @@ const VendorTransactions = ({
     //   }
     const tableColumns = [
         {
+            title: 'userName',
+            dataIndex: 'userName',
+              },
+        {
             title: 'Amount',
             dataIndex: 'amount',
             //   render: (text) => <Link to={`/app/dashboards/shipments/shipment/shipment-view/${text}`}>
@@ -82,7 +86,7 @@ const VendorTransactions = ({
         {
             title: 'Date',
             dataIndex: 'createdAt',
-            render: (text) => <div>{moment(new Date(text * 1000)).format('YYYY-MM-DD hh:mm:a')}</div>,
+            render: (text) => <div>{moment(new Date(text * 1000)).format('DD-MM-YYYY hh:mm:a')}</div>,
         },
         // {
         //     title: 'User',

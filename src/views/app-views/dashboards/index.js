@@ -14,13 +14,17 @@ const Dashboards = ({ match }) => {
           path={`${match.url}/default`}
           component={lazy(() => import(`./default`))}
         />
+         <Route
+          path={`${match.url}/sales`}
+          component={lazy(() => import(`./sales`))}
+        />
         <Route
           path={`${match.url}/analytic`}
           component={lazy(() => import(`./analytic`))}
         />
         <Route
           path={`${match.url}/sales`}
-          component={lazy(() => import(`./sales`))}
+          component={lazy(() => import(`./sales/saleslist`))}
         />
         <Route
           path={`${match.url}/catalog`}

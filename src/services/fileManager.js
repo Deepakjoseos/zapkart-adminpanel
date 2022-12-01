@@ -52,7 +52,7 @@ fileManagerService.bulkuploadImages = async function (imageCategoryId, images) {
     bodyFormData.append('thumbnailNotRequired', true)
     bodyFormData.append('saveAsImageName', true)
     const res = await fetch({
-      url: `/filemanager/upload-images`,
+      url: `/filemanager/batch-upload-files`,
       method: 'post',
       headers: { 'Content-Type': 'multipart/form-data' },
       data: bodyFormData,

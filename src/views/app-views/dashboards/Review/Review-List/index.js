@@ -198,7 +198,7 @@ const ReviewList = () => {
             <Input placeholder="Search" prefix={<SearchOutlined />} />
           </Form.Item>
         </Col>
-        <Col md={6} sm={24} xs={24} lg={6}>
+        {/* <Col md={6} sm={24} xs={24} lg={6}> */}
           {/* <Form.Item name="status" label="Status">
             <Select
               className="w-100"
@@ -213,7 +213,7 @@ const ReviewList = () => {
               ))}
             </Select>
           </Form.Item> */}
-        </Col>
+        {/* </Col> */}
 
         &nbsp;  &nbsp;  &nbsp; &nbsp;  &nbsp;  &nbsp;
         <Col className="mb-4">

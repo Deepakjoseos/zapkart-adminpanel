@@ -28,4 +28,18 @@ notificationService.createNotifications = async function (data) {
       console.log(err, 'show-err')
     }
   }
+
+
+  notificationService.createCartReminder= async function (data,userId) {
+    try {
+      const res = await fetch({
+        url:`${apiRoute}/cartreminder?userId=${userId}`,
+        method: 'post',
+        data: data,
+      })
+      return res
+    } catch (err) {
+      console.log(err, 'show-err')
+    }
+  }
   export default notificationService

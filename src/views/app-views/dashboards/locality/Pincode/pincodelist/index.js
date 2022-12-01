@@ -21,6 +21,7 @@ import {
   SearchOutlined,
   PlusCircleOutlined,
   FileAddOutlined,
+  FileImageOutlined,
   DownloadOutlined,
 } from '@ant-design/icons'
 import AvatarStatus from 'components/shared-components/AvatarStatus'
@@ -570,7 +571,7 @@ const Pincodelist = () => {
             Clear
           </Button>
           </Col>
-          <Col className="spider">
+          <Col className="spider" style={{marginTop:'-70px'}}>
           <Flex>
          
           <Button
@@ -581,6 +582,18 @@ const Pincodelist = () => {
           >
             Excel Upload
           </Button>
+
+          <div>
+            <Button icon={<FileImageOutlined />}>
+              {' '}
+              <a
+               href="https://ecommerce-test2.s3.amazonaws.com/samplefiles/pincode.xlsx"
+                download={'sample'}
+              >
+                Download Sample File
+              </a>
+            </Button>
+          </div>
          
         
 
