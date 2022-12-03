@@ -502,15 +502,23 @@ const dashBoardNavTree = [
         breadcrumb: false,
         submenu: [],
       },
-      
-      // {
-      //   key: 'dashboards-imagecategories',
-      //   path: `${APP_PREFIX_PATH}/dashboards/image-categories/image-list`,
-      //   title: 'Images',
-      //   icon: DotChartOutlined,
-      //   breadcrumb: false,
-      //   submenu: [],
-      // },
+     
+       {
+        key: 'dashboards-imagecategories',
+        path: `${APP_PREFIX_PATH}/dashboards/image-categories/image-list`,
+        title: 'Images',
+        icon: DotChartOutlined,
+        breadcrumb: false,
+        submenu: [],
+      },
+      {
+        key: 'dashboards-sales',
+        path: `${APP_PREFIX_PATH}/dashboards/sales`,
+        title: 'Sales',
+        icon: SettingOutlined,
+        breadcrumb: false,
+        submenu: [],
+      },
 
       {
         key: 'dashboards-settings',

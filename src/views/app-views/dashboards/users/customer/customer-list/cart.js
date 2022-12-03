@@ -30,6 +30,8 @@ import { useHistory, Link } from 'react-router-dom'
 import constantsService from 'services/constants'
 import orderService from 'services/orders'
 import moment from 'moment'
+import notificationService from 'services/notification'
+
 
 const { Option } = Select
 
@@ -37,9 +39,11 @@ const Cart = ({
   selectedCustomerId,
   refetchData,
   sendingValues,
+ 
   //   ordersList
 }) => {
   const [cart, setCart] = useState([])
+  const [reminder, setreminder] = useState([])
   const SITE_NAME = process.env.REACT_APP_SITE_NAME
 
   const getCart = async () => {
@@ -48,14 +52,26 @@ const Cart = ({
       setCart(data.items)
     }
   }
+  const cartreminder = async () => {
+    const data = await notificationService.createCartReminder(selectedCustomerId, sendingValues)
+    if (data) {
+      setreminder(data)
+    }
+  }
+
 
   useEffect(() => {
     if (selectedCustomerId) {
       getCart()
+      cartreminder()
     }
   }, [selectedCustomerId])
 
+
+ 
+
   const tableColumns = [
+   
     {
       title: 'name',
       dataIndex: 'product',
@@ -75,7 +91,7 @@ const Cart = ({
         </Link>
       ),
     },
-
+   
     {
       title: 'Quantity',
       dataIndex: 'quantity',
@@ -115,8 +131,21 @@ const Cart = ({
       render: (product) => {
         return <Flex alignItems="centre">{product?.vendorName}</Flex>
       },
+      
     },
+    
+    {
+      title: '',
+      dataIndex: 'actions',
+      render: (_, elm) => (
+        <div className="text-right">
+        <Button type='primary' onClick={reminder}> Notification </Button> 
+        </div>
+      ),
+    },
+   
   ]
+
 
   if (SITE_NAME === 'awen') {
     tableColumns.push({
@@ -139,8 +168,12 @@ const Cart = ({
           </Flex>
         )
       },
+      
     })
+    
+     
   }
+  
 
   return (
     <Table
@@ -150,8 +183,13 @@ const Cart = ({
       columns={tableColumns}
       dataSource={cart}
       rowKey="id"
+      
     />
+   
+    
+
   )
+  
 }
 
 export default Cart

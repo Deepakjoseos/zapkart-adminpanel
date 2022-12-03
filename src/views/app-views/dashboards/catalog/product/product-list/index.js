@@ -82,7 +82,9 @@ const ProductList = () => {
   const [brands, setBrands] = useState([])
   const [categories, setCategories] = useState([])
   const [orderbyname, setOrderbyname] = useState([])
+  const [sample, setSample] = useState([])
   const [pagination, setPagination] = useState({
+  
     current: 1,
     pageSize: 30,
   })
@@ -95,6 +97,17 @@ const ProductList = () => {
         setStatuses(Object.values(data.GENERAL['STATUS']))
       data.GENERAL['NAME_SORT'] &&
         setOrderbyname(Object.values(data.GENERAL['NAME_SORT']))
+       
+    }
+  }
+  const getConstants = async () => {
+    const data = await constantsService.getSample()
+    if (data) {
+      // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
+
+    
+        data.PRODUCT_EXCEL &&
+        setSample(Object.values(data.PRODUCT_EXCEL))
     }
   }
   // Changed here for pagination
@@ -155,6 +168,7 @@ const ProductList = () => {
     getBrands()
     getCategories()
     getVendors()
+    getConstants()
     fetchConstants()
     console.log('vendors', vendors)
   }, [])
@@ -862,8 +876,17 @@ const ProductList = () => {
         <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
           {filtersComponent()}
         </Flex>
-
-        <div className="mr-2 d-flex justify-content-between">
+        <div className="mr-2 d-flex justify-content-between" style={{paddingLeft: '166px',
+    marginBottom: '-39px'
+}}>
+            <Button icon={<FileImageOutlined />}>
+              {' '}
+              <a href="https://ecommerce-test2.s3.amazonaws.com/samplefiles/product.xlsx">
+                Download Sample File
+              </a>
+            </Button>
+          </div>
+        <div className="mr-2 d-flex justify-content-between" >
           <Button
             type="primary"
             icon={<FileAddOutlined />}
@@ -872,17 +895,7 @@ const ProductList = () => {
             Excel Upload
           </Button>
 
-          <div className="mr-2 d-flex justify-content-between">
-            <Button icon={<FileImageOutlined />}>
-              {' '}
-              <a
-                href={process.env.PUBLIC_URL + '/Sample Excel.xlsx'}
-                download={'file-name-to-use.xlsx'}
-              >
-                Download Sample File
-              </a>
-            </Button>
-          </div>
+       
 
           <div>
             <Button

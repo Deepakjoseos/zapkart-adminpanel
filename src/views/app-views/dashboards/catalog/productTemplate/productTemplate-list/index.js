@@ -72,7 +72,7 @@ const ProductTemplateList = () => {
   let history = useHistory()
   const fileInputRef = React.useRef(null)
   const [form] = Form.useForm()
-
+  const [sample, setSample] = useState([])
   const [list, setList] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
@@ -166,6 +166,17 @@ const ProductTemplateList = () => {
     // ...params,
   })
 
+
+  const getConstants = async () => {
+    const data = await constantsService.getSample()
+    if (data) {
+      // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
+
+    
+        data.PRODUCT_EXCEL &&
+        setSample(Object.values(data.PRODUCT_EXCEL))
+    }
+  }
   // On pagination Change
   const handleTableChange = (newPagination) => {
     getProductTemplates(
@@ -219,6 +230,7 @@ const ProductTemplateList = () => {
     //     setCategories(data.data)
     //   }
     // }
+    getConstants()
     // getProductTemplates()
     // getBrands()
     // getCategories()
@@ -738,8 +750,8 @@ const ProductTemplateList = () => {
             <Button icon={<FileImageOutlined />}>
               {' '}
               <a
-                href={process.env.PUBLIC_URL + '/Sample Excel.xlsx'}
-                download={'file-name-to-use.xlsx'}
+               href="https://ecommerce-test2.s3.amazonaws.com/samplefiles/producttemplate.xlsx"
+                download={'sample'}
               >
                 Download Sample File
               </a>

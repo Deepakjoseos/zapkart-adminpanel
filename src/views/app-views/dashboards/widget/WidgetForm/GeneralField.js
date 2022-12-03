@@ -9,7 +9,7 @@ import {
   Select,
   DatePicker,
 } from 'antd'
-
+import slugify from 'slugify'
 const { Option } = Select
 
 const rules = {
@@ -37,8 +37,16 @@ const rules = {
       required: true,
       message: 'Required',
     },
+    
   ],
+  
   priority: [
+    {
+      required: true,
+      message: 'Required',
+    },
+  ],
+  slug: [
     {
       required: true,
       message: 'Required',
@@ -46,13 +54,23 @@ const rules = {
   ],
 }
 
-const GeneralField = ({ form_statuses }) => {
+
+const GeneralField = ({ form_statuses,form }) => {
+  const generateSlugFromName = (value) => {
+    const slug = slugify(value)
+    form.setFieldsValue({ slug })
+  }
   return (
     <Row gutter={16}>
       <Col xs={24} sm={24} md={17}>
         <Card title="Basic Info">
           <Form.Item name="tabTitle" label="tab Title" rules={rules.tabTitle}>
-            <Input placeholder="tabTitle" />
+            <Input placeholder="tabTitle" 
+             onChange={(e) => generateSlugFromName(e.target.value)}/>
+           
+          </Form.Item>
+          <Form.Item name="slug" label="Slug" rules={rules.slug}>
+            <Input placeholder="Slug" />
           </Form.Item>
           <Form.Item
             name="isTitleShow"

@@ -16,6 +16,7 @@ import {
   EyeOutlined,
   DeleteOutlined,
   SearchOutlined,
+  FileImageOutlined,
   PlusCircleOutlined,FileAddOutlined,DownloadOutlined
 } from '@ant-design/icons'
 import AvatarStatus from 'components/shared-components/AvatarStatus'
@@ -351,6 +352,19 @@ const CompositionList = () => {
             />
             <p> {excelFile && excelFile?.name}</p>
           </div>
+          <div>
+            <Button icon={<FileImageOutlined />}>
+              {' '}
+              <a
+               href="https://ecommerce-test2.s3.amazonaws.com/samplefiles/composition.xlsx"
+                download={'sample'}
+              >
+                Download Sample File
+              </a>
+            </Button>
+          </div>
+         
+        
 
           <Button type="primary" disabled={!excelFile} onClick={onExcelSubmit}>
             Submit

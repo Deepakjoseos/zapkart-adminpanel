@@ -238,7 +238,7 @@ const handleTableChange = (newPagination) => {
       sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
     },
     {
-      title: 'Parent',
+      title: 'Parent Category',
       dataIndex: 'parentId',
       render: (parentId) => <span>{getParentName(parentId)}</span>,
       // sorter: (a, b) => utils.antdTableSorter(a, b, 'parentId'),
@@ -249,13 +249,18 @@ const handleTableChange = (newPagination) => {
       // sorter: (a, b) => utils.antdTableSorter(a, b, 'parentId'),
     },
     {
+      title: 'Home Priority',
+      dataIndex: 'homePriority',
+      // sorter: (a, b) => utils.antdTableSorter(a, b, 'parentId'),
+    },
+    {
       title: 'Priority',
       dataIndex: 'priority',
     },
     {
-      title: 'Description',
-      dataIndex: 'description',
-      render:	(description)	=>			<div dangerouslySetInnerHTML={{ __html: description}} />
+      title: 'productCount',
+      dataIndex: 'productCount'
+      
 
     },
 

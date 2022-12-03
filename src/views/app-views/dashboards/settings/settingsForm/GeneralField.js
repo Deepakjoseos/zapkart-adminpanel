@@ -122,8 +122,15 @@ const GeneralField = ({ setmode, form }) => {
             <Input placeholder="Razor Pay Account" type="text" />
           </Form.Item>
           {process.env.REACT_APP_SITE_NAME === "zapkart" && (
-            <Form.Item name="agreement" label="Agreement">
-              <Input placeholder="Agreement" type="text" />
+            <Form.Item name="" label="Agreement">
+             
+
+              <Editor
+                placeholder="Write something..."
+                editorHtml={form.getFieldValue("agreement") || ""}
+                onChange={(e) => form.setFieldsValue({ agreement: e })}
+                name="agreement"
+              />
             </Form.Item>
           )}
           {process.env.REACT_APP_SITE_NAME === "zapkart" && (

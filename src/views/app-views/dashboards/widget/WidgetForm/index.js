@@ -50,6 +50,7 @@ const WidgetForm = (props) => {
         if (data) {
           form.setFieldsValue({
             tabTitle: data.tabTitle,
+            slug: data.slug,
             isTitleShow: data.isTitleShow,
             priority: data.priority,
             numberOfItems: data.numberOfItems,
@@ -218,6 +219,8 @@ const WidgetForm = (props) => {
       .then(async (values, then) => {
         const sendingValues = {
           tabTitle: values.tabTitle,
+          slug: values.slug,
+
           status: values.status,
           priority: values.priority,
           listingPlatform: values.listingPlatform,
@@ -322,7 +325,7 @@ const WidgetForm = (props) => {
         <div className="container">
           <Tabs defaultActiveKey="1" style={{ marginTop: 30 }}>
             <TabPane tab="General" key="1">
-              <GeneralField form_statuses={form_statuses} />
+              <GeneralField form_statuses={form_statuses} form={form} />
             </TabPane>
             <TabPane tab="Widget" key="2">
               <WidgetField

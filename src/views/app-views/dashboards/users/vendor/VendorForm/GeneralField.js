@@ -88,12 +88,32 @@ const GeneralField = ({
       <Card title="Basic Info">
         {mode === 'ADD' ? (
           <>
+          {process.env.REACT_APP_SITE_NAME === 'athathy' && (
             <Form.Item name="firstName" label="First Name">
               <Input placeholder="First Name" />
-            </Form.Item>
+            </Form.Item>)}
+            {process.env.REACT_APP_SITE_NAME === 'athathy' && (
             <Form.Item name="lastName" label="Last Name">
               <Input placeholder="Last Name" />
             </Form.Item>
+          )}
+           {process.env.REACT_APP_SITE_NAME === 'awen' && (
+            <Form.Item name="firstName" label="First Name">
+              <Input placeholder="First Name" />
+            </Form.Item>)}
+            {process.env.REACT_APP_SITE_NAME === 'awen' && (
+            <Form.Item name="lastName" label="Last Name">
+              <Input placeholder="Last Name" />
+            </Form.Item>
+          )}
+            {SITE_NAME === 'zapkart' && (
+ <Form.Item name="firstName" label="Display Name">
+ <Input placeholder="First Name" />
+</Form.Item>
+
+
+                )}
+
             {SITE_NAME === 'zapkart' && (
               <>
                 <Form.Item name="email" label="Email" rules={rules.email}>
