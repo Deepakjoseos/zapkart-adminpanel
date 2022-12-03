@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+/* eslint-disable no-unused-expressions */
+import React, { useEffect, useState } from 'react'
 import {
   Input,
   Row,
@@ -10,6 +11,9 @@ import {
   Select,
   TreeSelect,
   Tree,
+  Button,
+  AutoComplete,
+  notification,
 } from 'antd'
 import { ImageSvg } from 'assets/svg/icon'
 import CustomIcon from 'components/util-components/CustomIcon'
@@ -19,6 +23,7 @@ import districtService from 'services/district'
 import _ from 'lodash'
 import cityService from 'services/city'
 import pincodeService from 'services/pincode'
+import countryService from 'services/country'
 
 // const { Dragger } = Upload
 const { Option } = Select
@@ -39,6 +44,26 @@ const rules = {
   ],
 }
 
+function waitForElm(selector) {
+  return new Promise((resolve) => {
+    if (document.querySelector(selector)) {
+      return resolve(document.querySelector(selector))
+    }
+
+    const observer = new MutationObserver((mutations) => {
+      if (document.querySelector(selector)) {
+        resolve(document.querySelector(selector))
+        observer.disconnect()
+      }
+    })
+
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+    })
+  })
+}
+
 const GeneralField = ({
   vendors,
   mode,
@@ -48,6 +73,25 @@ const GeneralField = ({
   setCheckedDeliveryZoneSendingValues,
   checkedDeliveryZoneSendingValues,
 }) => {
+  const SITE_NAME = process.env.REACT_APP_SITE_NAME
+  const [searchPincodes, setSearchPincodes] = useState([])
+  const [searchPincode, setSearchPincode] = useState(null)
+  const [pincodeSearchLoading, setPincodeSearchLoading] = useState(false)
+
+  const [expandedKeys, setExpandedKeys] = useState([])
+  const [autoExpandParent, setAutoExpandParent] = useState(true)
+
+  const getCountry = async () => {
+    const data = await countryService.getCountry('', `status=Active`)
+
+    if (data) {
+      const list = Utils.createDeliveryLocationList(data?.data)
+
+      console.log(list, 'hukjbujk')
+      setAllTreesData(list)
+    }
+  }
+
   const getState = async (countryId) => {
     const data = await stateService.getState(
       '',
@@ -161,6 +205,7 @@ const GeneralField = ({
   const onLoadData = (nodeData) => {
     console.log(nodeData, 'plss')
     const { children, key, deliveryZoneName } = nodeData
+
     return new Promise(async (resolve) => {
       if (children) {
         resolve()
@@ -207,6 +252,105 @@ const GeneralField = ({
     })
   }
 
+  // FOR PINCODE SEARCH PURPOSE
+  const onExpand = (newExpandedKeys) => {
+    setExpandedKeys(newExpandedKeys)
+    setAutoExpandParent(false)
+  }
+
+  const getPincodeForSearch = async (query) => {
+    const data = await pincodeService.getPincode(query)
+    if (data) {
+      const pincodes = data.data
+
+      const formattedPincodes = pincodes.map((pin) => {
+        return { ...pin, label: pin.name, value: pin.name }
+      })
+
+      setSearchPincodes(formattedPincodes)
+      return formattedPincodes
+    }
+  }
+
+  const onPincodeSearchSubmit = async (value) => {
+    const pinCodes = await getPincodeForSearch(`search=${value}`)
+
+    const matchedPincodeWithSearchValue = pinCodes.find(
+      (pin) => pin.name == value
+    )
+
+    if (matchedPincodeWithSearchValue) {
+      setSearchPincode(matchedPincodeWithSearchValue)
+    } else {
+      setSearchPincode(null)
+      notification.warning({
+        message: 'Cannot Find Pincode',
+      })
+    }
+
+    console.log(matchedPincodeWithSearchValue, 'getSearchValue')
+  }
+
+  useEffect(() => {
+    const onSearchPinCodeHandler = async () => {
+      setPincodeSearchLoading(true)
+      setAllTreesData([])
+
+      await getCountry()
+      const { countryId, stateId, districtId, cityId } = searchPincode
+
+      setExpandedKeys([])
+      setAutoExpandParent(false)
+
+      // It's a sequencial way of opening trees from country pincodes while pincode search
+
+      await onLoadData({
+        deliveryZoneName: 'COUNTRY',
+        key: countryId,
+      })
+
+      setExpandedKeys([countryId])
+      setAutoExpandParent(true)
+
+      await onLoadData({
+        deliveryZoneName: 'STATE',
+        key: stateId,
+      })
+
+      setExpandedKeys((prev) => [...prev, stateId])
+
+      await onLoadData({
+        deliveryZoneName: 'DISTRICT',
+        key: districtId,
+      })
+
+      setExpandedKeys((prev) => [...prev, districtId])
+
+      await onLoadData({
+        deliveryZoneName: 'CITY',
+        key: cityId,
+      })
+
+      setExpandedKeys((prev) => [...prev, cityId])
+
+      setTimeout(() => {
+        document
+          .querySelector('.ant-tree-node-selected')
+          .scrollIntoView({ behavior: 'smooth', block: 'center' })
+      }, 1000)
+
+      // const elm = await waitForElm('.ant-tree-node-selected')
+
+      // elm.scrollIntoView({ behavior: 'smooth', block: 'center' })
+
+      setPincodeSearchLoading(false)
+    }
+
+    if (searchPincode) {
+      onSearchPinCodeHandler()
+    }
+  }, [searchPincode])
+
   return (
     <>
       <Card title="Basic Info">
@@ -223,7 +367,7 @@ const GeneralField = ({
             ))}
           </Select>
         </Form.Item>
-        <Form.Item name="vendorId" label="Vendor" rules={rules.vendor} >
+        <Form.Item name="vendorId" label="Vendor" rules={rules.vendor}>
           <Select
             disabled={mode === 'EDIT' ? true : false}
             showSearch
@@ -261,23 +405,63 @@ const GeneralField = ({
         {/* <label style={{ fontWeight: 'bold' }}>Delivery Location</label> */}
       </Card>
 
-      <Card title="Delivery Locations">
-        <Tree
-          checkable
-          // showCheckedStrategy={SHOW_PARENT}
+      <Card
+        title="Delivery Locations"
+        extra={
+          SITE_NAME === 'zapkart' && (
+            <>
+              <AutoComplete
+                options={searchPincodes}
+                dropdownMatchSelectWidth={252}
+                style={{
+                  width: 300,
+                }}
+                onSelect={(data, option) => {
+                  setSearchPincode(option)
+                }}
+                onSearch={(searchText) =>
+                  getPincodeForSearch(`search=${searchText}`)
+                }
+              >
+                <Input.Search
+                  size="large"
+                  inputMode="numeric"
+                  typeof="number"
+                  type="number"
+                  placeholder="Search Pincode"
+                  itemType="number"
+                  onSearch={(val) => onPincodeSearchSubmit(val)}
+                  enterButton="Search"
+                  loading={pincodeSearchLoading}
+                />
+              </AutoComplete>
+            </>
+          )
+        }
+      >
+        {allTreesData?.length > 0 ? (
+          <Tree
+            checkable
+            selectable
+            selectedKeys={searchPincode?.id ? [searchPincode?.id] : []}
+            // showCheckedStrategy={SHOW_PARENT}
 
-          // onExpand={onExpand}
-          // expandedKeys={expandedKeys}
-          // autoExpandParent={autoExpandParent}
-          onCheck={onCheck}
-          checkedKeys={checkedDeliveryZoneSendingValues?.map((cur) => cur.id)}
-          // checkedKeys={checkedKeys}
-          onSelect={onSelect}
-          multiple
-          // selectedKeys={selectedKeys}
-          treeData={allTreesData}
-          loadData={onLoadData}
-        />
+            // onExpand={onExpand}
+            // expandedKeys={expandedKeys}
+            // autoExpandParent={autoExpandParent}
+            onCheck={onCheck}
+            checkedKeys={checkedDeliveryZoneSendingValues?.map((cur) => cur.id)}
+            // checkedKeys={checkedKeys}
+            onSelect={onSelect}
+            multiple
+            // selectedKeys={selectedKeys}
+            treeData={allTreesData}
+            loadData={onLoadData}
+            onExpand={onExpand}
+            expandedKeys={expandedKeys}
+            autoExpandParent={autoExpandParent}
+          />
+        ) : null}
       </Card>
     </>
   )
