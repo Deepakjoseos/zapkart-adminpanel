@@ -190,6 +190,17 @@ class Utils {
     return data
   }
 
+  static updateArrayRow(list, id, key, value) {
+    const objIndex = list.findIndex((obj) => obj.id === id)
+
+    console.log(list, id, key, value, 'goyyyy')
+
+    //Update object's name property.
+    list[objIndex][key] = value
+
+    return list
+  }
+
   /**
    * Wild card search on all property of the object
    * @param {Number | String} input - any value to search

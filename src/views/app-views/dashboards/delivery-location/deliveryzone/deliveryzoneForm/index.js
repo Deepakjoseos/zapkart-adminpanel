@@ -365,6 +365,8 @@ const DeliveryZoneForm = (props) => {
                   checkedDeliveryZoneSendingValues
                 }
                 setSendingDeliveryZones={setSendingDeliveryZones}
+                getCountry={getCountry}
+                getDistrict={getDistrict}
 
                 // isFinalTrue={isFinalTrue}
                 // setIsFinalTrue={setIsFinalTrue}

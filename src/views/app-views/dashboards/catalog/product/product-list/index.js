@@ -22,6 +22,8 @@ import {
   PlusCircleOutlined,
   FileAddOutlined,
   DownloadOutlined,
+  EditOutlined,
+  CheckOutlined,
 } from '@ant-design/icons'
 import AvatarStatus from 'components/shared-components/AvatarStatus'
 import EllipsisDropdown from 'components/shared-components/EllipsisDropdown'
@@ -37,6 +39,7 @@ import categoryService from 'services/category'
 import DeliveryZoneService from 'services/deliveryZone'
 import vendorService from 'services/vendor'
 import constantsService from 'services/constants'
+import Utils from 'utils'
 
 const { Option } = Select
 
@@ -88,6 +91,7 @@ const ProductList = () => {
     current: 1,
     pageSize: 30,
   })
+  const [editingRowIds, setEditingRowIds] = useState([])
   const fetchConstants = async () => {
     const data = await constantsService.getConstants()
     if (data) {
@@ -327,6 +331,23 @@ const ProductList = () => {
     setExcelFile(file)
   }
 
+  const onUpdateRow = (e, id, key) => {
+    e.preventDefault()
+    const inpVal = e.target.elements[0].value
+
+    // list, id, key, value
+
+    // list, id, key, value
+    const updatedList = Utils.updateArrayRow(list, id, key, inpVal)
+
+    const removedEditingRows = [...editingRowIds].filter(
+      (curId) => curId !== id
+    )
+    setEditingRowIds(removedEditingRows)
+
+    console.log(updatedList, 'got-it')
+  }
+
   const tableColumns = [
     {
       title: 'Product',
@@ -352,15 +373,18 @@ const ProductList = () => {
       dataIndex: 'price',
       render: (price, row) => {
         return (
-          <Flex flexDirection="column">
-            <div style={{ color: 'gray', textDecoration: 'line-through' }}>
-              {row.mrpPrice}
-            </div>{' '}
-            <div>
-              <span class="WebRupee">&#x20B9;</span>
-              {price}
-            </div>
-          </Flex>
+          <div className="d-flex align-items-center">
+            <Flex flexDirection="column">
+              <div style={{ color: 'gray', textDecoration: 'line-through' }}>
+                {row.mrpPrice}
+              </div>{' '}
+              <div>
+                <span class="WebRupee">&#x20B9;</span>
+                {price}
+              </div>
+            </Flex>
+            <Button type="ghost" icon={<EditOutlined />} className="ml-2" />
+          </div>
         )
       },
     },
@@ -390,6 +414,38 @@ const ProductList = () => {
     {
       title: 'QTY',
       dataIndex: 'qty',
+      render: (qty, row) => (
+        <>
+          {editingRowIds?.includes(row.id) ? (
+            <form onSubmit={(e) => onUpdateRow(e, row.id, 'qty')}>
+              <Input.Group compact>
+                <Input
+                  style={{
+                    width: '30%',
+                  }}
+                  defaultValue={qty}
+                />
+
+                <Button
+                  htmlType="submit"
+                  icon={<CheckOutlined />}
+                  // onClick={(e) => console.log(e, 'bjklbjk')}
+                />
+              </Input.Group>
+            </form>
+          ) : (
+            <div className="d-flex align-items-center">
+              {qty}
+              <Button
+                type="ghost"
+                icon={<EditOutlined />}
+                className="ml-2"
+                onClick={() => setEditingRowIds((prev) => [...prev, row.id])}
+              />
+            </div>
+          )}
+        </>
+      ),
       sorter: (a, b) => utils.antdTableSorter(a, b, 'qty'),
     },
     {
