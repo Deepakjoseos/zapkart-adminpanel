@@ -62,11 +62,13 @@ const rules = {
       message: "Required",
     },
   ],
+
   tdsPercentage: [
     {
       required: true,
       message: "Required",
     },
+ 
   ],
 };
 
@@ -143,7 +145,7 @@ const GeneralField = ({ setmode, form }) => {
               />
             </Form.Item>
           )}
-
+  {process.env.REACT_APP_SITE_NAME === "zapkart" && (
           <Form.Item
             name="tdsPercentage"
             label="TDS Percentage"
@@ -151,6 +153,7 @@ const GeneralField = ({ setmode, form }) => {
           >
             <Input placeholder="TDS Percentage" type="number" />
           </Form.Item>
+  )}
           {/* </div> */}
         </>
         <div>

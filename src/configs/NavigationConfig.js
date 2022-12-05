@@ -511,14 +511,15 @@ const dashBoardNavTree = [
         breadcrumb: false,
         submenu: [],
       },
-      {
-        key: 'dashboards-sales',
-        path: `${APP_PREFIX_PATH}/dashboards/sales`,
-        title: 'Sales',
-        icon: SettingOutlined,
-        breadcrumb: false,
-        submenu: [],
-      },
+      
+      // {
+      //   key: 'dashboards-sales',
+      //   path: `${APP_PREFIX_PATH}/dashboards/sales`,
+      //   title: 'Sales',
+      //   icon: SettingOutlined,
+      //   breadcrumb: false,
+      //   submenu: [],
+      // },
 
       {
         key: 'dashboards-settings',

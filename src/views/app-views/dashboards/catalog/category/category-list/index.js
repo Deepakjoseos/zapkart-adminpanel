@@ -77,7 +77,7 @@ const fetchConstants = async () => {
   if (data) {
     // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
 
-    setStatuses(Object.values(data.GENERAL['STATUS']))
+    setStatuses(Object.values(data.GENERAL['FORM_STATUS']))
 
   }
 }
@@ -258,7 +258,7 @@ const handleTableChange = (newPagination) => {
       dataIndex: 'priority',
     },
     {
-      title: 'productCount',
+      title: 'product Count',
       dataIndex: 'productCount'
       
 
@@ -316,17 +316,41 @@ const handleTableChange = (newPagination) => {
           </Form.Item>
         </Col>
         <Col md={6} sm={24} xs={24} lg={6}>
-          <Form.Item name="orderByPriority" label="OrderByPriority">
-            <Select className="w-100" placeholder="OrderBy Priority">
-              <Option value="">All</Option>
+          <Form.Item name="orderByPriority" label="Order By Priority">
+            <Select className="w-100" placeholder="Order By Priority">
+             
+              <Option value="true">Yes</Option>
+              <Option value="false">No</Option>
+            </Select>
+          </Form.Item>
+        </Col>
+
+
+
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="orderByHomePriority" label="Order By Home Priority">
+            <Select className="w-100" placeholder="Order By Priority">
+             
+              <Option value="true">Yes</Option>
+              <Option value="false">No</Option>
+            </Select>
+          </Form.Item>
+        </Col>
+
+
+
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="showDeleted" label="Show Deleted">
+            <Select className="w-100" placeholder="Show Deleted">
+             
               <Option value="true">Yes</Option>
               <Option value="false">No</Option>
             </Select>
           </Form.Item>
         </Col>
         <Col md={6} sm={24} xs={24} lg={6}>
-          <Form.Item name="orderByLevel" label="OrderByLevel">
-            <Select className="w-100" placeholder="OrderBy Level">
+          <Form.Item name="orderByLevel" label="Order ByLevel">
+            <Select className="w-100" placeholder="Order By Level">
               <Option value="">All</Option>
               <Option value="true">Yes</Option>
               <Option value="false">No</Option>

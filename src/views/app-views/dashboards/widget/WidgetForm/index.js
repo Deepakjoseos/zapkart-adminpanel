@@ -219,7 +219,7 @@ const WidgetForm = (props) => {
       .then(async (values, then) => {
         const sendingValues = {
           tabTitle: values.tabTitle,
-          slug: values.slug,
+        slug:values.slug,
 
           status: values.status,
           priority: values.priority,

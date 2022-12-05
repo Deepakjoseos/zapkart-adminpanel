@@ -71,7 +71,7 @@ const GeneralField = ({ propsImages, categories, handleChange, form, form_status
             />
           </Form.Item>
 
-          <Form.Item name="parentId" label="Parent Name">
+          <Form.Item name="parentId" label="Parent Category">
             <TreeSelect
               // style={{ width: 300 }}
               // value={props.form.getFieldValue('parentId')}

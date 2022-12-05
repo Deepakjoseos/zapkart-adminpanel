@@ -37,9 +37,12 @@ import Label from 'views/app-views/components/data-display/timeline/Label'
 import productService from 'services/product'
 import categoryService from 'services/category'
 import DeliveryZoneService from 'services/deliveryZone'
+
 import vendorService from 'services/vendor'
 import constantsService from 'services/constants'
 import Utils from 'utils'
+import productTemplateService from 'services/productTemplate'
+
 
 const { Option } = Select
 
@@ -65,6 +68,7 @@ const ProductList = () => {
 
   const [list, setList] = useState([])
   const [searchBackupList, setSearchBackupList] = useState([])
+  const [productTemplates, setTemplates] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
   const [statuses, setStatuses] = useState([])
@@ -162,6 +166,17 @@ const ProductList = () => {
         setBrands(data.data)
       }
     }
+
+
+    const getProductTemplates = async () => {
+      const data = await productTemplateService.getProductTemplates()
+      const activeProductTemplates = data.data.filter(
+        (cur) => cur.status === 'Active'
+      )
+      if (activeProductTemplates) {
+        setTemplates(activeProductTemplates)
+      }
+    }
     const getCategories = async () => {
       const data = await categoryService.getCategories()
       if (data) {
@@ -174,6 +189,7 @@ const ProductList = () => {
     getVendors()
     getConstants()
     fetchConstants()
+    getProductTemplates()
     console.log('vendors', vendors)
   }, [])
   const getPaginationParams = (params) => ({
@@ -383,7 +399,7 @@ const ProductList = () => {
                 {price}
               </div>
             </Flex>
-            <Button type="ghost" icon={<EditOutlined />} className="ml-2" />
+            <Button  type="ghost" icon={<EditOutlined />} className="ml-2" />
           </div>
         )
       },
@@ -455,7 +471,7 @@ const ProductList = () => {
         return (
           <Flex flexDirection="column" justifyContent="center">
             {row.username}
-            {row?.commission && `(${row.commission + '%'})`}
+            { `(${row.commission + '%'})`}
           </Flex>
         )
       },
@@ -740,11 +756,12 @@ const ProductList = () => {
             </Select>
           </Form.Item>
         </Col> */}
-        <Form.Item name="orderByName" label="orderByName">
+          <Col md={6} sm={24} xs={24} lg={6}>
+        <Form.Item name="orderByName" label="Order By Name">
           <Select
             className="w-100"
             style={{ minWidth: 180 }}
-            placeholder="Status"
+            placeholder="Order By Name"
           >
             <Option value="">All</Option>
             {orderbyname.map((item) => (
@@ -754,6 +771,29 @@ const ProductList = () => {
             ))}
           </Select>
         </Form.Item>
+        </Col>
+        <Col md={6} sm={24} xs={24} lg={6}>
+        <Form.Item
+          name="productTemplateId"
+          label="ProductTemplate"
+         
+        >
+          <Select
+            showSearch
+            optionFilterProp="children"
+            filterOption={(input, option) =>
+              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
+            placeholder="productTemplate"
+           
+          >
+            {productTemplates.map((temp) => (
+              <Option value={temp.id}>{temp.name}</Option>
+            ))}
+          </Select>
+        </Form.Item>
+
+        </Col>
         <Col className="mb-4">
           <Button type="primary" onClick={handleFilterSubmit}>
             Filter

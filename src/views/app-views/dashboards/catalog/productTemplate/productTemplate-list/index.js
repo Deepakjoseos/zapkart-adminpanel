@@ -43,7 +43,7 @@ import BulkProductTemplateImageUpload from './BulkProductTemplateImageUpload'
 import FileSaver from 'file-saver'
 
 const { Option } = Select
-
+const SITE_NAME = process.env.REACT_APP_SITE_NAME
 const getStockStatus = (status) => {
   if (status === 'Active') {
     return (
@@ -351,12 +351,16 @@ const ProductTemplateList = () => {
       ),
       sorter: (a, b) => utils.antdTableSorter(a, b, 'brand.name'),
     },
-    {
-      title: 'Medicine Type',
-      dataIndex: 'medicineType',
-      // render: (brand) => <Flex alignItems="center">{brand ? brand?.name : "-"}</Flex>,
-      // sorter: (a, b) => utils.antdTableSorter(a, b, 'brand.name'),
-    },
+ 
+    // {
+   
+    //   title: 'Medicine Type',
+    //   dataIndex: 'medicineType',
+    //   // render: (brand) => <Flex alignItems="center">{brand ? brand?.name : "-"}</Flex>,
+    //   // sorter: (a, b) => utils.antdTableSorter(a, b, 'brand.name'),
+      
+    // },
+    
     {
       title: 'Vendor Commission',
       dataIndex: 'commission',
@@ -457,6 +461,7 @@ const ProductTemplateList = () => {
         setStatuses(Object.values(data.GENERAL['STATUS']))
       data.GENERAL['NAME_SORT'] &&
         setOrderbyname(Object.values(data.GENERAL['NAME_SORT']))
+        
     }
   }
   // Filter Submit
@@ -606,7 +611,9 @@ const ProductTemplateList = () => {
             </Select>
           </Form.Item>
         </Col>
+        {SITE_NAME === 'zapkart' && (
         <Col md={6} sm={24} xs={24} lg={6}>
+       
           <Form.Item name="medicineTypeId" label="Medicine Types">
             <Select
               showSearch
@@ -629,7 +636,10 @@ const ProductTemplateList = () => {
               ))}
             </Select>
           </Form.Item>
+       
         </Col>
+    )}
+      {SITE_NAME === 'zapkart' && (
         <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item name="manufactureId" label="Manufactures">
             <Select
@@ -654,6 +664,8 @@ const ProductTemplateList = () => {
             </Select>
           </Form.Item>
         </Col>
+      )}
+          {SITE_NAME === 'zapkart' && (
         <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item name="prescriptionRequired" label="Prescription Required">
             <Select
@@ -675,6 +687,7 @@ const ProductTemplateList = () => {
             </Select>
           </Form.Item>
         </Col>
+      )}
         <Form.Item name="returnable" label="Returnable">
           <Select
             showSearch
@@ -694,7 +707,7 @@ const ProductTemplateList = () => {
             <Option value="false">No</Option>
           </Select>
         </Form.Item>
-        <Form.Item name="orderByName" label="orderByName">
+        <Form.Item name="orderByName" label="Order By Name">
           <Select
             className="w-100"
             style={{ minWidth: 180 }}
@@ -751,7 +764,7 @@ const ProductTemplateList = () => {
               {' '}
               <a
                href="https://ecommerce-test2.s3.amazonaws.com/samplefiles/producttemplate.xlsx"
-                download={'sample'}
+              
               >
                 Download Sample File
               </a>
