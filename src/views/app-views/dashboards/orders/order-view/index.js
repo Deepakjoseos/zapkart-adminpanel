@@ -442,7 +442,7 @@ const OrderView = () => {
                   )}
                 </div>
                 <h2 className="font-weight-semibold mt-3">
-                  <span className="mr-1">Grand Total: </span>₹
+                  <span className="mr-1">Grand Total: </span>
                   {order?.totalAmount}
                 </h2>
               </div>
@@ -629,7 +629,7 @@ const OrderView = () => {
                         ''
                       )}
                     </div>
-                    <span className="mr-1">Grand Total: </span>₹
+                    <span className="mr-1">Grand Total: </span>
                     {order?.totalAmount}
                   </h2>
                 </div>

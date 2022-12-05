@@ -307,7 +307,7 @@ const Orders = () => {
       dataIndex: 'totalAmount',
       render: (totalAmount) => (
         <div>
-          <span class="WebRupee">&#x20B9;</span>
+          
           {totalAmount}
         </div>
       ),

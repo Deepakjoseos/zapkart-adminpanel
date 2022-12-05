@@ -149,12 +149,7 @@ const rules = {
   //   },
   // ],
 
-  slug: [
-    {
-      required: true,
-      message: 'Required',
-    },
-  ],
+  
   slug: [
     {
       required: true,
@@ -323,12 +318,15 @@ const GeneralField = ({
           )}
 
           <Form.Item name="slug" label="Slug" rules={rules.slug}>
-            <Input placeholder="Slug" />
+            
+            <Input placeholder="Slug"
+             />
+            
           </Form.Item>
 
           <Form.Item
             name="allowedQuantityPerOrder"
-            label="AllowedQuantityPerOrder"
+            label="Allowed Quantity Per Order"
             rules={[
               {
                 required: true,
@@ -350,7 +348,7 @@ const GeneralField = ({
           {maxQty !== 0 && (
             <Form.Item
               name="minQty"
-              label="minQty"
+              label="Minimum Quantity"
               rules={[
                 {
                   required: true,
@@ -438,7 +436,7 @@ const GeneralField = ({
               ))}
             </Select>
           </Form.Item>
-
+          {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
           <Form.Item
             name="storageTemperature"
             label="Storage Temperature"
@@ -446,7 +444,8 @@ const GeneralField = ({
           >
             <Input placeholder="Storage Temperature" />
           </Form.Item>
-
+          )}
+          {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
           <Form.Item
             name="saltComposition"
             label="Salt Composition"
@@ -454,6 +453,7 @@ const GeneralField = ({
           >
             <Input placeholder="Salt Composition" />
           </Form.Item>
+          )}
           <Form.Item
             name="description"
             label="Description"

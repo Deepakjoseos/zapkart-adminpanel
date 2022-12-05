@@ -114,7 +114,7 @@ const GeneralField = ({
 
                 )}
 
-            {SITE_NAME === 'zapkart' && (
+           
               <>
                 <Form.Item name="email" label="Email" rules={rules.email}>
                   <Input />
@@ -140,11 +140,11 @@ const GeneralField = ({
                 <Form.Item name="phone" label="Phone" rules={rules.pone}>
                   <Input placeholder="Phone" />
                 </Form.Item>
-                {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+                
                   <Form.Item name="gst" label="GST" rules={rules.gst}>
                     <Input placeholder="Gst" />
                   </Form.Item>
-                )}
+           
 
                 <Form.Item name="pan" label="Pan" rules={rules.pan}>
                   <Input placeholder="Pan" />
@@ -153,11 +153,13 @@ const GeneralField = ({
                 <Form.Item name="drugLicense" label="Drug License">
                   <Input placeholder="drugLicense" />
                 </Form.Item>
+              
                 <Form.Item name="tanNumber" label="Tan Number">
                   <Input placeholder="tanNumber" />
                 </Form.Item>
+             
               </>
-            )}
+           
 
             {/* <Form.Item name="drugLicense" label="Drug License Number" rules={rules.drugLicense}>
           <Input placeholder="Drug License Number" />
@@ -195,7 +197,7 @@ const GeneralField = ({
               </Select>
             </Form.Item>
 
-            <Card title="Business">
+            
               {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
                 <Form.Item name="business.name" label="Bussiness Name">
                   <Input placeholder="Bussiness Name" />
@@ -248,7 +250,7 @@ const GeneralField = ({
                   <Input placeholder="Zipcode" />
                 </Form.Item>
               )}
-            </Card>
+         
           </>
         ) : (
           ''

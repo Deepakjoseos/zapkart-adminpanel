@@ -70,14 +70,14 @@ const BrandList = () => {
   // pagination
   const [pagination, setPagination] = useState({
     current: 1,
-    pageSize: 10,
+    pageSize: 30,
   })
   const fetchConstants = async () => {
     const data = await constantsService.getConstants()
     if (data) {
       // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
 
-      setStatuses(Object.values(data.GENERAL['STATUS']))
+      setStatuses(Object.values(data.GENERAL['FORM_STATUS']))
 
     }
   }
@@ -97,6 +97,7 @@ const BrandList = () => {
         total: data.total,
       })
       setLoading(false)
+      fetchConstants()
     }
   }
 
@@ -187,7 +188,7 @@ const BrandList = () => {
   const resetPagination = () => ({
     ...pagination,
     current: 1,
-    pageSize: 15,
+    pageSize: 10,
   })
 
   // Filter Submit
@@ -288,9 +289,28 @@ const BrandList = () => {
             </Select>
           </Form.Item>
         </Col>
+
+
         <Col md={6} sm={24} xs={24} lg={6}>
-          <Form.Item name="orderByPriority" label="OrderByPriority">
-            <Select className="w-100" placeholder="OrderBy Priority">
+          <Form.Item name="showDeleted" label="Show Deleted">
+
+            <Select
+              className="w-100"
+              style={{ minWidth: 180 }}
+              placeholder="showDeleted"
+            >
+              <Option value="">All</Option>
+              <Option value="true">Yes</Option>
+              <Option value="false">No</Option>
+            </Select>
+          </Form.Item>
+        </Col>
+
+
+
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="orderByPriority" label="Order By Priority">
+            <Select className="w-100" placeholder="Order By Priority">
               <Option value="">All</Option>
               <Option value="true">Yes</Option>
               <Option value="false">No</Option>

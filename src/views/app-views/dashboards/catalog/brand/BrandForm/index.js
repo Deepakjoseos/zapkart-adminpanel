@@ -95,6 +95,7 @@ const ProductForm = (props) => {
           // For setting form values when Load if it is in EDIT mode
           form.setFieldsValue({
             name: data.name,
+            description: data.description,
             status: data.status,
             priority: data.priority,
             metaTitle: data.metaTitle,
@@ -102,7 +103,7 @@ const ProductForm = (props) => {
             keywords: data.keywords,
             slug: data.slug,
             tags: data.tags,
-            description: data.description,
+           
           })
         } else {
           history.replace('/app/dashboards/catalog/brand/brands-list')

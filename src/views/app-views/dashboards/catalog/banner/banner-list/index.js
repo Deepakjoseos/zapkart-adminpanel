@@ -282,9 +282,9 @@ const handleTableChange = (newPagination) => {
           </Form.Item>
         </Col>
         <Col md={6} sm={24} xs={24} lg={6}>
-          <Form.Item name="orderByPriority" label="OrderByPriority">
-            <Select className="w-100" placeholder="OrderBy Priority">
-              <Option value="">All</Option>
+          <Form.Item name="orderByPriority" label="Order By Priority">
+            <Select className="w-100" placeholder="Order By Priority">
+          
               <Option value="true">Yes</Option>
               <Option value="false">No</Option>
             </Select>

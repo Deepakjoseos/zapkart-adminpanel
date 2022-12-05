@@ -277,7 +277,7 @@ const ProductForm = (props) => {
           minQty: data.minQty,
           highlights:data.highlights,
           productType: 'nonMedicine',
-          // slug: data.slug,
+          slug: data.slug,
           // tags: tags,
           // metaTitle: data.metaTitle,
           // metaDescription: data.metaDescription,
@@ -498,7 +498,7 @@ const ProductForm = (props) => {
       .catch((info) => {
         setSubmitLoading(false)
         console.log('info', info)
-        // message.error('Please enter all required field ')
+        message.error('Please enter all required field ')
       })
   }
 

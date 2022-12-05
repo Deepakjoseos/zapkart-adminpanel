@@ -253,25 +253,25 @@ const ProductForm = (props) => {
           },
         }
 
-        if (SITE_NAME !== 'zapkart') {
-          delete sendingValues.drugLicense
-          delete sendingValues.gst
-          delete sendingValues.pan
-        }
+        // if (SITE_NAME !== 'zapkart') {
+        //   delete sendingValues.drugLicense
+        //   delete sendingValues.gst
+        //   delete sendingValues.pan
+        // }
 
-        if (JSON.stringify(sendingValues.address) === '{}') {
-          delete sendingValues.address
-        }
+        // if (JSON.stringify(sendingValues.address) === '{}') {
+        //   delete sendingValues.address
+        // }
 
-        if (JSON.stringify(sendingValues.business) === '{}') {
-          delete sendingValues.business
-        } else if (JSON.stringify(sendingValues.business.address) === '{}') {
-          if (sendingValues.business.name) {
-            delete sendingValues.business.address
-          } else {
-            delete sendingValues.business
-          }
-        }
+        // if (JSON.stringify(sendingValues.business) === '{}') {
+        //   delete sendingValues.business
+        // } else if (JSON.stringify(sendingValues.business.address) === '{}') {
+        //   if (sendingValues.business.name) {
+        //     delete sendingValues.business.address
+        //   } else {
+        //     delete sendingValues.business
+        //   }
+        // }
 
         // This is for vendor profile photo
         if (displayImage.length !== 0 && displayImage !== null) {
