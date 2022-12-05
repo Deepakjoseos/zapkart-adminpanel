@@ -1,5 +1,16 @@
-import React from "react";
-import { Row, Col, Button, Card, Table, Tag, Select,Form, Badge, DatePicker } from "antd";
+import React from 'react'
+import {
+  Row,
+  Col,
+  Button,
+  Card,
+  Table,
+  Tag,
+  Select,
+  Form,
+  Badge,
+  DatePicker,
+} from 'antd'
 import qs from 'qs'
 // import Flex from 'components/shared-components/Flex'
 // import AvatarStatus from 'components/shared-components/AvatarStatus';
@@ -8,38 +19,38 @@ import qs from 'qs'
 // import NumberFormat from 'react-number-format';
 import Flex from 'components/shared-components/Flex'
 import {
-	CloudDownloadOutlined,
-	ArrowUpOutlined,
-	ArrowDownOutlined,
-	UserSwitchOutlined,
-	FileDoneOutlined,
-	SyncOutlined,
-	BarChartOutlined
-} from '@ant-design/icons';
-import ChartWidget from 'components/shared-components/ChartWidget';
-import { COLORS } from 'constants/ChartConstant';
+  CloudDownloadOutlined,
+  ArrowUpOutlined,
+  ArrowDownOutlined,
+  UserSwitchOutlined,
+  FileDoneOutlined,
+  SyncOutlined,
+  BarChartOutlined,
+} from '@ant-design/icons'
+import ChartWidget from 'components/shared-components/ChartWidget'
+import { COLORS } from 'constants/ChartConstant'
 
- import {
-	weeklyRevenueData,
-	topProductData,
-	customerChartData,
-	sessionData,
+import {
+  weeklyRevenueData,
+  topProductData,
+  customerChartData,
+  sessionData,
   sessionLabels,
   conbinedSessionData,
-	sessionColor,
-	recentOrderData
+  sessionColor,
+  recentOrderData,
 } from './SalesDashboardData'
 // import moment from 'moment';
 // import { DATE_FORMAT_DD_MM_YYYY } from 'constants/DateConstant'
 // import utils from 'utils'
 import { useSelector } from 'react-redux'
-import salesService from "services/sales";
-import { useState,useEffect } from "react";
+import salesService from 'services/sales'
+import { useState, useEffect } from 'react'
 import _ from 'lodash'
-import vendorService from "services/vendor";
-import productTemplateService from 'services/productTemplate';
-import customerService from "services/customer";
-const { Option } = Select;
+import vendorService from 'services/vendor'
+import productTemplateService from 'services/productTemplate'
+import customerService from 'services/customer'
+const { Option } = Select
 
 // const getPaymentStatus = status => {
 
@@ -66,45 +77,53 @@ const { Option } = Select;
 // }
 
 const WeeklyRevenue = () => {
-	const { direction } = useSelector(state => state.theme)
-	return (<Card>
-		<Row gutter={16}>
-			<Col xs={24} sm={24} md={24} lg={8}>
-				<flex className="h-100" flexDirection="column" justifyContent="between">
-					<div>
-						<h4 className="mb-0">Weekly Revenue</h4>
-						<span className="text-muted">8 - 15 Jul, 2020</span>
-					</div>
-					<div className="mb-4">
-						<h1 className="font-weight-bold">$27,188.00</h1>
-						<p className="text-success">
-							<span >
-								<ArrowUpOutlined />
-								<span> 17% </span>
-							</span>
-							<span>growth from last week</span>
-						</p>
-						<p>Total gross income figure based from the date range given above.</p>
-					</div>
-				</flex>
-			</Col>
-			<Col xs={24} sm={24} md={24} lg={16}>
-				<div className="mb-3 text-right">
-					<Button icon={<CloudDownloadOutlined/>}>Download Report</Button>
-				</div>
-				<ChartWidget
-					card={false}
-					series={weeklyRevenueData.series}
-					xAxis={weeklyRevenueData.categories}
-					title="Unique Visitors"
-					height={250}
-					type="bar"
-					customOptions={{colors: COLORS}}
-					direction={direction}
-				/>
-			</Col>
-		</Row>
-	</Card>)
+  const { direction } = useSelector((state) => state.theme)
+  return (
+    <Card>
+      <Row gutter={16}>
+        <Col xs={24} sm={24} md={24} lg={8}>
+          <flex
+            className="h-100"
+            flexDirection="column"
+            justifyContent="between"
+          >
+            <div>
+              <h4 className="mb-0">Weekly Revenue</h4>
+              <span className="text-muted">8 - 15 Jul, 2020</span>
+            </div>
+            <div className="mb-4">
+              <h1 className="font-weight-bold">$27,188.00</h1>
+              <p className="text-success">
+                <span>
+                  <ArrowUpOutlined />
+                  <span> 17% </span>
+                </span>
+                <span>growth from last week</span>
+              </p>
+              <p>
+                Total gross income figure based from the date range given above.
+              </p>
+            </div>
+          </flex>
+        </Col>
+        <Col xs={24} sm={24} md={24} lg={16}>
+          <div className="mb-3 text-right">
+            <Button icon={<CloudDownloadOutlined />}>Download Report</Button>
+          </div>
+          <ChartWidget
+            card={false}
+            series={weeklyRevenueData.series}
+            xAxis={weeklyRevenueData.categories}
+            title="Unique Visitors"
+            height={250}
+            type="bar"
+            customOptions={{ colors: COLORS }}
+            direction={direction}
+          />
+        </Col>
+      </Row>
+    </Card>
+  )
 }
 
 // const DisplayDataSet = () => (
@@ -203,11 +222,9 @@ const WeeklyRevenue = () => {
 // 	/>
 // )
 
-
-
 const SalesDashboard = () => {
-  const [sales, setSales] = useState([]);
-  const [customers, setUsers] = useState([]);
+  const [sales, setSales] = useState([])
+  const [customers, setUsers] = useState([])
   const [loading, setLoading] = useState(false)
   const [productTemplates, setTemplates] = useState([])
 
@@ -226,10 +243,10 @@ const SalesDashboard = () => {
       qs.stringify(getPaginationParams(paginationParams)),
       qs.stringify(filterParams)
     )
-	console.log(data, 'hihihihihih')
+    console.log(data, 'hihihihihih')
     if (data) {
-      setList(data.data)
-	  console.log(data, 'hihihihihih')
+      setList([data])
+      console.log(data, 'hihihihihih')
       // Pagination
       setPagination({
         ...paginationParams.pagination,
@@ -238,7 +255,6 @@ const SalesDashboard = () => {
       setLoading(false)
     }
   }
-
 
   const getProductTemplates = async () => {
     const data = await productTemplateService.getProductTemplates()
@@ -252,35 +268,31 @@ const SalesDashboard = () => {
   const getVendors = async () => {
     const data = await vendorService.getVendors()
     if (data) {
-      const users = data.map(cur => {
+      const users = data.map((cur) => {
         return {
-          ...cur, fullName: `${cur.firstName} ${cur.lastName}`
+          ...cur,
+          fullName: `${cur.firstName} ${cur.lastName}`,
         }
       })
       setVendors(users)
     }
   }
 
- 
-
+  useEffect(() => {
+    getProductTemplates()
+  }, [])
 
   useEffect(() => {
-	getProductTemplates()
+    getVendors()
   }, [])
-  
-  useEffect(() => {
-	getVendors()
-	
-  }, [])
-  
-
 
   const getCustomers = async () => {
     const data = await customerService.getCustomers()
     if (data) {
-      const users = data.map(cur => {
+      const users = data.map((cur) => {
         return {
-          ...cur, fullName: `${cur.firstName} ${cur.lastName}`
+          ...cur,
+          fullName: `${cur.firstName} ${cur.lastName}`,
         }
       })
       setUsers(users)
@@ -288,16 +300,13 @@ const SalesDashboard = () => {
   }
 
   useEffect(() => {
-	getCustomers()
-
+    getCustomers()
   }, [])
 
   useEffect(() => {
     getSales({
       pagination,
     })
-	
-
   }, [])
 
   // pagination generator
@@ -315,36 +324,25 @@ const SalesDashboard = () => {
     )
   }
   const tableColumns1 = [
-   
     {
-      title: "Total Products",
-      dataIndex: "totalAmount",
+      title: 'Total Products',
+      dataIndex: 'totalProducts',
       // sorter: (a, b) => utils.antdTableSorter(a, b, 'totalAmount'),
-
-      // render: (items, record) => <div>{items?.length}</div>,
     },
 
-   
-
-  
     {
-      title: "Total Amount",
-      dataIndex: "totalAmount",
+      title: 'Total Amount',
+      dataIndex: 'totalAmount',
       render: (totalAmount) => {
-        return <Flex alignItems="centre">{totalAmount}</Flex>;
+        return <Flex alignItems="centre">{totalAmount}</Flex>
       },
     },
-
-  
-  ];
+  ]
   const resetPagination = () => ({
     ...pagination,
     current: 1,
     pageSize: 10,
   })
-
-
-
 
   const handleFilterSubmit = async () => {
     setPagination(resetPagination())
@@ -392,22 +390,19 @@ const SalesDashboard = () => {
       className="ant-advanced-search-form"
     >
       <Row gutter={8} align="bottom">
-        
         <Col md={6} sm={24} xs={24} lg={2}>
           <Form.Item name="fromDate" label="From Date">
-		  <DatePicker/>
+            <DatePicker />
           </Form.Item>
         </Col>
 
-		<Col md={6} sm={24} xs={24} lg={2}>
+        <Col md={6} sm={24} xs={24} lg={2}>
           <Form.Item name="toDate" label="To Date">
-          
-             <DatePicker/>
-         
+            <DatePicker />
           </Form.Item>
         </Col>
 
-		<Col md={6} sm={24} xs={24} lg={5}>
+        <Col md={6} sm={24} xs={24} lg={5}>
           <Form.Item name="vendorIds" label="Vendors">
             <Select
               className="w-100"
@@ -424,7 +419,7 @@ const SalesDashboard = () => {
           </Form.Item>
         </Col>
 
-		<Col md={6} sm={24} xs={24} lg={5}>
+        <Col md={6} sm={24} xs={24} lg={5}>
           <Form.Item name="customerIds" label="Customers">
             <Select
               className="w-100"
@@ -441,7 +436,7 @@ const SalesDashboard = () => {
           </Form.Item>
         </Col>
 
-		<Col md={6} sm={24} xs={24} lg={5}>
+        <Col md={6} sm={24} xs={24} lg={5}>
           <Form.Item name="productTemplateIds" label="product Templates">
             <Select
               className="w-100"
@@ -449,15 +444,12 @@ const SalesDashboard = () => {
               placeholder="Product Templates"
             >
               <Option value="">All</Option>
-			  {productTemplates.map((temp) => (
-              <Option value={temp.id}>{temp.name}</Option>
-            ))}
-             
+              {productTemplates.map((temp) => (
+                <Option value={temp.id}>{temp.name}</Option>
+              ))}
             </Select>
           </Form.Item>
         </Col>
-
-
 
         <Col className="mb-4">
           <Button type="primary" onClick={handleFilterSubmit}>
@@ -473,194 +465,130 @@ const SalesDashboard = () => {
     </Form>
   )
 
-
-
-
-  const tableColumns3 =  [
-   
+  const tableColumns3 = [
     {
-      title: "Vendor Name",
-      dataIndex: "totalAmount",
+      title: 'Vendor Name',
+      dataIndex: 'totalAmount',
       // sorter: (a, b) => utils.antdTableSorter(a, b, 'totalAmount'),
 
       // render: (items, record) => <div>{items?.length}</div>,
     },
 
-   
-
-  
     {
-      title: "Total Amount",
-      dataIndex: "totalAmount",
+      title: 'Total Amount',
+      dataIndex: 'totalAmount',
       render: (totalAmount) => {
-        return <Flex alignItems="centre">{totalAmount}</Flex>;
+        return <Flex alignItems="centre">{totalAmount}</Flex>
       },
     },
+  ]
 
-  
-  ];
-
-
-
-
-
-  const tableColumns2 =  [
-   
+  const tableColumns2 = [
     {
-      title: "Customer Name",
-      dataIndex: "totalAmount",
+      title: 'Customer Name',
+      dataIndex: 'totalAmount',
       // sorter: (a, b) => utils.antdTableSorter(a, b, 'totalAmount'),
 
       // render: (items, record) => <div>{items?.length}</div>,
     },
 
-   
-
-  
     {
-      title: "Total Amount",
-      dataIndex: "totalAmount",
-      render: (totalAmount) => {
-        return <Flex alignItems="centre">{totalAmount}</Flex>;
-      },
+      title: 'Total Amount',
+      dataIndex: 'totalAmount',
     },
+  ]
 
-  
-  ];
-
-
-
-
-
-
-
-  const tableColumns =  [
-   
+  const tableColumns = [
     {
-      title: "Total Orders",
-      dataIndex: "totalAmount",
+      title: 'Total Orders',
+      dataIndex: 'totalOrders',
+      render: (totalOrders) => (
+        <Flex alignItems="centre">{totalOrders?.totalOrders}</Flex>
+      ),
       // sorter: (a, b) => utils.antdTableSorter(a, b, 'totalAmount'),
 
       // render: (items, record) => <div>{items?.length}</div>,
     },
 
-   
-
-  
     {
-      title: "Total Amount",
-      dataIndex: "totalAmount",
+      title: 'Total Amount',
+      dataIndex: 'totalAmount',
       render: (totalAmount) => {
-        return <Flex alignItems="centre">{totalAmount}</Flex>;
+        return <Flex alignItems="centre">{totalAmount}</Flex>
       },
     },
-
-  
-  ];
-
-
+  ]
 
   return (
-	<div>
-		<span alignItems="center" justifyContent="between" mobileFlex={false}>
+    <div>
+      <span alignItems="center" justifyContent="between" mobileFlex={false}>
         {filtersComponent()}
       </span>
-	  <br></br>
-	  <Row gutter={5}>
-	  <Col xs={24} sm={24} md={24} lg={10} xl={9} xxl={11}>
-    <Table
-      scroll={{
-        x: true,
-      }}
-      columns={tableColumns1}
-      dataSource={list}
-	  
-      rowKey="id"
-	  pagination={pagination}
-	
-	  onChange={handleTableChange}
-    />
-	</Col>
-	
+      <br></br>
+      <Row gutter={5}>
+        <Col xs={24} sm={24} md={24} lg={10} xl={9} xxl={11}>
+          <Table
+            scroll={{
+              x: true,
+            }}
+            columns={tableColumns1}
+            dataSource={list}
+            rowKey="id"
+            pagination={pagination}
+            onChange={handleTableChange}
+          />
+        </Col>
 
-		
-		
-		<Col xs={24} sm={24} md={24} lg={10} xl={9} xxl={11}>
-			
-				
-				 <Table
-      scroll={{
-        x: true,
-      }}
-      columns={tableColumns}
-      dataSource={list}
-	  
-      rowKey="id"
-	  pagination={pagination}
-	
-	  onChange={handleTableChange}
-    />
-
-			</Col>
-			{/* <Col xs={24} sm={24} md={24} lg={8} xl={9} xxl={10}>
+        <Col xs={24} sm={24} md={24} lg={10} xl={9} xxl={11}>
+          <Table
+            scroll={{
+              x: true,
+            }}
+            columns={tableColumns}
+            dataSource={list}
+            rowKey="id"
+            pagination={pagination}
+            onChange={handleTableChange}
+          />
+        </Col>
+        {/* <Col xs={24} sm={24} md={24} lg={8} xl={9} xxl={10}>
 				<DisplayDataSet />
 			</Col> */}
-		</Row>
-		
+      </Row>
 
+      <br></br>
+      <Row gutter={5}>
+        <Col xs={24} sm={24} md={24} lg={10} xl={9} xxl={11}>
+          <Table
+            scroll={{
+              x: true,
+            }}
+            columns={tableColumns2}
+            dataSource={list}
+            rowKey="id"
+            pagination={pagination}
+            onChange={handleTableChange}
+          />
+        </Col>
 
-		<br></br>
-	  <Row gutter={5}>
-	  <Col xs={24} sm={24} md={24} lg={10} xl={9} xxl={11}>
-    <Table
-      scroll={{
-        x: true,
-      }}
-      columns={tableColumns2}
-      dataSource={list}
-	  
-      rowKey="id"
-	  pagination={pagination}
-	
-	  onChange={handleTableChange}
-    />
-	</Col>
-	
-
-		
-		
-		<Col xs={24} sm={24} md={24} lg={10} xl={9} xxl={11}>
-			
-				
-				 <Table
-      scroll={{
-        x: true,
-      }}
-      columns={tableColumns3}
-      dataSource={list}
-	  
-      rowKey="id"
-	  pagination={pagination}
-	
-	  onChange={handleTableChange}
-    />
-
-			</Col>
-			{/* <Col xs={24} sm={24} md={24} lg={8} xl={9} xxl={10}>
+        <Col xs={24} sm={24} md={24} lg={10} xl={9} xxl={11}>
+          <Table
+            scroll={{
+              x: true,
+            }}
+            columns={tableColumns3}
+            dataSource={list}
+            rowKey="id"
+            pagination={pagination}
+            onChange={handleTableChange}
+          />
+        </Col>
+        {/* <Col xs={24} sm={24} md={24} lg={8} xl={9} xxl={10}>
 				<DisplayDataSet />
 			</Col> */}
-		</Row>
-		
+      </Row>
+    </div>
+  )
+}
 
-</div>
-
-  );
-};
-
-
-
-
-
-
-
-export default SalesDashboard;
+export default SalesDashboard
