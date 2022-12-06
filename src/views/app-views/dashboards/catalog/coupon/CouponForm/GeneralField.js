@@ -165,16 +165,16 @@ const GeneralField = ({
             />
           </Form.Item>
 
-          <Form.Item name="maxAmount" label="MaxAmount" rules={rules.maxAmount}>
-            <InputNumber placeholder="MaxAmount" min={0} max={100000} />
+          <Form.Item name="maxAmount" label="Maximum Amount" rules={rules.maxAmount}>
+            <InputNumber placeholder="Maximum Amount" min={0} max={100000} />
           </Form.Item>
 
           <Form.Item
             name="minOrderAmount"
-            label="MinOrderAmount"
+            label="Minimum Order Amount"
             rules={rules.minOrderAmount}
           >
-            <InputNumber placeholder="MinOrderAmount" min={0} max={100000} />
+            <InputNumber placeholder="Minimum Order Amount" min={0} max={100000} />
           </Form.Item>
           <Row>
             <Col span={8}>
@@ -325,7 +325,7 @@ const GeneralField = ({
 
           <Form.Item
             name="startEndDate"
-            label="Start-End Date"
+            label="Start End Date"
             rules={rules.startEndDate}
           >
             <DatePicker.RangePicker />

@@ -262,6 +262,7 @@ const ProductForm = (props) => {
                     refetchData={fetchCustomerById}
                   />
                 </TabPane>
+                {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
                 <TabPane tab="Prescriptions" key="3">
                   <ViewPrescriptions
                     selectedPrescriptionCustomerId={
@@ -272,6 +273,7 @@ const ProductForm = (props) => {
                     }
                   />
                 </TabPane>
+                )}
                 <TabPane tab="Orders" key="4">
                   {/* <Orders
                     selectedPrescriptionCustomerId={selectedPrescriptionCustomerId}
@@ -279,6 +281,7 @@ const ProductForm = (props) => {
                   /> */}
                   <ViewOrders selectedCustomerId={selectedCustomerId} />
                 </TabPane>
+                {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
                 <TabPane tab="Cart" key="5">
                   {/* <Orders
                     selectedPrescriptionCustomerId={selectedPrescriptionCustomerId}
@@ -286,6 +289,7 @@ const ProductForm = (props) => {
                   /> */}
                   <Cart selectedCustomerId={selectedCustomerId} />
                 </TabPane>
+                )}
               </>
             )}
           </Tabs>

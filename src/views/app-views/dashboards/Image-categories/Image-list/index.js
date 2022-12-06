@@ -239,7 +239,7 @@ const ImageList = () => {
       className="ant-advanced-search-form"
     >
       <Row gutter={8} align="bottom">
-        <Col md={6} sm={24} xs={24} lg={6}>
+        <Col md={6} sm={24} xs={24} lg={4}>
           <Form.Item name="search" label="Search">
             <Input placeholder="Search" prefix={<SearchOutlined />} />
           </Form.Item>

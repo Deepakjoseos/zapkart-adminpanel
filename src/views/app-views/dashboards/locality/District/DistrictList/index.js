@@ -297,7 +297,7 @@ const DistrictList = () => {
             </Select>
           </Form.Item>
         </Col>
-
+        {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
         <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item
             name="stateId"
@@ -325,6 +325,7 @@ const DistrictList = () => {
             </Select>
           </Form.Item>
         </Col>
+        )}
 
 
 

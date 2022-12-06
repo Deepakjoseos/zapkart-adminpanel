@@ -3,10 +3,11 @@ import fetch from 'auth/FetchInterceptor'
 const taxCategoryService = {}
 const apiRoute = '/taxCategory'
 
-taxCategoryService.getTaxCategories = async function () {
+taxCategoryService.getTaxCategories = async function (paginationQuery = '',
+filterQuery = '') {
     try {
       const res = await fetch({
-        url: `${apiRoute}`,
+        url: `${apiRoute}?${paginationQuery}&${filterQuery}`,
         method: 'get',
       })
       const data = res.data.filter((cur) => cur.status !== 'Deleted')

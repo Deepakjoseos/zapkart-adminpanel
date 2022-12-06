@@ -219,6 +219,7 @@ export const DefaultDashboard = () => {
                 subtitle={`This Year ${moment().year()}`}
               />
             </Col>
+            
             <Col xs={24} sm={24} md={24} lg={24} xl={6}>
               <StatisticWidget
                 title="Total Sales"

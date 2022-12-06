@@ -5,7 +5,10 @@ import {
   Select,
   Input,
   Button,
+  Col,
   Menu,
+  Row,
+  Form,
   Tag,
   notification,
   Drawer,
@@ -21,7 +24,9 @@ import {
 import EllipsisDropdown from 'components/shared-components/EllipsisDropdown'
 import Flex from 'components/shared-components/Flex'
 import { useHistory } from 'react-router-dom'
+import _ from 'lodash'
 import utils from 'utils'
+import qs from 'qs'
 import customerService from 'services/customer'
 import AvatarStatus from 'components/shared-components/AvatarStatus'
 import { groupList } from 'views/app-views/pages/profile/profileData'
@@ -49,7 +54,7 @@ const getStockStatus = (status) => {
 }
 const TaxCategoryList = () => {
   let history = useHistory()
-
+  const [form] = Form.useForm()
   const [list, setList] = useState([])
   const [searchBackupList, setSearchBackupList] = useState([])
   const [selectedViewAddress, setSelectedViewAddress] = useState([])
@@ -58,18 +63,30 @@ const TaxCategoryList = () => {
   const [customerAddressOpen, setCustomerAddressOpen] = useState(false)
   const [customerAddFormOpen, setCustomerAddFormOpen] = useState(false)
   const [statuses, setStatuses] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [pagination, setPagination] = useState({
+    current: 1,
+    pageSize: 15,
+  })
+const [filterEnabled, setFilterEnabled] = useState(false)
 
   const [selectedCustomerId, setSelectedCustomerId] = useState(null)
   const [selectedPrescriptionCustomerId, setSelectedPrescriptionCustomerId] =
     useState(null)
 
-  const getTaxCategories = async () => {
-    const data = await taxCategoryService.getTaxCategories()
+  const getTaxCategories = async (paginationParams = {}, filterParams) => {
+    const data = await taxCategoryService.getTaxCategories(qs.stringify(getPaginationParams(paginationParams)),
+    qs.stringify(filterParams))
     if (data) {
       setList(data)
       setSearchBackupList(data)
       console.log(selectedViewAddress, 'show-data')
-
+// Pagination
+setPagination({
+  ...paginationParams.pagination,
+  total: data.total,
+})
+setLoading(false)
 
     }
   }
@@ -84,10 +101,25 @@ const TaxCategoryList = () => {
   }
 
   useEffect(() => {
-    getTaxCategories()
+    getTaxCategories(pagination)
     fetchConstants()
   }, [])
+ // pagination generator
+ const getPaginationParams = (params) => ({
+  limit: params.pagination?.pageSize,
+  page: params.pagination?.current,
+  // ...params,
+})
 
+// On pagination Change
+const handleTableChange = (newPagination) => {
+  getTaxCategories(
+    {
+      pagination: newPagination,
+    },
+    filterEnabled ? _.pickBy(form.getFieldsValue(), _.identity) : {}
+  )
+}
   const dropdownMenu = (row) => (
     <Menu>
       <Menu.Item onClick={() => editTaxCategory(row.id)}>
@@ -159,7 +191,7 @@ const TaxCategoryList = () => {
 
   const tableColumns = [
     {
-      title: 'taxCategoryId',
+      title: 'Tax Category Id',
       dataIndex: 'id'
     },
     {
@@ -212,7 +244,38 @@ const TaxCategoryList = () => {
       ),
     },
   ]
+  const resetPagination = () => ({
+    ...pagination,
+    current: 1,
+    pageSize: 10,
+  })
 
+  // Filter Submit
+  const handleFilterSubmit = async () => {
+    setPagination(resetPagination())
+
+    form
+      .validateFields()
+      .then(async (values) => {
+        setFilterEnabled(true)
+        // Removing falsy Values from values
+        const sendingValues = _.pickBy(values, _.identity)
+        getTaxCategories({ pagination: resetPagination() }, sendingValues)
+      })
+      .catch((info) => {
+        console.log('info', info)
+        setFilterEnabled(false)
+      })
+  }
+
+  // Clear Filter
+  const handleClearFilter = async () => {
+    form.resetFields()
+
+    setPagination(resetPagination())
+    getTaxCategories({ pagination: resetPagination() }, {})
+    setFilterEnabled(false)
+  }
   const onSearch = (e) => {
     const value = e.currentTarget.value
     const searchArray = e.currentTarget.value ? list : searchBackupList
@@ -232,15 +295,18 @@ const TaxCategoryList = () => {
   }
 
   const filters = () => (
+    <div className="mr-md-3 mb-3">
     <Flex className="mb-1" mobileFlex={false}>
-      <div className="mr-md-3 mb-3">
+     
         <Input
           placeholder="Search"
           prefix={<SearchOutlined />}
           onChange={(e) => onSearch(e)}
         />
-      </div>
-      <div className="mb-3">
+      
+     
+   
+      
         <Select
           className="w-100"
           style={{ minWidth: 180 }}
@@ -253,8 +319,21 @@ const TaxCategoryList = () => {
             </Option>
           ))}
         </Select>
-      </div>
+        
+          <Button type="primary" onClick={handleFilterSubmit}>
+            Filter
+          </Button>
+      
+  
+          <Button type="primary" onClick={handleClearFilter}>
+            Clear
+          </Button>
+     
+        
+  
+  
     </Flex>
+    </div>
   )
 
   return (
@@ -273,7 +352,13 @@ const TaxCategoryList = () => {
         </div>
       </Flex>
       <div className="table-responsive">
-        <Table columns={tableColumns} dataSource={list} rowKey="id" />
+        <Table  columns={tableColumns}
+          dataSource={list}
+          rowKey="id"
+          pagination={pagination}
+          loading={loading}
+          onChange={handleTableChange}
+       />
 
 
       </div>

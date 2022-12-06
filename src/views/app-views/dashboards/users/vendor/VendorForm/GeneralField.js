@@ -140,24 +140,26 @@ const GeneralField = ({
                 <Form.Item name="phone" label="Phone" rules={rules.pone}>
                   <Input placeholder="Phone" />
                 </Form.Item>
-                
+                {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
                   <Form.Item name="gst" label="GST" rules={rules.gst}>
                     <Input placeholder="Gst" />
                   </Form.Item>
-           
-
+                )}
+           {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
                 <Form.Item name="pan" label="Pan" rules={rules.pan}>
                   <Input placeholder="Pan" />
                 </Form.Item>
-
+                     )}
+ {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
                 <Form.Item name="drugLicense" label="Drug License">
                   <Input placeholder="drugLicense" />
                 </Form.Item>
-              
+                     )}
+               {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
                 <Form.Item name="tanNumber" label="Tan Number">
                   <Input placeholder="tanNumber" />
                 </Form.Item>
-             
+                  )}
               </>
            
 
@@ -288,16 +290,16 @@ const GeneralField = ({
                   <Input placeholder="Pan" />
                 </Form.Item>
               )}
-              {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+           {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
                 <Form.Item name="drugLicense" label="Drug License">
                   <Input placeholder="drugLicense" />
                 </Form.Item>
-              )}
-              {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+            )}
+           {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
                 <Form.Item name="tanNumber" label="Tan Number">
                   <Input placeholder="tanNumber" />
                 </Form.Item>
-              )}
+         )}
             </>
 
             {/* <Form.Item name="drugLicense" label="Drug License Number" rules={rules.drugLicense}>
@@ -339,7 +341,7 @@ const GeneralField = ({
         </Form.Item> */}
       </Card>
 
-      {/* <Card title="Address">
+      <Card title="Address">
         <Form.Item name="address.line1" label="Line1">
           <Input placeholder="Line 1" />
         </Form.Item>
@@ -363,8 +365,7 @@ const GeneralField = ({
         <Form.Item name="address.zipcode" label="Zipcode">
           <Input placeholder="Zipcode" />
         </Form.Item>
-      </Card> */}
-
+      </Card> 
       {/* 'business.name': data?.business?.name,
         'business.address.line1': data?.business?.address?.line1,
         'business.address.city': data?.business?.address?.city,
@@ -391,40 +392,38 @@ const GeneralField = ({
             </Upload>
           </Card>
 
-          {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+        
             <h4>Bussiness Address</h4>
-          )}
-          {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+         
+       
             <Form.Item name="business.address.line1" label="Line1">
               <Input placeholder="Line1" />
             </Form.Item>
-          )}
+       
 
-          {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
             <Form.Item name="business.address.city" label="City">
               <Input placeholder="City" />
             </Form.Item>
-          )}
-          {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+        
+      
             <Form.Item name="business.address.state" label="State">
               <Input placeholder="State" />
             </Form.Item>
-          )}
-          {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
-            <Form.Item name="business.address.country" label="Country">
+        
+            <Form.Item name="business.address.country" label="Country" >
+              
               <Input placeholder="Country" />
             </Form.Item>
-          )}
-          {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+       
+        
             <Form.Item name="business.address.phone" label="Phone">
               <Input placeholder="Phone" />
             </Form.Item>
-          )}
-          {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+         
             <Form.Item name="business.address.zipcode" label="Zipcode">
               <Input placeholder="Zipcode" />
             </Form.Item>
-          )}
+      
         </Card>
       ) : (
         ' '
