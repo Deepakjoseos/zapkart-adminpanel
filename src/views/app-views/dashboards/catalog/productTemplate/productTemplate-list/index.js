@@ -99,24 +99,6 @@ const ProductTemplateList = () => {
     pageSize: 30,
   })
 
-  // const handleDownload=()=>{
-  //   let sliceSize =1024;
-  //   let byteCharacters = atob(EXCEL_FILE_BASE64);
-  //   let bytesLength = byteCharacters.length;
-  //   let slicesCount = Math.ceil(bytesLength / sliceSize);
-  //   let byteArrays = new Array(slicesCount);
-  //   for(let sliceIndex = 0; sliceIndex < slicesCount; ++sliceIndex){
-  //     let begin = sliceIndex * sliceSize;
-  //     let end = Math.min(begin + sliceSize, bytesLength);
-  //     let bytes = new Array(end - begin)
-  //     for (var offset = begin, i = 0; offset < end; ++i, offset){
-  //       bytes[i] = byteCharacters[offset].charCodeAt(0);
-  //     }
-  //     byteArrays[sliceIndex] = new Uint8Array(bytes)
-  //   }
-  //   let blob = new Blob(byteArrays, { type: 'application/vnd.ms-excel' })
-  //   FileSaver.saveAs(new Blob([blob],{}), "my-excel.xlsx");
-  // }
   // Changed here for pagination
   const getProductTemplates = async (paginationParams = {}, filterParams) => {
     setLoading(true)
@@ -166,15 +148,13 @@ const ProductTemplateList = () => {
     // ...params,
   })
 
-
-  const getConstants = async () => {
+  const fetchSampleExcel = async () => {
     const data = await constantsService.getSample()
     if (data) {
       // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
 
-    
-        data.PRODUCT_EXCEL &&
-        setSample(Object.values(data.PRODUCT_EXCEL))
+      // NEW
+      data.PRODUCT_TEMPLATE_EXCEL && setSample(data.PRODUCT_TEMPLATE_EXCEL)
     }
   }
   // On pagination Change
@@ -230,7 +210,7 @@ const ProductTemplateList = () => {
     //     setCategories(data.data)
     //   }
     // }
-    getConstants()
+    fetchSampleExcel()
     // getProductTemplates()
     // getBrands()
     // getCategories()
@@ -303,8 +283,8 @@ const ProductTemplateList = () => {
   const handleStatusChange = async (value, selectedRow) => {
     const sendingValues = {
       ...selectedRow,
-      categoryId: selectedRow.category.id,
-      taxCategoryId: selectedRow.taxCategory.id,
+      categoryId: selectedRow?.category?.id,
+      taxCategoryId: selectedRow?.taxCategory?.id,
       status: value,
     }
 
@@ -351,16 +331,16 @@ const ProductTemplateList = () => {
       ),
       sorter: (a, b) => utils.antdTableSorter(a, b, 'brand.name'),
     },
- 
+
     // {
-   
+
     //   title: 'Medicine Type',
     //   dataIndex: 'medicineType',
     //   // render: (brand) => <Flex alignItems="center">{brand ? brand?.name : "-"}</Flex>,
     //   // sorter: (a, b) => utils.antdTableSorter(a, b, 'brand.name'),
-      
+
     // },
-    
+
     {
       title: 'Vendor Commission',
       dataIndex: 'commission',
@@ -461,7 +441,6 @@ const ProductTemplateList = () => {
         setStatuses(Object.values(data.GENERAL['STATUS']))
       data.GENERAL['NAME_SORT'] &&
         setOrderbyname(Object.values(data.GENERAL['NAME_SORT']))
-        
     }
   }
   // Filter Submit
@@ -612,82 +591,86 @@ const ProductTemplateList = () => {
           </Form.Item>
         </Col>
         {SITE_NAME === 'zapkart' && (
-        <Col md={6} sm={24} xs={24} lg={6}>
-       
-          <Form.Item name="medicineTypeId" label="Medicine Types">
-            <Select
-              showSearch
-              optionFilterProp="children"
-              filterOption={(input, option) =>
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }
-              className="w-100"
-              style={{ minWidth: 180 }}
-              // onChange={(value) => setSelectedBrandId(value)}
-              // onSelect={handleQuery}
-              placeholder="Medicine Types"
-              // value={selectedBrandId}
+          <Col md={6} sm={24} xs={24} lg={6}>
+            <Form.Item name="medicineTypeId" label="Medicine Types">
+              <Select
+                showSearch
+                optionFilterProp="children"
+                filterOption={(input, option) =>
+                  option.children.toLowerCase().indexOf(input.toLowerCase()) >=
+                  0
+                }
+                className="w-100"
+                style={{ minWidth: 180 }}
+                // onChange={(value) => setSelectedBrandId(value)}
+                // onSelect={handleQuery}
+                placeholder="Medicine Types"
+                // value={selectedBrandId}
+              >
+                <Option value="">All</Option>
+                {medicineTypes.map((medicineType) => (
+                  <Option key={medicineType.id} value={medicineType.id}>
+                    {medicineType.name}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+          </Col>
+        )}
+        {SITE_NAME === 'zapkart' && (
+          <Col md={6} sm={24} xs={24} lg={6}>
+            <Form.Item name="manufactureId" label="Manufactures">
+              <Select
+                showSearch
+                optionFilterProp="children"
+                filterOption={(input, option) =>
+                  option.children.toLowerCase().indexOf(input.toLowerCase()) >=
+                  0
+                }
+                className="w-100"
+                style={{ minWidth: 180 }}
+                // onChange={(value) => setSelectedBrandId(value)}
+                // onSelect={handleQuery}
+                placeholder="Manufacturers"
+                // value={selectedBrandId}
+              >
+                <Option value="">All</Option>
+                {manufacturers.map((manufacturer) => (
+                  <Option key={manufacturer.id} value={manufacturer.id}>
+                    {manufacturer.name}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+          </Col>
+        )}
+        {SITE_NAME === 'zapkart' && (
+          <Col md={6} sm={24} xs={24} lg={6}>
+            <Form.Item
+              name="prescriptionRequired"
+              label="Prescription Required"
             >
-              <Option value="">All</Option>
-              {medicineTypes.map((medicineType) => (
-                <Option key={medicineType.id} value={medicineType.id}>
-                  {medicineType.name}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
-       
-        </Col>
-    )}
-      {SITE_NAME === 'zapkart' && (
-        <Col md={6} sm={24} xs={24} lg={6}>
-          <Form.Item name="manufactureId" label="Manufactures">
-            <Select
-              showSearch
-              optionFilterProp="children"
-              filterOption={(input, option) =>
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }
-              className="w-100"
-              style={{ minWidth: 180 }}
-              // onChange={(value) => setSelectedBrandId(value)}
-              // onSelect={handleQuery}
-              placeholder="Manufacturers"
-              // value={selectedBrandId}
-            >
-              <Option value="">All</Option>
-              {manufacturers.map((manufacturer) => (
-                <Option key={manufacturer.id} value={manufacturer.id}>
-                  {manufacturer.name}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
-        </Col>
-      )}
-          {SITE_NAME === 'zapkart' && (
-        <Col md={6} sm={24} xs={24} lg={6}>
-          <Form.Item name="prescriptionRequired" label="Prescription Required">
-            <Select
-              showSearch
-              optionFilterProp="children"
-              filterOption={(input, option) =>
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }
-              className="w-100"
-              style={{ minWidth: 180 }}
-              // onChange={(value) => setSelectedPrescriptionRequired(value)}
-              // onSelect={handleQuery}
-              // value={selectedPrescriptionrequired}
-              placeholder="Prescription Required"
-            >
-              <Option value="">All</Option>
-              <Option value="true">Yes</Option>
-              <Option value="false">No</Option>
-            </Select>
-          </Form.Item>
-        </Col>
-      )}
+              <Select
+                showSearch
+                optionFilterProp="children"
+                filterOption={(input, option) =>
+                  option.children.toLowerCase().indexOf(input.toLowerCase()) >=
+                  0
+                }
+                className="w-100"
+                style={{ minWidth: 180 }}
+                // onChange={(value) => setSelectedPrescriptionRequired(value)}
+                // onSelect={handleQuery}
+                // value={selectedPrescriptionrequired}
+                placeholder="Prescription Required"
+              >
+                <Option value="">All</Option>
+                <Option value="true">Yes</Option>
+                <Option value="false">No</Option>
+              </Select>
+            </Form.Item>
+          </Col>
+        )}
         <Form.Item name="returnable" label="Returnable">
           <Select
             showSearch
@@ -762,12 +745,7 @@ const ProductTemplateList = () => {
           <div>
             <Button icon={<FileImageOutlined />}>
               {' '}
-              <a
-               href="https://ecommerce-test2.s3.amazonaws.com/samplefiles/producttemplate.xlsx"
-              
-              >
-                Download Sample File
-              </a>
+              <a href={sample}>Download Sample File</a>
             </Button>
           </div>
         </Flex>
