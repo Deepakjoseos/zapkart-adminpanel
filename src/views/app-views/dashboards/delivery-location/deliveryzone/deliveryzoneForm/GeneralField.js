@@ -334,9 +334,11 @@ const GeneralField = ({
       setExpandedKeys((prev) => [...prev, cityId])
 
       setTimeout(() => {
-        document
-          .querySelector('.ant-tree-node-selected')
-          .scrollIntoView({ behavior: 'smooth', block: 'center' })
+        if (document.querySelector('.ant-tree-node-selected')) {
+          document
+            .querySelector('.ant-tree-node-selected')
+            .scrollIntoView({ behavior: 'smooth', block: 'center' })
+        }
       }, 1000)
 
       // const elm = await waitForElm('.ant-tree-node-selected')
@@ -350,6 +352,25 @@ const GeneralField = ({
       onSearchPinCodeHandler()
     }
   }, [searchPincode])
+
+  // Additional Function
+  function onlyNumberKey(evt) {
+    var theEvent = evt || window.event
+
+    // Handle paste
+    if (theEvent.type === 'paste') {
+      key = evt.clipboardData.getData('text/plain')
+    } else {
+      // Handle key press
+      var key = theEvent.keyCode || theEvent.which
+      key = String.fromCharCode(key)
+    }
+    var regex = /[0-9]|\./
+    if (!regex.test(key)) {
+      theEvent.returnValue = false
+      if (theEvent.preventDefault) theEvent.preventDefault()
+    }
+  }
 
   return (
     <>
@@ -433,6 +454,7 @@ const GeneralField = ({
                   onSearch={(val) => onPincodeSearchSubmit(val)}
                   enterButton="Search"
                   loading={pincodeSearchLoading}
+                  onKeyPress={(event) => onlyNumberKey(event)}
                 />
               </AutoComplete>
             </>

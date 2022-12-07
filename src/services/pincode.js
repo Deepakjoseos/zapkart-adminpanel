@@ -8,7 +8,7 @@ pincodeService.getPincode = async function (
   filterQuery = ''
 ) {
   try {
-    let url = `${api}?${paginationQuery}&${filterQuery}`
+    let url = `${api}/public?${paginationQuery}&${filterQuery}`
     const res = await fetch({
       url,
       method: 'get',
@@ -19,7 +19,7 @@ pincodeService.getPincode = async function (
   }
 }
 
-pincodeService.deletePincode= async function (id) {
+pincodeService.deletePincode = async function (id) {
   try {
     const res = await fetch({
       url: `/pincode/${id}`,
@@ -44,7 +44,7 @@ pincodeService.getPincodeById = async function (id) {
   }
 }
 
-pincodeService.createPincode= async function (data) {
+pincodeService.createPincode = async function (data) {
   try {
     const res = await fetch({
       url: `/pincode`,

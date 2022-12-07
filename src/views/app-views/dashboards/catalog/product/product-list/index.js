@@ -43,7 +43,6 @@ import constantsService from 'services/constants'
 import Utils from 'utils'
 import productTemplateService from 'services/productTemplate'
 
-
 const { Option } = Select
 
 const getStockStatus = (status) => {
@@ -91,7 +90,6 @@ const ProductList = () => {
   const [orderbyname, setOrderbyname] = useState([])
   const [sample, setSample] = useState([])
   const [pagination, setPagination] = useState({
-  
     current: 1,
     pageSize: 30,
   })
@@ -105,7 +103,6 @@ const ProductList = () => {
         setStatuses(Object.values(data.GENERAL['STATUS']))
       data.GENERAL['NAME_SORT'] &&
         setOrderbyname(Object.values(data.GENERAL['NAME_SORT']))
-       
     }
   }
   const getConstants = async () => {
@@ -113,9 +110,7 @@ const ProductList = () => {
     if (data) {
       // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
 
-    
-        data.PRODUCT_EXCEL &&
-        setSample(Object.values(data.PRODUCT_EXCEL))
+      data.PRODUCT_EXCEL && setSample(data.PRODUCT_EXCEL)
     }
   }
   // Changed here for pagination
@@ -166,7 +161,6 @@ const ProductList = () => {
         setBrands(data.data)
       }
     }
-
 
     const getProductTemplates = async () => {
       const data = await productTemplateService.getProductTemplates()
@@ -399,7 +393,7 @@ const ProductList = () => {
                 {price}
               </div>
             </Flex>
-            <Button  type="ghost" icon={<EditOutlined />} className="ml-2" />
+            <Button type="ghost" icon={<EditOutlined />} className="ml-2" />
           </div>
         )
       },
@@ -471,7 +465,7 @@ const ProductList = () => {
         return (
           <Flex flexDirection="column" justifyContent="center">
             {row.username}
-            { `(${row.commission + '%'})`}
+            {`(${row.commission + '%'})`}
           </Flex>
         )
       },
@@ -756,43 +750,37 @@ const ProductList = () => {
             </Select>
           </Form.Item>
         </Col> */}
-          <Col md={6} sm={24} xs={24} lg={6}>
-        <Form.Item name="orderByName" label="Order By Name">
-          <Select
-            className="w-100"
-            style={{ minWidth: 180 }}
-            placeholder="Order By Name"
-          >
-            <Option value="">All</Option>
-            {orderbyname.map((item) => (
-              <Option key={item.id} value={item}>
-                {item}
-              </Option>
-            ))}
-          </Select>
-        </Form.Item>
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="orderByName" label="Order By Name">
+            <Select
+              className="w-100"
+              style={{ minWidth: 180 }}
+              placeholder="Order By Name"
+            >
+              <Option value="">All</Option>
+              {orderbyname.map((item) => (
+                <Option key={item.id} value={item}>
+                  {item}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
         </Col>
         <Col md={6} sm={24} xs={24} lg={6}>
-        <Form.Item
-          name="productTemplateId"
-          label="ProductTemplate"
-         
-        >
-          <Select
-            showSearch
-            optionFilterProp="children"
-            filterOption={(input, option) =>
-              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-            }
-            placeholder="productTemplate"
-           
-          >
-            {productTemplates.map((temp) => (
-              <Option value={temp.id}>{temp.name}</Option>
-            ))}
-          </Select>
-        </Form.Item>
-
+          <Form.Item name="productTemplateId" label="ProductTemplate">
+            <Select
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              placeholder="productTemplate"
+            >
+              {productTemplates.map((temp) => (
+                <Option value={temp.id}>{temp.name}</Option>
+              ))}
+            </Select>
+          </Form.Item>
         </Col>
         <Col className="mb-4">
           <Button type="primary" onClick={handleFilterSubmit}>
@@ -972,17 +960,16 @@ const ProductList = () => {
         <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
           {filtersComponent()}
         </Flex>
-        <div className="mr-2 d-flex justify-content-between" style={{paddingLeft: '166px',
-    marginBottom: '-39px'
-}}>
-            <Button icon={<FileImageOutlined />}>
-              {' '}
-              <a href="https://ecommerce-test2.s3.amazonaws.com/samplefiles/product.xlsx">
-                Download Sample File
-              </a>
-            </Button>
-          </div>
-        <div className="mr-2 d-flex justify-content-between" >
+        <div
+          className="mr-2 d-flex justify-content-between"
+          style={{ paddingLeft: '166px', marginBottom: '-39px' }}
+        >
+          <Button icon={<FileImageOutlined />}>
+            {' '}
+            <a href={sample}>Download Sample File</a>
+          </Button>
+        </div>
+        <div className="mr-2 d-flex justify-content-between">
           <Button
             type="primary"
             icon={<FileAddOutlined />}
@@ -990,8 +977,6 @@ const ProductList = () => {
           >
             Excel Upload
           </Button>
-
-       
 
           <div>
             <Button
