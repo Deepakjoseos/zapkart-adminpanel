@@ -385,7 +385,7 @@ const Pincodelist = () => {
 
 
 
-
+{process.env.REACT_APP_SITE_NAME === 'zapkart' && (
 <Col md={6} sm={24} xs={24} lg={4}>
           <Form.Item
             name="pincodeId"
@@ -414,14 +414,12 @@ const Pincodelist = () => {
           </Form.Item>
         </Col>
 
-
-
-
-        <Col md={6} sm={24} xs={24} lg={4}>
-          <Form.Item
-            name="districtId"
-            label={SITE_NAME === 'zapkart' ? 'District' : 'Country'}
-          >
+)}
+ <Col md={6} sm={24} xs={24} lg={4}>
+  
+        <Form.Item name="cityId" 
+         label={SITE_NAME === 'zapkart' ? 'City' : 'Emirates'}
+      >
             <Select
               showSearch
               optionFilterProp="children"
@@ -432,98 +430,7 @@ const Pincodelist = () => {
               style={{ minWidth: 180 }}
               // onChange={(value) => setSelectedBrandId(value)}
               // onSelect={handleQuery}
-              placeholder={SITE_NAME === 'zapkart' ? 'District' : 'Country'}
-              // value={selectedBrandId}
-            >
-              <Option value="">All</Option>
-              {district.map((item) => (
-                <Option key={item.id} value={item.id}>
-                  {item.name}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
-        </Col>
-
-
-
-
-
-
-        <Col md={6} sm={24} xs={24} lg={4}>
-          <Form.Item
-            name="countryId"
-            label="country"
-          >
-            <Select
-              showSearch
-              optionFilterProp="children"
-              filterOption={(input, option) =>
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }
-              className="w-100"
-              style={{ minWidth: 180 }}
-              // onChange={(value) => setSelectedBrandId(value)}
-              // onSelect={handleQuery}
-              placeholder="country"
-              // value={selectedBrandId}
-            >
-              <Option value="">All</Option>
-              {country.map((item) => (
-                <Option key={item.id} value={item.id}>
-                  {item.name}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
-        </Col>
-
-
-
-
-
-
-        <Col md={6} sm={24} xs={24} lg={4}>
-          <Form.Item
-            name="stateId"
-            label="state"
-          >
-            <Select
-              showSearch
-              optionFilterProp="children"
-              filterOption={(input, option) =>
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }
-              className="w-100"
-              style={{ minWidth: 180 }}
-              // onChange={(value) => setSelectedBrandId(value)}
-              // onSelect={handleQuery}
-              placeholder="state"
-              // value={selectedBrandId}
-            >
-              <Option value="">All</Option>
-              {state.map((item) => (
-                <Option key={item.id} value={item.id}>
-                  {item.name}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
-        </Col>
-
-        <Col md={6} sm={24} xs={24} lg={4}>
-        <Form.Item name="cityId" label="City">
-            <Select
-              showSearch
-              optionFilterProp="children"
-              filterOption={(input, option) =>
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }
-              className="w-100"
-              style={{ minWidth: 180 }}
-              // onChange={(value) => setSelectedBrandId(value)}
-              // onSelect={handleQuery}
-              placeholder="city"
+              placeholder={SITE_NAME === 'zapkart' ? 'City' : 'Emirates'}
               // value={selectedBrandId}
             >
               <Option value="">All</Option>
@@ -561,6 +468,103 @@ const Pincodelist = () => {
         */}
          </Col>
 
+
+        <Col md={6} sm={24} xs={24} lg={4}>
+          <Form.Item
+            name="districtId"
+            label={SITE_NAME === 'zapkart' ? 'District' : 'Country'}
+          >
+            <Select
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              className="w-100"
+              style={{ minWidth: 180 }}
+              // onChange={(value) => setSelectedBrandId(value)}
+              // onSelect={handleQuery}
+              placeholder={SITE_NAME === 'zapkart' ? 'District' : 'Country'}
+              // value={selectedBrandId}
+            >
+              <Option value="">All</Option>
+              {district.map((item) => (
+                <Option key={item.id} value={item.id}>
+                  {item.name}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </Col>
+
+
+
+
+
+        {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+        <Col md={6} sm={24} xs={24} lg={4}>
+          <Form.Item
+            name="countryId"
+            label="country"
+          >
+            <Select
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              className="w-100"
+              style={{ minWidth: 180 }}
+              // onChange={(value) => setSelectedBrandId(value)}
+              // onSelect={handleQuery}
+              placeholder="country"
+              // value={selectedBrandId}
+            >
+              <Option value="">All</Option>
+              {country.map((item) => (
+                <Option key={item.id} value={item.id}>
+                  {item.name}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </Col>
+        )}
+
+
+
+
+        {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+        <Col md={6} sm={24} xs={24} lg={4}>
+          <Form.Item
+            name="stateId"
+            label="state"
+          >
+            <Select
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              className="w-100"
+              style={{ minWidth: 180 }}
+              // onChange={(value) => setSelectedBrandId(value)}
+              // onSelect={handleQuery}
+              placeholder="state"
+              // value={selectedBrandId}
+            >
+              <Option value="">All</Option>
+              {state.map((item) => (
+                <Option key={item.id} value={item.id}>
+                  {item.name}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </Col>
+        )}
+
+       
         <Col className="mb-4">
           <Button type="primary" onClick={handleFilterSubmit}>
             Filter
@@ -571,9 +575,12 @@ const Pincodelist = () => {
             Clear
           </Button>
           </Col>
-          <Col className="spider" style={{marginTop:'-70px'}}>
+          <Col className="spider" >
           <Flex>
          
+        
+
+          <div >
           <Button
             className="mr-2"
             type="primary"
@@ -582,8 +589,6 @@ const Pincodelist = () => {
           >
             Excel Upload
           </Button>
-
-          <div>
             <Button icon={<FileImageOutlined />}>
               {' '}
               <a

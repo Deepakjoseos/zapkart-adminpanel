@@ -164,7 +164,7 @@ const ViewOrders = ({
     // ]
     const tableColumns = [
         {
-          title: 'OrderNo',
+          title: 'Order No',
           dataIndex: 'orderNo',
           render: (text, record) => (
             <Link to={`/app/dashboards/orders/order-view/${record.id}`}>
@@ -254,7 +254,7 @@ const ViewOrders = ({
         // },
     
           {
-            title: 'Order status',
+            title: 'Order Status',
             dataIndex: 'status',
             // render: (status, row) => {
             //   return (

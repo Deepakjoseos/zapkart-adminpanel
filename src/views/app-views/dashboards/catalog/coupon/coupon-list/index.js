@@ -207,17 +207,17 @@ const CouponList = () => {
       sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
     },
     {
-      title: 'code',
+      title: 'Code',
       dataIndex: 'code',
       sorter: (a, b) => utils.antdTableSorter(a, b, 'code'),
     },
     {
-      title: 'valueType',
+      title: 'Value Type',
       dataIndex: 'valueType',
       sorter: (a, b) => utils.antdTableSorter(a, b, 'valueType'),
     },
     {
-      title: 'value',
+      title: 'Value',
       dataIndex: 'value',
       sorter: (a, b) => utils.antdTableSorter(a, b, 'value'),
     },
@@ -232,23 +232,23 @@ const CouponList = () => {
     //   sorter: (a, b) => utils.antdTableSorter(a, b, 'minOrderAmount'),
     // },
     {
-      title: 'availableType',
+      title: 'Available Type',
       dataIndex: 'availableType',
       sorter: (a, b) => utils.antdTableSorter(a, b, 'availableType'),
     },
     {
-      title: 'available',
+      title: 'Available',
       dataIndex: 'available',
       sorter: (a, b) => utils.antdTableSorter(a, b, 'available'),
     },
     {
-      title: 'startDate',
+      title: 'Start Date',
       dataIndex: 'startDate',
       render: (startDate) => moment(startDate).format('MMMM Do YYYY'),
       sorter: (a, b) => utils.antdTableSorter(a, b, 'startDate'),
     },
     {
-      title: 'endDate',
+      title: 'End Date',
       dataIndex: 'endDate',
       render: (endDate) => moment(endDate).format('MMMM Do YYYY'),
       sorter: (a, b) => utils.antdTableSorter(a, b, 'endDate'),

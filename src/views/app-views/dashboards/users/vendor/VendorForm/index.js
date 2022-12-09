@@ -152,12 +152,13 @@ const ProductForm = (props) => {
         lastName: data.lastName,
         email: data?.email,
         phone: data?.phone,
-        gst: SITE_NAME === 'zapkart' ? data?.gst : null,
-        tanNumber: SITE_NAME === 'zapkart' ? data?.tanNumber : null,
-        pan: SITE_NAME === 'zapkart' ? data?.pan : null,
+        gst: data?.gst,
+        tanNumber:data?.tanNumber,
+        pan:data?.pan,
         drugLicense: data?.drugLicense,
         groups: data?.groups.map((cur) => cur.id),
         business: data?.business,
+       
 
         // address:
         'address.line1': data?.address?.line1,

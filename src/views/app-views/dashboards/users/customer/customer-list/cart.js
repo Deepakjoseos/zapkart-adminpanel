@@ -73,7 +73,7 @@ const Cart = ({
   const tableColumns = [
    
     {
-      title: 'name',
+      title: 'Name',
       dataIndex: 'product',
       // sorter: (a, b) => utils.antdTableSorter(a, b, 'totalAmount'),
 

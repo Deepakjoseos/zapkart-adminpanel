@@ -352,7 +352,7 @@ const CityList = () => {
 
 
 
-
+        {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
         <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item
             name="stateName"
@@ -381,7 +381,7 @@ const CityList = () => {
           </Form.Item>
         </Col>
 
-
+        )}
 
 
         <Col className="mb-4 ml-3">

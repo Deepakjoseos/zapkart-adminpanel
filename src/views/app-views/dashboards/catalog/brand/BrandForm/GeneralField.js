@@ -31,6 +31,12 @@ const rules = {
       message: 'Required',
     },
   ],
+  description: [
+    {
+      required: true,
+      message: 'Required',
+    },
+  ],
   image: [
     {
       required: true,
@@ -82,17 +88,17 @@ const GeneralField = ({ form, propsImages, form_statuses, propsBannerImage }) =>
             />
           </Form.Item>
           <Form.Item
+          name="description"
+          label="Description"
+          rules={rules.description}
+        >
+          <Editor
+            placeholder="Write something..."
+            editorHtml={form.getFieldValue('description') || ''}
+            onChange={(e) => form.setFieldsValue({ description: e })}
             name="description"
-            label="Description"
-            rules={rules.description}
-          >
-            <Editor
-              placeholder="Write something..."
-              editorHtml={form.getFieldValue('description') || ''}
-              onChange={(e) => form.setFieldsValue({ description: e })}
-              name="description"
-            />
-          </Form.Item>
+          />
+        </Form.Item>
 
           <Form.Item name="status" label="Status" rules={rules.status}>
             <Select placeholder="Status">

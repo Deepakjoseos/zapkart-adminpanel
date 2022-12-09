@@ -112,7 +112,7 @@ const WidgetField = ({
           <Form.Item
             name="listingPlatform"
             label="Listing Platform"
-            rules={rules.allowedPaymentTypes}
+            rules={rules.listingPlatform}
           >
             <Select
               mode="multiple" 

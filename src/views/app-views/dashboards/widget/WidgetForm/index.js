@@ -223,7 +223,9 @@ const WidgetForm = (props) => {
 
           status: values.status,
           priority: values.priority,
-          listingPlatform: values.listingPlatform,
+          listingPlatform: values.listingPlatform
+          ? values?.listingPlatform
+          : form.getFieldValue('listingPlatform'),
           numberOfItems: values?.numberOfItems
             ? values?.numberOfItems
             : form.getFieldValue('numberOfItems'),

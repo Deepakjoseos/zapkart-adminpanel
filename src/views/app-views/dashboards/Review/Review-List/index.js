@@ -127,7 +127,7 @@ const ReviewList = () => {
 
   const tableColumns = [
     {
-      title: 'userImage',
+      title: 'User Image',
       dataIndex: 'userImage',
       render: (_, record) => (
         <div className="d-flex">
@@ -142,23 +142,23 @@ const ReviewList = () => {
       sorter: (a, b) => utils.antdTableSorter(a, b, 'userImage'),
     },
     {
-      title: "userName",
+      title: "User Name",
       dataIndex: 'userName',
       sorter: (a, b) => utils.antdTableSorter(a, b, 'userName'),
     },
     
     {
-      title: "title",
+      title: "Title",
       dataIndex: 'title',
       sorter: (a, b) => utils.antdTableSorter(a, b, 'title'),
     },
     {
-      title: "message",
+      title: "Message",
       dataIndex: 'message',
       sorter: (a, b) => utils.antdTableSorter(a, b, 'message'),
     },
     {
-      title: "rating",
+      title: "Rating",
       dataIndex: 'rating',
       sorter: (a, b) => utils.antdTableSorter(a, b, 'rating'),
     },

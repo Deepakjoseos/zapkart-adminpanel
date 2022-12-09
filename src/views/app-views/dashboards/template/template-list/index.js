@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Card, Table, Select, Input, Button, Menu, Tag } from 'antd'
+import { Card, Table, Select, Input, Button, Menu, Form, Tag } from 'antd'
 // import TemplateListData from 'assets/data/product-list.data.json'
 import {
   EyeOutlined,
@@ -13,7 +13,8 @@ import { useHistory } from 'react-router-dom'
 import utils from 'utils'
 import templateService from 'services/template'
 import constantsService from 'services/constants'
-
+import qs from 'qs'
+import _ from 'lodash'
 const { Option } = Select
 
 const getStockStatus = (status) => {
@@ -35,12 +36,20 @@ const getStockStatus = (status) => {
 }
 const TemplateList = () => {
   let history = useHistory()
-
+  const [form] = Form.useForm()
+  const [filterEnabled, setFilterEnabled] = useState(false)
   const [list, setList] = useState([])
   const [searchBackupList, setSearchBackupList] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
   const [statuses,setStatuses] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [pagination, setPagination] = useState({
+    current: 1,
+    pageSize: 15,
+  })
+
+  
   const fetchConstants = async () => {
     const data = await constantsService.getConstants()
     if (data) {
@@ -50,19 +59,44 @@ const TemplateList = () => {
   
     }
   }
-  useEffect(() => {
-    const getTemplates = async () => {
-      const data = await templateService.getTemplates()
+
+    const getTemplates = async (paginationParams = {}, filterParams) => {
+      setLoading(false)
+
+      const data = await templateService.getTemplates( qs.stringify(getPaginationParams(paginationParams)),
+      qs.stringify(filterParams))
       if (data) {
         setList(data)
         setSearchBackupList(data)
         console.log(data, 'show-data')
+        setPagination({
+          ...paginationParams.pagination,
+          total: data.total,
+        })
+        
+
+       
       }
     }
-    getTemplates()
+    useEffect(() => {
+    getTemplates(pagination)
     fetchConstants()
   }, [])
 
+
+  const getPaginationParams = (params) => ({
+    limit: params.pagination?.pageSize,
+    page: params.pagination?.current,
+    // ...params,
+  })
+  const handleTableChange = (newPagination) => {
+    getTemplates(
+      {
+        pagination: newPagination,
+      },
+      filterEnabled ? _.pickBy(form.getFieldsValue(), _.identity) : {}
+    )
+  }
   const dropdownMenu = (row) => (
     <Menu>
       <Menu.Item onClick={() => viewDetails(row)}>
@@ -110,6 +144,35 @@ const TemplateList = () => {
       }
     }
   }
+  const resetPagination = () => ({
+    ...pagination,
+    current: 1,
+    pageSize: 10,
+  })
+  const handleFilterSubmit = async () => {
+    setPagination(resetPagination())
+
+    form
+      .validateFields()
+      .then(async (values) => {
+        setFilterEnabled(true)
+        // Removing falsy Values from values
+        const sendingValues = _.pickBy(values, _.identity)
+        getTemplates({ pagination: resetPagination() }, sendingValues)
+      })
+      .catch((info) => {
+        console.log('info', info)
+        setFilterEnabled(false)
+      })
+  }
+  const handleClearFilter = async () => {
+    form.resetFields()
+
+    setPagination(resetPagination())
+    getTemplates({ pagination: resetPagination() }, {})
+    setFilterEnabled(false)
+  }
+  
 
   const tableColumns = [
     {
@@ -181,7 +244,18 @@ const TemplateList = () => {
               ))}
             </Select>
       </div>
+   
+          <Button type="primary" onClick={handleFilterSubmit}>
+            Filter
+          </Button>
+       
+      
+          <Button type="primary" onClick={handleClearFilter}>
+            Clear
+          </Button>
+     
     </Flex>
+    
   )
 
   return (
@@ -200,7 +274,12 @@ const TemplateList = () => {
         </div>
       </Flex>
       <div className="table-responsive">
-        <Table columns={tableColumns} dataSource={list} rowKey="id" />
+        <Table columns={tableColumns}
+        dataSource={list}
+        rowKey="id"
+        pagination={pagination}
+        loading={loading}
+        onChange={handleTableChange}/>
       </div>
     </Card>
   )
