@@ -11,12 +11,19 @@ import {
   Button,
   Modal,
 } from 'antd'
+import {
+  EyeOutlined,
+  DeleteOutlined,
+  SearchOutlined,
+  PlusCircleOutlined,
+} from '@ant-design/icons'
+import Flex from 'components/shared-components/Flex'
 import ListingItemsTable from './listingItemsTable'
 import AddListingItemsTable from './AddListingItemsTable'
 import Editor from 'components/shared-components/Editor'
+import utils from 'utils'
 // const { Dragger } = Upload
 const { Option } = Select
-
 const rules = {
   numberOfItems: [
     {
@@ -64,7 +71,8 @@ const WidgetField = ({
   const [isopenAddListingTableModal, setIsOpenAddListingTableModal] =
     useState(false)
   const [selectedRowItems, setSelectedRowItems] = useState([])
-
+  const [searchBackupList, setSearchBackupList] = useState([])
+  const [selectedRowKeys, setSelectedRowKeys] = useState([])
   const handleCancel = () => {
     setIsOpenAddListingTableModal(false)
     setSelectedRowItems([])
@@ -77,10 +85,31 @@ const WidgetField = ({
       setSelectedRowItems([])
     }
   }
+  const onSearch = (e) => {
+    const value = e.currentTarget.value
+    const searchArray = e.currentTarget.value ? listItems : searchBackupList
+    const data = utils.wildCardSearch(searchArray, value)
+    setListItems(data)
+    setSelectedRowKeys([])
+  }
+  const handleShowStatus = (value) => {
+    if (value !== 'All') {
+      const key = 'status'
+      const data = utils.filterArray(searchBackupList, key, value)
+      setListItems(data)
+    } else {
+      setListItems(searchBackupList)
+    }
+  }
+
+  
+ 
+
   return (
     <Row gutter={16}>
       <Col xs={24} sm={24} md={17}>
         <Card title="Widget Info">
+        
           <Form.Item
             name="numberOfItems"
             label="Number Of Items"
@@ -169,6 +198,7 @@ const WidgetField = ({
               </Button>
 
               <Modal
+              
                 title="Add List Items"
                 style={{ top: 20 }}
                 visible={isopenAddListingTableModal}
@@ -182,9 +212,20 @@ const WidgetField = ({
                   >
                     Submit
                   </Button>,
+                    
                 ]}
                 destroyOnClose
               >
+                  <Flex className="mb-1" mobileFlex={false}>
+                      <div className="mr-md-3 mb-3">
+                        <Input
+                          placeholder="Search"
+                          prefix={<SearchOutlined />}
+                          onChange={(e) => onSearch(e)}
+                        />
+                      </div>
+                    
+                    </Flex>
                 <AddListingItemsTable
                   listItemsProvider={listItemsProvider}
                   setListItems={setListItems}

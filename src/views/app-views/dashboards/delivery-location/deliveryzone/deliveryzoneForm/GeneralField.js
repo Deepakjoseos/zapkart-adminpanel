@@ -431,20 +431,23 @@ const GeneralField = ({
         extra={
           SITE_NAME === 'zapkart' && (
             <>
-              <AutoComplete
+              <AutoComplete 
                 options={searchPincodes}
                 dropdownMatchSelectWidth={252}
                 style={{
                   width: 300,
+                
                 }}
                 onSelect={(data, option) => {
                   setSearchPincode(option)
                 }}
                 onSearch={(searchText) =>
                   getPincodeForSearch(`search=${searchText}`)
+                  
                 }
+                
               >
-                <Input.Search
+                <Input.Search 
                   size="large"
                   inputMode="numeric"
                   typeof="number"
