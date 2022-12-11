@@ -9,6 +9,7 @@ import {
   Select,
   Form,
   Badge,
+  Tabs,
   DatePicker,
 } from 'antd'
 import qs from 'qs'
@@ -18,6 +19,7 @@ import qs from 'qs'
 // import DonutChartWidget from 'components/shared-components/DonutChartWidget'
 // import NumberFormat from 'react-number-format';
 import Flex from 'components/shared-components/Flex'
+
 import {
   CloudDownloadOutlined,
   ArrowUpOutlined,
@@ -50,8 +52,12 @@ import _ from 'lodash'
 import vendorService from 'services/vendor'
 import productTemplateService from 'services/productTemplate'
 import customerService from 'services/customer'
+import SalesVendor from './salelistvendor'
+import SalesCustomer from './salescusttomer'
+import SalesOrder from './salesorder'
+import SalesProducts from './salesproducts'
 const { Option } = Select
-
+const { TabPane } = Tabs
 // const getPaymentStatus = status => {
 
 // 	if(status === 'Paid') {
@@ -323,21 +329,7 @@ const SalesDashboard = () => {
       filterEnabled ? _.pickBy(form.getFieldsValue(), _.identity) : {}
     )
   }
-  const tableColumns1 = [
-    {
-      title: 'Total Products',
-      dataIndex: 'totalProducts',
-      // sorter: (a, b) => utils.antdTableSorter(a, b, 'totalAmount'),
-    },
-
-    {
-      title: 'Total Amount',
-      dataIndex: 'totalAmount',
-      render: (totalAmount) => {
-        return <Flex alignItems="centre">{totalAmount}</Flex>
-      },
-    },
-  ]
+  
   const resetPagination = () => ({
     ...pagination,
     current: 1,
@@ -382,212 +374,30 @@ const SalesDashboard = () => {
   //   }
   // }
 
-  const filtersComponent = () => (
-    <Form
-      layout="vertical"
-      form={form}
-      name="filter_form"
-      className="ant-advanced-search-form"
-    >
-      <Row gutter={8} align="bottom">
-        <Col md={6} sm={24} xs={24} lg={2}>
-          <Form.Item name="fromDate" label="From Date">
-            <DatePicker />
-          </Form.Item>
-        </Col>
-
-        <Col md={6} sm={24} xs={24} lg={2}>
-          <Form.Item name="toDate" label="To Date">
-            <DatePicker />
-          </Form.Item>
-        </Col>
-
-        <Col md={6} sm={24} xs={24} lg={5}>
-          <Form.Item name="vendorIds" label="Vendors">
-            <Select
-              className="w-100"
-              style={{ minWidth: 180 }}
-              placeholder="Vendors"
-            >
-              <Option value="">All</Option>
-              {vendors.map((users) => (
-                <Option key={users.id} value={users.id}>
-                  {users.fullName}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
-        </Col>
-
-        <Col md={6} sm={24} xs={24} lg={5}>
-          <Form.Item name="customerIds" label="Customers">
-            <Select
-              className="w-100"
-              style={{ minWidth: 180 }}
-              placeholder="Customers"
-            >
-              <Option value="">All</Option>
-              {customers.map((user) => (
-                <Option key={user.id} value={user.id}>
-                  {user.fullName}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
-        </Col>
-
-        <Col md={6} sm={24} xs={24} lg={5}>
-          <Form.Item name="productTemplateIds" label="product Templates">
-            <Select
-              className="w-100"
-              style={{ minWidth: 180 }}
-              placeholder="Product Templates"
-            >
-              <Option value="">All</Option>
-              {productTemplates.map((temp) => (
-                <Option value={temp.id}>{temp.name}</Option>
-              ))}
-            </Select>
-          </Form.Item>
-        </Col>
-
-        <Col className="mb-4">
-          <Button type="primary" onClick={handleFilterSubmit}>
-            Filter
-          </Button>
-        </Col>
-        <Col className="mb-4">
-          <Button type="primary" onClick={handleClearFilter}>
-            Clear
-          </Button>
-        </Col>
-      </Row>
-    </Form>
-  )
-
-  const tableColumns3 = [
-    {
-      title: 'Vendor Name',
-      dataIndex: 'totalAmount',
-      // sorter: (a, b) => utils.antdTableSorter(a, b, 'totalAmount'),
-
-      // render: (items, record) => <div>{items?.length}</div>,
-    },
-
-    {
-      title: 'Total Amount',
-      dataIndex: 'totalAmount',
-      render: (totalAmount) => {
-        return <Flex alignItems="centre">{totalAmount}</Flex>
-      },
-    },
-  ]
-
-  const tableColumns2 = [
-    {
-      title: 'Customer Name',
-      dataIndex: 'totalAmount',
-      // sorter: (a, b) => utils.antdTableSorter(a, b, 'totalAmount'),
-
-      // render: (items, record) => <div>{items?.length}</div>,
-    },
-
-    {
-      title: 'Total Amount',
-      dataIndex: 'totalAmount',
-    },
-  ]
-
-  const tableColumns = [
-    {
-      title: 'Total Orders',
-      dataIndex: 'totalOrders',
-      render: (totalOrders) => (
-        <Flex alignItems="centre">{totalOrders?.totalOrders}</Flex>
-      ),
-      // sorter: (a, b) => utils.antdTableSorter(a, b, 'totalAmount'),
-
-      // render: (items, record) => <div>{items?.length}</div>,
-    },
-
-    {
-      title: 'Total Amount',
-      dataIndex: 'totalAmount',
-      render: (totalAmount) => {
-        return <Flex alignItems="centre">{totalAmount}</Flex>
-      },
-    },
-  ]
+ 
+    
 
   return (
-    <div>
-      <span alignItems="center" justifyContent="between" mobileFlex={false}>
-        {filtersComponent()}
-      </span>
-      <br></br>
-      <Row gutter={5}>
-        <Col xs={24} sm={24} md={24} lg={10} xl={9} xxl={11}>
-          <Table
-            scroll={{
-              x: true,
-            }}
-            columns={tableColumns1}
-            dataSource={list}
-            rowKey="id"
-            pagination={pagination}
-            onChange={handleTableChange}
-          />
-        </Col>
-
-        <Col xs={24} sm={24} md={24} lg={10} xl={9} xxl={11}>
-          <Table
-            scroll={{
-              x: true,
-            }}
-            columns={tableColumns}
-            dataSource={list}
-            rowKey="id"
-            pagination={pagination}
-            onChange={handleTableChange}
-          />
-        </Col>
-        {/* <Col xs={24} sm={24} md={24} lg={8} xl={9} xxl={10}>
-				<DisplayDataSet />
-			</Col> */}
-      </Row>
-
-      <br></br>
-      <Row gutter={5}>
-        <Col xs={24} sm={24} md={24} lg={10} xl={9} xxl={11}>
-          <Table
-            scroll={{
-              x: true,
-            }}
-            columns={tableColumns2}
-            dataSource={list}
-            rowKey="id"
-            pagination={pagination}
-            onChange={handleTableChange}
-          />
-        </Col>
-
-        <Col xs={24} sm={24} md={24} lg={10} xl={9} xxl={11}>
-          <Table
-            scroll={{
-              x: true,
-            }}
-            columns={tableColumns3}
-            dataSource={list}
-            rowKey="id"
-            pagination={pagination}
-            onChange={handleTableChange}
-          />
-        </Col>
-        {/* <Col xs={24} sm={24} md={24} lg={8} xl={9} xxl={10}>
-				<DisplayDataSet />
-			</Col> */}
-      </Row>
-    </div>
+   
+      <div className="container">
+          <Tabs defaultActiveKey="1" style={{ marginTop: 30 }}>
+            <TabPane tab="Vendor" key="1">
+              <SalesVendor/>
+            </TabPane>
+            <TabPane tab="Customer" key="2">
+              <SalesCustomer/>
+            </TabPane>
+            <TabPane tab="Orders" key="3">
+              <SalesOrder/>
+            </TabPane>
+              
+            <TabPane tab="Products" key="4">
+              <SalesProducts/>
+            </TabPane>
+           
+          </Tabs>
+        </div>
+  
   )
 }
 

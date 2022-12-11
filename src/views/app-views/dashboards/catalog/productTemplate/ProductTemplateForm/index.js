@@ -390,7 +390,7 @@ const ProductForm = (props) => {
 
           if (sendingValues.productType === 'Medicine') {
             sendingValues.pregnancyInteraction = values.pregnancyInteraction
-            // sendingValues.expertAdvice = values.expertAdvice
+            sendingValues.expertAdvice = values.expertAdvice
             sendingValues.sideEffects = values.sideEffects
             sendingValues.howToUse = values.howToUse
             sendingValues.faq = values.faq
