@@ -341,22 +341,48 @@ const ProductList = () => {
     setExcelFile(file)
   }
 
-  const onUpdateRow = (e, id, key) => {
+  const onUpdateRow = async (e, id, key, row) => {
     e.preventDefault()
     const inpVal = e.target.elements[0].value
 
-    // list, id, key, value
+    const sendingValues = {
+      ...row,
+      vendorId: row.userId,
+      deliveryZoneId: row.deliveryZone.id,
+      [key]: inpVal,
+    }
 
-    // list, id, key, value
-    const updatedList = Utils.updateArrayRow(list, id, key, inpVal)
+    if (row?.variant?.id) {
+      sendingValues.variantId = row?.variant?.id
+    }
 
-    const removedEditingRows = [...editingRowIds].filter(
-      (curId) => curId !== id
-    )
-    setEditingRowIds(removedEditingRows)
+    const edited = await productService.editProduct(id, sendingValues)
 
-    console.log(updatedList, 'got-it')
+    if (edited) {
+      console.log(edited, 'yesssss')
+      notification.success({
+        message: `Edited ${key} Successfully Done`,
+      })
+
+      const updatedList = Utils.updateArrayRow(list, id, key, inpVal)
+
+      // const removedEditingRows = [...editingRowIds].filter(
+      //   (cur) => row.field !== key
+      // )
+      // setEditingRowIds(removedEditingRows)
+
+      console.log(updatedList, 'got-it')
+    }
   }
+
+  // const onClearEdit = (id, field) => {
+  //   const removedEditingRows = [...editingRowIds].filter(
+  //     (cur) => cur.id !== id && cur.field !== field
+  //   )
+  //   setEditingRowIds(removedEditingRows)
+  // }
+
+  console.log(editingRowIds, 'pdkjedhjk')
 
   const tableColumns = [
     {
@@ -382,8 +408,71 @@ const ProductList = () => {
       title: 'Price',
       dataIndex: 'price',
       render: (price, row) => {
-        return (
-          <div className="d-flex align-items-center">
+        const editingRow = editingRowIds?.find((cur) => cur.id === row.id)
+
+        return editingRow &&
+          (editingRow.field === 'price' || editingRow.field === 'mrpPrice') ? (
+          <>
+            <form onSubmit={(e) => onUpdateRow(e, row.id, 'price', row)}>
+              <Input.Group compact>
+                <Input
+                  style={{
+                    width: '65%',
+                  }}
+                  defaultValue={price}
+                />
+
+                <Button
+                  htmlType="submit"
+                  icon={<CheckOutlined />}
+                  // onClick={(e) => console.log(e, 'bjklbjk')}
+                />
+              </Input.Group>
+            </form>
+            <form onSubmit={(e) => onUpdateRow(e, row.id, 'mrpPrice', row)}>
+              <Input.Group compact>
+                <Input
+                  style={{
+                    width: '65%',
+                  }}
+                  defaultValue={row.mrpPrice}
+                />
+
+                <Button
+                  htmlType="submit"
+                  icon={<CheckOutlined />}
+                  // onClick={(e) => console.log(e, 'bjklbjk')}
+                />
+              </Input.Group>
+            </form>
+            {/* <Button onClick={() => onClearEdit(row.id, 'price')}>Clear</Button> */}
+          </>
+        ) : (
+          <>
+            <Flex flexDirection="column">
+              <div style={{ color: 'gray', textDecoration: 'line-through' }}>
+                {row.mrpPrice}
+              </div>{' '}
+              <div>
+                <span class="WebRupee">&#x20B9;</span>
+                {price}
+              </div>
+            </Flex>
+            <Button
+              type="ghost"
+              onClick={() => {
+                setEditingRowIds([{ id: row.id, field: 'price' }])
+              }}
+              icon={<EditOutlined />}
+              className="ml-2"
+            />
+          </>
+        )
+
+        // return (
+        //   <>
+        {
+          /* <div className="d-flex align-items-center">
             <Flex flexDirection="column">
               <div style={{ color: 'gray', textDecoration: 'line-through' }}>
                 {row.mrpPrice}
@@ -394,8 +483,46 @@ const ProductList = () => {
               </div>
             </Flex>
             <Button type="ghost" icon={<EditOutlined />} className="ml-2" />
-          </div>
-        )
+          </div> */
+        }
+
+        {
+          /* {editingRowIds?.includes(row.id) ? (
+              <form onSubmit={(e) => onUpdateRow(e, row.id, 'qty', row)}>
+                <Input.Group compact>
+                  <Input
+                    style={{
+                      width: '30%',
+                    }}
+                    defaultValue={qty}
+                  />
+
+                  <Button
+                    htmlType="submit"
+                    icon={<CheckOutlined />}
+                    // onClick={(e) => console.log(e, 'bjklbjk')}
+                  />
+                </Input.Group>
+              </form>
+            ) : (
+              <div className="d-flex align-items-center">
+                {qty}
+                <Button
+                  type="ghost"
+                  icon={<EditOutlined />}
+                  className="ml-2"
+                  onClick={() =>
+                    setEditingRowIds((prev) => [
+                      ...prev,
+                      { id: row.id, field: 'qty' },
+                    ])
+                  }
+                />
+              </div>
+            )} */
+        }
+        // </>
+        // )
       },
     },
     {
@@ -424,38 +551,43 @@ const ProductList = () => {
     {
       title: 'QTY',
       dataIndex: 'qty',
-      render: (qty, row) => (
-        <>
-          {editingRowIds?.includes(row.id) ? (
-            <form onSubmit={(e) => onUpdateRow(e, row.id, 'qty')}>
-              <Input.Group compact>
-                <Input
-                  style={{
-                    width: '30%',
-                  }}
-                  defaultValue={qty}
-                />
+      render: (qty, row) => {
+        const editingRow = editingRowIds?.find((cur) => cur.id === row.id)
+        return (
+          <>
+            {editingRow?.id && editingRow.field === 'qty' ? (
+              <form onSubmit={(e) => onUpdateRow(e, row.id, 'qty', row)}>
+                <Input.Group compact>
+                  <Input
+                    style={{
+                      width: '65%',
+                    }}
+                    defaultValue={qty}
+                  />
 
+                  <Button
+                    htmlType="submit"
+                    icon={<CheckOutlined />}
+                    // onClick={(e) => console.log(e, 'bjklbjk')}
+                  />
+                </Input.Group>
+              </form>
+            ) : (
+              <div className="d-flex align-items-center">
+                {qty}
                 <Button
-                  htmlType="submit"
-                  icon={<CheckOutlined />}
-                  // onClick={(e) => console.log(e, 'bjklbjk')}
+                  type="ghost"
+                  icon={<EditOutlined />}
+                  className="ml-2"
+                  onClick={() =>
+                    setEditingRowIds([{ id: row.id, field: 'qty' }])
+                  }
                 />
-              </Input.Group>
-            </form>
-          ) : (
-            <div className="d-flex align-items-center">
-              {qty}
-              <Button
-                type="ghost"
-                icon={<EditOutlined />}
-                className="ml-2"
-                onClick={() => setEditingRowIds((prev) => [...prev, row.id])}
-              />
-            </div>
-          )}
-        </>
-      ),
+              </div>
+            )}
+          </>
+        )
+      },
       sorter: (a, b) => utils.antdTableSorter(a, b, 'qty'),
     },
     {
