@@ -14,6 +14,7 @@ import constantsService from 'services/constants'
 import shipmentService from 'services/shipment'
 import qs from 'qs'
 import utils from 'utils'
+import { duration } from 'moment'
 
 const { TabPane } = Tabs
 
@@ -35,6 +36,7 @@ const ProductForm = (props) => {
   //   const [uploadLoading, setUploadLoading] = useState(false)
   const [submitLoading, setSubmitLoading] = useState(false)
   const [productBuyType, setProductBuyType] = useState('Purchase')
+  const [condition, setCondition] = useState()
   const [statuses, setStatuses] = useState([])
   const [pickupLocations, setPickupLocations] = useState([])
   const [selectedVendorId, setSelectedVendorId] = useState(null)
@@ -124,11 +126,21 @@ const ProductForm = (props) => {
             vendorId: data?.userId,
             commission: data?.commission,
             hsn: data?.hsn,
+            condition:data?.condition,
+            duration:data?.duration,
+            age:data?.age,
+            description: data.description,
+            usage: data?.usage,
+            location:data?.location,
+            deliveryMethod:data?.deliveryMethod,
+            warranty:data?.warranty
+            
           })
           setSelectedVendorId(data?.userId)
           setProductTemplateId(data.productTemplateId)
           setProductBuyType(data.acquirementMethod)
           getDeliveryZones({}, { vendorId: data?.userId })
+          setCondition(data.condition)
 
           // const subscriptionPrice = data.subscriptionPrice.map((item) => {
           //   return {
@@ -202,6 +214,8 @@ const ProductForm = (props) => {
           values.productBuyType = 'Purchase'
         } else if (process.env.REACT_APP_SITE_NAME === 'awen') {
           values.productBuyType = values.acquirementMethod
+          
+          
         }
 
         if (values.productVariantId === '') {
@@ -287,6 +301,7 @@ const ProductForm = (props) => {
                 productBuyType={productBuyType}
                 setProductBuyType={setProductBuyType}
                 vendors={vendors}
+                condition={condition}
                 getDeliveryZones={getDeliveryZones}
                 statuses={statuses}
                 // subscriptionPrice={subscriptionPrice}

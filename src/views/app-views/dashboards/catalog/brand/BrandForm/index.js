@@ -95,7 +95,7 @@ const ProductForm = (props) => {
           // For setting form values when Load if it is in EDIT mode
           form.setFieldsValue({
             name: data.name,
-            description: data.description,
+            description: data?.description,
             status: data.status,
             priority: data.priority,
             metaTitle: data.metaTitle,
@@ -211,6 +211,11 @@ const ProductForm = (props) => {
             //  append image url to values object
             values.image = imgValue
             //checking banner exists
+            if(
+              values.forwardUrl?.length === 0
+              ){
+                delete values.forwardUrl
+              }
             if (uploadedBanner.length !== 0 && uploadedBanner !== null) {
               const imageCategory = imageCategories.find(
                 (imgCat) => imgCat.imageFor === 'BrandBanners'
@@ -226,6 +231,7 @@ const ProductForm = (props) => {
               values.banner = null
             }
 
+          
             const edited = await brandService.editBrand(param.id, values)
             if (edited) {
               message.success(`Edited ${values.name} to Brand list`)

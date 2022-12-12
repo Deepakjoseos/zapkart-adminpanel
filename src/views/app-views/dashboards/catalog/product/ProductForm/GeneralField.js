@@ -14,7 +14,8 @@ import {
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
 import { ImageSvg } from 'assets/svg/icon'
 import CustomIcon from 'components/util-components/CustomIcon'
-
+import cityService from 'services/city'
+import Editor from 'components/shared-components/Editor'
 // const { Dragger } = Upload
 const { Option } = Select
 
@@ -119,6 +120,9 @@ const rules = {
 }
 
 const GeneralField = ({
+  
+
+  
   form,
   productTemplates,
   deliveryZones,
@@ -127,14 +131,24 @@ const GeneralField = ({
   setProductBuyType,
   vendors,
   getDeliveryZones,
+
+
+  
   statuses,
+  values,
+  condition,
+  initialValues
+  
   // subscriptionPrice,
   // bulkPrice,
 }) => {
+
+  
   console.log(productTemplates, 'plss')
   const [variants, setVariants] = useState([])
   const [selectedVendorId, setSelectedVendorId] = useState(null)
-
+  const [cities, setCities] = useState([])
+  
   const getVariants = (id) => {
     const curTemp = productTemplates.find((cur) => cur.id === id)
     console.log(curTemp, 'hoooooo')
@@ -143,6 +157,16 @@ const GeneralField = ({
       productVariantId: '',
     })
   }
+  const getCities = async () => {
+    const data = await cityService.getCity()
+    if (data) {
+      setCities(data.data)
+    }
+  }
+  useEffect(() => {
+    getCities()
+ 
+  }, [])
 
   useEffect(() => {
     if (productTemplateId) {
@@ -158,6 +182,8 @@ const GeneralField = ({
     }
   }, [productTemplateId, productTemplates])
 
+
+ 
   return (
     <>
       <Card title="Basic Info">
@@ -290,6 +316,170 @@ const GeneralField = ({
             <Option value={false}>No</Option>
           </Select>
         </Form.Item>
+
+
+
+        <Form.Item
+          name="condition"
+          label="Condition of your Product"
+          
+          
+        >
+          <Select placeholder="Condition of your Product">
+            <Option value={'New'}>New</Option>
+            <Option value={'Used'}>Used</Option>
+          </Select>
+        </Form.Item>
+
+
+        {/* {values.condition === 'Used' && ( */}
+        <Form.Item
+        name="usage"
+        label="usage"
+       
+    
+      >
+        <Select placeholder="usage">
+          <Option value={'Used'}>Used-Like New</Option>
+          <Option value={'Used'}>Used-Very Good</Option>
+          <Option value={'Used'}>Used-Good</Option>
+          <Option value={'Used'}>Used-Acceptable</Option>
+          <Option value={'Used'}>Used-Poor</Option>
+          <Option value={'Used'}>Used-Not Working</Option>
+        </Select>
+      </Form.Item>
+        {/* )} */}
+
+
+        
+{/* {values.condition === 'Used' && ( */}
+        <Form.Item
+        name="age"
+        label="age"
+       
+       
+      >
+        <Select placeholder="age">
+        <Option value={'Used'}> &lt; 1 Month </Option>
+                   <Option value={'1'}>1 Month</Option>
+                   <Option value={'2'}>2 Month</Option>
+                   <Option value={'3'}>3 Month</Option>
+                   <Option value={'4'}>4 Month</Option>
+                   <Option value={'5'}>5 Month</Option>
+                   <Option value={'6'}>6 Month</Option>
+                   <Option value={'7'}>7 Month</Option>
+                   <Option value={'8'}>8 Month</Option>
+                   <Option value={'9'}>9 Month</Option>
+                   <Option value={'10'}>10 Month</Option>
+                   <Option value={'11'}>11 Month</Option>
+                   <Option value={'12'}>1 Year</Option>
+                   <Option value={'13'}>2 Year</Option>
+                   <Option value={'14'}>3 Year</Option>
+                   <Option value={'15'}>4 Year</Option>
+                   <Option value={'16'}>5 Year</Option>
+                   <Option value={'17'}>6 Year</Option>
+                   <Option value={'18'}>7 Year</Option>
+                   <Option value={'19'}>8 Year</Option>
+                   <Option value={'20'}>9 Year</Option>
+                   <Option value={'21'}>10 Year</Option>
+                   <Option value={'22'}>11 Year</Option>
+                   <Option value={'23'}>12 Year</Option>
+                   <Option value={'24'}>13 Year</Option>
+                   <Option value={'25'}>14 Year</Option>
+                   <Option value={'26'}>15 Year</Option>
+        </Select>
+      </Form.Item>
+        {/* )} */}
+
+        <Form.Item
+          name="description"
+          label="Description"
+          rules={rules.description}
+        >
+          <Editor
+            placeholder="Write something..."
+            editorHtml={form.getFieldValue('description') || ''}
+            onChange={(e) => form.setFieldsValue({ description: e })}
+            name="description"
+          />
+        </Form.Item>
+
+
+
+        <Form.Item name="duration" label="Duration" >
+          <Input placeholder="Duration" />
+        </Form.Item>
+           
+
+                
+      
+              
+<Form.Item
+        name="location"
+        label="location"
+       
+    
+      >
+        <Select placeholder="usage">
+        <Option>Select</Option>
+                  {cities?.map((city) => (
+                    <Option key={city.name} value={city.name}>
+                      {city?.name}
+                    </Option>
+                  ))}
+                </Select>
+      </Form.Item>
+            
+              
+      <Form.Item name="warranty" label="warranty" >
+          <Input placeholder="warranty" />
+        </Form.Item>
+           
+
+
+
+      <Form.Item
+        name="deliveryMethod"
+        label="deliveryMethod"
+        
+      >
+        
+        <Select placeholder="Delivery Method">
+          <Option value={'Self'}>Self</Option>
+          <Option value={'Courier'}>Courier</Option>
+          
+        </Select>
+      </Form.Item>
+            
+          
+     
+
+
+     
+              
+
+{/* {(values.acquirementMethod === 'Lend' ||
+                values.acquirementMethod === 'Rent') && (
+
+
+                  <Form.Item
+                  name="subscriptionPrice"
+                  label="subscriptionPrice"
+                  rules={rules.subscriptionPrice}
+                >
+                    
+                  <Select placeholder="subscriptionPrice">
+                    <Option value={true}>Yes</Option>
+                    <Option value={false}>No</Option>
+                  </Select>
+                </Form.Item>
+        
+
+                }} */}
+
+            
+
+
       </Card>
 
       <Card title="Price Info">

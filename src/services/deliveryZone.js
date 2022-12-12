@@ -42,10 +42,10 @@ deliveryzoneService.getDeliveryZoneById = async function (id) {
     console.log(err, 'show-err')
   }
 }
-deliveryzoneService.createDeliveryZone = async function (data) {
+deliveryzoneService.createDeliveryZone = async function (data,vendorId) {
   try {
     const res = await fetch({
-      url: `/deliveryzones/admin?vendorId=${data?.vendorId}`,
+      url: `/deliveryzones/${vendorId}/admin`,
       method: 'post',
       data: data,
     })

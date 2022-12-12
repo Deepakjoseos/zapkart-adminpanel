@@ -76,7 +76,7 @@ const MainBannerForm = (props) => {
             setFileListImages(himg)
           }
 
-          
+        
 
           if (data.mobileImage) {
             himg = [
@@ -96,15 +96,17 @@ const MainBannerForm = (props) => {
             name: data.name,
             status: data.status,
             priority: data.priority,
-            forwardUrl: data.forwardUrl,
+            forwardUrl: data?.forwardUrl,
+            
           })
+         
         } else {
           history.replace(
             '/app/dashboards/catalog/main-banner/main-banner-list'
           )
         }
       }
-
+      
       fetchMainBannerById()
     }
   }, [form, mode, param, props])
@@ -183,6 +185,8 @@ const MainBannerForm = (props) => {
         }
         if (mode === EDIT) {
           // Checking if image exists
+         
+          
           if (
             uploadedImg.length !== 0 &&
             uploadedImg !== null &&
@@ -212,6 +216,12 @@ const MainBannerForm = (props) => {
             values.image = imgValue
             values.mobileImage = mobileImgValue
 
+
+            if(
+              values.forwardUrl?.length === 0
+              ){
+                delete values.forwardUrl
+              }
             const edited = await mainBannerService.editMainBanner(
               param.id,
               values
