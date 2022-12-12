@@ -656,7 +656,7 @@ const GeneralField = ({
             >
               <Editor
                 placeholder="Write something..."
-                editorHtml={form.getFieldValue('expertAdvice') || ''}
+                editorHtml={form.getFieldValue('expertAdvice')}
                 onChange={(e) => form.setFieldsValue({ expertAdvice: e })}
                 name="expertAdvice"
               />
