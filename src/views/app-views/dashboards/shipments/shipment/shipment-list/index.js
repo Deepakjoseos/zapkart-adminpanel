@@ -237,9 +237,8 @@ const ShipmentList = () => {
       sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
     },
     {
-      title: 'Shipped By Vendor',
-      dataIndex: 'shippedByVendor',
-      render: (text) => <div>{text ? 'Yes' : 'No'}</div>,
+      title: 'Shipped By',
+      dataIndex: 'shippedBy',
     },
     {
       title: 'Status',
