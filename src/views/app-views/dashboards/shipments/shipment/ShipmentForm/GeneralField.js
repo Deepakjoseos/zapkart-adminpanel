@@ -55,7 +55,7 @@ const rules = {
 }
 
 const GeneralField = ({ form }) => {
-  const [shippedByVendor, setShippedByVendor] = useState(null)
+  const [shippedBy, setShippedBy] = useState(null)
   const [pickupLocations, setPickUpLocations] = useState([])
   const [selectedVendorId, setSelectedVendorId] = useState(null)
   const [vendors, setVendors] = useState([])
@@ -123,7 +123,7 @@ const GeneralField = ({ form }) => {
                   height: '',
                   weight: '',
                 })
-                setShippedByVendor(false)
+                setShippedBy(null)
               }}
             >
               {vendors?.map((cur) => (
@@ -134,23 +134,24 @@ const GeneralField = ({ form }) => {
 
           {selectedVendorId && (
             <Form.Item
-              name="shippedByVendor"
-              label="Shipped By Vendor"
+              name="shippedBy"
+              label="Shipped By"
               rules={rules.shippedByVendor}
             >
               <Select
-                placeholder="Shipped By Vendor"
+                placeholder="Shipped By"
                 onChange={(e) => {
-                  setShippedByVendor(e)
+                  setShippedBy(e)
                 }}
               >
-                <Option value={true}>Yes</Option>
-                <Option value={false}>No</Option>
+                <Option value={'Vendor'}>Vendor</Option>
+                <Option value={'Ship Rocket'}>Ship Rocket</Option>
+                <Option value={'Track On'}>Track On</Option>
               </Select>
             </Form.Item>
           )}
 
-          {shippedByVendor && (
+          {shippedBy === 'Vendor' && (
             <Form.Item
               name="expectedDeliveryDate"
               label="Expected Delivery Date"
@@ -189,7 +190,7 @@ const GeneralField = ({ form }) => {
             <Input placeholder="Name" />
           </Form.Item> */}
         </Card>
-        {shippedByVendor === false && (
+        {shippedBy && shippedBy !== 'Vendor' && (
           <Card title="Shipment Details">
             <Form.Item name="description" label="Description">
               <Input placeholder="Description" />
@@ -198,8 +199,8 @@ const GeneralField = ({ form }) => {
             <Form.Item name="pickup_location" label="Pickup Location">
               <Select placeholder="Pickup Location">
                 {pickupLocations?.map((item) => (
-                  <Option value={item?.pickup_location}>
-                    {`${item.address}, ${item.city}, ${item.state}, ${item?.pin_code}`}
+                  <Option value={item?.pickupLocation}>
+                    {`${item.address}, ${item.city}, ${item.state}, ${item?.pinCode}`}
                   </Option>
                 ))}
               </Select>

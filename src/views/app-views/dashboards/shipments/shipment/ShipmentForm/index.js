@@ -66,7 +66,8 @@ const ShipmentForm = (props) => {
       .validateFields()
       .then(async (values) => {
         const sendingValues = {
-          shippedByVendor: values.shippedByVendor,
+          vendorId: values.vendorId,
+          shippedBy: values.shippedBy,
           items: values.items,
           expectedDeliveryDate: moment(values.expectedDeliveryDate).format(
             'YYYY-MM-DD'

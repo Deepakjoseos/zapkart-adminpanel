@@ -42,7 +42,10 @@ const OrderSelectionField = ({
     )
 
     const filterOrderItemsByVendor = allOrderItems?.items?.filter(
-      (cur) => cur.vendorId === selectedVendorId && !cur?.shipmentId
+      (cur) =>
+        cur.vendorId === selectedVendorId &&
+        !cur?.shipmentId &&
+        cur?.status === 'Confirmed'
     )
 
     return filterOrderItemsByVendor

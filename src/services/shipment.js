@@ -209,4 +209,17 @@ shipmentService.generatePickupInfo = async function (data) {
   }
 }
 
+shipmentService.selectShipmentType = async function (data) {
+  try {
+    const res = await fetch({
+      url: `${apiRoute}/selectShipmentType`,
+      method: 'put',
+      data,
+    })
+    return res
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
+
 export default shipmentService
