@@ -329,7 +329,11 @@ const OrderCreate = () => {
         if (process.env.NODE_ENV === 'development') {
           baseurl = 'https://www.ecommerce.riolabz.com'
         } else if (process.env.NODE_ENV === 'production') {
-          baseurl = 'https://api.zapkart.com'
+          if (process.env.REACT_APP_API_STAGE === 'Dev') {
+            baseurl = 'https://ecommercelive.riolabz.com'
+          } else {
+            baseurl = 'https://api.zapkart.com'
+          }
         }
       }
 

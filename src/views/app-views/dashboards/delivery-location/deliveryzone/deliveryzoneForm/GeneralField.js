@@ -76,6 +76,8 @@ const GeneralField = ({
   const SITE_NAME = process.env.REACT_APP_SITE_NAME
   const [searchPincodes, setSearchPincodes] = useState([])
   const [searchPincode, setSearchPincode] = useState(null)
+  const [searchCities, setSearchCities] = useState([])
+  const [searchCity, setSearchCity] = useState(null)
   const [pincodeSearchLoading, setPincodeSearchLoading] = useState(false)
 
   const [expandedKeys, setExpandedKeys] = useState([])
@@ -258,6 +260,7 @@ const GeneralField = ({
     setAutoExpandParent(false)
   }
 
+  // Pincode
   const getPincodeForSearch = async (query) => {
     const data = await pincodeService.getPincode(query)
     if (data) {
@@ -272,6 +275,7 @@ const GeneralField = ({
     }
   }
 
+  // Pincode Search Submit
   const onPincodeSearchSubmit = async (value) => {
     const pinCodes = await getPincodeForSearch(`search=${value}`)
 
@@ -281,6 +285,9 @@ const GeneralField = ({
 
     if (matchedPincodeWithSearchValue) {
       setSearchPincode(matchedPincodeWithSearchValue)
+
+      setSearchCity(null)
+      setSearchCities([])
     } else {
       setSearchPincode(null)
       notification.warning({
@@ -291,47 +298,117 @@ const GeneralField = ({
     console.log(matchedPincodeWithSearchValue, 'getSearchValue')
   }
 
+  // City
+  const getCityForSearch = async (query) => {
+    const data = await cityService.getCity(query)
+    if (data) {
+      const cities = data.data
+
+      const formattedCities = cities.map((city) => {
+        return { ...city, label: city.name, value: city.name }
+      })
+
+      setSearchCities(formattedCities)
+      return formattedCities
+    }
+  }
+
+  // City Search Submit
+  const onCitySearchSubmit = async (value) => {
+    const cities = await getCityForSearch(`search=${value}`)
+
+    const matchedCityWithSearchValue = cities.find((city) => city.name == value)
+
+    if (matchedCityWithSearchValue) {
+      setSearchCity(matchedCityWithSearchValue)
+
+      setSearchPincode(null)
+      setSearchPincodes([])
+    } else {
+      setSearchPincode(null)
+      notification.warning({
+        message: 'Cannot Find City',
+      })
+    }
+
+    console.log(matchedCityWithSearchValue, 'getSearchValue')
+  }
+
   useEffect(() => {
-    const onSearchPinCodeHandler = async () => {
+    const onSearchHandler = async () => {
       setPincodeSearchLoading(true)
       setAllTreesData([])
 
-      await getCountry()
-      const { countryId, stateId, districtId, cityId } = searchPincode
+      if (searchPincode) {
+        const { countryId, stateId, districtId, cityId } = searchPincode
 
-      setExpandedKeys([])
-      setAutoExpandParent(false)
+        await getCountry()
 
-      // It's a sequencial way of opening trees from country pincodes while pincode search
+        setExpandedKeys([])
+        setAutoExpandParent(false)
 
-      await onLoadData({
-        deliveryZoneName: 'COUNTRY',
-        key: countryId,
-      })
+        // It's a sequencial way of opening trees from country pincodes while pincode search
 
-      setExpandedKeys([countryId])
-      setAutoExpandParent(true)
+        await onLoadData({
+          deliveryZoneName: 'COUNTRY',
+          key: countryId,
+        })
 
-      await onLoadData({
-        deliveryZoneName: 'STATE',
-        key: stateId,
-      })
+        setExpandedKeys([countryId])
+        setAutoExpandParent(true)
 
-      setExpandedKeys((prev) => [...prev, stateId])
+        await onLoadData({
+          deliveryZoneName: 'STATE',
+          key: stateId,
+        })
 
-      await onLoadData({
-        deliveryZoneName: 'DISTRICT',
-        key: districtId,
-      })
+        setExpandedKeys((prev) => [...prev, stateId])
 
-      setExpandedKeys((prev) => [...prev, districtId])
+        await onLoadData({
+          deliveryZoneName: 'DISTRICT',
+          key: districtId,
+        })
 
-      await onLoadData({
-        deliveryZoneName: 'CITY',
-        key: cityId,
-      })
+        setExpandedKeys((prev) => [...prev, districtId])
 
-      setExpandedKeys((prev) => [...prev, cityId])
+        await onLoadData({
+          deliveryZoneName: 'CITY',
+          key: cityId,
+        })
+
+        setExpandedKeys((prev) => [...prev, cityId])
+      } else if (searchCity) {
+        const { countryId, stateId, districtId } = searchCity
+
+        await getCountry()
+
+        setExpandedKeys([])
+        setAutoExpandParent(false)
+
+        // It's a sequencial way of opening trees from country to city while city search
+
+        await onLoadData({
+          deliveryZoneName: 'COUNTRY',
+          key: countryId,
+        })
+
+        setExpandedKeys([countryId])
+        setAutoExpandParent(true)
+
+        await onLoadData({
+          deliveryZoneName: 'STATE',
+          key: stateId,
+        })
+
+        setExpandedKeys((prev) => [...prev, stateId])
+
+        await onLoadData({
+          deliveryZoneName: 'DISTRICT',
+          key: districtId,
+        })
+
+        setExpandedKeys((prev) => [...prev, districtId])
+      }
 
       setTimeout(() => {
         if (document.querySelector('.ant-tree-node-selected')) {
@@ -348,10 +425,10 @@ const GeneralField = ({
       setPincodeSearchLoading(false)
     }
 
-    if (searchPincode) {
-      onSearchPinCodeHandler()
+    if (searchPincode || searchCity) {
+      onSearchHandler()
     }
-  }, [searchPincode])
+  }, [searchPincode, searchCity])
 
   // Additional Function
   function onlyNumberKey(evt) {
@@ -431,23 +508,21 @@ const GeneralField = ({
         extra={
           SITE_NAME === 'zapkart' && (
             <>
-              <AutoComplete 
+              <AutoComplete
                 options={searchPincodes}
+                className="mr-2"
                 dropdownMatchSelectWidth={252}
                 style={{
                   width: 300,
-                
                 }}
                 onSelect={(data, option) => {
                   setSearchPincode(option)
                 }}
                 onSearch={(searchText) =>
                   getPincodeForSearch(`search=${searchText}`)
-                  
                 }
-                
               >
-                <Input.Search 
+                <Input.Search
                   size="large"
                   inputMode="numeric"
                   typeof="number"
@@ -460,6 +535,27 @@ const GeneralField = ({
                   onKeyPress={(event) => onlyNumberKey(event)}
                 />
               </AutoComplete>
+              <AutoComplete
+                options={searchCities}
+                dropdownMatchSelectWidth={252}
+                style={{
+                  width: 300,
+                }}
+                onSelect={(data, option) => {
+                  setSearchCity(option)
+                }}
+                onSearch={(searchText) =>
+                  getCityForSearch(`search=${searchText}`)
+                }
+              >
+                <Input.Search
+                  size="large"
+                  placeholder="Search City"
+                  onSearch={(val) => onCitySearchSubmit(val)}
+                  enterButton="Search"
+                  loading={pincodeSearchLoading}
+                />
+              </AutoComplete>
             </>
           )
         }
@@ -468,7 +564,13 @@ const GeneralField = ({
           <Tree
             checkable
             selectable
-            selectedKeys={searchPincode?.id ? [searchPincode?.id] : []}
+            selectedKeys={
+              searchPincode?.id
+                ? [searchPincode?.id]
+                : searchCity?.id
+                ? [searchCity?.id]
+                : []
+            }
             // showCheckedStrategy={SHOW_PARENT}
 
             // onExpand={onExpand}
