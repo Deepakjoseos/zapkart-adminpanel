@@ -563,7 +563,7 @@ const ShipmentView = () => {
                         Shipper Company Name :
                         {
                           shipment.shiprocket?.awbDetails.shipped_by
-                            .shipper_company_name
+                            .shipper_companyName
                         }{' '}
                       </p>
                       <p>

@@ -87,7 +87,7 @@ const ShipmentCreateForm = ({
             'YYYY-MM-DD'
           ),
           shipRocket: {
-            pickup_location: values.pickup_location,
+            pickupLocation: values.pickupLocation,
             length: values.length,
             breadth: values.breadth,
             height: values.height,
@@ -280,7 +280,7 @@ const ShipmentCreateForm = ({
                 </Form.Item>
 
                 <Form.Item
-                  name="pickup_location"
+                  name="pickupLocation"
                   label="Pickup Location"
                   rules={[
                     {
@@ -291,8 +291,8 @@ const ShipmentCreateForm = ({
                 >
                   <Select placeholder="Pickup Location">
                     {pickupLocations.map((item) => (
-                      <Option value={item?.pickup_location}>
-                        {`${item.address}, ${item.city}, ${item.state}, ${item?.pin_code}`}
+                      <Option value={item?.pickupLocation}>
+                        {`${item.address}, ${item.city}, ${item.state}, ${item?.pinCode}`}
                       </Option>
                     ))}
                   </Select>
