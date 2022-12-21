@@ -6,12 +6,14 @@ import useUpload from 'hooks/useUpload'
 import React, { useEffect, useState } from 'react'
 import customerService from 'services/customer'
 import { multipleImageUpload } from 'utils/s3/s3ImageUploader'
+import { useSelector } from 'react-redux'
 
 const ViewPrescriptions = ({
   selectedPrescriptionCustomerId,
   setSelectedPrescriptionCustomerId,
 }) => {
   const [prescriptions, setPrescriptions] = useState([])
+  const { imageCategories } = useSelector((state) => state.auth)
   console.log('customerId',selectedPrescriptionCustomerId)
   const {
     fileList: fileListImages,
@@ -62,7 +64,11 @@ const ViewPrescriptions = ({
     let prescs = []
     if (prescriptions.length !== 0 && prescriptions !== null) {
       console.log('prescriptions', prescriptions)
-      const imgValues = await multipleImageUpload(prescriptions, 'prescription')
+      const imageCategory = imageCategories.find(
+        (imgCat) => imgCat.imageFor === 'Prescriptions'
+      )
+      const imgValues = await multipleImageUpload(imageCategory.id,
+        prescriptions)
 
       prescs = imgValues
     } else {
@@ -75,7 +81,7 @@ const ViewPrescriptions = ({
     )
     if (data) {
       message.success('Prescription updated successfully')
-      setSelectedPrescriptionCustomerId(null)
+      // setSelectedPrescriptionCustomerId(null)
     }
   }
 
