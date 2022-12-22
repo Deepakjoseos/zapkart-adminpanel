@@ -154,8 +154,8 @@ const PickupLocationList = () => {
     },
     {
       title: 'Pin Code',
-      dataIndex: 'pin_code',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'pin_code'),
+      dataIndex: 'pinCode',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'pinCode'),
     },
 
     // {

@@ -150,7 +150,7 @@ const GeneralField = ({
 
         <Col span={8}>
           <Form.Item
-            name="pin_code"
+            name="pinCode"
             label={SITE_NAME === 'zapkart' ? 'Zipcode' : 'City'}
           >
             <Select
@@ -230,7 +230,7 @@ const GeneralField = ({
       </Row>
       <Row gutter={16}>
         <Col span={24}>
-          <Form.Item name="address_2" label="Address 2">
+          <Form.Item name="addressLine2" label="Address 2">
             <Input.TextArea rows={4} placeholder="Address 2" />
           </Form.Item>
         </Col>

@@ -15,7 +15,7 @@ const dev = {
 const prod = {
   API_ENDPOINT_URL:
     SITE_NAME === 'zapkart'
-      ? 'https://api.zapkart.com/api/v1'
+      ? 'https://ecommercelive.riolabz.com/api/v1'
       : SITE_NAME === 'athathy'
       ? 'https://api.athathy.ae/api/v1'
       : // Default For Awen

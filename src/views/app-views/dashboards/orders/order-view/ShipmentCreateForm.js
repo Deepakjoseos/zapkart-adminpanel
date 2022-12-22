@@ -88,7 +88,7 @@ const ShipmentCreateForm = ({
             'YYYY-MM-DD'
           ),
           shipRocket: {
-            pickup_location: values.pickup_location,
+            pickupLocation: values.pickupLocation,
             length: values.length,
             breadth: values.breadth,
             height: values.height,
@@ -282,7 +282,7 @@ const ShipmentCreateForm = ({
                 </Form.Item>
 
                 <Form.Item
-                  name="pickup_location"
+                  name="pickupLocation"
                   label="Pickup Location"
                   rules={[
                     {
