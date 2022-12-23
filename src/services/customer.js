@@ -130,4 +130,23 @@ customerService.deleteAddress = async function (customerId, addressId, data) {
   }
 }
 
+// *******************************EDIT**************************************************************
+
+customerService.updatePhoneNumber = async function (data, id) {
+  
+  try {
+    console.log(data);
+  const res = await fetch({
+    url: `https://ecommercelive.riolabz.com/api/v1/admin/update-user-phone/${id}`,
+    method: 'put',
+    data
+  })
+  return res
+} catch (err) {
+  console.log(err, 'show-err')
+}
+}
+
+// *******************************EDIT**************************************************************
+
 export default customerService
