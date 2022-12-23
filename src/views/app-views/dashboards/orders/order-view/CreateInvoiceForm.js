@@ -20,6 +20,7 @@ import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import shipmentService from 'services/shipment'
 import orderService from 'services/orders'
+import taxCategoryService from 'services/TaxCategory'
 
 const CreateInvoiceForm = ({
   orderId,
@@ -46,7 +47,10 @@ const CreateInvoiceForm = ({
 
   // Items Form
   const [batch, setBatch] = useState(null)
+  const [hsn, setHsn] = useState(null)
+  const [taxCategoryId, setTaxCategoryId] = useState(null)
   const [expiry, setExpiry] = useState(null)
+  const [taxCategories, setTaxCategories] = useState([])
 
   // const getPickupLocations = async () => {
   //   const data = await shipmentService.getPickupLocations()
@@ -85,8 +89,21 @@ const CreateInvoiceForm = ({
     }
   }, [items])
 
+  const fetchTaxCategories = async () => {
+    const allTaxCategories = await taxCategoryService.getTaxCategories()
+    if (allTaxCategories) {
+      setTaxCategories(allTaxCategories)
+    }
+  }
+
+  useEffect(() => {
+    fetchTaxCategories()
+  }, [])
+
   const resetInvoiceItemStateValues = () => {
     setBatch(null)
+    setHsn(null)
+    setTaxCategoryId(null)
     setExpiry(null)
     setSelectedCurrentItemId(null)
   }
@@ -94,7 +111,10 @@ const CreateInvoiceForm = ({
   const addToCreatingInvoiceValue = () => {
     setCreatingInvoiceValue((prev) => ({
       ...prev,
-      items: [...prev?.items, { id: selectedCurrentItemId, batch, expiry }],
+      items: [
+        ...prev?.items,
+        { id: selectedCurrentItemId, batch, expiry, hsn, taxCategoryId },
+      ],
     }))
     resetInvoiceItemStateValues()
     setIsAddInvoiceModalOpen(false)
@@ -257,6 +277,10 @@ const CreateInvoiceForm = ({
                             setIsAddInvoiceModalOpen(true)
                             setSelectedCurrentItemId(row.id)
                             setBatch(row.batch ? row.batch : null)
+                            setHsn(row.batch ? row.hsn : null)
+                            setTaxCategoryId(
+                              row.batch ? row.taxCategoryId : null
+                            )
                             setExpiry(row.expiry ? moment(row.expiry) : null)
                           }}
                         >
@@ -289,9 +313,8 @@ const CreateInvoiceForm = ({
         ]}
         destroyOnClose
       >
-         <p>Batch</p>
+        <p>Batch</p>
         <Input
-        
           placeholder="Batch"
           className="mb-3"
           onChange={(e) => setBatch(e.target.value)}
@@ -299,13 +322,39 @@ const CreateInvoiceForm = ({
         />
         <p>Expiry</p>
         <DatePicker
-        
           placeholder="Expiry Date"
           format="YYYY-MM-DD"
           value={expiry ? moment(expiry) : null}
           className="w-100"
           onChange={(date, dateString) => setExpiry(dateString)}
         />
+
+        <p>Hsn</p>
+        <Input
+          placeholder="Hsn"
+          className="mb-3"
+          onChange={(e) => setHsn(e.target.value)}
+          value={hsn}
+        />
+
+        <p>TaxCategory</p>
+        <Select
+          placeholder="Tax Category"
+          showSearch
+          optionFilterProp="children"
+          filterOption={(input, option) =>
+            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+          }
+          style={{ width: '100%' }}
+          onChange={(e) => setTaxCategoryId(e)}
+          value={taxCategoryId}
+        >
+          {taxCategories.map((medicineType) => (
+            <Option key={medicineType.id} value={medicineType.id}>
+              {medicineType.name}
+            </Option>
+          ))}
+        </Select>
       </Modal>
     </>
   )
