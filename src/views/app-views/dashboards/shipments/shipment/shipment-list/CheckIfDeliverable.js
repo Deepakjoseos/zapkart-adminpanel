@@ -238,7 +238,7 @@ const CheckIfDeliverable = ({
     if (selectable && shipment?.customer_pincode) {
       console.log(shipment, 'heyieyig')
       const values = {
-        pickup_postcode: shipment?.pickup_address?.pinCode,
+        pickup_postcode: shipment?.pickup_address?.pin_code,
         delivery_postcode: shipment?.customer_pincode,
         cod: shipment?.cod,
         weight: shipment?.others?.weight,

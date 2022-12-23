@@ -3,19 +3,21 @@ import fetch from 'auth/FetchInterceptor'
 const taxCategoryService = {}
 const apiRoute = '/taxCategory'
 
-taxCategoryService.getTaxCategories = async function (paginationQuery = '',
-filterQuery = '') {
-    try {
-      const res = await fetch({
-        url: `${apiRoute}?${paginationQuery}&${filterQuery}`,
-        method: 'get',
-      })
-      const data = res.data.filter((cur) => cur.status !== 'Deleted')
-      return data
-    } catch (err) {
-      console.log(err, 'show-err')
-    }
+taxCategoryService.getTaxCategories = async function (
+  paginationQuery = '',
+  filterQuery = ''
+) {
+  try {
+    const res = await fetch({
+      url: `${apiRoute}?${paginationQuery}&${filterQuery}`,
+      method: 'get',
+    })
+    const data = res.data.filter((cur) => cur.status !== 'Deleted')
+    return data
+  } catch (err) {
+    console.log(err, 'show-err')
   }
+}
 
 taxCategoryService.deleteTaxCategory = async function (id) {
   try {
