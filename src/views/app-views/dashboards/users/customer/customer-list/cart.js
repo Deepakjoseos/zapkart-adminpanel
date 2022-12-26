@@ -62,6 +62,7 @@ const Cart = ({
 
   useEffect(() => {
     if (selectedCustomerId) {
+      console.log(selectedCustomerId);
       getCart()
       cartreminder()
     }
