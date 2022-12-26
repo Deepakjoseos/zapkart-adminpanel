@@ -1,7 +1,17 @@
 import React from 'react'
-import { Input, Row, Col, Card, Form, Upload, Select } from 'antd'
+import { Input, Row, Col, Card, Form, Upload, Select, Button } from 'antd'
 import { ImageSvg } from 'assets/svg/icon'
 import CustomIcon from 'components/util-components/CustomIcon'
+
+// *************************************Edited***************************************************
+import { useState } from 'react';                         //edit
+import { message } from 'antd';                           //edit
+import customerService from 'services/customer';          //edit
+import Flex from 'components/shared-components/Flex';     //edit
+import Loading from 'components/shared-components/Loading';
+
+// *************************************Edited***************************************************
+
 // const { Dragger } = Upload
 const { Option } = Select
 
@@ -28,7 +38,49 @@ const GeneralField = ({
   phoneVerified,
   emailVerified,
   form_statuses,
+
+// *************************************Edited***************************************************
+
+  id,                                   //edit
+  setPhoneVerified                      //edit
+
+// *************************************Edited***************************************************
+
+
 }) => {
+
+ // *************************************Edited***************************************************
+
+const [updatePhone, setUpdatePhone] = useState(false);
+const [isLoading, setIsLoading] =useState(false);
+const [data, setData] = useState({
+  phone: ''
+})
+
+const handleClick = async () => {
+  setIsLoading(true)
+  const promise = await customerService.updatePhoneNumber(data, id)
+  if(promise){
+    setIsLoading(false)
+    message.success(`Updated Phone Number to ${data.phone}`)
+    setData({
+      phone: ''
+    })
+    form.setFieldsValue({
+      phone: data.phone,
+    })
+    setPhoneVerified(true)
+  } else {
+    setIsLoading(false)
+
+  }
+  setUpdatePhone(false);
+}
+
+// *************************************Edited***************************************************
+
+
+
   return (
     <Row gutter={16}>
       <Col xs={24} sm={24} md={17}>
@@ -62,6 +114,86 @@ const GeneralField = ({
               >
                 <Input disabled id="success" />
               </Form.Item>
+
+{/* *************************************Edited*************************************************** */}
+
+<div>
+  {
+    !updatePhone ? 
+    <Button 
+    type = 'primary' 
+    onClick = {() => {
+      setUpdatePhone(
+        prev => !prev
+      )
+  }}> Update Phone Number
+  </Button>
+    :
+    <div>
+      <br/>
+        <Card >
+          <h2 className="mb-3">Update Phone Number</h2>
+          <Input 
+            value = {data.phone} 
+            placeholder="phone number" 
+            onChange = {(e) => setData({
+              phone: e.target.value
+            })} 
+          />
+          <Flex
+            className="py-2"
+            mobileFlex={false}
+            justifyContent="end"
+            alignItems="center"
+
+          >
+
+            {!isLoading ? 
+              <>
+                 <div>
+                    <Button 
+                    className="mr-2"
+                    onClick={() => {
+                      setUpdatePhone(false)
+                    }}
+                    >Cancel</Button>
+                    </div>
+                    <div >
+                    <Button 
+                    type= 'primary'
+                    onClick={() => {
+                      handleClick()
+                    }}
+                    >Update</Button>
+                  </div>
+              </> :
+              <Loading />
+            }
+
+            {/* <div>
+          <Button 
+          className="mr-2"
+          onClick={() => {
+            setUpdatePhone(false)
+          }}
+          >Cancel</Button>
+          </div>
+          <div >
+          <Button 
+          type= 'primary'
+          onClick={() => {
+            handleClick()
+          }}
+          >Update</Button>
+          </div> */}
+          </Flex>
+        </Card>
+    </div>
+  } 
+  
+</div>
+<br/>
+{/* *************************************Edited*************************************************** */}
 
               <Form.Item
                 hasFeedback

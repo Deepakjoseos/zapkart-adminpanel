@@ -251,6 +251,14 @@ const ProductForm = (props) => {
                 emailVerified={emailVerified}
                 phoneVerified={phoneVerified}
                 form_statuses={form_statuses}
+
+// *************************************Edited***************************************************
+
+                id = {id}                                       //Edit
+                setPhoneVerified={setPhoneVerified}             //Edit
+
+// *************************************Edited***************************************************
+
               />
             </TabPane>
             {id && (

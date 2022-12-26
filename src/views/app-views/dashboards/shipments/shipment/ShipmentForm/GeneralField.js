@@ -117,7 +117,7 @@ const GeneralField = ({ form }) => {
                     },
                   ],
                   description: '',
-                  pickup_location: '',
+                  pickupLocation: '',
                   length: '',
                   breadth: '',
                   height: '',
@@ -196,7 +196,7 @@ const GeneralField = ({ form }) => {
               <Input placeholder="Description" />
             </Form.Item>
 
-            <Form.Item name="pickup_location" label="Pickup Location">
+            <Form.Item name="pickupLocation" label="Pickup Location">
               <Select placeholder="Pickup Location">
                 {pickupLocations?.map((item) => (
                   <Option value={item?.pickupLocation}>

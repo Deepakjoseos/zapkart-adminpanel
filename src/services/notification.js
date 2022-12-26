@@ -30,12 +30,13 @@ notificationService.createNotifications = async function (data) {
   }
 
 
-  notificationService.createCartReminder= async function (data,userId) {
+  notificationService.createCartReminder= async function (data) {
+    // console.log(data);
     try {
       const res = await fetch({
-        url:`${apiRoute}/cartreminder?userId=${userId}`,
+        url:`${apiRoute}/cartreminder`,
         method: 'post',
-        data: data,
+        data: {userId: data}
       })
       return res
     } catch (err) {
