@@ -32,7 +32,7 @@ mainBannerService.deleteMainBanner = async function (id) {
 mainBannerService.getMainBannerById = async function (id) {
   try {
     const res = await fetch({
-      url: `${apiRoute}/${id}/public`,
+      url: `${apiRoute}/${id}`,
       method: 'get',
     })
     return res.data
