@@ -224,14 +224,14 @@ const GeneralField = ({
               },
             ]}
           >
-            <Input.TextArea rows={4} placeholder="Address" />
+            <Input rows={4} placeholder="Address" />
           </Form.Item>
         </Col>
       </Row>
       <Row gutter={16}>
         <Col span={24}>
           <Form.Item name="addressLine2" label="Address 2">
-            <Input.TextArea rows={4} placeholder="Address 2" />
+            <Input rows={4} placeholder="Address 2" />
           </Form.Item>
         </Col>
       </Row>

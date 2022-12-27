@@ -2,11 +2,13 @@ import fetch from 'auth/FetchInterceptor'
 
 const salesService = {}
 const api = '/sales'
-salesService.getSales = async function (data,paginationQuery = '',
-filterQuery = '') {
+salesService.getSales = async function (paginationQuery = '',
+// filterQuery = '',    &${filterQuery}
+data) {
+  console.log(data,'inside');
     try {
       const res = await fetch({
-        url: `${api}/admin?${paginationQuery}&${filterQuery}`,
+        url: `${api}/admin`,
         method: 'post',
         data: data,
       })

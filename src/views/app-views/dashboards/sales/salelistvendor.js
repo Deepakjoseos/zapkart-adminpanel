@@ -41,8 +41,8 @@ import {
   sessionColor,
   recentOrderData,
 } from './SalesDashboardData'
-// import moment from 'moment';
-// import { DATE_FORMAT_DD_MM_YYYY } from 'constants/DateConstant'
+import moment from 'moment';
+import { DATE_FORMAT_DD_MM_YYYY } from 'constants/DateConstant'
 // import utils from 'utils'
 import { useSelector } from 'react-redux'
 import salesService from 'services/sales'
@@ -237,6 +237,7 @@ const SalesVendor = () => {
   const [list, setList] = useState([])
   const [vendors, setVendors] = useState([])
   const [filterEnabled, setFilterEnabled] = useState(false)
+  const [vendorList, setVendorList] = useState([])
 
   const getSales = async (paginationParams = {}, filterParams) => {
     setLoading(true)
@@ -244,16 +245,18 @@ const SalesVendor = () => {
       qs.stringify(getPaginationParams(paginationParams)),
       qs.stringify(filterParams)
     )
-    console.log(data, 'hihihihihih')
+    // console.log(data, 'hihihihihih')
     if (data) {
       setList([data])
-      console.log(data, 'hihihihihih')
+      // console.log(data, 'hihihihihih')
       // Pagination
       setPagination({
         ...paginationParams.pagination,
         total: data.total,
       })
       setLoading(false)
+
+
     }
   }
 
@@ -276,12 +279,25 @@ const SalesVendor = () => {
         }
       })
       setVendors(users)
+    //   if(data && vendors) {
+    //     const vendorList = Object.values(list.vendors).map((data) => {
+    //       for(let i=0 ; i<vendors.length-1 ; i++){
+    //         if(data.id === vendors[i].id){return vendors}
+    //     }
+    //   })
+    // }
     }
   }
+
+  
 
   useEffect(() => {
     getProductTemplates()
   }, [])
+
+  useEffect(() => {
+    setVendorList(list[0]?.vendors)
+  }, [list])
 
   useEffect(() => {
     getVendors()
@@ -339,6 +355,21 @@ const SalesVendor = () => {
       },
     },
   ]
+
+  const tableColumns2 =[
+    {
+      title: 'ID',
+      dataIndex: 'id'
+    }, 
+    {
+      title: 'Total Customers',
+      dataIndex: 'totalCustomers'
+    },
+    {
+      title: 'Total Amount',
+      dataIndex: 'totalAmount'
+    }
+  ]
   const resetPagination = () => ({
     ...pagination,
     current: 1,
@@ -346,14 +377,19 @@ const SalesVendor = () => {
   })
 
   const handleFilterSubmit = async () => {
+    setVendorList(list[0]?.vendors)
     setPagination(resetPagination())
 
     form
       .validateFields()
       .then(async (values) => {
+        console.log(values)
         setFilterEnabled(true)
         // Removing falsy Values from values
-        const sendingValues = _.pickBy(values, _.identity)
+        const sendingValues = _.pickBy({...values,
+          fromDate: values.fromDate ? moment(values.fromDate).format() : '', 
+          toDate: values.toDate ? moment(values.toDate).format():''},           
+          _.identity)
         getSales({ pagination: resetPagination() }, sendingValues)
       })
       .catch((info) => {
@@ -369,6 +405,7 @@ const SalesVendor = () => {
     setPagination(resetPagination())
     getSales({ pagination: resetPagination() }, {})
     setFilterEnabled(false)
+
   }
   // const handleQuery = async () => {
   //   const query = {}
@@ -391,23 +428,26 @@ const SalesVendor = () => {
       className="ant-advanced-search-form"
     >
       <Row gutter={8} align="bottom">
-        <Col md={6} sm={24} xs={24} lg={2}>
-          <Form.Item name="fromDate" label="From Date">
-            <DatePicker />
+        <Col md={6} sm={24} xs={24} lg={4}>
+          <Form.Item name="fromDate" label="From Date" >
+            <DatePicker  
+            />
           </Form.Item>
         </Col>
 
-        <Col md={6} sm={24} xs={24} lg={2}>
-          <Form.Item name="toDate" label="To Date">
-            <DatePicker />
+        <Col md={6} sm={24} xs={24} lg={4}>
+          <Form.Item name="toDate" label="To Date" >
+            <DatePicker 
+            />
           </Form.Item>
         </Col>
 
         <Col md={6} sm={24} xs={24} lg={5}>
           <Form.Item name="vendorIds" label="Vendors">
             <Select
+              mode="multiple"
               className="w-100"
-              style={{ minWidth: 180 }}
+              style={{ minWidth: 100 }}
               placeholder="Vendors"
             >
               <Option value="">All</Option>
@@ -423,8 +463,9 @@ const SalesVendor = () => {
         <Col md={6} sm={24} xs={24} lg={5}>
           <Form.Item name="customerIds" label="Customers">
             <Select
+              mode="multiple"
               className="w-100"
-              style={{ minWidth: 180 }}
+              style={{ minWidth: 100 }}
               placeholder="Customers"
             >
               <Option value="">All</Option>
@@ -440,8 +481,9 @@ const SalesVendor = () => {
         <Col md={6} sm={24} xs={24} lg={5}>
           <Form.Item name="productTemplateIds" label="product Templates">
             <Select
+              mode="multiple"
               className="w-100"
-              style={{ minWidth: 180 }}
+              style={{ minWidth: 100 }}
               placeholder="Product Templates"
             >
               <Option value="">All</Option>
@@ -451,7 +493,7 @@ const SalesVendor = () => {
             </Select>
           </Form.Item>
         </Col>
-
+        {/* <div style={{display:"flex", alignItems:"end"}} > */}
         <Col className="mb-4">
           <Button type="primary" onClick={handleFilterSubmit}>
             Filter
@@ -462,6 +504,7 @@ const SalesVendor = () => {
             Clear
           </Button>
         </Col>
+        {/* </div> */}
       </Row>
     </Form>
   )
@@ -491,7 +534,10 @@ const SalesVendor = () => {
       <span alignItems="center" justifyContent="between" mobileFlex={false}>
         {filtersComponent()}
       </span>
-      <br></br>
+      {/* <br></br>
+      <Row gutter={5}>
+      </Row>
+      <br></br> */}
       <Row gutter={16}>
         <Col span={24}>
           <Table
@@ -504,10 +550,12 @@ const SalesVendor = () => {
             pagination={pagination}
             onChange={handleTableChange}
           />
+          <Table columns={tableColumns2} dataSource={vendorList} rowKey="id1" />
         </Col>
         {/* <Col xs={24} sm={24} md={24} lg={8} xl={9} xxl={10}>
 				<DisplayDataSet />
 			</Col> */}
+      {console.log(vendorList, "vendors")}
       </Row>
       </Card>
     </div>

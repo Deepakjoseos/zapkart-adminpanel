@@ -41,7 +41,7 @@ import {
   sessionColor,
   recentOrderData,
 } from './SalesDashboardData'
-// import moment from 'moment';
+import moment from 'moment';
 // import { DATE_FORMAT_DD_MM_YYYY } from 'constants/DateConstant'
 // import utils from 'utils'
 import { useSelector } from 'react-redux'
@@ -244,10 +244,10 @@ const SalesOrder = () => {
       qs.stringify(getPaginationParams(paginationParams)),
       qs.stringify(filterParams)
     )
-    console.log(data, 'hihihihihih')
+    // console.log(data, 'hihihihihih')
     if (data) {
       setList([data])
-      console.log(data, 'hihihihihih')
+      // console.log(data, 'hihihihihih')
       // Pagination
       setPagination({
         ...paginationParams.pagination,
@@ -352,8 +352,13 @@ const SalesOrder = () => {
       .validateFields()
       .then(async (values) => {
         setFilterEnabled(true)
+
         // Removing falsy Values from values
-        const sendingValues = _.pickBy(values, _.identity)
+        // {...values,fromDate: moment().format("MMM Do YY"), toDate: moment(values.toDate).format("MMM Do YY")}
+        const sendingValues = _.pickBy({...values,
+          fromDate: values.fromDate ? moment(values.fromDate).format() : '', 
+          toDate: values.toDate ? moment(values.toDate).format():''},           
+          _.identity)
         getSales({ pagination: resetPagination() }, sendingValues)
       })
       .catch((info) => {
@@ -391,14 +396,16 @@ const SalesOrder = () => {
       className="ant-advanced-search-form"
     >
       <Row gutter={8} align="bottom">
-        <Col md={6} sm={24} xs={24} lg={2}>
-          <Form.Item name="fromDate" label="From Date">
+        <Col md={6} sm={24} xs={24} lg={4}>
+          <Form.Item name="fromDate" label="From Date"
+          >
             <DatePicker />
           </Form.Item>
         </Col>
 
-        <Col md={6} sm={24} xs={24} lg={2}>
-          <Form.Item name="toDate" label="To Date">
+        <Col md={6} sm={24} xs={24} lg={4}>
+          <Form.Item name="toDate" label="To Date"
+          >
             <DatePicker />
           </Form.Item>
         </Col>
@@ -406,8 +413,9 @@ const SalesOrder = () => {
         <Col md={6} sm={24} xs={24} lg={5}>
           <Form.Item name="vendorIds" label="Vendors">
             <Select
+              mode="multiple"
               className="w-100"
-              style={{ minWidth: 180 }}
+              style={{ minWidth: 100 }}
               placeholder="Vendors"
             >
               <Option value="">All</Option>
@@ -423,8 +431,9 @@ const SalesOrder = () => {
         <Col md={6} sm={24} xs={24} lg={5}>
           <Form.Item name="customerIds" label="Customers">
             <Select
+              mode="multiple"
               className="w-100"
-              style={{ minWidth: 180 }}
+              style={{ minWidth: 100 }}
               placeholder="Customers"
             >
               <Option value="">All</Option>
@@ -440,8 +449,9 @@ const SalesOrder = () => {
         <Col md={6} sm={24} xs={24} lg={5}>
           <Form.Item name="productTemplateIds" label="product Templates">
             <Select
+              mode="multiple"
               className="w-100"
-              style={{ minWidth: 180 }}
+              style={{ minWidth: 100 }}
               placeholder="Product Templates"
             >
               <Option value="">All</Option>
@@ -497,7 +507,10 @@ const SalesOrder = () => {
       <span alignItems="center" justifyContent="between" mobileFlex={false}>
         {filtersComponent()}
       </span>
-     
+      {/* <br></br>
+      <Row gutter={5}>
+      </Row>
+      <br></br> */}
       <Row gutter={16}>
         <Col span={24}>
           <Table
