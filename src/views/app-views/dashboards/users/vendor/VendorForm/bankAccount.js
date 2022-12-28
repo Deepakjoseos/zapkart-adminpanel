@@ -182,7 +182,7 @@ const BankAccountList = ({ selectedVendorId }) => {
     },
     {
       title: "Created Date",
-      dataIndex: "created_at",
+      dataIndex: "createdAt",
       render: (text) => (
         <Flex alignItems="center">
           {moment(new Date(text * 1000)).format('DD-MM-YYYY hh:mm:a')}

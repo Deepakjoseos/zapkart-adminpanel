@@ -37,7 +37,7 @@ const getEnv = () => {
     case 'development':
       return dev
     case 'production':
-      return prod
+      return process.env.REACT_APP_API_STAGE === 'Dev' ? dev : prod
     case 'test':
       return test
     default:

@@ -103,7 +103,6 @@ const ProductForm = (props) => {
             keywords: data.keywords,
             slug: data.slug,
             tags: data.tags,
-           
           })
         } else {
           history.replace('/app/dashboards/catalog/brand/brands-list')

@@ -3,14 +3,14 @@ import fetch from 'auth/FetchInterceptor'
 const notificationService = {}
 const apiRoute = '/notifications'
 
-notificationService.getNotifications = async function () {
+notificationService.getNotifications = async function (paginationQuery='', query ='') {
   try {
     const res = await fetch({
-      url: `${apiRoute}`,
+      url: `${apiRoute}?${paginationQuery}&${query}`,
       method: 'get',
     })
     const data = res.data.filter((cur) => cur.status !== 'Deleted')
-    return res.data
+    return res
   } catch (err) {
     console.log(err, 'show-err')
   }
@@ -30,12 +30,13 @@ notificationService.createNotifications = async function (data) {
   }
 
 
-  notificationService.createCartReminder= async function (data,userId) {
+  notificationService.createCartReminder= async function (data) {
+    // console.log(data);
     try {
       const res = await fetch({
-        url:`${apiRoute}/cartreminder?userId=${userId}`,
+        url:`${apiRoute}/cartreminder`,
         method: 'post',
-        data: data,
+        data: {userId: data}
       })
       return res
     } catch (err) {

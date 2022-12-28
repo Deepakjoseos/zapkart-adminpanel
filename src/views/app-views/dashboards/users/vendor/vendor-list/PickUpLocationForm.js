@@ -142,7 +142,7 @@ const PickupLocationForm = ({
                             <Form.Item name="address" label="Address" rules={rules.zipcode}>
                                 <Input placeholder="Address" />
                             </Form.Item>
-                            <Form.Item name="address_2" label="Address2" rules={rules.zipcode}>
+                            <Form.Item name="addressLine2" label="Address2" rules={rules.zipcode}>
                                 <Input placeholder="Address2 " />
                             </Form.Item>
                             <Form.Item name="city" label="City" rules={rules.line1}>
@@ -155,7 +155,7 @@ const PickupLocationForm = ({
                             <Form.Item name="country" label="Country" rules={rules.line1}>
                                 <Input placeholder="Country" />
                             </Form.Item>
-                            <Form.Item name="pin_code" label="Pin Code">
+                            <Form.Item name="pinCode" label="Pin Code">
                                 <InputNumber placeholder="Pin Code" min={0} max={100000} />
                                 <Form.Item name="lat" label="Latitude" rules={rules.priority}>
                                     <InputNumber placeholder="Latitude" min={0} max={100000} />

@@ -1,7 +1,20 @@
 import React from 'react'
-import { Input, Row, Col, Card, Form, Upload, Select } from 'antd'
+import { Input, Row, Col, Card, Form, Upload, Select, Button} from 'antd'
 import { ImageSvg } from 'assets/svg/icon'
 import CustomIcon from 'components/util-components/CustomIcon'
+
+/* *********************************EDIT****************************************** */
+
+import { useState } from 'react';                         //edit
+import { message } from 'antd';                           //edit
+import vendorService from 'services/vendor';              //edit
+import Flex from 'components/shared-components/Flex';     //edit
+import Loading from 'components/shared-components/Loading';
+
+
+
+/* *********************************EDIT****************************************** */
+
 
 // const { Dragger } = Upload
 const { Option } = Select
@@ -82,7 +95,41 @@ const GeneralField = ({
   form_statuses,
   propsLogo,
   userGroups,
-}) => (
+  id,                                       // edit
+  setPhoneVerified                          // edit
+}) => {
+  
+/* *********************************EDIT****************************************** */
+
+const [updatePhone, setUpdatePhone] = useState(false);
+const [isLoading, setIsLoading] =useState(false);
+const [data, setData] = useState({
+  phone: ''
+})
+
+const handleClick = async () => {
+  setIsLoading(true)
+  const promise = await vendorService.updatePhoneNumber(data, id)
+  if(promise){
+    setIsLoading(false)
+    message.success(`Updated Phone Number to ${data.phone}`)
+    form.setFieldsValue({
+      phone: data.phone,
+    })
+    setPhoneVerified(true)
+    setData({
+      phone: ''
+    })
+  } else {
+    setIsLoading(false)
+
+  }
+  setUpdatePhone(false);
+}
+
+/* *********************************EDIT****************************************** */
+
+  return (
   <Row gutter={16}>
     <Col xs={24} sm={24} md={17}>
       <Card title="Basic Info">
@@ -277,6 +324,64 @@ const GeneralField = ({
                 <Input disabled id="success" />
               </Form.Item>
 
+{/* *********************************EDIT****************************************** */}
+              
+<div>
+                {!updatePhone ? 
+                  <Button
+                    type='primary'  
+                    onClick={() => setUpdatePhone(prev => !prev)}
+                  >Update Phone Number</Button> : 
+                  <div>
+                    <br/>
+                      <Card >
+                        <h2 className="mb-3">Update Phone Number</h2>
+                        <Input 
+                          value = {data.phone} 
+                          placeholder="phone number" 
+                          onChange = {(e) => setData({
+                            phone: e.target.value
+                          })} 
+                        />
+                        <Flex
+                          className="py-2"
+                          mobileFlex={false}
+                          justifyContent="end"
+                          alignItems="center"
+
+                        >
+                          {!isLoading ? 
+                            <>
+                               <div>
+                                  <Button 
+                                  className="mr-2"
+                                  onClick={() => {
+                                    setUpdatePhone(false)
+                                  }}
+                                  >Cancel</Button>
+                                  </div>
+                                  <div >
+                                  <Button 
+                                  type= 'primary'
+                                  onClick={() => {
+                                    handleClick()
+                                  }}
+                                  >Update</Button>
+                                </div>
+                            </> :
+                            <Loading />
+                          }
+                        </Flex>
+                      </Card>
+                  </div>
+                }
+              </div>
+              <br />
+
+               
+{/* *********************************EDIT****************************************** */}
+
+
               <Form.Item
                 hasFeedback
                 validateStatus={emailVerified ? 'success' : 'error'}
@@ -444,6 +549,6 @@ const GeneralField = ({
       </Card>
     </Col>
   </Row>
-)
+)}
 
 export default GeneralField

@@ -2,10 +2,11 @@ import fetch from 'auth/FetchInterceptor'
 
 const salesService = {}
 const api = '/sales'
-salesService.getSales = async function (data) {
+salesService.getSales = async function (data,paginationQuery = '',
+filterQuery = '') {
     try {
       const res = await fetch({
-        url: `${api}/admin`,
+        url: `${api}/admin?${paginationQuery}&${filterQuery}`,
         method: 'post',
         data: data,
       })

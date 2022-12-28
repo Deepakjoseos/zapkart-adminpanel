@@ -10,6 +10,7 @@ import {
   Modal,
   Row,
   Col,
+  Popconfirm,
 } from 'antd'
 // import { invoiceData } from '../../../pages/invoice/invoiceData'
 import NumberFormat from 'react-number-format'
@@ -25,6 +26,7 @@ import shipmentService from 'services/shipment'
 import CheckIfDeliverable from '../shipment-list/CheckIfDeliverable'
 
 const ShipmentView = () => {
+  const { Option } = Select
   const { id } = useParams()
   const [shipment, setShipment] = useState({})
   const [AWB, setAWB] = useState(false)
@@ -36,6 +38,7 @@ const ShipmentView = () => {
   const [checkIfDeliverableOpen, setCheckIfDeliverableOpen] = useState(false)
   const [selectedCourierId, setSelectedCourierId] = useState(null)
   const [currentActionButton, setCurrentActionButton] = useState(null)
+  const [selectedShipmentType, setSelectedShipmentType] = useState(null)
   //   const [isFormOpen, setIsFormOpen] = useState(false)
   //   const [printing, setPrinting] = useState(false)
   //   const [isPrescriptionModalOpen, setIsPrescriptionModalOpen] = useState(false)
@@ -190,7 +193,7 @@ const ShipmentView = () => {
 
   useEffect(() => {
     if (shipment?.shiprocket) {
-      if (!shipment.shiprocket?.awbDetails) {
+      if (!shipment.shiprocket?.awbDetails?.awb_code) {
         showAWBButton(true)
       }
       if (!shipment.shiprocket?.label) {
@@ -338,31 +341,82 @@ const ShipmentView = () => {
     }
   }, [selectedCourierId])
 
+  const selectShipmentType = async (shipmentId, shipmentType) => {
+    const selected = await shipmentService.selectShipmentType({
+      shipmentId,
+      shipmentType,
+    })
+
+    if (selected) {
+      notification.success({
+        message: 'Selected Shipment Type Successful',
+      })
+    }
+
+    setTimeout(() => {
+      window.location.reload()
+    }, 2000)
+  }
+
   return (
     <>
       <Card>
         <Flex alignItems="right" justifyContent="between" mobileFlex={false}>
-          {shipment.shippedByVendor ? (
+          {shipment.shippedBy === 'Vendor' ||
+          shipment.shippedBy === 'Track On' ? (
             ''
-          ) : (
+          ) : shipment.shippedBy === 'Not Selected' ? (
             <div className="d-flex right">
-              {AWB_button ? (
-                <Button
-                  onClick={() => {
-                    // generateAwb(id)
-                    setCheckIfDeliverableOpen(true)
-                    setCurrentActionButton('AWB')
-                  }}
-                  block
-                  type="primary"
-                  className="mr-2"
-                >
-                  Generate AWB
-                </Button>
-              ) : (
-                ''
-              )}
-              {/* {shipment.shiprocket?.awbDetails ? <Button
+              <Select
+                placeholder="Select Shipment Type"
+                className="mr-3"
+                onChange={(val) => setSelectedShipmentType(val)}
+              >
+                <Option value={'Ship Rocket'}>Ship Rocket</Option>
+                <Option value={'Track On'}>Track On</Option>
+              </Select>
+              <Popconfirm
+                disabled={!selectedShipmentType}
+                placement="top"
+                title={'Are you sure?'}
+                onConfirm={() =>
+                  selectShipmentType(shipment?.id, selectedShipmentType)
+                }
+                okText="Yes"
+                cancelText="No"
+              >
+                <Button type="primary">Set</Button>
+              </Popconfirm>
+
+              {/* <Button
+                onClick={() => selectShipmenType(shipment.id)}
+                block
+                type="primary"
+                className="mr-2"
+              >
+                Select Shipment Type
+              </Button> */}
+            </div>
+          ) : (
+            shipment.shippedBy === 'Ship Rocket' && (
+              <div className="d-flex right">
+                {AWB_button ? (
+                  <Button
+                    onClick={() => {
+                      // generateAwb(id)
+                      setCheckIfDeliverableOpen(true)
+                      setCurrentActionButton('AWB')
+                    }}
+                    block
+                    type="primary"
+                    className="mr-2"
+                  >
+                    Generate AWB
+                  </Button>
+                ) : (
+                  ''
+                )}
+                {/* {shipment.shiprocket?.?.awb_code <Button
                   onClick={showAWBDetails}
                   block type="primary"
                   className="mr-2"
@@ -370,57 +424,57 @@ const ShipmentView = () => {
                   Show AWB Details
                 </Button> : ""} */}
 
-              {label_button ? (
-                <Button
-                  onClick={() => generateLabel(id)}
-                  type="primary"
-                  block
-                  className="mr-2"
-                >
-                  Generate Label
-                </Button>
-              ) : (
-                ''
-              )}
-              {shipment.shiprocket?.label ? (
-                <Button
-                  onClick={downloadLabel}
-                  type="primary"
-                  block
-                  className="mr-2"
-                >
-                  Download Label
-                </Button>
-              ) : (
-                ''
-              )}
+                {label_button ? (
+                  <Button
+                    onClick={() => generateLabel(id)}
+                    type="primary"
+                    block
+                    className="mr-2"
+                  >
+                    Generate Label
+                  </Button>
+                ) : (
+                  ''
+                )}
+                {shipment.shiprocket?.label ? (
+                  <Button
+                    onClick={downloadLabel}
+                    type="primary"
+                    block
+                    className="mr-2"
+                  >
+                    Download Label
+                  </Button>
+                ) : (
+                  ''
+                )}
 
-              {manifest_button ? (
-                <Button
-                  onClick={() => generateManifest(id)}
-                  type="primary"
-                  block
-                  className="mr-2"
-                >
-                  Generate Manifest
-                </Button>
-              ) : (
-                ''
-              )}
-              {shipment.shiprocket?.manifest ? (
-                <Button
-                  onClick={downloadManifest}
-                  type="primary"
-                  block
-                  className="mr-2"
-                >
-                  Download Manifest
-                </Button>
-              ) : (
-                ''
-              )}
+                {manifest_button ? (
+                  <Button
+                    onClick={() => generateManifest(id)}
+                    type="primary"
+                    block
+                    className="mr-2"
+                  >
+                    Generate Manifest
+                  </Button>
+                ) : (
+                  ''
+                )}
+                {shipment.shiprocket?.manifest ? (
+                  <Button
+                    onClick={downloadManifest}
+                    type="primary"
+                    block
+                    className="mr-2"
+                  >
+                    Download Manifest
+                  </Button>
+                ) : (
+                  ''
+                )}
 
-              {/* {invoice_button ? (
+                {/* {invoice_button ? (
                 <Button
                   onClick={() => generateInvoice(id)}
                   type="primary"
@@ -432,7 +486,7 @@ const ShipmentView = () => {
               ) : (
                 ''
               )} */}
-              {/* {shipment.shiprocket?.invoice ? (
+                {/* {shipment.shiprocket?.invoice ? (
                 <Button
                   onClick={downlodInvoice}
                   type="primary"
@@ -445,7 +499,7 @@ const ShipmentView = () => {
                 ''
               )} */}
 
-              {/* {shipment.status === 'Pickup Requested' ?
+                {/* {shipment.status === 'Pickup Requested' ?
                 <Button onClick={showPickUpDetails} type="primary">
 
                   <span className="ml-2">View Pickup Details</span>
@@ -453,35 +507,36 @@ const ShipmentView = () => {
                 </Button>
                 : ""} */}
 
-              {!shipment.shiprocket?.pickup &&
-              shipment?.shiprocket?.awbDetails ? (
-                <Button
-                  onClick={() => {
-                    // requestPickupOrder(id)
-                    // setCheckIfDeliverableOpen(true)
-                    // setCurrentActionButton('generate-pickup-info')
-                    requestPickupOrder()
-                  }}
-                  type="primary"
-                >
-                  <span className="ml-2">Request to Pickup Order</span>
-                </Button>
-              ) : (
-                !shipment?.shiprocket?.awbDetails &&
-                !shipment.shiprocket?.pickup && (
+                {!shipment.shiprocket?.pickup &&
+                shipment?.shiprocket?.awbDetails?.awb_code ? (
                   <Button
                     onClick={() => {
                       // requestPickupOrder(id)
-                      setCheckIfDeliverableOpen(true)
-                      setCurrentActionButton('generate-pickup-info')
+                      // setCheckIfDeliverableOpen(true)
+                      // setCurrentActionButton('generate-pickup-info')
+                      requestPickupOrder()
                     }}
                     type="primary"
                   >
-                    <span className="ml-2">Generate Pickup Info</span>
+                    <span className="ml-2">Request to Pickup Order</span>
                   </Button>
-                )
-              )}
-            </div>
+                ) : (
+                  !shipment?.shiprocket?.awbDetails?.awb_code &&
+                  !shipment.shiprocket?.pickup && (
+                    <Button
+                      onClick={() => {
+                        // requestPickupOrder(id)
+                        setCheckIfDeliverableOpen(true)
+                        setCurrentActionButton('generate-pickup-info')
+                      }}
+                      type="primary"
+                    >
+                      <span className="ml-2">Generate Pickup Info</span>
+                    </Button>
+                  )
+                )}
+              </div>
+            )
           )}
         </Flex>
         <br /> <br />
@@ -499,18 +554,18 @@ const ShipmentView = () => {
         ))}
         <span>Status:</span>
         {shipment.status} <br />
-        <span>Shipped By Vendor:</span>
-        {shipment.shippedByVendor ? 'Yes' : 'No'}
+        <span>Shipped By: </span>
+        {shipment.shippedBy}
         <Row style={{ width: '100%' }}>
           <Col md={12} sm={24} lg={12}>
-            {shipment.shiprocket?.awbDetails ? (
+            {shipment.shiprocket?.awbDetails?.awb_code ? (
               <Card>
                 <div className="mt-3">
                   <Row>
                     <Col>
                       <h3>AWB Details</h3>
                       <p>
-                        AWB Code: {shipment.shiprocket?.awbDetails.awb_code}
+                        AWB Code: {shipment.shiprocket?.awbDetails?.awb_code}
                       </p>
                       <p>
                         AWB Code Status:{' '}
@@ -563,7 +618,7 @@ const ShipmentView = () => {
                         Shipper Company Name :
                         {
                           shipment.shiprocket?.awbDetails.shipped_by
-                            .shipper_company_name
+                            .shipper_companyName
                         }{' '}
                       </p>
                       <p>

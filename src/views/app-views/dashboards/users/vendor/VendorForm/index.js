@@ -414,6 +414,13 @@ const ProductForm = (props) => {
                 phoneVerified={phoneVerified}
                 form_statuses={form_statuses}
                 userGroups={groupList}
+/* *********************************EDIT****************************************** */
+
+                id = {id}
+                setPhoneVerified={setPhoneVerified}
+
+
+/* *********************************EDIT****************************************** */
               />
             </TabPane>
             {id && (
