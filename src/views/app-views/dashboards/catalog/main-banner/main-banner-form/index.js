@@ -11,6 +11,7 @@ import { useHistory } from 'react-router-dom'
 import constantsService from 'services/constants'
 import mainBannerService from 'services/MainBanner'
 import { useSelector } from 'react-redux'
+import _ from 'lodash'
 const { TabPane } = Tabs
 
 const ADD = 'ADD'
@@ -173,6 +174,8 @@ const MainBannerForm = (props) => {
 
             
             values.mobileImage = mobileImgValue
+
+         
           
             const created = await mainBannerService.createMainBanner(values)
             if (created) {
@@ -216,12 +219,13 @@ const MainBannerForm = (props) => {
             values.image = imgValue
             values.mobileImage = mobileImgValue
 
+            
 
-            if(
-              values.forwardUrl?.length === 0
-              ){
-                delete values.forwardUrl
-              }
+
+
+          
+
+
             const edited = await mainBannerService.editMainBanner(
               param.id,
               values

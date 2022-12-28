@@ -95,10 +95,12 @@ const GeneralField = ({
           </Form.Item>
         </Col> */}
       </Row>
-
+     
       <Row gutter={16}>
+      {SITE_NAME === 'zapkart' && (      
         <Col span={8}>
-          {SITE_NAME === 'zapkart' && (
+         
+       
             <Form.Item name="state" label="State">
               <Select
                 showSearch
@@ -120,8 +122,9 @@ const GeneralField = ({
                 ))}
               </Select>
             </Form.Item>
-          )}
+         
         </Col>
+        )}
         <Col span={8}>
           <Form.Item
             name="city"

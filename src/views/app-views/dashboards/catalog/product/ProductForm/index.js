@@ -304,6 +304,7 @@ const ProductForm = (props) => {
                 condition={condition}
                 getDeliveryZones={getDeliveryZones}
                 statuses={statuses}
+                mode={mode}
                 // subscriptionPrice={subscriptionPrice}
                 // bulkPrice={bulkPrice}
                 // isFinalTrue={isFinalTrue}
