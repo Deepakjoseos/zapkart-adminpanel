@@ -1,16 +1,22 @@
 import fetch from 'auth/FetchInterceptor'
+import _ from 'lodash'
+
 
 const salesService = {}
 const api = '/sales'
 salesService.getSales = async function (paginationQuery = '',
-// filterQuery = '',    &${filterQuery}
+//     &${filterQuery} filterQuery = '',
 data) {
-  console.log(data,'inside');
     try {
+      // const pageValues = _.pickBy(paginationQuery,_.identity)
+      console.log(paginationQuery.pagination);
       const res = await fetch({
         url: `${api}/admin`,
         method: 'post',
-        data: data,
+        data: {...data ,
+        "page": paginationQuery.pagination.current,
+        "limit": paginationQuery.pagination.pageSize
+        }
       })
       return res
     } catch (err) {

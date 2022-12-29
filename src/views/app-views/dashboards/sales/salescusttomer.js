@@ -42,14 +42,12 @@ const SalesCustomer = () => {
 
   const getSales = async (paginationParams = {}, filterParams) => {
     setLoading(true)
-    const data = await salesService.getSales(
-      qs.stringify(getPaginationParams(paginationParams)),
-      qs.stringify(filterParams)
+    const data = await salesService.getSales(paginationParams, filterParams
+      // qs.stringify(getPaginationParams(paginationParams)),
+      // qs.stringify(filterParams)
     )
-    console.log(data, 'hihihihihih')
     if (data) {
       setList([data])
-      console.log(data, 'hihihihihih')
       // Pagination
       setPagination({
         ...paginationParams.pagination,

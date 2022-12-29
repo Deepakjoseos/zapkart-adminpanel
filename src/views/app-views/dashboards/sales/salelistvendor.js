@@ -77,55 +77,55 @@ const { TabPane } = Tabs
 // 	return ''
 // }
 
-const WeeklyRevenue = () => {
-  const { direction } = useSelector((state) => state.theme)
-  return (
-    <Card>
-      <Row gutter={16}>
-        <Col xs={24} sm={24} md={24} lg={8}>
-          <flex
-            className="h-100"
-            flexDirection="column"
-            justifyContent="between"
-          >
-            <div>
-              <h4 className="mb-0">Weekly Revenue</h4>
-              <span className="text-muted">8 - 15 Jul, 2020</span>
-            </div>
-            <div className="mb-4">
-              <h1 className="font-weight-bold">$27,188.00</h1>
-              <p className="text-success">
-                <span>
-                  <ArrowUpOutlined />
-                  <span> 17% </span>
-                </span>
-                <span>growth from last week</span>
-              </p>
-              <p>
-                Total gross income figure based from the date range given above.
-              </p>
-            </div>
-          </flex>
-        </Col>
-        <Col xs={24} sm={24} md={24} lg={16}>
-          <div className="mb-3 text-right">
-            <Button icon={<CloudDownloadOutlined />}>Download Report</Button>
-          </div>
-          <ChartWidget
-            card={false}
-            series={weeklyRevenueData.series}
-            xAxis={weeklyRevenueData.categories}
-            title="Unique Visitors"
-            height={250}
-            type="bar"
-            customOptions={{ colors: COLORS }}
-            direction={direction}
-          />
-        </Col>
-      </Row>
-    </Card>
-  )
-}
+// const WeeklyRevenue = () => {
+//   const { direction } = useSelector((state) => state.theme)
+//   return (
+//     <Card>
+//       <Row gutter={16}>
+//         <Col xs={24} sm={24} md={24} lg={8}>
+//           <flex
+//             className="h-100"
+//             flexDirection="column"
+//             justifyContent="between"
+//           >
+//             <div>
+//               <h4 className="mb-0">Weekly Revenue</h4>
+//               <span className="text-muted">8 - 15 Jul, 2020</span>
+//             </div>
+//             <div className="mb-4">
+//               <h1 className="font-weight-bold">$27,188.00</h1>
+//               <p className="text-success">
+//                 <span>
+//                   <ArrowUpOutlined />
+//                   <span> 17% </span>
+//                 </span>
+//                 <span>growth from last week</span>
+//               </p>
+//               <p>
+//                 Total gross income figure based from the date range given above.
+//               </p>
+//             </div>
+//           </flex>
+//         </Col>
+//         <Col xs={24} sm={24} md={24} lg={16}>
+//           <div className="mb-3 text-right">
+//             <Button icon={<CloudDownloadOutlined />}>Download Report</Button>
+//           </div>
+//           <ChartWidget
+//             card={false}
+//             series={weeklyRevenueData.series}
+//             xAxis={weeklyRevenueData.categories}
+//             title="Unique Visitors"
+//             height={250}
+//             type="bar"
+//             customOptions={{ colors: COLORS }}
+//             direction={direction}
+//           />
+//         </Col>
+//       </Row>
+//     </Card>
+//   )
+// }
 
 // const DisplayDataSet = () => (
 // 	<Row gutter={16}>
@@ -235,20 +235,19 @@ const SalesVendor = () => {
     pageSize: 15,
   })
   const [list, setList] = useState([])
+  const [testData, setTestData] = useState([])
   const [vendors, setVendors] = useState([])
   const [filterEnabled, setFilterEnabled] = useState(false)
   const [vendorList, setVendorList] = useState([])
 
   const getSales = async (paginationParams = {}, filterParams) => {
     setLoading(true)
-    const data = await salesService.getSales(
-      qs.stringify(getPaginationParams(paginationParams)),
-      qs.stringify(filterParams)
+    const data = await salesService.getSales(paginationParams, filterParams
+      // qs.stringify(getPaginationParams(paginationParams))
+      // qs.stringify(filterParams)  , filterParams
     )
-    // console.log(data, 'hihihihihih')
     if (data) {
       setList([data])
-      // console.log(data, 'hihihihihih')
       // Pagination
       setPagination({
         ...paginationParams.pagination,
@@ -391,17 +390,17 @@ const SalesVendor = () => {
     form
       .validateFields()
       .then(async (values) => {
-        console.log(values)
+        
         setFilterEnabled(true)
         // Removing falsy Values from values
         const sendingValues = _.pickBy({...values,
           fromDate: values.fromDate ? moment(values.fromDate).format() : '', 
           toDate: values.toDate ? moment(values.toDate).format():''},           
           _.identity)
+
         getSales({ pagination: resetPagination() }, sendingValues)
       })
       .catch((info) => {
-        console.log('info', info)
         setFilterEnabled(false)
       })
   }
@@ -551,7 +550,6 @@ const SalesVendor = () => {
             loading={loading}
           />
         </Col>
-      {console.log(vendorList, "vendors")}
       </Row>
       </Card>
     </div>
