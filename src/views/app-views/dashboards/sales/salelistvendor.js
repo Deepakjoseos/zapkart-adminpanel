@@ -358,12 +358,20 @@ const SalesVendor = () => {
 
   const tableColumns2 =[
     {
-      title: 'ID',
-      dataIndex: 'id'
+      title: 'Vendor Name',
+      dataIndex: 'name'
     }, 
     {
       title: 'Total Customers',
       dataIndex: 'totalCustomers'
+    },
+    {
+      title: 'Total Products',
+      dataIndex: 'totalProducts'
+    },
+    {
+      title: 'Total Commission',
+      dataIndex: 'totalCommission'
     },
     {
       title: 'Total Amount',
@@ -450,7 +458,7 @@ const SalesVendor = () => {
               style={{ minWidth: 100 }}
               placeholder="Vendors"
             >
-              <Option value="">All</Option>
+              {/* <Option value="">All</Option> */}
               {vendors.map((users) => (
                 <Option key={users.id} value={users.id}>
                   {users.fullName}
@@ -468,7 +476,7 @@ const SalesVendor = () => {
               style={{ minWidth: 100 }}
               placeholder="Customers"
             >
-              <Option value="">All</Option>
+              {/* <Option value="">All</Option> */}
               {customers.map((user) => (
                 <Option key={user.id} value={user.id}>
                   {user.fullName}
@@ -486,7 +494,7 @@ const SalesVendor = () => {
               style={{ minWidth: 100 }}
               placeholder="Product Templates"
             >
-              <Option value="">All</Option>
+              {/* <Option value="">All</Option> */}
               {productTemplates.map((temp) => (
                 <Option value={temp.id}>{temp.name}</Option>
               ))}
@@ -508,25 +516,6 @@ const SalesVendor = () => {
       </Row>
     </Form>
   )
-
-  const tableColumns3 = [
-    {
-      title: 'Total Vendors',
-      dataIndex: 'totalVendors',
-      // sorter: (a, b) => utils.antdTableSorter(a, b, 'totalAmount'),
-
-      // render: (items, record) => <div>{items?.length}</div>,
-    },
-
-    {
-      title: 'Total Amount',
-      dataIndex: 'totalAmount',
-      render: (totalAmount) => {
-        return <Flex alignItems="centre">{totalAmount}</Flex>
-      },
-    },
-  ]
-
   
   return (
     <div>
@@ -534,27 +523,34 @@ const SalesVendor = () => {
       <span alignItems="center" justifyContent="between" mobileFlex={false}>
         {filtersComponent()}
       </span>
-      {/* <br></br>
-      <Row gutter={5}>
-      </Row>
-      <br></br> */}
+    
+      <div style={{ padding: '15px'}}>
+          <Row gutter={18} style={{display:'flex', justifyContent:'space-around'}} >
+            <Col span={9}>
+              <Card title="Total Vendors">
+                {list[0]?.totalVendors}
+              </Card>
+            </Col>
+            <Col span={9}>
+              <Card title="Total Amount"  style={{}} >
+                {list[0]?.totalAmount}
+              </Card>
+            </Col>
+          </Row>
+        </div>
+
       <Row gutter={16}>
         <Col span={24}>
-          <Table
-            scroll={{
-              x: true,
-            }}
-            columns={tableColumns3}
-            dataSource={list}
-            rowKey="id"
-            pagination={pagination}
-            onChange={handleTableChange}
+          <Table 
+            scroll={{x:true,}}
+            columns={tableColumns2} 
+            dataSource={vendorList} 
+            rowKey="id1" 
+            pagination = {pagination}
+            onChange = {handleTableChange}
+            loading={loading}
           />
-          <Table columns={tableColumns2} dataSource={vendorList} rowKey="id1" />
         </Col>
-        {/* <Col xs={24} sm={24} md={24} lg={8} xl={9} xxl={10}>
-				<DisplayDataSet />
-			</Col> */}
       {console.log(vendorList, "vendors")}
       </Row>
       </Card>

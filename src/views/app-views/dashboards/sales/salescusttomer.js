@@ -36,6 +36,7 @@ const SalesCustomer = () => {
     pageSize: 15,
   })
   const [list, setList] = useState([])
+  const [customerList, setCustomerList] = useState([])
   const [vendors, setVendors] = useState([])
   const [filterEnabled, setFilterEnabled] = useState(false)
 
@@ -87,6 +88,10 @@ const SalesCustomer = () => {
   useEffect(() => {
     getVendors()
   }, [])
+
+  useEffect(() => {
+    setCustomerList(list[0]?.customers)
+  }, [list])
 
   const getCustomers = async () => {
     const data = await customerService.getCustomers()
@@ -201,7 +206,6 @@ const SalesCustomer = () => {
               style={{ minWidth: 100 }}
               placeholder="Vendors"
             >
-              <Option value="">All</Option>
               {vendors.map((users) => (
                 <Option key={users.id} value={users.id}>
                   {users.fullName}
@@ -219,7 +223,6 @@ const SalesCustomer = () => {
               style={{ minWidth: 100 }}
               placeholder="Customers"
             >
-              <Option value="">All</Option>
               {customers.map((user) => (
                 <Option key={user.id} value={user.id}>
                   {user.fullName}
@@ -237,7 +240,6 @@ const SalesCustomer = () => {
               style={{ minWidth: 100 }}
               placeholder="Product Templates"
             >
-              <Option value="">All</Option>
               {productTemplates.map((temp) => (
                 <Option value={temp.id}>{temp.name}</Option>
               ))}
@@ -275,39 +277,71 @@ const SalesCustomer = () => {
     },
   ]
 
+  const tableColumns =[
+    {
+      title: 'Customer Name',
+      dataIndex: 'name'
+    }, 
+    {
+      title: 'Total Orders',
+      dataIndex: 'totalOrders',
+      render: (totalOrders) => {return totalOrders.totalOrders}
+    },
+    {
+      title: 'Completed Orders',
+      dataIndex: 'totalOrders',
+      render: (totalOrders) => {return totalOrders.completedOrders}
+    },
+    {
+      title: 'Cancelled Orders',
+      dataIndex: 'totalOrders',
+      render: (totalOrders) => {return totalOrders.cancelledOrders}
+    },
+    {
+      title: 'Total Products',
+      dataIndex: 'totalProducts'
+    },
+    {
+      title: 'Total Amount',
+      dataIndex: 'totalAmount'
+    }
+  ]
  
   return (
     <div>
+
         <Card>
-      <span alignItems="center" justifyContent="between" mobileFlex={false}>
+      <span alignItems="center" justifyContent="center"  mobileFlex={false}>
         {filtersComponent()}
       </span>
-      {/* <br></br>
-      <Row gutter={5}>
-      </Row>
-      <br></br> */}
+  
+        <div style={{padding: '15px', flexDirection:'space-between', justifyContent:'center', alignItems:'flex-start'}}>
+          <Row gutter={18} style={{display:'flex', justifyContent:'space-around'}}>
+            <Col span={9} >
+              <Card style={{}} title="Total Customers">
+                {list[0]?.totalCustomers}
+              </Card>
+            </Col>
+            <Col span={9}>
+              <Card title="Total Amount"  style={{justifyContent:'center'}} >
+                {list[0]?.totalAmount}
+              </Card>
+            </Col>
+          </Row>
+        </div>
+
       <Row gutter={16}>
         <Col span={24}>
-          <Table
-            scroll={{
-              x: true,
-            }}
-            columns={tableColumns2}
-            dataSource={list}
-            rowKey="id"
-            pagination={pagination}
-            onChange={handleTableChange}
-           
-           
-       
-           
+          <Table 
+            scroll={{x:true,}}
+            columns={tableColumns}
+            dataSource={customerList}
+            rowKey='id1'
+            pagination = {pagination}
+            onChange = {handleTableChange}
             loading={loading}
-          
           />
         </Col>
-
-       
-    
       </Row>
       </Card>
     </div>

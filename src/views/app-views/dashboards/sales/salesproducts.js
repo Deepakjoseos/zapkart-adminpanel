@@ -235,6 +235,7 @@ const SalesProducts = () => {
     pageSize: 15,
   })
   const [list, setList] = useState([])
+  const [productList, setProductList] = useState([])
   const [vendors, setVendors] = useState([])
   const [filterEnabled, setFilterEnabled] = useState(false)
 
@@ -286,6 +287,10 @@ const SalesProducts = () => {
   useEffect(() => {
     getVendors()
   }, [])
+
+  useEffect(() => {
+    setProductList(list[0]?.products)
+  },[list])
 
   const getCustomers = async () => {
 
@@ -416,7 +421,6 @@ const SalesProducts = () => {
               style={{ minWidth: 100 }}
               placeholder="Vendors"
             >
-              <Option value="">All</Option>
               {vendors.map((users) => (
                 <Option key={users.id} value={users.id}>
                   {users.fullName}
@@ -434,7 +438,6 @@ const SalesProducts = () => {
               style={{ minWidth: 100 }}
               placeholder="Customers"
             >
-              <Option value="">All</Option>
               {customers.map((user) => (
                 <Option key={user.id} value={user.id}>
                   {user.fullName}
@@ -452,7 +455,6 @@ const SalesProducts = () => {
               style={{ minWidth: 100 }}
               placeholder="Product Templates"
             >
-              <Option value="">All</Option>
               {productTemplates.map((temp) => (
                 <Option value={temp.id}>{temp.name}</Option>
               ))}
@@ -493,6 +495,29 @@ const SalesProducts = () => {
         dataIndex: 'quantitySold',
       },
   ]
+ 
+  const tableColumns = [
+    {
+      title: 'Product Name',
+      dataIndex: 'productTemplateName'
+    },
+    {
+      title: 'Total Orders',
+      dataIndex: 'totalOrders'
+    },
+    {
+      title: 'Quantity Sold',
+      dataIndex: 'quantitySold'
+    },
+    {
+      title: 'Quantity Returned',
+      dataIndex: 'quantityReturned'
+    },
+    {
+      title: 'Total Amount',
+      dataIndex: 'totalAmount'
+    },
+  ]
 
  
   return (
@@ -501,26 +526,33 @@ const SalesProducts = () => {
       <span alignItems="center" justifyContent="between" mobileFlex={false}>
         {filtersComponent()}
       </span>
-      {/* <br></br>
-      <Row gutter={5}>
-      </Row>
-      <br></br> */}
+      <div style={{ padding: '15px' }}>
+          <Row gutter={18} style={{display:'flex', justifyContent:'space-around'}}>
+            <Col span={9}>
+              <Card style={{}} title="Total Products">
+                {list[0]?.totalProducts}
+              </Card>
+            </Col>
+            <Col span={9}>
+              <Card title="Total Amount"  style={{}} >
+                {list[0]?.totalAmount}
+              </Card>
+            </Col>
+          </Row>
+        </div>
+
       <Row gutter={16}>
         <Col span={24}>
-          <Table
-            scroll={{
-              x: true,
-            }}
-            columns={tableColumns4}
-            dataSource={list}
-            rowKey="id"
+          <Table 
+            scroll={{x:true}}
+            columns={tableColumns}
+            dataSource={productList}
+            rowKey='productid'
             pagination={pagination}
             onChange={handleTableChange}
+            loading={loading}
           />
         </Col>
-
-       
-    
       </Row>
       </Card>
     </div>

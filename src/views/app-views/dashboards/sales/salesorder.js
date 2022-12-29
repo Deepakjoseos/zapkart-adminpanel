@@ -11,6 +11,7 @@ import {
   Badge,
   Tabs,
   DatePicker,
+  Menu,
 } from 'antd'
 import qs from 'qs'
 // import Flex from 'components/shared-components/Flex'
@@ -20,6 +21,7 @@ import qs from 'qs'
 // import NumberFormat from 'react-number-format';
 import Flex from 'components/shared-components/Flex'
 import {
+  EyeOutlined,
   CloudDownloadOutlined,
   ArrowUpOutlined,
   ArrowDownOutlined,
@@ -45,12 +47,14 @@ import moment from 'moment';
 // import { DATE_FORMAT_DD_MM_YYYY } from 'constants/DateConstant'
 // import utils from 'utils'
 import { useSelector } from 'react-redux'
+import { Route, Switch, Redirect, useHistory } from 'react-router-dom'
 import salesService from 'services/sales'
 import { useState, useEffect } from 'react'
 import _ from 'lodash'
 import vendorService from 'services/vendor'
 import productTemplateService from 'services/productTemplate'
 import customerService from 'services/customer'
+import EllipsisDropdown from 'components/shared-components/EllipsisDropdown'
 const { Option } = Select
 const { TabPane } = Tabs
 // const getPaymentStatus = status => {
@@ -235,8 +239,10 @@ const SalesOrder = () => {
     pageSize: 15,
   })
   const [list, setList] = useState([])
+  const [orderList, setOrderList] = useState([])
   const [vendors, setVendors] = useState([])
   const [filterEnabled, setFilterEnabled] = useState(false)
+  let history = useHistory()
 
   const getSales = async (paginationParams = {}, filterParams) => {
     setLoading(true)
@@ -305,6 +311,35 @@ const SalesOrder = () => {
   }, [])
 
   useEffect(() => {
+    setOrderList(list[0]?.orders)
+  }, [list])
+
+  const viewDetails = (row) => {
+    history.push(`/app/dashboards/orders/order-view/${row.id}`)
+  }
+
+  const dropdownMenu = (row) => (
+    <Menu>
+      <Menu.Item onClick={() => viewDetails(row)}>
+        <Flex alignItems="center">
+          <EyeOutlined />
+          <span className="ml-2">View Details</span>
+        </Flex>
+      </Menu.Item>
+      {/* <Menu.Item onClick={() => deleteRow(row)}>
+        <Flex alignItems="center">
+          <DeleteOutlined />
+          <span className="ml-2">
+            {selectedRows.length > 0
+              ? `Delete (${selectedRows.length})`
+              : 'Delete'}
+          </span>
+        </Flex>
+      </Menu.Item> */}
+    </Menu>
+  )
+
+  useEffect(() => {
     getSales({
       pagination,
     })
@@ -339,6 +374,49 @@ const SalesOrder = () => {
       },
     },
   ]
+
+  const tableColumns2 =[
+    {
+      title: 'Customer Name',
+      dataIndex: 'customerName'
+    }, 
+    {
+      title: 'Order Number',
+      dataIndex: 'orderNumber'
+    },
+    {
+      title: 'Date',
+      dataIndex: 'date',
+      render: (date) => (
+        <Flex alignItems="center">
+          {moment(date).format('DD-MM-YYYY hh:mm:a')}
+        </Flex>
+      )
+    },
+    {
+      title: 'Commision',
+      dataIndex: 'commission'
+    },
+    {
+      title: 'Amount',
+      dataIndex: 'amount'
+    },
+    {
+      title:'',
+      render: (data) => (<Button type='primary' onClick={() => viewDetails(data)}>Show Details</Button>)
+    },
+    // {
+    //   title: '',
+    //   // dataIndex: 'actions',
+    //   render: (_, elm) => (
+    //     <div className="text-right">
+    //       <EllipsisDropdown menu={dropdownMenu(elm)} />
+    //     </div>
+    //   ),
+    // },
+
+  ]
+
   const resetPagination = () => ({
     ...pagination,
     current: 1,
@@ -418,7 +496,6 @@ const SalesOrder = () => {
               style={{ minWidth: 100 }}
               placeholder="Vendors"
             >
-              <Option value="">All</Option>
               {vendors.map((users) => (
                 <Option key={users.id} value={users.id}>
                   {users.fullName}
@@ -436,7 +513,6 @@ const SalesOrder = () => {
               style={{ minWidth: 100 }}
               placeholder="Customers"
             >
-              <Option value="">All</Option>
               {customers.map((user) => (
                 <Option key={user.id} value={user.id}>
                   {user.fullName}
@@ -454,7 +530,6 @@ const SalesOrder = () => {
               style={{ minWidth: 100 }}
               placeholder="Product Templates"
             >
-              <Option value="">All</Option>
               {productTemplates.map((temp) => (
                 <Option value={temp.id}>{temp.name}</Option>
               ))}
@@ -507,24 +582,32 @@ const SalesOrder = () => {
       <span alignItems="center" justifyContent="between" mobileFlex={false}>
         {filtersComponent()}
       </span>
-      {/* <br></br>
-      <Row gutter={5}>
-      </Row>
-      <br></br> */}
+      <div style={{ padding: '15px' }}>
+          <Row gutter={18} style={{display:'flex', justifyContent:'space-around'}}>
+            <Col span={9}>
+              <Card style={{}} title="Total Orders">
+                {list[0]?.totalOrders.totalOrders}
+              </Card>
+            </Col>
+            <Col span={9}>
+              <Card title="Total Amount"  style={{}} >
+                {list[0]?.totalAmount}
+              </Card>
+            </Col>
+          </Row>
+        </div>
       <Row gutter={16}>
-        <Col span={24}>
-          <Table
-            scroll={{
-              x: true,
-            }}
-            columns={tableColumns}
-            dataSource={list}
-            rowKey="id"
-            pagination={pagination}
-            onChange={handleTableChange}
-          />
-        </Col>
-      
+          <Col span={24}>
+            <Table 
+              scroll={{x:true}}
+              columns={tableColumns2}
+              dataSource={orderList}
+              rowKey='id2'
+              pagination={pagination}
+              onChange={handleTableChange}
+              loading={loading}
+            />
+          </Col>
       </Row>
       </Card>
      
