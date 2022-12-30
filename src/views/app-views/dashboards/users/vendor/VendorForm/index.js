@@ -17,6 +17,7 @@ import BankAccount from './bankAccount'
 import { useSelector } from 'react-redux'
 import Documents from './documents'
 import PickupLocations from '../VendorForm/pickuplocation'
+import DocumentField from './DocumentField'
 
 // const getAllPickUpLocations = async ()=>{
 //   const data = await shipmentService.getAllPickUpLocations()
@@ -445,6 +446,9 @@ const ProductForm = (props) => {
                     <Documents />
                   </TabPane>
                 )}
+                <TabPane tab="Documents" key="5">
+                  <DocumentField selectedVendorId={selectedVendorId} />
+                </TabPane>
               </>
             )}
           </Tabs>
