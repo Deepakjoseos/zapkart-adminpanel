@@ -1,16 +1,20 @@
 import React, { useState } from "react";
-import { Button, Row } from "antd";
+import { Button, Form, Row } from "antd";
 import {
     EditOutlined,
     DeleteOutlined,
     PlusCircleOutlined,
   } from '@ant-design/icons'
 import Flex from "components/shared-components/Flex";
+import { useParams } from "react-router-dom";
+
 import DocumentForm from "./DocumentForm";
 
 const DocumentField =() => {
 
     const [openDocumentForm, setOpenDocumentForm] = useState(false)
+    const { id } = useParams()
+    const [form] = Form.useForm()
 
 
     return(
@@ -27,6 +31,7 @@ const DocumentField =() => {
                 <DocumentForm 
                     openDocumentForm={openDocumentForm}
                     setOpenDocumentForm={setOpenDocumentForm}
+                    form={form}
                 />
             </Row>
         </div>
