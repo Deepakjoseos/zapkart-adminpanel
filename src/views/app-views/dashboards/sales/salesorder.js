@@ -263,15 +263,15 @@ const SalesOrder = () => {
     }
   }
 
-//   const getProductTemplates = async () => {
-//     const data = await productTemplateService.getProductTemplates()
-//     const activeProductTemplates = data.data.filter(
-//       (cur) => cur.status === 'Active'
-//     )
-//     if (activeProductTemplates) {
-//       setTemplates(activeProductTemplates)
-//     }
-//   }
+  const getProductTemplates = async () => {
+    const data = await productTemplateService.getProductTemplates()
+    const activeProductTemplates = data.data.filter(
+      (cur) => cur.status === 'Active'
+    )
+    if (activeProductTemplates) {
+      setTemplates(activeProductTemplates)
+    }
+  }
   const getVendors = async () => {
     const data = await vendorService.getVendors()
     if (data) {
@@ -286,7 +286,7 @@ const SalesOrder = () => {
   }
 
   useEffect(() => {
-    // getProductTemplates()
+    getProductTemplates()
   }, [])
 
   useEffect(() => {
