@@ -1,8 +1,16 @@
-import { Button, Card, Drawer, Form, Input, message, Upload } from "antd";
+import { Button, Card, Drawer, Form, Input, message, Upload, Select } from "antd";
 import CustomIcon from "components/util-components/CustomIcon";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import useUpload from 'hooks/useUpload'
+import { ImageSvg } from "assets/svg/icon";
+import { multipleImageUpload } from 'utils/s3/s3ImageUploader'
+import { useSelector } from "react-redux";
+import productTemplateService from 'services/productTemplate'
+import type { UploadFile } from 'antd/es/upload/interface'
+
+
+
 
 
 const DocumentForm = ({
@@ -13,6 +21,9 @@ const DocumentForm = ({
 ) => {
 
     const [submitLoading, setSubmitLoading] = useState(false)
+    const [documents, setDocuments] = useState([])
+    const { documentCategories } = useSelector((state) => state.auth)
+    const { Option } = Select
 
     const {
         fileList: fileListImages,
@@ -40,12 +51,45 @@ const DocumentForm = ({
 
     const { id } = useParams()
 
+    // useEffect(() => {
+    //   console.log(form.getFieldValue('attributes'), 'plss')
+    // }, [form])
+
     const onFinish = async() =>{
         // setSubmitLoading(true)
         form
         .validateFields()
         .then(async(values) => {
+            values.documents = documents
             console.log(values, 'doc values');
+
+            if (documents.length !== 0 && documents !== null) {
+              const documentCategory = documentCategories.find(
+                (imgCat) => imgCat.imageFor === 'ProductTemplates'
+              )
+  
+              const imgValues = await multipleImageUpload(
+                documentCategory.id,
+                documents
+              )
+  
+              values.documents = imgValues
+  
+              const created =
+                await productTemplateService.createProductTemplateVariant(
+                  id,
+                  values
+                )
+              if (created) {
+                message.success(`Created Variant Success`)
+                // setOpenVariantsForm(false)
+                // setSelectedVariant(null)
+                // refreshData()
+                onDrawerClose()
+              }
+            } else {
+              message.error('Please upload image')
+            }
         })
         .catch((info) => {
             setSubmitLoading(false)
@@ -54,9 +98,25 @@ const DocumentForm = ({
         })
     }
 
+    const propsImages = {
+      multiple: true,
+      beforeUpload: beforeUploadImages,
+      onRemove: onRemoveImages,
+      onChange: onChangeImages,
+      fileList: fileListImages,
+    }
+
     function onDrawerClose() {
         setOpenDocumentForm(false)
     }
+
+    // const propsImages = {
+    //   multiple: true,
+    //   beforeUpload: beforeUploadImages,
+    //   onRemove: onRemoveImages,
+    //   onChange: onChangeImages,
+    //   fileList: fileListImages,
+    // }
 
 
     return (
@@ -108,22 +168,35 @@ const DocumentForm = ({
                     label="Is Verified?"
                     rules={rules.isVerified}
                 >
-                    <Input placeholder="Display Name" />
+                    <Select placeholder="---">
+                      <Option value='yes' >Yes</Option>
+                      <Option value='no'>No</Option>
+                    </Select>
                 </Form.Item>
             </Card>
 
-            <Card>
-              <Upload  listType="picture-card" name="document">
-                <CustomIcon className="display-3"/>
+            <Card title="Documents">
+              <Upload multiple listType="picture-card" name="documents" action='https://www.http://localhost:3001/app/dashboards/settings/edit-settings' {...propsImages} 
+                // beforeUpload={(data) => setDocuments(data)}
+              >
+                <CustomIcon className="display-3" svg={ImageSvg} />
               </Upload>
+              size: 600px * 405px
             </Card>
 
-            {/* <Card title="Media">
-                <Upload listType="picture-card" name="image" {...propsImages}>
-                    <CustomIcon className="display-3" svg={ImageSvg} />
-                </Upload>
-                size: 600px * 405px
-            </Card> */}
+            {/* <Card title="documents">
+          <Upload multiple listType="picture" name="documents"
+          accept=".png"
+          beforeUpload={(file)=> {
+            setDocuments(file)
+            return true
+          }}
+ 
+          >
+            <CustomIcon className="display-3" svg={ImageSvg} />
+          </Upload>
+          size: 600px * 405px
+        </Card> */}
       </Form>
         </Drawer>
     )
