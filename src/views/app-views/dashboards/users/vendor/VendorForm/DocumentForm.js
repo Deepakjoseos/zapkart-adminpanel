@@ -24,9 +24,9 @@ const DocumentForm = ({
 
     const [submitLoading, setSubmitLoading] = useState(false)
     const [documents, setDocuments] = useState([])
-    const { documentCategories } = useSelector((state) => state.auth)
     const { Option } = Select
     const { imageCategories } = useSelector((state) => state.auth)
+    const [passingData, setPassingData] = useState({})
 
     const {
         fileList: fileListImages,
@@ -56,12 +56,21 @@ const DocumentForm = ({
 
     useEffect(() => {
       if(selectedDoc){
-        console.log(selectedDoc, "selected Doc");
+        // console.log(selectedDoc, "selected Doc");
         form.setFieldsValue({
           files : selectedDoc.files,
-          isVerified : selectedDoc.isVerified,
+          isVerified : selectedDoc.isVerified ? 'yes' : 'no',
           type: selectedDoc.type
         })
+        const images = selectedDoc.files.map((cur, i) => {
+          return {
+            uid: i + Math.random() * 10,
+            url: cur,
+          }
+        })
+
+        setDocuments(images)
+        setFileListImages(images)
       }
     },[selectedDoc])
 
@@ -74,7 +83,8 @@ const DocumentForm = ({
         form
         .validateFields()
         .then(async(values) => {
-          console.log(values, "submit");
+
+          // console.log(values, "submit");
             if (values.isVerified === "yes"){
               values.isVerified = true;
             } else if(values.isVerified === "no"){
@@ -89,23 +99,38 @@ const DocumentForm = ({
                 documentCategory.id,
                 documents
               )
-  
               values.files = imgValues 
-
-              const created =
-                await vendorService.createVendorDocument(
+              console.log(selectedDoc,"selsctedDoc", values, "values")
+              if(selectedDoc){
+                const edited = await vendorService.updateVendorDocument(
                   id,
+                  selectedDoc.id,
                   values
                 )
-              if (created) {
-                message.success(`Created Variant Success`)
-                // setOpenVariantsForm(false)
-                // setSelectedVariant(null)
-                refreshData()
-                onDrawerClose()
+                if (edited) {
+                  message.success(`Edited Variant Success`)
+                  setOpenDocumentForm(false)
+                  setSelectedDoc(null)
+                  refreshData()
+                  onDrawerClose()
+                } else {
+                  message.error('Please upload image')
+                }
+              } else {
+                const created = await vendorService.createVendorDocument(id, values)
+
+                if (created) {
+                  message.success(`Created Variant Success`)
+                  setOpenDocumentForm(false)
+                  setSelectedDoc(null)
+                  refreshData()
+                  onDrawerClose()
+                } else {
+                  message.error('Please upload image')
+                }
               }
-            } else {
-              message.error('Please upload image')
+              
+        
             }
         })
         .catch((info) => {
@@ -128,6 +153,10 @@ const DocumentForm = ({
 
     function onDrawerClose() {
         setOpenDocumentForm(false)
+        setFileListImages([])
+        form.resetFields()
+        setSelectedDoc(null)
+        setDocuments([])
     }
 
     // const propsImages = {
@@ -197,7 +226,7 @@ const DocumentForm = ({
             </Card>
 
             <Card title="Documents">
-              <Upload multiple listType="picture-card" name="documents" action='https://www.http://localhost:3001/app/dashboards/settings/edit-settings' {...propsImages} 
+              <Upload multiple type="file" listType="picture-card" name="documents" action='https://www.http://localhost:3001/app/dashboards/settings/edit-settings' {...propsImages} 
                 // beforeUpload={(data) => setDocuments(data)}
               >
                 <CustomIcon className="display-3" svg={ImageSvg} />

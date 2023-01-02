@@ -155,4 +155,18 @@ vendorService.deleteVendorDocument = async function (vendorId, docId) {
     }
 }
 
+vendorService.updateVendorDocument = async function (vendorId, docId, data) {
+  console.log(vendorId, docId, data)
+  try {
+      const res = await fetch({
+        url:`https://ecommercelive.riolabz.com/api/v1/vendors/document/${docId}/${vendorId}`,
+        method: 'put',
+        data: data
+      })
+      return res
+    } catch (err) {
+      console.log(err, 'show-err')
+    }
+}
+
 export default vendorService

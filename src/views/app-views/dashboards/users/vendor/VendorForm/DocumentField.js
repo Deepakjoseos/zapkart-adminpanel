@@ -23,6 +23,7 @@ const DocumentField =({documentData, refreshData }) => {
     // console.log(documentData,"doc data");
 
     const onEditDocument = ((doc) => {
+        // console.log(doc, "doc");
         setSelectedDoc(doc)
         setOpenDocumentForm(true)
     })
