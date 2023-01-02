@@ -50,6 +50,7 @@ const ProductForm = (props) => {
   const [groupList, setGroupList] = useState([])
   const [transactions, setTransactions] = useState([])
   const [logo, setLogo] = useState(null)
+  const [documentData, setDocumentData] = useState([])
 
   const [wallet, setWallet] = useState({})
   const [selectedVendorId, setSelectedVendorId] = useState(null)
@@ -83,7 +84,6 @@ const ProductForm = (props) => {
   const fetchConstants = async () => {
     const data = await constantsService.getConstants()
     if (data) {
-      // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
 
       setStatuses(Object.values(data.GENERAL['FORM_STATUS']))
     }
@@ -93,14 +93,14 @@ const ProductForm = (props) => {
     if (data) {
       setTransactions(data)
     }
-    console.log('trans', data)
+    // console.log('trans', data)
   }
   const getWallet = async () => {
     const data = await walletService.getVendorWallet(id)
     if (data) {
       setWallet(data)
     }
-    console.log('trans', data)
+    // console.log('trans', data)
   }
   useEffect(() => {
     getTransactions()
@@ -118,7 +118,7 @@ const ProductForm = (props) => {
     const data = await vendorService.getVendorById(id)
     if (data) {
       setSelectedVendorId(data.id)
-      console.log('datavendorid', data)
+      // console.log('datavendorid', data)
       setPickUpLocation(data.pickupLocations)
       let himg = []
       if (data?.displayImage) {
@@ -181,6 +181,7 @@ const ProductForm = (props) => {
       })
       setEmailVerified(data?.emailVerified ? true : false)
       setPhoneVerified(data?.phone ? true : false)
+      setDocumentData(data?.documents)
     } else {
       history.replace('/app/dashboards/users/vendor/vendor-list')
     }
@@ -221,7 +222,7 @@ const ProductForm = (props) => {
     form
       .validateFields()
       .then(async (values) => {
-        console.log(values, 'values')
+        // console.log(values, 'values')
 
         const sendingValues = {
           firstName: values.firstName,
@@ -287,7 +288,7 @@ const ProductForm = (props) => {
             imageCategory.id
           )
           sendingValues.displayImage = displayImageValue
-          console.log('upload', sendingValues.displayImage)
+          // console.log('upload', sendingValues.displayImage)
         } else {
           delete sendingValues.displayImage
         }
@@ -311,7 +312,7 @@ const ProductForm = (props) => {
             })
           }
 
-          console.log('upload', logoValue)
+          // console.log('upload', logoValue)
         } else {
           delete sendingValues.business.logo
         }
@@ -332,7 +333,7 @@ const ProductForm = (props) => {
         }
         if (mode === EDIT) {
           // Checking if image exists
-          console.log(sendingValues, 'heyyyy', values)
+          // console.log(sendingValues, 'heyyyy', values)
           // if (displayImage.length !== 0 && displayImage !== null) {
           //   const displayImageValue = await singleImageUploader(
           //     displayImage[0].originFileObj,
@@ -355,7 +356,7 @@ const ProductForm = (props) => {
       })
       .catch((info) => {
         setSubmitLoading(false)
-        console.log('info', info)
+        // console.log('info', info)
         message.error('Please enter all required field ')
       })
   }
@@ -447,7 +448,10 @@ const ProductForm = (props) => {
                   </TabPane>
                 )}
                 <TabPane tab="Documents" key="5">
-                  <DocumentField selectedVendorId={selectedVendorId} />
+                  <DocumentField 
+                    documentData={documentData}
+                    refreshData = {fetchVendorById}
+                  />
                 </TabPane>
               </>
             )}

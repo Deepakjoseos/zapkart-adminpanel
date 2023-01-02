@@ -6,8 +6,7 @@ import useUpload from 'hooks/useUpload'
 import { ImageSvg } from "assets/svg/icon";
 import { multipleImageUpload } from 'utils/s3/s3ImageUploader'
 import { useSelector } from "react-redux";
-import productTemplateService from 'services/productTemplate'
-import type { UploadFile } from 'antd/es/upload/interface'
+import vendorService from "services/vendor";
 
 
 
@@ -16,7 +15,10 @@ import type { UploadFile } from 'antd/es/upload/interface'
 const DocumentForm = ({
     openDocumentForm,
     setOpenDocumentForm,
-    form
+    form,
+    refreshData,
+    selectedDoc,
+    setSelectedDoc
 }
 ) => {
 
@@ -24,6 +26,7 @@ const DocumentForm = ({
     const [documents, setDocuments] = useState([])
     const { documentCategories } = useSelector((state) => state.auth)
     const { Option } = Select
+    const { imageCategories } = useSelector((state) => state.auth)
 
     const {
         fileList: fileListImages,
@@ -51,6 +54,17 @@ const DocumentForm = ({
 
     const { id } = useParams()
 
+    useEffect(() => {
+      if(selectedDoc){
+        console.log(selectedDoc, "selected Doc");
+        form.setFieldsValue({
+          files : selectedDoc.files,
+          isVerified : selectedDoc.isVerified,
+          type: selectedDoc.type
+        })
+      }
+    },[selectedDoc])
+
     // useEffect(() => {
     //   console.log(form.getFieldValue('attributes'), 'plss')
     // }, [form])
@@ -60,11 +74,14 @@ const DocumentForm = ({
         form
         .validateFields()
         .then(async(values) => {
-            values.documents = documents
-            console.log(values, 'doc values');
-
+          console.log(values, "submit");
+            if (values.isVerified === "yes"){
+              values.isVerified = true;
+            } else if(values.isVerified === "no"){
+              values.isVerified = false;
+            }
             if (documents.length !== 0 && documents !== null) {
-              const documentCategory = documentCategories.find(
+              const documentCategory = imageCategories.find(
                 (imgCat) => imgCat.imageFor === 'ProductTemplates'
               )
   
@@ -73,10 +90,10 @@ const DocumentForm = ({
                 documents
               )
   
-              values.documents = imgValues
-  
+              values.files = imgValues 
+
               const created =
-                await productTemplateService.createProductTemplateVariant(
+                await vendorService.createVendorDocument(
                   id,
                   values
                 )
@@ -84,7 +101,7 @@ const DocumentForm = ({
                 message.success(`Created Variant Success`)
                 // setOpenVariantsForm(false)
                 // setSelectedVariant(null)
-                // refreshData()
+                refreshData()
                 onDrawerClose()
               }
             } else {
@@ -93,7 +110,6 @@ const DocumentForm = ({
         })
         .catch((info) => {
             setSubmitLoading(false)
-            console.log('info', info)
             message.error('Please enter all required field ')
         })
     }
@@ -105,6 +121,10 @@ const DocumentForm = ({
       onChange: onChangeImages,
       fileList: fileListImages,
     }
+
+    useEffect(() => {
+      setDocuments(fileListImages)
+    }, [fileListImages])
 
     function onDrawerClose() {
         setOpenDocumentForm(false)
@@ -133,6 +153,7 @@ const DocumentForm = ({
                     textAlign: 'right',
                   }}
                 >
+                  {/* {console.log(data)} */}
                   <Button
                     onClick={() => onDrawerClose()}
                     style={{ marginRight: 8 }}
