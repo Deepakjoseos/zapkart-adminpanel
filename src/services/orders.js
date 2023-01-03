@@ -201,6 +201,19 @@ orderService.createVendorOrderInvoice = async function (orderId, data) {
   }
 }
 
+orderService.syncRazorPay = async function (orderId) {
+  try {
+    const res = await fetch({
+      url: `/payment/syncPaymentWithRazorPay/${orderId}`,
+      method: 'patch'
+    })
+
+    return res
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
+
 // orderService.getProductById = async function (id) {
 //   try {
 //     const res = await fetch({
