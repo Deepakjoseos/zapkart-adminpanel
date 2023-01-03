@@ -404,6 +404,9 @@ const OrderView = () => {
                     }}
                   />
                 )}
+              <div >
+                <Button type='primary'>ShipRocket</Button>
+              </div>
               </Table>
               <div className="d-flex justify-content-end">
                 <div className="text-right ">

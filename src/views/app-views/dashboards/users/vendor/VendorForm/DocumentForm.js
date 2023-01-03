@@ -226,12 +226,10 @@ const DocumentForm = ({
             </Card>
 
             <Card title="Documents">
-              <Upload multiple type="file" listType="picture-card" name="documents" action='https://www.http://localhost:3001/app/dashboards/settings/edit-settings' {...propsImages} 
-                // beforeUpload={(data) => setDocuments(data)}
+              <Upload multiple listType="picture-card" name="documents"  {...propsImages} 
               >
                 <CustomIcon className="display-3" svg={ImageSvg} />
               </Upload>
-              size: 600px * 405px
             </Card>
 
             {/* <Card title="documents">
