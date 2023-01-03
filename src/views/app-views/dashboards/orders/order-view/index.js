@@ -53,9 +53,9 @@ const OrderView = () => {
     }
   }
 
-  const clickSync = async () => {
-    const response = await orderService.syncRazorPay(id)
-    if(response){
+  const clickSync = async (docID) => {
+    const res = await orderService.syncRazorPay(docID)
+    if(res){
       message.success("synced with RazorPay")
     }
   }
@@ -189,7 +189,7 @@ const OrderView = () => {
             <Button 
             type="primary"
             className="mb-4 mr-2"
-            onClick={() => clickSync()}
+            onClick={() => clickSync(order.payment.id)}
             >
               Sync with RazorPay
             </Button>

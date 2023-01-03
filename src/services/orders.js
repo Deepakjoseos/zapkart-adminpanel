@@ -203,6 +203,7 @@ orderService.createVendorOrderInvoice = async function (orderId, data) {
 
 orderService.syncRazorPay = async function (orderId) {
   try {
+    // console.log(orderId, "orderid");
     const res = await fetch({
       url: `/payment/syncPaymentWithRazorPay/${orderId}`,
       method: 'patch'
