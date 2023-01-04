@@ -18,7 +18,7 @@ import CustomIcon from 'components/util-components/CustomIcon'
 import { TweenOneGroup } from 'rc-tween-one'
 import { SwapOutlined } from '@ant-design/icons'
 import slugify from 'slugify'
-import Editor from 'components/shared-components/Editor'
+import Editor from "components/shared-components/Editor";
 
 
 // const { Dragger } = Upload
@@ -93,7 +93,7 @@ const GeneralField = ({ form, propsImages, form_statuses, propsBannerImage }) =>
           rules={rules.description}
         >
           <Editor
-            placeholder="Write something..."
+            
             editorHtml={form.getFieldValue('description') || ''}
             onChange={(e) => form.setFieldsValue({ description: e })}
             name="description"
