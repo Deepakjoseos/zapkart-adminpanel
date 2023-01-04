@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, Card, Col, Form, Row, Image } from "antd";
+import { Button, Card, Col, Form, Row, Image, Alert } from "antd";
 import {
     EditOutlined,
     DeleteOutlined,
@@ -64,8 +64,17 @@ const DocumentField =({documentData, refreshData }) => {
                                 />
                             </Flex>
                         }
-                        >
+                        >   
+
                             <Image.PreviewGroup>
+                                <Flex style={{padding:'30px'}}>
+                                    {doc.isVerified ?(
+                                    <Alert style={{width:'20%'}}message="Verified" type="success" showIcon/>
+                                    ):(
+                                        <Alert style={{width:'25%'}}message="Not-Verified" type="error" showIcon/>
+                                    )}
+                                    <br/>
+                                </Flex>
                                 {doc.files.map((file, index) => (
                                 <Image
                                     key={index}
