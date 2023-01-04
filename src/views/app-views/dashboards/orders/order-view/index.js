@@ -182,7 +182,7 @@ const OrderView = () => {
             </Button>
           )}
 
-          {order?.payment?.type === "Online" && (
+          {order?.payment?.type === "Online" && order?.payment?.status === "PENDING" && (
           <Flex 
             justifyContent="end"
           >
