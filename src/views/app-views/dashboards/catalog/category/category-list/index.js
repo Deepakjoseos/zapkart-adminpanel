@@ -28,6 +28,7 @@ import brandService from 'services/brand'
 import _ from 'lodash'
 import categoryService from 'services/category'
 import constantsService from 'services/constants'
+import { placeholder } from '@babel/types'
 
 const { Option } = Select
 
@@ -378,6 +379,12 @@ const handleTableChange = (newPagination) => {
               <Option value="">All</Option>
               <Option value="true">true</Option>
               <Option value="false">false</Option>
+            </Select>
+          </Form.Item>
+        </Col>
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="tags" label="Tags">
+            <Select dropdownStyle={{display: "none"}} mode = 'tags' style={{width: '100%'}} placeholder='tags'>
             </Select>
           </Form.Item>
         </Col>

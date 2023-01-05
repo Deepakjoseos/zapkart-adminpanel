@@ -698,11 +698,6 @@ const ProductTemplateList = () => {
 
         {SITE_NAME === 'zapkart' && (
           <Col md={6} sm={24} xs={24} lg={6}>
-
-          </Col>
-        )}
-
-
         <Form.Item name="orderByName" label="Order By Name">
           <Select
             className="w-100"
@@ -717,11 +712,12 @@ const ProductTemplateList = () => {
             ))}
           </Select>
         </Form.Item>
+        </Col>
+        )}
+
         {SITE_NAME === 'zapkart' && (
           <Col md={6} sm={24} xs={24} lg={6}>
 
-          </Col>
-        )}
         <Form.Item name="productsExists" label="Products Exists">
           <Select
             showSearch
@@ -741,11 +737,10 @@ const ProductTemplateList = () => {
             <Option value="false">No</Option>
           </Select>
         </Form.Item>
-        {SITE_NAME === 'zapkart' && (
-          <Col md={6} sm={24} xs={24} lg={6}>
-
           </Col>
         )}
+        {SITE_NAME === 'zapkart' && (
+          <Col md={6} sm={24} xs={24} lg={6}>
         <Form.Item name="orderByPrice" label="Order By Price">
           <Select
             showSearch
@@ -765,11 +760,11 @@ const ProductTemplateList = () => {
             <Option value="High To Low">High To Low</Option>
           </Select>
         </Form.Item>
+          </Col>
+        )}
         {SITE_NAME === 'zapkart' && (
           <Col md={6} sm={24} xs={24} lg={6}>
 
-          </Col>
-        )}
         <Form.Item name="productType" label="Product Type">
           <Select
             showSearch
@@ -789,12 +784,20 @@ const ProductTemplateList = () => {
             <Option value="NonMedicine">NonMedicine</Option>
           </Select>
         </Form.Item>
-        <Form.Item name="tags" label="Tags">
-          <Input multiple/>
-        </Form.Item>
+          </Col>
+        )}
         {SITE_NAME === 'zapkart' && (
           <Col md={6} sm={24} xs={24} lg={6}>
-
+        <Form.Item name="tags" label="Tags">
+          <Select
+            dropdownStyle={{ display: "none" }}
+            mode="tags"
+            style={{
+              width: "100%",
+            }}
+            placeholder="Keywords"
+          ></Select>
+        </Form.Item>
           </Col>
         )}
         &nbsp;

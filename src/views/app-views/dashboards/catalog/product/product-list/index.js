@@ -859,7 +859,7 @@ const ProductList = () => {
             </Select>
           </Form.Item>
         </Col>
-        {/* <Col md={6} sm={24} xs={24} lg={6}>
+        <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item name="acquirementMethod" label="Acquirement Method">
             <Select
               showSearch
@@ -881,7 +881,7 @@ const ProductList = () => {
               <Option value="Giveaway">Giveaway</Option>
             </Select>
           </Form.Item>
-        </Col> */}
+        </Col>
         <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item name="orderByName" label="Order By Name">
             <Select
@@ -914,6 +914,142 @@ const ProductList = () => {
             </Select>
           </Form.Item>
         </Col>
+
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="manufactureId" label="Manufacture">
+            <Select
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              placeholder="Manufacture"
+            >
+              {productTemplates.map((temp) => (
+                <Option value={temp.id}>{temp.name}</Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </Col>
+
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="medicineTypeId" label="Medicine Type">
+            <Select
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              placeholder="Medicine Type"
+            >
+              {productTemplates.map((temp) => (
+                <Option value={temp.id}>{temp.name}</Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </Col>
+
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="productVariantId" label="Product Variant">
+            <Select
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              placeholder="Product Variant"
+            >
+              {productTemplates.map((temp) => (
+                <Option value={temp.id}>{temp.name}</Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </Col>
+
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="productType" label="Product Type">
+            <Select
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              className="w-100"
+              style={{ minWidth: 180 }}
+              // onChange={(value) => setSelectedApproval(value)}
+              // onSelect={handleQuery}
+              // value={selectedApproval}
+              placeholder="Product Type"
+            >
+              <Option value="">All</Option>
+              <Option value="Medicine">Medicine</Option>
+              <Option value="NonMedicine">NonMedicine</Option>
+            </Select>
+          </Form.Item>
+        </Col>
+
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="returnable" label="Returnable">
+            <Select
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              className="w-100"
+              style={{ minWidth: 180 }}
+              // onChange={(value) => setSelectedApproval(value)}
+              // onSelect={handleQuery}
+              // value={selectedApproval}
+              placeholder="Returnable"
+            >
+              <Option value="">All</Option>
+              <Option value={true}>Yes</Option>
+              <Option value={false}>No</Option>
+            </Select>
+          </Form.Item>
+        </Col>
+
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="prescriptionRequired" label="Prescription Required">
+            <Select
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              className="w-100"
+              style={{ minWidth: 180 }}
+              // onChange={(value) => setSelectedApproval(value)}
+              // onSelect={handleQuery}
+              // value={selectedApproval}
+              placeholder="Prescription Required"
+            >
+              <Option value="">All</Option>
+              <Option value={true}>Yes</Option>
+              <Option value={false}>No</Option>
+            </Select>
+          </Form.Item>
+        </Col>
+
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="tags" label="Tags">
+            <Select
+              mode='tags'
+              dropdownStyle={{display : 'none'}}
+              style={{ width: '100%' }}
+              // onChange={(value) => setSelectedApproval(value)}
+              // onSelect={handleQuery}
+              // value={selectedApproval}
+              placeholder="Tags"
+            >
+              <Option value="">All</Option>
+              <Option value={true}>Yes</Option>
+              <Option value={false}>No</Option>
+            </Select>
+          </Form.Item>
+        </Col>
+
         <Col className="mb-4">
           <Button type="primary" onClick={handleFilterSubmit}>
             Filter
