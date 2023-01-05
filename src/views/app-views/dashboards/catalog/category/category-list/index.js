@@ -373,7 +373,7 @@ const handleTableChange = (newPagination) => {
             </Select>
           </Form.Item>
         </Col>
-        <Col md={6} sm={24} xs={24} lg={6}>
+        {/* <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item name="excludePriorityZero" label="Exclude Priority Zero">
             <Select className="w-100" placeholder="excludePriorityZero">
               <Option value="">All</Option>
@@ -381,7 +381,7 @@ const handleTableChange = (newPagination) => {
               <Option value="false">false</Option>
             </Select>
           </Form.Item>
-        </Col>
+        </Col> */}
         <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item name="tags" label="Tags">
             <Select dropdownStyle={{display: "none"}} mode = 'tags' style={{width: '100%'}} placeholder='tags'>

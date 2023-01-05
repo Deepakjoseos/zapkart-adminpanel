@@ -859,7 +859,7 @@ const ProductList = () => {
             </Select>
           </Form.Item>
         </Col>
-        <Col md={6} sm={24} xs={24} lg={6}>
+        {/* <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item name="acquirementMethod" label="Acquirement Method">
             <Select
               showSearch
@@ -881,7 +881,7 @@ const ProductList = () => {
               <Option value="Giveaway">Giveaway</Option>
             </Select>
           </Form.Item>
-        </Col>
+        </Col> */}
         <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item name="orderByName" label="Order By Name">
             <Select
@@ -916,6 +916,23 @@ const ProductList = () => {
         </Col>
 
         <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="productVariantId" label="Product Variant">
+            <Select
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              placeholder="Product Variant"
+            >
+              {productTemplates.map((temp) => (
+                <Option value={temp.id}>{temp.name}</Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </Col>
+
+        <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item name="manufactureId" label="Manufacture">
             <Select
               showSearch
@@ -941,23 +958,6 @@ const ProductList = () => {
                 option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
               }
               placeholder="Medicine Type"
-            >
-              {productTemplates.map((temp) => (
-                <Option value={temp.id}>{temp.name}</Option>
-              ))}
-            </Select>
-          </Form.Item>
-        </Col>
-
-        <Col md={6} sm={24} xs={24} lg={6}>
-          <Form.Item name="productVariantId" label="Product Variant">
-            <Select
-              showSearch
-              optionFilterProp="children"
-              filterOption={(input, option) =>
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }
-              placeholder="Product Variant"
             >
               {productTemplates.map((temp) => (
                 <Option value={temp.id}>{temp.name}</Option>

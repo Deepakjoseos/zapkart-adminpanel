@@ -715,7 +715,7 @@ const ProductTemplateList = () => {
         </Col>
         )}
 
-        {SITE_NAME === 'zapkart' && (
+        {/* {SITE_NAME === 'zapkart' && (
           <Col md={6} sm={24} xs={24} lg={6}>
 
         <Form.Item name="productsExists" label="Products Exists">
@@ -738,7 +738,7 @@ const ProductTemplateList = () => {
           </Select>
         </Form.Item>
           </Col>
-        )}
+        )} */}
         {SITE_NAME === 'zapkart' && (
           <Col md={6} sm={24} xs={24} lg={6}>
         <Form.Item name="orderByPrice" label="Order By Price">
