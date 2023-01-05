@@ -535,7 +535,14 @@ const dashBoardNavTree = [
         submenu: [],
       },
       
-    
+      {
+        key: 'dashboards-returnRequest',
+        path: `${APP_PREFIX_PATH}/dashboards/return-request`,
+        title: 'Return Request',
+        icon: SettingOutlined,
+        breadcrumb: false,
+        submenu: [],
+      },
 
       {
         key: 'dashboards-settings',
