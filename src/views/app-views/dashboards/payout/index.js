@@ -82,6 +82,7 @@ const Payout = () => {
     if(res){
       message.success('Approved')
     }
+    getPayout();
   }
 
   const clickHandle = (value) => {
