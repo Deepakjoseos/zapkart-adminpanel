@@ -68,8 +68,18 @@ const Payout = () => {
     if(data) {
       setUsers(data.data)
       console.log(data.data,"reqdata");
-      // const userIds = data.map((cont) => cont.id) 
-      // setUserId(userIds)
+      const userIds = data.data.map((cont) => { 
+        return ({
+        id: cont.vendorId,
+        fullName: cont.vendorName
+        })
+    }) 
+      setUserId(userIds)
+      // {users.map((user) => (
+      //   <Option key={user.id} value={user.id}>
+      //     {user.fullName}
+      //   </Option>
+      // ))}
     }
   }
 
@@ -145,6 +155,7 @@ const Payout = () => {
 
   const handleFilterSubmit = async () => {
     setPagination(resetPagination())
+    console.log(userId, "filter");
 
     form
       .validateFields()
@@ -205,14 +216,14 @@ const Payout = () => {
 
           </Form.Item>
         </Col> */}
-        {/* <Col md={6} sm={24} xs={24} lg={6}>
+        <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item name="userId" label="Customers">
             <Select
               showSearch
-              optionFilterProp="children"
-              filterOption={(input, option) =>
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }
+              // optionFilterProp="children"
+              // filterOption={(input, option) =>
+              //   option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              // }
               className="w-100"
               style={{ minWidth: 180 }}
               // onChange={(value) => setSelectedUserId(value)}
@@ -221,14 +232,14 @@ const Payout = () => {
               placeholder="Users"
             >
               <Option value="">All</Option>
-              {users.map((user) => (
+              {userId.map((user) => (
                 <Option key={user.id} value={user.id}>
                   {user.fullName}
                 </Option>
               ))}
             </Select>
           </Form.Item>
-        </Col> */}
+        </Col>
 
         <Col md={6} sm={24} xs={24} lg={3} className="mb-4 ml-2">
           <Button type="primary" onClick={handleFilterSubmit}>
