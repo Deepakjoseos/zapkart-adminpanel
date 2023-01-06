@@ -15,4 +15,18 @@ payoutService.getPayoutReq= async function(paginationQuery = '', query = '') {
     }
 }
 
+payoutService.approvePayout= async function(data) {
+    try {
+            let url = `https://ecommercelive.riolabz.com/api/v1/wallet/payout/requests/approve`
+            const res = fetch({
+                url ,
+                method: 'post',
+                data: data
+            })
+        return res;
+    } catch(err) {
+        console.log(err,'show-err')
+    }
+}
+
 export default payoutService;

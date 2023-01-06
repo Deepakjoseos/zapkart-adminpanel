@@ -9,7 +9,7 @@ import {
   Tag,
   Form,
   Row,
-  Col, notification
+  Col, notification, message
 } from 'antd'
 // import BrandListData from 'assets/data/product-list.data.json'
 import {
@@ -69,7 +69,30 @@ const Payout = () => {
       setUsers(data)
       const userIds = data.map((cont) => cont.id) 
       setUserId(userIds)
+      setPagination({
+        ...paginationParams.pagination,
+        total: data.total,
+      })
+      setLoading(false)
     }
+  }
+
+  const approvePayout = async (data) => {
+    const res = await payoutService.approvePayout(data)
+    if(res){
+      message.success('Approved')
+    }
+  }
+
+  const clickHandle = (value) => {
+    // console.log(value, moment().format('DD-MM-YYYY hh:mm:a'))
+    const data={
+      walletPayoutId: value.id,
+      approved: true,
+      approvedOn: moment().format('DD-MM-YYYY hh:mm:a')
+    }
+    // console.log(data, "rohit")
+    approvePayout(data)
   }
 
   useEffect(() => {
@@ -96,6 +119,17 @@ const Payout = () => {
 
   const tableColumns = [
     {
+      title: 'User Name',
+      dataIndex: 'userName',
+    },
+    {
+      title: 'Bank',
+      dataIndex: 'bankAccount',
+      render:(data) => {
+        // console.log(data,"rohit")
+        return (<div>{data?.nickName}</div>)}
+    },
+    {
       title: 'Amount',
       dataIndex: 'amount',
       // render: (text, record) => (
@@ -103,10 +137,6 @@ const Payout = () => {
       //     {text}
       //   </Link>
       // ),
-    },
-    {
-      title: 'Bank Account Id',
-      dataIndex: 'bankAccountId',
     },
     {
       title: 'Approved',
@@ -123,6 +153,19 @@ const Payout = () => {
       title: 'Updated At',
       dataIndex: 'updatedAt',
       render: (updatedAt) => (<div>{moment(new Date(updatedAt * 1000)).format('DD-MM-YYYY hh:mm:a')}</div>)
+    },
+    {
+      title: '',
+      dataIndex: 'id',
+      render: (id) => {
+        const sendingValue = users.filter((user) => user.id === id)
+        return(<Button onClick={()=> clickHandle(sendingValue[0])}>Test</Button>)
+      }
+      // render: (approved) => (<Button 
+      //   onClick={() =>clickHandle()}
+      //   type='primary' 
+      //   disabled={approved}
+      // >{approved ? 'Approved' : 'Approve'}</Button>)
     },
   ]
 
