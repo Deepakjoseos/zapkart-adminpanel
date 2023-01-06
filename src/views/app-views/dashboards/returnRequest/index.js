@@ -9,7 +9,7 @@ import {
   Tag,
   Form,
   Row,
-  Col, notification
+  Col, notification, Drawer, message
 } from 'antd'
 // import BrandListData from 'assets/data/product-list.data.json'
 import {
@@ -36,18 +36,18 @@ const { Option } = Select
 
 const Payout = () => {
   const [searchBackupList, setSearchBackupList] = useState([])
-  const [selectedRowKeys, setSelectedRowKeys] = useState([])
+  const [remarks, setRemarks] = useState(null)
   const [userId, setUserId] = useState([])
   const [users, setUsers] = useState([])
-  const [selectedUserId, setSelectedUserId] = useState(null)
-  const [paymentStatuses, setPaymentStatuses] = useState([])
+  const [selectedUser, setSelectedUser] = useState(null)
+  const [sendingValues, setSendingValues] = useState([])
   const [orderStatuses, setOrderStatuses] = useState([])
   const [customerPrescriptions, setCustomerPrescriptions] = useState([])
-  const [statuses, setStatuses] = useState([])
+  const [openForm, setOpenForm] = useState(false)
   let history = useHistory()
   const [form] = Form.useForm()
 
-  const [list, setList] = useState([])
+  const [list, setList] = useState({})
   const [selectedRows, setSelectedRows] = useState([])
 
   // Added for Pagination
@@ -146,13 +146,26 @@ const Payout = () => {
     },
     {
       title: '',
-      dataIndex: 'status',
-      render: (status) => <Button 
-        type={status === "Return Requested" ? "primary" : ""}
-        disabled={status === "Return Requested" ? false : true}
-        onClick={() => { }}
-      >{status === "Return Requested" ? "Approve" : "Approved"}</Button>
-      // {data === 'Return Requested' ?(<Button type='primary'>Approve</Button>):(<Button disabled>Approved</Button>)}
+      dataIndex: 'id',
+      render: (id) => {
+        const data = users.filter((user)=>(id === user.id))
+        return(<Button 
+          onClick={() => { setOpenForm(true)
+          setSelectedUser(data)
+          setList(prev => ({
+            ...prev,
+            status: 'Shipping Soon',
+            itemIds: data[0]?.id
+          }))
+        }}
+          type='primary' 
+          disabled={data.status !== "Return Requested" ? false : true}>Approve</Button>)
+      }
+      // (<Button 
+      //   type={status === "Return Requested" ? "primary" : ""}
+      //   disabled={status === "Return Requested" ? false : true}
+      //   onClick={() => { setOpenForm(true)}}
+      // >{status === "Return Requested" ? "Approve" : "Approved"}</Button>)
     },
   ]
 
@@ -178,6 +191,10 @@ const Payout = () => {
         // console.log('info', info)
         setFilterEnabled(false)
       })
+  }
+
+  const onFormModalClose = () => {
+    setOpenForm(false)
   }
 
   const handleClearFilter = async () => {
@@ -229,6 +246,23 @@ const Payout = () => {
     </Form>
   )
 
+  const remarkChange =(e) => {
+    setList(prev => ({
+      ...prev,
+      returnRemark: e.target?.value
+    }))
+  }
+
+  const confirmReturn =async( id) => {
+    console.log( id , "sending values",list , "list")
+      const res = await returnReqService.approveReq(list, id)
+      if(res){
+        setOpenForm(false);
+        message.success("approved");
+        getReturnReqList();
+      }
+  }
+
 return(
   <Card> 
     <span alignItems="center" justifyContent="between" mobileFlex={false}>
@@ -247,6 +281,36 @@ return(
           rowKey="id"
         />
       </div>
+      {openForm && (
+        <Drawer
+          title="Confirm Approval"
+          width={400}
+          onClose={() => onFormModalClose()}
+          visible={openForm}
+          bodyStyle={{ paddingBottom: 80 }}
+        >
+          <br />
+          <label>Return Remarks</label>
+          <br />
+          <Input value={list.returnRemark} onChange={remarkChange}/>
+        <br />
+
+          <Button type='primary' onClick={() => { 
+            setSendingValues({
+              itemIds: selectedUser[0].id,
+              returnRemark: remarks,
+              status: 'Shipping Soon'
+            })
+            // setList((prev) => ({
+            //   ...prev,
+            //   returnRemark: remarks,
+            //   status: 'Shipping Soon'
+            // }))
+            confirmReturn(selectedUser[0].orderId)
+
+          }}>Confirm Approval</Button>
+        </Drawer>
+      )}
   </Card>
 )
 }
