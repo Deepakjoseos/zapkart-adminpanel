@@ -23,8 +23,8 @@ const VendorTransactions = ({
   wallet,
 }) => {
 
-    console.log('transactions', transactions)
-    console.log('wallet', wallet)
+    // console.log('transactions', transactions)
+    // console.log('wallet', wallet)
 
     const [isFormOpen, setisFormOpen] = useState(false)
     const [bank_accounts, setBankAccounts] = useState([])

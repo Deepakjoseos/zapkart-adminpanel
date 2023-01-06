@@ -81,6 +81,13 @@ const rules = {
       message: 'Required',
     },
   ],
+  emailSubscription: [
+    {
+      required: true,
+      message: 'Required',
+    }
+  ]
+  
 }
 
 const SITE_NAME = process.env.REACT_APP_SITE_NAME
@@ -115,6 +122,7 @@ const handleClick = async () => {
     message.success(`Updated Phone Number to ${data.phone}`)
     form.setFieldsValue({
       phone: data.phone,
+      // emailSubscription:data.emailSubscription ? 'Yes' : 'No'
     })
     setPhoneVerified(true)
     setData({
@@ -184,7 +192,7 @@ const handleClick = async () => {
                 >
                   <Input.Password />
                 </Form.Item>
-                <Form.Item name="phone" label="Phone" rules={rules.pone}>
+                <Form.Item name="phone" label="Phone" rules={rules.phone}>
                   <Input placeholder="Phone" />
                 </Form.Item>
                 {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
@@ -380,7 +388,16 @@ const handleClick = async () => {
 
                
 {/* *********************************EDIT****************************************** */}
-
+                <Form.Item
+                  name='smsSubscription'
+                  label='SMS Subscription'
+                >
+                  <Select>
+                    {/* <Option value = ''>All</Option> */}
+                    <Option value = {false}>No</Option>
+                    <Option value = {true}>Yes</Option>
+                  </Select>
+                </Form.Item>
 
               <Form.Item
                 hasFeedback
@@ -390,6 +407,19 @@ const handleClick = async () => {
               >
                 <Input disabled id="success" />
               </Form.Item>
+
+
+                <Form.Item
+                  name='emailSubscription'
+                  label='Email Subscription'
+                >
+                  <Select>
+                    {/* <Option value = ''>All</Option> */}
+                    <Option value = {false}>No</Option>
+                    <Option value = {true}>Yes</Option>
+                  </Select>
+                </Form.Item>
+
               {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
                 <Form.Item name="pan" label="Pan" rules={rules.pan}>
                   <Input placeholder="Pan" />
