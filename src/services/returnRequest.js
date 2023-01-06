@@ -2,9 +2,9 @@ import fetch from 'auth/FetchInterceptor'
 
 const returnReqService = {};
 
-returnReqService.getPayoutReq= async function(paginationQuery = '', query = '') {
+returnReqService.getAllItems= async function(query = '') {
     try {
-            let url = `https://ecommercelive.riolabz.com/api/v1/wallet/payout/requests/all/admin?${paginationQuery}&${query}`
+            let url = `https://ecommercelive.riolabz.com/api/v1/order/admin/view_all_items?status=Shipped&${query}`
             const res = fetch({
                 url ,
                 method: 'get'

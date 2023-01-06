@@ -60,22 +60,21 @@ const Payout = () => {
     pageSize: 10,
   })
 
-  const getReturnReqList = async(paginationParams = {}, filterParams) => {
-    const data = await returnReqService.getPayoutReq(
-      qs.stringify(getPaginationParams(paginationParams)),
+  const getReturnReqList = async(filterParams) => {
+    const data = await returnReqService.getAllItems(
+      // qs.stringify(getPaginationParams(paginationParams)),
       qs.stringify(filterParams)
     )
     if(data) {
-      setUsers(data)
-      const userIds = data.map((cont) => cont.id) 
-      setUserId(userIds)
+      setUsers(data.data)
+      console.log(data.data,"reqdata");
+      // const userIds = data.map((cont) => cont.id) 
+      // setUserId(userIds)
     }
   }
 
   useEffect(() => {
-    getReturnReqList({
-      pagination,
-    })
+    getReturnReqList()
   }, [])
 
 
@@ -87,17 +86,14 @@ const Payout = () => {
 
   const handleTableChange = (newPagination) => {
     getReturnReqList(
-      {
-        pagination: newPagination,
-      },
       filterEnabled ? _.pickBy(form.getFieldsValue(), _.identity) : {}
     )
   }
 
   const tableColumns = [
     {
-      title: 'Amount',
-      dataIndex: 'amount',
+      title: 'Order No',
+      dataIndex: 'orderNo',
       // render: (text, record) => (
       //   <Link to={`/app/dashboards/orders/order-view/${record.id}`}>
       //     {text}
@@ -105,23 +101,38 @@ const Payout = () => {
       // ),
     },
     {
-      title: 'Bank Account Id',
-      dataIndex: 'bankAccountId',
+      title: 'Product Name',
+      dataIndex: 'name',
+      render: (text, record) => (
+        <Link to={`/app/dashboards/catalog/product/edit-product/${record.id}`}>
+          {text}
+        </Link>
+      ),
     },
+
     {
-      title: 'Approved',
-      dataIndex: 'approved',
-      render:(app) => (app ? 
-        <div>Yes</div> : <div>No</div> )
+      title: 'Quantity',
+      dataIndex:'quantity',
     },
+
     {
-      title: 'Created At',
-      dataIndex: 'createdAt',
+      title: 'Price',
+      dataIndex:'price',
+    },
+    // {
+    //   title: 'Approved',
+    //   dataIndex: 'approved',
+    //   render:(app) => (app ? 
+    //     <div>Yes</div> : <div>No</div> )
+    // },
+    {
+      title: 'Order Date',
+      dataIndex: 'Orderdate',
       render: (createdAt) => (<div>{moment(new Date(createdAt * 1000)).format('DD-MM-YYYY hh:mm:a')}</div>)
     },
     {
-      title: 'Updated At',
-      dataIndex: 'updatedAt',
+      title: 'Return-Requested Date',
+      dataIndex: 'returnRequested',
       render: (updatedAt) => (<div>{moment(new Date(updatedAt * 1000)).format('DD-MM-YYYY hh:mm:a')}</div>)
     },
   ]
@@ -142,7 +153,7 @@ const Payout = () => {
         // console.log(values, "heyy");
         // Removing falsy Values from values
         const sendingValues = _.pickBy(values, _.identity)
-        getReturnReqList({ pagination: resetPagination() }, sendingValues)
+        getReturnReqList(sendingValues)
       })
       .catch((info) => {
         // console.log('info', info)
@@ -154,7 +165,7 @@ const Payout = () => {
     form.resetFields()
 
     setPagination(resetPagination())
-    getReturnReqList({ pagination: resetPagination() }, {})
+    getReturnReqList()
     setFilterEnabled(false)
   }
 
@@ -172,7 +183,7 @@ const Payout = () => {
           </Form.Item>
         </Col> */}
 
-        <Col md={6} sm={24} xs={24} lg={8}>
+        {/* <Col md={6} sm={24} xs={24} lg={8}>
           <Form.Item name="id" label="id">
 
             <Select showSearch
@@ -193,7 +204,7 @@ const Payout = () => {
             </Select>
 
           </Form.Item>
-        </Col>
+        </Col> */}
         {/* <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item name="userId" label="Customers">
             <Select
@@ -241,11 +252,12 @@ return(
     </Flex>
     <div className="table-responsive">
         <Table
-          scroll={{
-            x: true,
-          }} pagination={pagination}
+          // scroll={{
+          //   x: true,
+          // }} 
+         // pagination={pagination}
           loading={loading}
-          onChange={handleTableChange}
+          // onChange={handleTableChange}
           columns={tableColumns}
           dataSource={users}
           rowKey="id"
