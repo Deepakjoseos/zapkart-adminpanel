@@ -172,7 +172,7 @@ const Payout = () => {
           </Form.Item>
         </Col> */}
 
-        <Col md={6} sm={24} xs={24} lg={8}>
+        <Col md={6} sm={24} xs={24} lg={5}>
           <Form.Item name="id" label="id">
 
             <Select showSearch
@@ -219,13 +219,13 @@ const Payout = () => {
           </Form.Item>
         </Col> */}
 
-        <Col md={6} sm={24} xs={24} lg={3} className="mb-4 ml-2">
+        <Col className="mb-4">
           <Button type="primary" onClick={handleFilterSubmit}>
             Filter
           </Button>
         </Col>
-        <Col md={6} sm={24} xs={24} lg={3} className="mb-4 ml-2">
-          <Button className="ml-1" type="primary" onClick={handleClearFilter}>
+        <Col className="mb-4">
+          <Button type="primary" onClick={handleClearFilter}>
             Clear
           </Button>
         </Col>
@@ -236,9 +236,9 @@ const Payout = () => {
 
 return(
   <Card> 
-    <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
+    <div alignItems="center" justifyContent="between" mobileFlex={false}>
       {filtersComponent()}
-    </Flex>
+    </div>
     <div className="table-responsive">
         <Table
           scroll={{
