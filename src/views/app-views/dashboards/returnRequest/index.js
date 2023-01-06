@@ -67,11 +67,10 @@ const Payout = () => {
     )
     if(data) {
       setUsers(data.data)
-      console.log(data.data,"reqdata");
       const userIds = data.data.map((cont) => { 
         return ({
-        id: cont.vendorId,
-        fullName: cont.vendorName
+        id: cont.userId,
+        fullName: cont.userName
         })
     }) 
       setUserId(userIds)
@@ -104,11 +103,11 @@ const Payout = () => {
     {
       title: 'Order No',
       dataIndex: 'orderNo',
-      // render: (text, record) => (
-      //   <Link to={`/app/dashboards/orders/order-view/${record.id}`}>
-      //     {text}
-      //   </Link>
-      // ),
+      render: (text, record) => (
+        <Link to={`/app/dashboards/orders/order-view/${record.orderId}`}>
+          {text}
+        </Link>
+      ),
     },
     {
       title: 'Product Name',
@@ -137,13 +136,23 @@ const Payout = () => {
     // },
     {
       title: 'Order Date',
-      dataIndex: 'returnRequestedAt',
-      render: (createdAt) => (<div>{moment(new Date(createdAt * 1000)).format('DD-MM-YYYY hh:mm:a')}</div>)
+      dataIndex: 'orderedAt',
+      render: (orderedAt) => (<div>{moment(new Date(orderedAt * 1000)).format('DD-MM-YYYY hh:mm:a')}</div>)
     },
     {
       title: 'Return-Requested Date',
-      dataIndex: 'returnRequested',
-      render: (updatedAt) => (<div>{moment(new Date(updatedAt * 1000)).format('DD-MM-YYYY hh:mm:a')}</div>)
+      dataIndex: 'returnRequestedAt',
+      render: (returnRequestedAt) => <div>{moment(new Date(returnRequestedAt * 1000)).format('DD-MM-YYYY hh:mm:a')}</div>
+    },
+    {
+      title: '',
+      dataIndex: 'status',
+      render: (status) => <Button 
+        type={status === "Return Requested" ? "primary" : ""}
+        disabled={status === "Return Requested" ? false : true}
+        onClick={() => { }}
+      >{status === "Return Requested" ? "Approve" : "Approved"}</Button>
+      // {data === 'Return Requested' ?(<Button type='primary'>Approve</Button>):(<Button disabled>Approved</Button>)}
     },
   ]
 
@@ -155,7 +164,6 @@ const Payout = () => {
 
   const handleFilterSubmit = async () => {
     setPagination(resetPagination())
-    console.log(userId, "filter");
 
     form
       .validateFields()
@@ -188,47 +196,12 @@ const Payout = () => {
       className="ant-advanced-search-form"
     >
       <Row gutter={8} align="bottom">
-        {/* <Col md={6} sm={24} xs={24} lg={6}>
-          <Form.Item name="search" label="Search">
-            <Input placeholder="Search" prefix={<SearchOutlined />} />
-          </Form.Item>
-        </Col> */}
-
-        {/* <Col md={6} sm={24} xs={24} lg={8}>
-          <Form.Item name="id" label="id">
-
-            <Select showSearch
-              optionFilterProp="children"
-              filterOption={(input, option) =>
-                option.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }
-              className="w-100"
-              style={{ minWidth: 180 }}
-              placeholder="id"
-            >
-              <Option value="">All</Option>
-              {userId?.map((item) => (
-              <Option key={item} value={item}>
-                {item}
-              </Option>
-            ))}
-            </Select>
-
-          </Form.Item>
-        </Col> */}
         <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item name="userId" label="Customers">
             <Select
               showSearch
-              // optionFilterProp="children"
-              // filterOption={(input, option) =>
-              //   option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              // }
               className="w-100"
               style={{ minWidth: 180 }}
-              // onChange={(value) => setSelectedUserId(value)}
-              // onSelect={handleQuery}
-              // value={selectedUserId}
               placeholder="Users"
             >
               <Option value="">All</Option>
@@ -241,26 +214,26 @@ const Payout = () => {
           </Form.Item>
         </Col>
 
-        <Col md={6} sm={24} xs={24} lg={3} className="mb-4 ml-2">
+        <Col className="mb-4">
           <Button type="primary" onClick={handleFilterSubmit}>
             Filter
           </Button>
         </Col>
-        <Col md={6} sm={24} xs={24} lg={3} className="mb-4 ml-2">
-          <Button className="ml-1" type="primary" onClick={handleClearFilter}>
+
+        <Col className="mb-4">
+          <Button type="primary" onClick={handleClearFilter}>
             Clear
           </Button>
         </Col>
-
       </Row>
     </Form>
   )
 
 return(
   <Card> 
-    <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
+    <span alignItems="center" justifyContent="between" mobileFlex={false}>
       {filtersComponent()}
-    </Flex>
+    </span>
     <div className="table-responsive">
         <Table
           // scroll={{
