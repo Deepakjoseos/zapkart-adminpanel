@@ -41,7 +41,7 @@ const Payout = () => {
   const [users, setUsers] = useState([])
   const [selectedUser, setSelectedUser] = useState(null)
   const [sendingValues, setSendingValues] = useState([])
-  const [orderStatuses, setOrderStatuses] = useState([])
+  const [customerList, setCustomerList] = useState(null)
   const [customerPrescriptions, setCustomerPrescriptions] = useState([])
   const [openForm, setOpenForm] = useState(false)
   let history = useHistory()
@@ -84,6 +84,7 @@ const Payout = () => {
 
   useEffect(() => {
     getReturnReqList()
+    getCustomers()
   }, [])
 
 
@@ -222,10 +223,10 @@ const Payout = () => {
               placeholder="Users"
             >
               <Option value="">All</Option>
-              {userId.map((user) => (
-                <Option key={user.id} value={user.id}>
-                  {user.fullName}
-                </Option>
+              {customerList?.map((user) => (
+                <Option key={user?.id} value={user?.id}>
+                  {user?.fullName}
+                </ Option>
               ))}
             </Select>
           </Form.Item>
@@ -261,6 +262,18 @@ const Payout = () => {
         message.success("approved");
         getReturnReqList();
       }
+  }
+
+  const getCustomers = async () => {
+    const data = await customerService.getCustomers()
+    if (data) {
+      const users = data.map(cur => {
+        return {
+          ...cur, fullName: `${cur.firstName} ${cur.lastName}`
+        }
+      })
+      setCustomerList(users)
+    }
   }
 
 return(
