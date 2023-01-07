@@ -220,7 +220,7 @@ const Payout = () => {
               showSearch
               className="w-100"
               style={{ minWidth: 180 }}
-              placeholder="Users"
+              placeholder="Customer"
             >
               <Option value="">All</Option>
               {customerList?.map((user) => (
