@@ -270,7 +270,7 @@ const Documents = () => {
     getVendorDocumentById()
   }, [])
 
-  console.log(isVerifiedEmiratesId, 'psjk;j')
+  // console.log(isVerifiedEmiratesId, 'psjk;j')
 
   const onSaveDocument = async () => {
     let tradeLicenseFileUrl,
