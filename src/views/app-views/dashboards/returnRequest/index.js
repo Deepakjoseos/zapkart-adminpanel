@@ -289,26 +289,49 @@ return(
           visible={openForm}
           bodyStyle={{ paddingBottom: 80 }}
         >
+        
+        <div
+          style={{
+            textAlign: 'right',
+          }}
+        >
+          <Button
+            onClick={() => onFormModalClose()}
+            style={{ marginRight: 8 }}
+            htmlType="button"
+          >
+            Abort
+          </Button>
+          <Button
+            htmlType="button"
+            // onClick={onFinish}
+            type="primary"
+            // loading={submitLoading}
+            onClick={() => { 
+              setSendingValues({
+                itemIds: selectedUser[0].id,
+                returnRemark: remarks,
+                status: 'Shipping Soon'
+              })
+              // setList((prev) => ({
+              //   ...prev,
+              //   returnRemark: remarks,
+              //   status: 'Shipping Soon'
+              // }))
+              confirmReturn(selectedUser[0].orderId)
+  
+            }}
+          >
+            Submit
+          </Button>
+        </div>
+      
           <br />
           <label>Return Remarks</label>
           <br />
           <Input value={list.returnRemark} onChange={remarkChange}/>
         <br />
 
-          <Button type='primary' onClick={() => { 
-            setSendingValues({
-              itemIds: selectedUser[0].id,
-              returnRemark: remarks,
-              status: 'Shipping Soon'
-            })
-            // setList((prev) => ({
-            //   ...prev,
-            //   returnRemark: remarks,
-            //   status: 'Shipping Soon'
-            // }))
-            confirmReturn(selectedUser[0].orderId)
-
-          }}>Confirm Approval</Button>
         </Drawer>
       )}
   </Card>
