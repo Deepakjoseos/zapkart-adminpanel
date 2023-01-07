@@ -31,11 +31,12 @@ import constantsService from 'services/constants'
 import orderService from 'services/orders'
 import moment from 'moment'
 import payoutService from 'services/payout'
+import vendorService from 'services/vendor'
 
 const { Option } = Select
 
 const Payout = () => {
-  const [searchBackupList, setSearchBackupList] = useState([])
+  const [vendorList, setVendorList] = useState(null)
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
   const [userId, setUserId] = useState([])
   const [users, setUsers] = useState([])
@@ -103,6 +104,7 @@ const Payout = () => {
     getPayout({
       pagination,
     })
+    getVendors()
   }, [])
 
 
@@ -151,19 +153,33 @@ const Payout = () => {
     {
       title: 'Created At',
       dataIndex: 'createdAt',
-      render: (createdAt) => (<div>{moment(new Date(createdAt * 1000)).format('DD-MM-YYYY hh:mm:a')}</div>)
+      render: (createdAt) => (<div>{moment(new Date(createdAt * 1000)).format('DD-MMM-YYYY hh:mm:a')}</div>)
     },
     {
       title: 'Updated At',
       dataIndex: 'updatedAt',
-      render: (updatedAt) => (<div>{moment(new Date(updatedAt * 1000)).format('DD-MM-YYYY hh:mm:a')}</div>)
+      render: (updatedAt) => (<div>{moment(new Date(updatedAt * 1000)).format('DD-MMM-YYYY hh:mm:a')}</div>)
     },
     {
       title: '',
       dataIndex: 'id',
       render: (id) => {
         const sendingValue = users.filter((user) => user.id === id)
-        return(<Button type='primary' onClick={()=> clickHandle(sendingValue[0])}>Approve</Button>)
+        return(
+          <>
+              {sendingValue[0].approved ? 
+                <>
+                <Button disabled>Approved</Button>
+                </> : <>
+                <Button 
+                  onClick={()=> clickHandle(sendingValue[0])}
+                  type='primary'
+                >Approve</Button>
+                </>
+              }
+          </>
+        )
+        // return(<Button disabled={sendingValue[0].approved} type='primary' onClick={()=> clickHandle(sendingValue[0])}>Approve</Button>)
       }
       // render: (approved) => (<Button 
       //   onClick={() =>clickHandle()}
@@ -220,7 +236,7 @@ const Payout = () => {
         </Col> */}
 
         <Col md={6} sm={24} xs={24} lg={5}>
-          <Form.Item name="id" label="id">
+          <Form.Item name="userId" label="Vendor Name">
 
             <Select showSearch
               optionFilterProp="children"
@@ -229,12 +245,12 @@ const Payout = () => {
               }
               className="w-100"
               style={{ minWidth: 180 }}
-              placeholder="id"
+              placeholder="Vendor"
             >
               <Option value="">All</Option>
-              {userId?.map((item) => (
+              {vendorList?.map((item) => (
               <Option key={item.id} value={item.id}>
-                {item.name}
+                {`${item.firstName} ${item.lastName}`}
               </Option>
             ))}
             </Select>
@@ -280,6 +296,11 @@ const Payout = () => {
       </Row>
     </Form>
   )
+
+  const getVendors = async() => {
+    const data = await vendorService.getVendors()
+    if(data) setVendorList(data)
+  }
 
 return(
   <Card> 
