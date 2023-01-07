@@ -1,2 +1,0 @@
-(this.webpackJsonpecommerce=this.webpackJsonpecommerce||[]).push([[109],{3432:function(e,c,t){"use strict";t.r(c);t(0);var r=t(1361),s=t(2);c.default=function(){return Object(s.jsx)(r.default,{allowRedirect:!0})}}}]);
-//# sourceMappingURL=109.e923fb69.chunk.js.map
