@@ -196,12 +196,34 @@ const handleClick = async () => {
 {/* *************************************Edited*************************************************** */}
 
               <Form.Item
+                name="smsSubscription"
+                label="SMS Subscription"
+                rules={rules.emailVerified}
+              >
+                <Select placeholder="SMS Subscription">
+                  <Option value={true}>Yes</Option>
+                  <Option value={false}>No</Option>
+                </Select>
+              </Form.Item>
+
+              <Form.Item
                 hasFeedback
                 validateStatus={emailVerified ? 'success' : 'error'}
                 name="email"
                 label="Email"
               >
                 <Input disabled id="success" />
+              </Form.Item>
+
+              <Form.Item
+                name="emailSubscription"
+                label="Email Subscription"
+                rules={rules.emailVerified}
+              >
+                <Select placeholder="Email Subscription">
+                  <Option value={true}>Yes</Option>
+                  <Option value={false}>No</Option>
+                </Select>
               </Form.Item>
             </>
           ) : (
