@@ -11,6 +11,7 @@ import {
   Row,
   Col,
   Popconfirm,
+  message,
 } from 'antd'
 // import { invoiceData } from '../../../pages/invoice/invoiceData'
 import NumberFormat from 'react-number-format'
@@ -39,6 +40,7 @@ const ShipmentView = () => {
   const [selectedCourierId, setSelectedCourierId] = useState(null)
   const [currentActionButton, setCurrentActionButton] = useState(null)
   const [selectedShipmentType, setSelectedShipmentType] = useState(null)
+  const [syncLoading, setSyncLoading] = useState(false)
   //   const [isFormOpen, setIsFormOpen] = useState(false)
   //   const [printing, setPrinting] = useState(false)
   //   const [isPrescriptionModalOpen, setIsPrescriptionModalOpen] = useState(false)
@@ -61,7 +63,14 @@ const ShipmentView = () => {
   })
 
   //   console.log(printing, 'ljkshdl')
-  console.log('shipmentidid', id)
+  // console.log('shipmentidid', id)
+
+  const SyncShiprocket = async () => {
+    setSyncLoading(true)
+    const data = await shipmentService.SyncWithShipRocket(id)
+    data.message && message.success(data.message)
+    setSyncLoading(false)
+  }
 
   const getShipmentById = async () => {
     const shipmentData = await shipmentService.getShipmentById(id)
@@ -734,6 +743,9 @@ const ShipmentView = () => {
           </Col>
         </Row>
       </Card>
+      {shipment.shippedBy === 'Ship Rocket' && (
+        <Button  loading ={syncLoading} type='primary' onClick={() => SyncShiprocket()}>Sync With ShipRocket</Button>
+      )}
       <CheckIfDeliverable
         setCheckIfDeliverableOpen={setCheckIfDeliverableOpen}
         checkIfDeliverableOpen={checkIfDeliverableOpen}
