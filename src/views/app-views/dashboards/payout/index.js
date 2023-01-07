@@ -67,7 +67,10 @@ const Payout = () => {
     )
     if(data) {
       setUsers(data)
-      const userIds = data.map((cont) => cont.id) 
+      const userIds = data.map((cont) => ({
+        id: cont.userId,
+        name: cont.userName
+      })) 
       setUserId(userIds)
       setPagination({
         ...paginationParams.pagination,
@@ -160,7 +163,7 @@ const Payout = () => {
       dataIndex: 'id',
       render: (id) => {
         const sendingValue = users.filter((user) => user.id === id)
-        return(<Button onClick={()=> clickHandle(sendingValue[0])}>Test</Button>)
+        return(<Button type='primary' onClick={()=> clickHandle(sendingValue[0])}>Approve</Button>)
       }
       // render: (approved) => (<Button 
       //   onClick={() =>clickHandle()}
@@ -230,8 +233,8 @@ const Payout = () => {
             >
               <Option value="">All</Option>
               {userId?.map((item) => (
-              <Option key={item} value={item}>
-                {item}
+              <Option key={item.id} value={item.id}>
+                {item.name}
               </Option>
             ))}
             </Select>
