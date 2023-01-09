@@ -125,7 +125,7 @@ const Payout = () => {
 
   const tableColumns = [
     {
-      title: 'User Name',
+      title: 'Vendors',
       dataIndex: 'userName',
     },
     {
