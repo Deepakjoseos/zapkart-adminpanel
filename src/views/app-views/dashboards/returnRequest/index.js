@@ -217,6 +217,10 @@ const Payout = () => {
         <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item name="userId" label="Customers">
             <Select
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
               showSearch
               className="w-100"
               style={{ minWidth: 180 }}
