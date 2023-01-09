@@ -55,15 +55,37 @@ const Payout = () => {
   const [filterEnabled, setFilterEnabled] = useState(false)
 
   // pagination
-  const [pagination, setPagination] = useState({
-    current: 1,
-    pageSize: 10,
-  })
+  // const [pagination, setPagination] = useState({
+  //   current: 1,
+  //   pageSize: 10,
+  // })
+
+  const defaultValues = {
+    status: [
+      "Items Returning Back",
+      "Return Requested",
+      "Return Initiated",
+      "Return Rescheduled",
+      "Return Completed",
+      "Return Delayed",
+      "Items Returning Back",
+      "Return Items Received",
+      "Return Items Verification Failed",
+      "Return Items Verification Completed",
+      "Return Failed",
+      "Return Cancelled",
+      "Refund Initiated",
+      "Refund Delayed",
+      "Refund Completed",
+      "Refund Failed"
+    ]
+  }
 
   const getReturnReqList = async(filterParams) => {
     const data = await returnReqService.getAllItems(
       // qs.stringify(getPaginationParams(paginationParams)),
-      qs.stringify(filterParams)
+      qs.stringify(filterParams),
+      qs.stringify(defaultValues)
     )
     if(data) {
       setUsers(data.data)
@@ -88,17 +110,17 @@ const Payout = () => {
   }, [])
 
 
-  const getPaginationParams = (params) => ({
-    limit: params.pagination?.pageSize,
-    page: params.pagination?.current,
-    // ...params,
-  })
+  // const getPaginationParams = (params) => ({
+  //   limit: params.pagination?.pageSize,
+  //   page: params.pagination?.current,
+  //   // ...params,
+  // })
 
-  const handleTableChange = (newPagination) => {
-    getReturnReqList(
-      filterEnabled ? _.pickBy(form.getFieldsValue(), _.identity) : {}
-    )
-  }
+  // const handleTableChange = (newPagination) => {
+  //   getReturnReqList(
+  //     filterEnabled ? _.pickBy(form.getFieldsValue(), _.identity) : {}
+  //   )
+  // }
 
   const tableColumns = [
     {
@@ -160,7 +182,7 @@ const Payout = () => {
           }))
         }}
           type='primary' 
-          disabled={data.status !== "Return Requested" ? false : true}>Approve</Button>)
+          disabled={data.status === "Return Requested" ? false : true}>Approve</Button>)
       }
       // (<Button 
       //   type={status === "Return Requested" ? "primary" : ""}
@@ -170,14 +192,14 @@ const Payout = () => {
     },
   ]
 
-  const resetPagination = () => ({
-    ...pagination,
-    current: 1,
-    pageSize: 10,
-  })
+  // const resetPagination = () => ({
+  //   ...pagination,
+  //   current: 1,
+  //   pageSize: 10,
+  // })
 
   const handleFilterSubmit = async () => {
-    setPagination(resetPagination())
+    // setPagination(resetPagination())
 
     form
       .validateFields()
@@ -201,7 +223,7 @@ const Payout = () => {
   const handleClearFilter = async () => {
     form.resetFields()
 
-    setPagination(resetPagination())
+    // setPagination(resetPagination())
     getReturnReqList()
     setFilterEnabled(false)
   }
@@ -259,7 +281,7 @@ const Payout = () => {
   }
 
   const confirmReturn =async( id) => {
-    console.log( id , "sending values",list , "list")
+    // console.log( id , "sending values",list , "list")
       const res = await returnReqService.approveReq(list, id)
       if(res){
         setOpenForm(false);
@@ -290,7 +312,7 @@ return(
           // scroll={{
           //   x: true,
           // }} 
-         // pagination={pagination}
+         pagination={false}
           loading={loading}
           // onChange={handleTableChange}
           columns={tableColumns}

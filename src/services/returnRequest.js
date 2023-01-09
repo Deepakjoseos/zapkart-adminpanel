@@ -2,11 +2,11 @@ import fetch from 'auth/FetchInterceptor'
 
 const returnReqService = {};
 
-returnReqService.getAllItems= async function(query = '') {
+returnReqService.getAllItems= async function(query = '', defaultQuery) {
     try {
         
 
-            let url = `https://ecommercelive.riolabz.com/api/v1/order/admin/view_all_items?status=Return%20Requested&${query}`
+            let url = `/order/admin/view_all_items?${defaultQuery}&${query}`
             const res = fetch({
                 url ,
                 method: 'get'
