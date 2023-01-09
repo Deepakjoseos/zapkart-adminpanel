@@ -256,6 +256,7 @@ const ProductForm = (props) => {
 
                 id = {id}                                       //Edit
                 setPhoneVerified={setPhoneVerified}             //Edit
+                setEmailVerified={setEmailVerified}             //Edit
 
 // *************************************Edited***************************************************
 

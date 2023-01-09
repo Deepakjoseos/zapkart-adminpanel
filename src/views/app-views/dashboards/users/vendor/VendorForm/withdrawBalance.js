@@ -36,7 +36,7 @@ import walletService from 'services/Wallet'
     selectedVendorId,
     bank_accounts
   }) => {
-    console.log('vendorId', selectedVendorId)
+    // console.log('vendorId', selectedVendorId)
     const [form] = Form.useForm()
   
     const [submitLoading, setSubmitLoading] = useState(false)
@@ -90,7 +90,7 @@ import walletService from 'services/Wallet'
             bankAccountId: values?.bankAccountId
   
           }
-          console.log(values, 'values')
+          // console.log(values, 'values')
   
           // if (selectedBankAccount === null) {
           // Checking if image exists
@@ -117,7 +117,7 @@ import walletService from 'services/Wallet'
         })
         .catch((info) => {
           setSubmitLoading(false)
-          console.log('info', info)
+          // console.log('info', info)
           message.error('Please enter all required field ')
         })
     }
