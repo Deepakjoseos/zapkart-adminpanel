@@ -1,6 +1,6 @@
 import React, { Component, useEffect, useRef, useState } from 'react'
 import { PrinterOutlined } from '@ant-design/icons'
-import { Card, Table, Button, Select, notification, Image, Modal } from 'antd'
+import { Card, Table, Button, Select, notification, Image, Modal, message } from 'antd'
 import { invoiceData } from '../../../pages/invoice/invoiceData'
 import NumberFormat from 'react-number-format'
 import { useParams, Link } from 'react-router-dom'
@@ -44,15 +44,20 @@ const OrderView = () => {
     // },
   })
 
-  console.log(printing, 'ljkshdl')
 
   const getOrderById = async () => {
-    const orderData = await orderService.getOrderById(id)
+    const orderData = await orderService.getOrderById(id)  
 
-    if (order) {
+    if (orderData) {
       setOrder(orderData)
     }
-    console.log('order payment', order.payment)
+  }
+
+  const clickSync = async (docID) => {
+    const res = await orderService.syncRazorPay(docID)
+    if(res){
+      message.success("synced with RazorPay")
+    }
   }
 
   useEffect(() => {
@@ -78,7 +83,6 @@ const OrderView = () => {
   const fetchConstants = async () => {
     const data = await constantsService.getConstants()
     if (data) {
-      // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
       setOrderItemsStatuses(Object.values(data.ORDER['ORDER_ITEM_STATUS']))
     }
   }
@@ -177,7 +181,22 @@ const OrderView = () => {
               Download Invoices
             </Button>
           )}
-        </Flex>
+
+          {order?.payment?.type === "Online" && order?.payment?.status === "PENDING" && (
+          <Flex 
+            justifyContent="end"
+          >
+            <Button 
+            type="primary"
+            className="mb-4 mr-2"
+            onClick={() => clickSync(order.payment.id)}
+            >
+              Sync with RazorPay
+            </Button>
+          </Flex>
+          )}
+          </Flex>
+
         <div>
           <Card>
             <div className="d-md-flex justify-content-md-between">
@@ -199,17 +218,6 @@ const OrderView = () => {
                       {order?.shippingAddress?.country}
                       {order?.shippingAddress?.uniqueId}
                     </span>
-                    {/* <span>
-                  {
-      title: 'OrderNo',
-      dataIndex: 'orderNo',
-      render: (text, record) => (
-        <Link to={`/app/dashboards/orders/order-view/${record.id}`}>
-          {text}
-        </Link>
-      ),
-    },
-                  </span> */}
 
                     <br />
                     <abbr className="text-dark" title="Phone">
@@ -412,6 +420,9 @@ const OrderView = () => {
                     }}
                   />
                 )}
+              <div >
+                <Button type='primary'>ShipRocket</Button>
+              </div>
               </Table>
               <div className="d-flex justify-content-end">
                 <div className="text-left">
@@ -548,6 +559,7 @@ const OrderView = () => {
                   ))}
                 </>
               )}
+
               <div className="mt-4">
                 <Table
                   dataSource={order?.items}

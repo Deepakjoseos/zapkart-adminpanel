@@ -59,6 +59,9 @@ const GeneralField = ({ propsImages, propsMobileImages,form_statuses }) => (
         >
           <Input placeholder="URL" />
         </Form.Item>
+
+
+        
         <Form.Item name="priority" label="Priority" rules={rules.priority}>
           <InputNumber placeholder="Priority" min={0} max={100000} />
         </Form.Item>
