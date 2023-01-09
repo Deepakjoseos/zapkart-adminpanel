@@ -151,12 +151,11 @@ const Payout = () => {
       title: 'Price',
       dataIndex:'price',
     },
-    // {
-    //   title: 'Approved',
-    //   dataIndex: 'approved',
-    //   render:(app) => (app ? 
-    //     <div>Yes</div> : <div>No</div> )
-    // },
+    {
+      title: 'Customer Remark',
+      dataIndex: 'returnCustomerRemark',
+      // render:(app) => (<p justifyContent='center' >{app ? app : '-'}</p>)
+    },
     {
       title: 'Order Date',
       dataIndex: 'orderedAt',
