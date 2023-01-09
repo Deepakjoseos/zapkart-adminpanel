@@ -9,7 +9,7 @@ import {
   Tag,
   Form,
   Row,
-  Col, notification
+  Col, notification, DatePicker
 } from 'antd'
 // import BrandListData from 'assets/data/product-list.data.json'
 import {
@@ -30,6 +30,7 @@ import customerService from 'services/customer'
 import constantsService from 'services/constants'
 import orderService from 'services/orders'
 import moment from 'moment'
+import vendorService from 'services/vendor'
 
 const { Option } = Select
 
@@ -57,11 +58,11 @@ const getShippingStatus = (status) => {
 }
 
 const Orders = () => {
-  const [searchBackupList, setSearchBackupList] = useState([])
+  const [paymentType, setPaymentType] = useState(null)
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
   const [selectedStatus, setSelectedStatus] = useState('')
   const [users, setUsers] = useState([])
-  const [selectedUserId, setSelectedUserId] = useState(null)
+  const [vendorList, setVendorList] = useState(null)
   const [paymentStatuses, setPaymentStatuses] = useState([])
   const [orderStatuses, setOrderStatuses] = useState([])
   const [customerPrescriptions, setCustomerPrescriptions] = useState([])
@@ -81,6 +82,8 @@ const Orders = () => {
     current: 1,
     pageSize: 15,
   })
+
+
   const getCustomers = async () => {
     const data = await customerService.getCustomers()
     if (data) {
@@ -93,6 +96,21 @@ const Orders = () => {
     }
   }
 
+  const getVendors = async () => {
+    const data = await vendorService.getVendors()
+    if (data) {
+      const users = data.map(cur => {
+        return {
+          ...cur, 
+          fullName: `${cur.firstName} ${cur.lastName}`
+        }
+      })
+      setVendorList(users)
+      // console.log(users, "rohit");
+    }
+  }
+
+
 
   const fetchConstants = async () => {
     const data = await constantsService.getConstants()
@@ -100,14 +118,19 @@ const Orders = () => {
       // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
       setOrderStatuses(Object.values(data.ORDER['ORDER_STATUS']))
       setPaymentStatuses(Object.values(data.PAYMENT['PAYMENT_STATUS']))
-      setStatuses(Object.values(data.GENERAL['STATUS']))
+      setStatuses(Object.values(data.ORDER['ORDER_ITEM_STATUS']))
+      setPaymentType(Object.values(data.GENERAL['PAYMENT_TYPE']))
     }
   }
   const getOrders = async (paginationParams = {}, filterParams) => {
     setLoading(true)
+    const defaultQuery = {
+      statusOtherThan: "Failed"
+    }
     const data = await orderService.getOrders(
       qs.stringify(getPaginationParams(paginationParams)),
-      qs.stringify(filterParams)
+      qs.stringify(filterParams),
+      qs.stringify(defaultQuery)
     )
 
     if (data) {
@@ -126,7 +149,7 @@ const Orders = () => {
     getOrders({
       pagination,
     })
-    // getVendors()
+    getVendors()
     fetchConstants()
     getCustomers()
   }, [])
@@ -148,7 +171,7 @@ const Orders = () => {
     )
   }
 
-  console.log('order Status', orderStatuses)
+  // console.log('order Status', orderStatuses)
 
   // const handleShowStatus = (value) => {
   //   if (value !== 'All') {
@@ -455,12 +478,14 @@ const Orders = () => {
       .validateFields()
       .then(async (values) => {
         setFilterEnabled(true)
-        // Removing falsy Values from values
-        const sendingValues = _.pickBy(values, _.identity)
+        // Removing falsy Values from values 
+        const sendingValues = _.pickBy({...values,
+          fromDate: values.fromDate ? moment(values.fromDate).format() : '', 
+          toDate: values.toDate ? moment(values.toDate).format():''}, _.identity)
         getOrders({ pagination: resetPagination() }, sendingValues)
       })
       .catch((info) => {
-        console.log('info', info)
+        // console.log('info', info)
         setFilterEnabled(false)
       })
   }
@@ -481,6 +506,20 @@ const Orders = () => {
       className="ant-advanced-search-form"
     >
       <Row gutter={8} align="bottom">
+
+      <Col md={6} sm={24} xs={24} lg={2}>
+          <Form.Item name="fromDate" label="From Date">
+            <DatePicker />
+          </Form.Item>
+        </Col>
+
+        <Col md={6} sm={24} xs={24} lg={2}>
+          <Form.Item name="toDate" label="To Date">
+            <DatePicker />
+          </Form.Item>
+        </Col>
+
+
         <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item name="search" label="Search">
             <Input placeholder="Search" prefix={<SearchOutlined />} />
@@ -509,6 +548,29 @@ const Orders = () => {
 
           </Form.Item>
         </Col>
+
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="itemStatus" label="Item Status">
+
+            <Select showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              className="w-100"
+              style={{ minWidth: 180 }}
+              placeholder="Status"
+            >
+              <Option value="">All</Option>
+              {statuses?.map((item) => (
+              <Option key={item} value={item}>
+                {item}
+              </Option>
+            ))}
+            </Select>
+
+          </Form.Item>
+        </Col>
         <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item name="userId" label="Customers">
             <Select
@@ -522,15 +584,61 @@ const Orders = () => {
               // onChange={(value) => setSelectedUserId(value)}
               // onSelect={handleQuery}
               // value={selectedUserId}
-              placeholder="Users"
+              placeholder="Customers"
             >
               <Option value="">All</Option>
-              {users.map((user) => (
+              {users?.map((user) => (
                 <Option key={user.id} value={user.id}>
                   {user.fullName}
                 </Option>
               ))}
             </Select>
+          </Form.Item>
+        </Col>
+
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="vendorId" label="Vendor">
+
+            <Select showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              className="w-100"
+              style={{ minWidth: 180 }}
+              placeholder="Vendors"
+            >
+              <Option value="">All</Option>
+              {vendorList?.map((user) => (
+                <Option key={user.id} value={user.id}>
+                  {user.fullName}
+                </Option>
+              ))}
+            </Select>
+
+          </Form.Item>
+        </Col>
+
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="paymentType" label="Payment Type">
+
+            <Select showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              className="w-100"
+              style={{ minWidth: 180 }}
+              placeholder="Payment Type"
+            >
+              <Option value="">All</Option>
+              {paymentType?.map((item) => (
+              <Option key={item} value={item}>
+                {item}
+              </Option>
+            ))}
+            </Select>
+
           </Form.Item>
         </Col>
 
