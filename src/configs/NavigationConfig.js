@@ -341,7 +341,7 @@ const dashBoardNavTree = [
       
       {
         key: 'dashboards-review',
-        path: `${APP_PREFIX_PATH}/dashboards/Review/Review-List`,
+        path: `${APP_PREFIX_PATH}/dashboards/review/review-list`,
         title: 'Review',
         // icon: DotChartOutlined,
         icon: InfoCircleOutlined,
@@ -350,29 +350,22 @@ const dashBoardNavTree = [
       },
       {
         key: 'dashboards-notifications',
-        path: `${APP_PREFIX_PATH}/dashboards/template`,
+        path: `${APP_PREFIX_PATH}/dashboards/notifications`,
         title: 'Notifications',
         icon: NotificationOutlined,
         breadcrumb: false,
         submenu: [
           {
               key: 'dashboards-notifications-template',
-              path: `${APP_PREFIX_PATH}/dashboards/template/template-list`,
+              path: `${APP_PREFIX_PATH}/dashboards/notifications/template`,
               title: 'Template',
               icon: AlignCenterOutlined,
               breadcrumb: false,
               submenu: [],
             },{
               key: 'dashboards-notifications-notificationhistory',
-              path: `${APP_PREFIX_PATH}/dashboards/template/notification-history`,
+              path: `${APP_PREFIX_PATH}/dashboards/notifications/notification-history`,
               title: 'Notification History',
-              icon: NotificationOutlined,
-              breadcrumb: false,
-              submenu: [],
-            },{
-              key: 'dashboards-notifications-generalnotifications',
-              path: `${APP_PREFIX_PATH}/dashboards/template/general-notifications`,
-              title: 'General Notifications',
               icon: NotificationOutlined,
               breadcrumb: false,
               submenu: [],

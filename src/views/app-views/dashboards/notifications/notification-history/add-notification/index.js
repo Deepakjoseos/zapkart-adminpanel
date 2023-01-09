@@ -1,8 +1,8 @@
 import React from 'react'
 import NotificationForm from '../NotificationForm'
 
-const AddNotification = () => {
+const AddTemplate = () => {
   return <NotificationForm mode="ADD" />
 }
 
-export default AddNotification
+export default AddTemplate

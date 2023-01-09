@@ -219,7 +219,7 @@ const Pincodelist = () => {
     {
       title: SITE_NAME === 'zapkart' ? 'Pincode' : 'City',
       dataIndex: 'name',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'pincodeName'),
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
     },
     // {
     //   title: 'City',

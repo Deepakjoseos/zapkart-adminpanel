@@ -22,8 +22,8 @@ const GeneralField = ({
   getPincode,
   getCity,
 }) => {
-  console.log('hiiii')
-  console.log(pincode)
+  // console.log('hiiii')
+  // console.log(pincode)
   return (
     <Card>
       <Row gutter={16}>

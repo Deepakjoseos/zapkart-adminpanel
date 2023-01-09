@@ -172,7 +172,7 @@ const GeneralField = ({ form }) => {
           {selectedVendorId && (
             <Form.List name="items">
               {(fields, { add, remove }) => {
-                console.log(fields, 'show-filelds')
+                // console.log(fields, 'show-filelds')
                 return (
                   <OrderSelectionField
                     selectedVendorId={selectedVendorId}

@@ -327,7 +327,7 @@ const Orders = () => {
       dataIndex: 'createdAt',
       render: (createdAt) => (
         <Flex alignItems="center">
-          {moment(new Date(createdAt * 1000)).format('DD-MM-YYYY hh:mm:a')}
+          {moment(new Date(createdAt * 1000)).format('DD-MMM-YYYY hh:mm:a')}
         </Flex>
       ),
       sorter: (a, b) => utils.antdTableSorter(a, b, 'createdAt'),

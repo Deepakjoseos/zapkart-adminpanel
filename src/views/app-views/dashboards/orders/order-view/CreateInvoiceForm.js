@@ -328,7 +328,8 @@ const CreateInvoiceForm = ({
           className="w-100"
           onChange={(date, dateString) => setExpiry(dateString)}
         />
-
+        <br/>
+        <br/>
         <p>Hsn</p>
         <Input
           placeholder="Hsn"
