@@ -215,6 +215,19 @@ const handleClick = async () => {
                 <Input disabled id="success" />
               </Form.Item>
 
+              <div>
+                {!isLoading ? 
+                  <Button
+                    type = 'primary' 
+                    onClick={handleVerifyEmail}
+                  >Verify Email
+                  </Button> :
+                  <Loading />
+                }
+
+              </div>
+              <br/>
+
               <Form.Item
                 name="emailSubscription"
                 label="Email Subscription"
