@@ -224,13 +224,15 @@ const TemplateList = () => {
   const filters = () => (
     <Flex className="mb-1" mobileFlex={false}>
       <div className="mr-md-3 mb-3">
+      <label className="mt-2">Search</label>
         <Input
           placeholder="Search"
           prefix={<SearchOutlined />}
           onChange={(e) => onSearch(e)}
         />
       </div>
-      <div className="mb-3">
+      <div className="mr-md-3 mb-3">
+      <label className="mt-2">Status</label>
       <Select
               className="w-100"
               style={{ minWidth: 180 }}
@@ -244,15 +246,16 @@ const TemplateList = () => {
               ))}
             </Select>
       </div>
-   
-          <Button type="primary" onClick={handleFilterSubmit}>
+      <div >
+          <Button className="mr-2 mt-4" type="primary" onClick={handleFilterSubmit}>
             Filter
           </Button>
-       
-      
-          <Button type="primary" onClick={handleClearFilter}>
+      </div>
+       <div >
+          <Button className="mr-2 mt-4" type="primary" onClick={handleClearFilter}>
             Clear
           </Button>
+       </div>
      
     </Flex>
     
