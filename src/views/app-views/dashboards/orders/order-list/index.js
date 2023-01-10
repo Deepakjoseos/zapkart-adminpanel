@@ -122,7 +122,7 @@ const Orders = () => {
       setPaymentType(Object.values(data.GENERAL['PAYMENT_TYPE']))
     }
   }
-  const getOrders = async (paginationParams = {}, filterParams) => {
+  const getOrders = async (paginationParams = { }, filterParams) => {
     setLoading(true)
     const defaultQuery = {
       statusOtherThan: "Failed"
@@ -136,7 +136,7 @@ const Orders = () => {
     if (data) {
       setList(data.data)
 
-      // Pagination
+      // Pagination 
       setPagination({
         ...paginationParams.pagination,
         total: data.total,
@@ -163,12 +163,28 @@ const Orders = () => {
 
   // On pagination Change
   const handleTableChange = (newPagination) => {
-    getOrders(
-      {
-        pagination: newPagination,
-      },
-      filterEnabled ? _.pickBy(form.getFieldsValue(), _.identity) : {}
-    )
+    
+    form
+      .validateFields()
+      .then(async (values) => {
+        setFilterEnabled(true)
+        // Removing falsy Values from values 
+        const sendingValues = _.pickBy({...values,
+          fromDate: values.fromDate ? moment(values.fromDate).format() : '', 
+          toDate: values.toDate ? moment(values.toDate).format():''}, _.identity)
+        getOrders({ pagination: newPagination }, sendingValues)
+      })
+      .catch((info) => {
+        // console.log('info', info)
+        setFilterEnabled(false)
+      })
+
+    // getOrders(
+    //   {
+    //     pagination: newPagination,
+    //   },
+    //   filterEnabled ? _.pickBy(form.getFieldsValue(), _.identity) : {}
+    // )
   }
 
   // console.log('order Status', orderStatuses)
