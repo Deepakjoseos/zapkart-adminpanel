@@ -523,26 +523,26 @@ const Orders = () => {
     >
       <Row gutter={8} align="bottom">
 
-      <Col md={6} sm={24} xs={24} lg={2}>
+      <Col md={6} sm={24} xs={24} lg={4}>
           <Form.Item name="fromDate" label="From Date">
             <DatePicker />
           </Form.Item>
         </Col>
 
-        <Col md={6} sm={24} xs={24} lg={2}>
+        <Col md={6} sm={24} xs={24} lg={4}>
           <Form.Item name="toDate" label="To Date">
             <DatePicker />
           </Form.Item>
         </Col>
 
 
-        <Col md={6} sm={24} xs={24} lg={6}>
+        <Col md={6} sm={24} xs={24} lg={5}>
           <Form.Item name="search" label="Search">
             <Input placeholder="Search" prefix={<SearchOutlined />} />
           </Form.Item>
         </Col>
 
-        <Col md={6} sm={24} xs={24} lg={6}>
+        <Col md={6} sm={24} xs={24} lg={4}>
           <Form.Item name="status" label="Status">
 
             <Select showSearch
@@ -565,7 +565,7 @@ const Orders = () => {
           </Form.Item>
         </Col>
 
-        <Col md={6} sm={24} xs={24} lg={6}>
+        <Col md={6} sm={24} xs={24} lg={4}>
           <Form.Item name="itemStatus" label="Item Status">
 
             <Select showSearch
@@ -587,7 +587,7 @@ const Orders = () => {
 
           </Form.Item>
         </Col>
-        <Col md={6} sm={24} xs={24} lg={6}>
+        <Col md={6} sm={24} xs={24} lg={5}>
           <Form.Item name="userId" label="Customers">
             <Select
               showSearch
@@ -612,7 +612,7 @@ const Orders = () => {
           </Form.Item>
         </Col>
 
-        <Col md={6} sm={24} xs={24} lg={6}>
+        <Col md={6} sm={24} xs={24} lg={5}>
           <Form.Item name="vendorId" label="Vendor">
 
             <Select showSearch
@@ -635,7 +635,7 @@ const Orders = () => {
           </Form.Item>
         </Col>
 
-        <Col md={6} sm={24} xs={24} lg={6}>
+        <Col md={6} sm={24} xs={24} lg={4}>
           <Form.Item name="paymentType" label="Payment Type">
 
             <Select showSearch
