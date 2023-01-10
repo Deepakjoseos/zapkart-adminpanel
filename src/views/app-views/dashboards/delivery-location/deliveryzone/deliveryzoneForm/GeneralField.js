@@ -335,15 +335,16 @@ const GeneralField = ({
     console.log(matchedCityWithSearchValue, 'getSearchValue')
   }
 
- useEffect(() => {
+  useEffect(() => {
     const onSearchHandler = async () => {
+      setPincodeSearchLoading(true)
       setAllTreesData([])
 
       if (searchPincode) {
         const { countryId, stateId, districtId, cityId } = searchPincode
 
         await getCountry()
-        setPincodeSearchLoading(true)
+
         setExpandedKeys([])
         setAutoExpandParent(false)
 
@@ -377,67 +378,11 @@ const GeneralField = ({
         })
 
         setExpandedKeys((prev) => [...prev, cityId])
-      } 
-      // else if (searchCity) {
-      //   const { countryId, stateId, districtId } = searchCity
-      //   setCitySearchLoading(true)
-
-      //   await getCountry()
-
-      //   setExpandedKeys([])
-      //   setAutoExpandParent(false)
-
-      //   // It's a sequencial way of opening trees from country to city while city search
-
-      //   await onLoadData({
-      //     deliveryZoneName: 'COUNTRY',
-      //     key: countryId,
-      //   })
-
-      //   setExpandedKeys([countryId])
-      //   setAutoExpandParent(true)
-
-      //   await onLoadData({
-      //     deliveryZoneName: 'STATE',
-      //     key: stateId,
-      //   })
-
-      //   setExpandedKeys((prev) => [...prev, stateId])
-      //   setPincodeSearchLoading(false)
-
-      //   await onLoadData({
-      //     deliveryZoneName: 'DISTRICT',
-      //     key: districtId,
-      //   })
-
-      //   setExpandedKeys((prev) => [...prev, districtId])
-      // }
-
-      setTimeout(() => {
-        if (document.querySelector('.ant-tree-node-selected')) {
-          document
-            .querySelector('.ant-tree-node-selected')
-            .scrollIntoView({ behavior: 'smooth', block: 'center' })
-        }
-      }, 1000)
-
-      // const elm = await waitForElm('.ant-tree-node-selected')
-
-      // elm.scrollIntoView({ behavior: 'smooth', block: 'center' })
-      // setCitySearchLoading(false)
-      setPincodeSearchLoading(false)
-    }
-
-    if (searchPincode ) {
-      onSearchHandler()
-    }
-  }, [searchPincode])
-  useEffect(() => {
-    const onSearchCity2 = async () => {
-      if (searchCity) {
+      } else if (searchCity) {
         const { countryId, stateId, districtId } = searchCity
 
         await getCountry()
+
         setExpandedKeys([])
         setAutoExpandParent(false)
 
@@ -450,7 +395,6 @@ const GeneralField = ({
 
         setExpandedKeys([countryId])
         setAutoExpandParent(true)
-        setCitySearchLoading(true)
 
         await onLoadData({
           deliveryZoneName: 'STATE',
@@ -458,7 +402,6 @@ const GeneralField = ({
         })
 
         setExpandedKeys((prev) => [...prev, stateId])
-        setPincodeSearchLoading(false)
 
         await onLoadData({
           deliveryZoneName: 'DISTRICT',
@@ -467,26 +410,27 @@ const GeneralField = ({
 
         setExpandedKeys((prev) => [...prev, districtId])
       }
-        setTimeout(() => {
-          if (document.querySelector('.ant-tree-node-selected')) {
-            document
-              .querySelector('.ant-tree-node-selected')
-              .scrollIntoView({ behavior: 'smooth', block: 'center' })
-          }
-        }, 1000)
-        setCitySearchLoading(false)
 
-      
-      
+      setTimeout(() => {
+        if (document.querySelector('.ant-tree-node-selected')) {
+          document
+            .querySelector('.ant-tree-node-selected')
+            .scrollIntoView({ behavior: 'smooth', block: 'center' })
+        }
+      }, 1000)
+
+      // const elm = await waitForElm('.ant-tree-node-selected')
+
+      // elm.scrollIntoView({ behavior: 'smooth', block: 'center' })
+
+      setPincodeSearchLoading(false)
     }
 
-    
-
-    if (searchCity) {
-      onSearchCity2()
+    if (searchPincode || searchCity) {
+      onSearchHandler()
     }
-  },[searchCity])
-  
+  }, [searchPincode, searchCity])
+
   // Additional Function
   function onlyNumberKey(evt) {
     var theEvent = evt || window.event
@@ -613,7 +557,7 @@ const GeneralField = ({
                   placeholder="Search City"
                   onSearch={(val) => onCitySearchSubmit(val)}
                   enterButton="Search"
-                  loading={citySearchLoading}
+                  loading={pincodeSearchLoading}
                 />
               </AutoComplete>
             </>
