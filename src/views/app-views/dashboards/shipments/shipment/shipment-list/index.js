@@ -297,7 +297,7 @@ const ShipmentList = () => {
           onChange={(e) => onSearch(e)}
         />
       </div>
-      <div className="mb-3">
+      {/* <div className="mb-3">
         <Select
           className="w-100"
           style={{ minWidth: 180 }}
@@ -310,7 +310,7 @@ const ShipmentList = () => {
             </Option>
           ))}
         </Select>
-      </div>
+      </div> */}
     </Flex>
   )
 
