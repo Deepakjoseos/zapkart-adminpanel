@@ -589,7 +589,9 @@ const Orders = () => {
 
             <Select
               mode='multiple'
-              defaultValue='Failed' 
+              initialValue = 'Failed'
+              defaultValue = 'Failed'
+              in
               showSearch
               optionFilterProp="children"
               filterOption={(input, option) =>
