@@ -83,6 +83,19 @@ const Orders = () => {
     pageSize: 15,
   })
 
+  const statusOtherThanList= [
+'Pending',
+'Verifiying Prescription',
+'Prescription Missing',
+// 'Failed',
+'Confirmed',
+'Shipping Soon',
+'Shipped',
+'Delivered',
+'Cancelled',
+'Returned',
+'Completed'
+  ]
 
   const getCustomers = async () => {
     const data = await customerService.getCustomers()
@@ -124,13 +137,15 @@ const Orders = () => {
   }
   const getOrders = async (paginationParams = { }, filterParams) => {
     setLoading(true)
+    // if (filterParams.statusOtherThan === ''){
+    //   filterParams.statusOtherThan = '1Failed'
+    // }
     const defaultQuery = {
       statusOtherThan: "Failed"
     }
     const data = await orderService.getOrders(
       qs.stringify(getPaginationParams(paginationParams)),
-      qs.stringify(filterParams),
-      qs.stringify(defaultQuery)
+      qs.stringify(filterParams ? filterParams : defaultQuery )
     )
 
     if (data) {
@@ -171,7 +186,9 @@ const Orders = () => {
         // Removing falsy Values from values 
         const sendingValues = _.pickBy({...values,
           fromDate: values.fromDate ? moment(values.fromDate).format() : '', 
-          toDate: values.toDate ? moment(values.toDate).format():''}, _.identity)
+          toDate: values.toDate ? moment(values.toDate).format():'',
+        }, _.identity,)
+
         getOrders({ pagination: newPagination }, sendingValues)
       })
       .catch((info) => {
@@ -366,7 +383,7 @@ const Orders = () => {
       dataIndex: 'createdAt',
       render: (createdAt) => (
         <Flex alignItems="center">
-          {moment(new Date(createdAt * 1000)).format('DD-MM-YYYY hh:mm:a')}
+          {moment(new Date(createdAt * 1000)).format('DD-MMM-YYYY hh:mm:a')}
         </Flex>
       ),
       sorter: (a, b) => utils.antdTableSorter(a, b, 'createdAt'),
@@ -497,7 +514,9 @@ const Orders = () => {
         // Removing falsy Values from values 
         const sendingValues = _.pickBy({...values,
           fromDate: values.fromDate ? moment(values.fromDate).format() : '', 
-          toDate: values.toDate ? moment(values.toDate).format():''}, _.identity)
+          toDate: values.toDate ? moment(values.toDate).format():'',
+          // statusOtherThan: values.statusOtherThan ? values.statusOtherThan : 'Failed'
+        }, _.identity)
         getOrders({ pagination: resetPagination() }, sendingValues)
       })
       .catch((info) => {
@@ -511,7 +530,7 @@ const Orders = () => {
     form.resetFields()
 
     setPagination(resetPagination())
-    getOrders({ pagination: resetPagination() }, {})
+    getOrders({ pagination: resetPagination() },)
     setFilterEnabled(false)
   }
   const filtersComponent = () => (
@@ -556,6 +575,32 @@ const Orders = () => {
             >
               <Option value="">All</Option>
               {orderStatuses?.map((item) => (
+              <Option key={item} value={item}>
+                {item}
+              </Option>
+            ))}
+            </Select>
+
+          </Form.Item>
+        </Col>
+
+        <Col md={6} sm={24} xs={24} lg={4}>
+          <Form.Item name="statusOtherThan" label="Status Other Than">
+
+            <Select
+              mode='multiple'
+              defaultValue='Failed' 
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              className="w-100"
+              style={{ minWidth: 180 }}
+              placeholder="Status"
+            >
+              {/* <Option value="">All</Option> */}
+              {statusOtherThanList?.map((item) => (
               <Option key={item} value={item}>
                 {item}
               </Option>

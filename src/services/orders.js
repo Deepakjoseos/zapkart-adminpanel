@@ -5,9 +5,9 @@ const orderService = {}
 
 const api = '/order/admin/view_all'
 
-orderService.getOrders = async function (paginationQuery = '', query = '', defaultQuery) {
+orderService.getOrders = async function (paginationQuery = '', query = '') {
   try {
-    let url = `${api}?${paginationQuery}&${defaultQuery}&${query}`
+    let url = `${api}?${paginationQuery}&${query}`
     const res = await fetch({
       url,
       method: 'get',
