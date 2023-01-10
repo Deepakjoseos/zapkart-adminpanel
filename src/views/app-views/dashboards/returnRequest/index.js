@@ -143,6 +143,11 @@ const Payout = () => {
     },
 
     {
+      title: 'Status',
+      dataIndex:'status',
+    },
+
+    {
       title: 'Quantity',
       dataIndex:'quantity',
     },
@@ -159,12 +164,12 @@ const Payout = () => {
     {
       title: 'Order Date',
       dataIndex: 'orderedAt',
-      render: (orderedAt) => (<div>{moment(new Date(orderedAt * 1000)).format('DD-MM-YYYY hh:mm:a')}</div>)
+      render: (orderedAt) => (<div>{moment(new Date(orderedAt * 1000)).format('DD-MMM-YYYY hh:mm:a')}</div>)
     },
     {
       title: 'Return-Requested Date',
       dataIndex: 'returnRequestedAt',
-      render: (returnRequestedAt) => <div>{moment(new Date(returnRequestedAt * 1000)).format('DD-MM-YYYY hh:mm:a')}</div>
+      render: (returnRequestedAt) => <div>{moment(new Date(returnRequestedAt * 1000)).format('DD-MMM-YYYY hh:mm:a')}</div>
     },
     {
       title: '',
@@ -181,7 +186,7 @@ const Payout = () => {
           }))
         }}
           type='primary' 
-          disabled={data.status === "Return Requested" ? false : true}>Approve</Button>)
+          disabled = {data[0].status === "Return Requested" ? false : true}>Approve</Button>)
       }
       // (<Button 
       //   type={status === "Return Requested" ? "primary" : ""}
