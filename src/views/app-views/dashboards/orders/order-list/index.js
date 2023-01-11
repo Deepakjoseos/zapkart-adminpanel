@@ -87,7 +87,7 @@ const Orders = () => {
 'Pending',
 'Verifiying Prescription',
 'Prescription Missing',
-// 'Failed',
+'Failed',
 'Confirmed',
 'Shipping Soon',
 'Shipped',
@@ -539,6 +539,7 @@ const Orders = () => {
       form={form}
       name="filter_form"
       className="ant-advanced-search-form"
+      initialValues={{statusOtherThan: 'Failed'}}
     >
       <Row gutter={8} align="bottom">
 
@@ -585,11 +586,11 @@ const Orders = () => {
         </Col>
 
         <Col md={6} sm={24} xs={24} lg={4}>
-          <Form.Item name="statusOtherThan" label="Status Other Than">
-
+          <Form.Item name="statusOtherThan" label="Status Other Than"
+          >
             <Select
               mode='multiple'
-              initialValue = 'Failed'
+              // initialValue = 'Failed'
               defaultValue = 'Failed'
               in
               showSearch
