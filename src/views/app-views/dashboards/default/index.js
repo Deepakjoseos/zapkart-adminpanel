@@ -214,7 +214,7 @@ export const DefaultDashboard = () => {
             <Col xs={24} sm={24} md={24} lg={24} xl={6}>
               <StatisticWidget
                 title="Total Transaction"
-                value={`${annualStatisticData?.transactions}`}
+                value={annualStatisticData?.transactions}
                 // status={elm.status}
                 subtitle={`This Year ${moment().year()}`}
               />
