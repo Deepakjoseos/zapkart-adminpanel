@@ -58,10 +58,10 @@ const VendorTransactions = ({
     //     }
     //   }
     const tableColumns = [
-        {
-            title: 'userName',
-            dataIndex: 'userName',
-              },
+        // {
+        //     title: 'userName',
+        //     dataIndex: 'userName',
+        //       },
         {
             title: 'Amount',
             dataIndex: 'amount',
@@ -86,7 +86,7 @@ const VendorTransactions = ({
         {
             title: 'Date',
             dataIndex: 'createdAt',
-            render: (text) => <div>{moment(new Date(text * 1000)).format('DD-MM-YYYY hh:mm:a')}</div>,
+            render: (text) => <div>{moment(new Date(text * 1000)).format('DD-MMM-YYYY hh:mm:a')}</div>,
         },
         // {
         //     title: 'User',
@@ -97,16 +97,17 @@ const VendorTransactions = ({
             render: (_, row) => {
                 return (
                     <Flex flexDirection="column" justifyContent="center">
+                        <span>{row.orderNo} {row.itemName && `(${row.itemName})`}</span>
  
                         {/* {row.name}{row?.variant && `(${row.variant.name})`}   */}
-                        <span>OrderId:</span>
+                        {/* <span>OrderId:</span>
                         <Link to={`/app/dashboards/orders/order-view/${row.orderId}`}>
                             {row.orderId}
                         </Link>
-                        <p>Item Name:</p>
+                        <p>Item Name:</p>   ({row.itemName})
                         {row.itemName}
                         <p>Item Quantity</p>
-                        {row.itemQty}
+                        {row.itemQty} */}
 
                     </Flex>
                 )
