@@ -70,7 +70,7 @@ const rules = {
 }
 
 const GeneralField = ({ form, tempConstants, form_statuses }) => {
-  console.log('constants', tempConstants)
+  // console.log('constants', tempConstants)
   return (
     <Row gutter={16}>
       <Col xs={24} sm={24} md={24}>
@@ -190,7 +190,7 @@ const GeneralField = ({ form, tempConstants, form_statuses }) => {
                 label="SMS Template Id"
                 rules={rules.smsTemplateId}
               >
-                <Input placeholder="SMS Template Id" />
+                <Input rows={4} placeholder="SMS Template Id" />
               </Form.Item>
 
               <Form.Item
@@ -198,7 +198,7 @@ const GeneralField = ({ form, tempConstants, form_statuses }) => {
                 label="SMS Content"
                 rules={rules.smsContent}
               >
-                <Input
+                <Input.TextArea rows={4}
                   placeholder="Write something..."
                   // editorHtml={form.getFieldValue('smsContent') || ''}
                   // onChange={(e) => form.setFieldsValue({ smsContent: e })}
@@ -273,10 +273,10 @@ const GeneralField = ({ form, tempConstants, form_statuses }) => {
                 label="FCM Description"
                 rules={rules.fcmDescription}
               >
-                <Editor
+                <Input.TextArea rows={4}
                   placeholder="Write something..."
-                  editorHtml={form.getFieldValue('fcmDescription') || ''}
-                  onChange={(e) => form.setFieldsValue({ fcmDescription: e })}
+                  // editorHtml={form.getFieldValue('fcmDescription') || ''}
+                  // onChange={(e) => form.setFieldsValue({ fcmDescription: e })}
                   name="fcmDescription"
                 />
               </Form.Item>

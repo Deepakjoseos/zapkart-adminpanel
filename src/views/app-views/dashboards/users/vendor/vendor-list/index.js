@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Card, Table, Select, Input, Menu, Tag, notification, Modal, Button } from 'antd'
-import { EyeOutlined, SearchOutlined, PlusCircleOutlined } from '@ant-design/icons'
+import { EyeOutlined, SearchOutlined, PlusCircleOutlined ,DeleteOutlined } from '@ant-design/icons'
 import EllipsisDropdown from 'components/shared-components/EllipsisDropdown'
 import Flex from 'components/shared-components/Flex'
 import { useHistory } from 'react-router-dom'
@@ -33,6 +33,7 @@ const VendorList = () => {
   const [list, setList] = useState([])
   const [searchBackupList, setSearchBackupList] = useState([])
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
+  const [selectedRows, setSelectedRows] = useState([])
   const [pickUpLocations, setPickUpLocations] = useState([])
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [statuses, setStatuses] = useState([])
@@ -84,7 +85,7 @@ const VendorList = () => {
           <span className="ml-2">View PickUpLocations</span>
         </Flex>
       </Menu.Item>
-      {/* <Menu.Item onClick={() => deleteRow(row)}>
+      <Menu.Item onClick={() => deleteRow(row)}>
         <Flex alignItems="center">
           <DeleteOutlined />
           <span className="ml-2">
@@ -93,7 +94,7 @@ const VendorList = () => {
               : 'Delete'}
           </span>
         </Flex>
-      </Menu.Item> */}
+      </Menu.Item>
     </Menu>
   )
 
@@ -105,24 +106,24 @@ const VendorList = () => {
   //   history.push(`/app/dashboards/users/usergroup/edit-usergroup/${row.id}`)
   // }
 
-  // const deleteRow = async (row) => {
-  //   const resp = await vendorService.deleteUserGroup(row.id)
+  const deleteRow = async (row) => {
+    const resp = await vendorService.deleteVendor(row.id)
 
-  //   if (resp) {
-  //     const objKey = 'id'
-  //     let data = list
-  //     if (selectedRows.length > 1) {
-  //       selectedRows.forEach((elm) => {
-  //         data = utils.deleteArrayRow(data, objKey, elm.id)
-  //         setList(data)
-  //         setSelectedRows([])
-  //       })
-  //     } else {
-  //       data = utils.deleteArrayRow(data, objKey, row.id)
-  //       setList(data)
-  //     }
-  //   }
-  // }
+    if (resp) {
+      const objKey = 'id'
+      let data = list
+      if (selectedRows.length > 1) {
+        selectedRows.forEach((elm) => {
+          data = utils.deleteArrayRow(data, objKey, elm.id)
+          setList(data)
+          setSelectedRows([])
+        })
+      } else {
+        data = utils.deleteArrayRow(data, objKey, row.id)
+        setList(data)
+      }
+    }
+  }
   const fetchConstants = async () => {
     const data = await constantsService.getConstants()
     if (data) {
@@ -202,12 +203,12 @@ const VendorList = () => {
           />
         </div>
       ),
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'firstName'),
     },
     {
       title: 'Last Name',
       dataIndex: 'lastName',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'lastname'),
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'lastName'),
     },
     {
       title: 'Email',

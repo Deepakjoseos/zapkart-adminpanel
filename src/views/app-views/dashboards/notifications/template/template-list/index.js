@@ -68,7 +68,7 @@ const TemplateList = () => {
       if (data) {
         setList(data)
         setSearchBackupList(data)
-        console.log(data, 'show-data')
+        // console.log(data, 'show-data')
         setPagination({
           ...paginationParams.pagination,
           total: data.total,
@@ -119,11 +119,11 @@ const TemplateList = () => {
   )
 
   const addProduct = () => {
-    history.push(`/app/dashboards/template/add-template`)
+    history.push(`/app/dashboards/notifications/template/add-template`)
   }
 
   const viewDetails = (row) => {
-    history.push(`/app/dashboards/template/edit-template/${row.id}`)
+    history.push(`/app/dashboards/notifications/template/edit-template/${row.id}`)
   }
 
   const deleteRow = async (row) => {
@@ -161,7 +161,7 @@ const TemplateList = () => {
         getTemplates({ pagination: resetPagination() }, sendingValues)
       })
       .catch((info) => {
-        console.log('info', info)
+        // console.log('info', info)
         setFilterEnabled(false)
       })
   }
@@ -224,15 +224,13 @@ const TemplateList = () => {
   const filters = () => (
     <Flex className="mb-1" mobileFlex={false}>
       <div className="mr-md-3 mb-3">
-      <label className="mt-2">Search</label>
         <Input
           placeholder="Search"
           prefix={<SearchOutlined />}
           onChange={(e) => onSearch(e)}
         />
       </div>
-      <div className="mr-md-3 mb-3">
-      <label className="mt-2">Status</label>
+      <div className="mb-3">
       <Select
               className="w-100"
               style={{ minWidth: 180 }}
@@ -246,16 +244,15 @@ const TemplateList = () => {
               ))}
             </Select>
       </div>
-      <div >
-          <Button className="mr-2 mt-4" type="primary" onClick={handleFilterSubmit}>
+            
+          <Button className="ml-3" type="primary" onClick={handleFilterSubmit}>
             Filter
           </Button>
-      </div>
-       <div >
-          <Button className="mr-2 mt-4" type="primary" onClick={handleClearFilter}>
+       
+      
+          <Button className="ml-2" type="primary" onClick={handleClearFilter}>
             Clear
           </Button>
-       </div>
      
     </Flex>
     

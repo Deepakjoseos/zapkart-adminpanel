@@ -21,16 +21,16 @@ import {
 import AvatarStatus from 'components/shared-components/AvatarStatus'
 import EllipsisDropdown from 'components/shared-components/EllipsisDropdown'
 import Flex from 'components/shared-components/Flex'
-import { useHistory } from 'react-router-dom'
+import { useHistory , Link } from 'react-router-dom'
 import qs from 'qs'
 import utils from 'utils'
-
+import orderService from 'services/orders'
 import cityService from 'services/city'
 import _ from 'lodash'
-
-import constantsService from 'services/constants'
-import districtService from 'services/district'
-import stateService from 'services/state'
+import moment from 'moment'
+import productService from 'services/product'
+import customerService from 'services/customer'
+import vendorService from 'services/vendor'
 import reviewService from 'services/review'
 const { Option } = Select
 
@@ -40,7 +40,9 @@ const ReviewList = () => {
 
   let history = useHistory()
   const [form] = Form.useForm()
-
+  const [orders, setOrders] = useState([])
+  const [customers, setUsers] = useState([])
+  const [vendors, setVendors] = useState([])
   const [list, setList] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
 
@@ -49,13 +51,23 @@ const ReviewList = () => {
   const [filterEnabled, setFilterEnabled] = useState(false)
   const [statuses, setStatuses] = useState([])
   const [reviews, setReviews] = useState([])
-  
+  const [products, setProducts] = useState([])
+
   // pagination
   const [pagination, setPagination] = useState({
     current: 1,
     pageSize: 10,
   })
  
+  useEffect(() => {
+    getReviews(pagination)
+    getVendors()
+    getCustomers()
+    getProductsTemplate()
+    }, [])
+
+
+
   const getReviews = async (paginationParams = {}, filterParams) => {
     const data = await reviewService.getReviews( qs.stringify(getPaginationParams(paginationParams)),
     qs.stringify(filterParams))
@@ -63,12 +75,62 @@ const ReviewList = () => {
     if (data) {
       setList(data)
     }
+    // console.log(data,'reviews')
   }
- 
 
-  useEffect(() => {
-  getReviews(pagination)
-  }, [])
+  const getVendors = async () => {
+    const data = await vendorService.getVendors()
+    if (data) {
+      const users = data.map((cur) => {
+        return {
+          ...cur,
+          fullName: `${cur.firstName} ${cur.lastName}`,
+        }
+      })
+      setVendors(users)
+    }
+  }
+
+  const getProductsTemplate = async () => {
+    const data = await productService.getPublicProducts(
+    )
+    const productsTemplate = data.data;
+    if (productsTemplate) {
+      const users = productsTemplate.map((cur) => {
+        return {
+          ...cur,
+          fullName: `${cur.name} `,
+        }
+      })
+      setProducts(users)
+      // console.log(users,'products');
+    }
+  }
+
+  const getCustomers = async () => {
+    const data = await customerService.getCustomers()
+    if (data) {
+      const users = data.map((cur) => {
+        return {
+          ...cur,
+          fullName: `${cur.firstName} ${cur.lastName}`,
+        }
+      })
+      setUsers(users)
+      // console.log(users,'Customers')
+    }
+  }
+
+  
+
+  // useEffect(() => {
+  //   // getReviews(pagination)
+  //   getVendors()
+  //   getCustomers()
+  //   getProductsTemplate()
+  //   }, [])
+
+
   // pagination generator
   const getPaginationParams = (params) => ({
     limit: params.pagination?.pageSize,
@@ -111,7 +173,7 @@ const ReviewList = () => {
         getReviews({ pagination: resetPagination() }, sendingValues)
       })
       .catch((info) => {
-        console.log('info', info)
+        // console.log('info', info)
         setFilterEnabled(false)
       })
   }
@@ -127,60 +189,84 @@ const ReviewList = () => {
 
   const tableColumns = [
     {
-      title: 'User Image',
-      dataIndex: 'userImage',
+      title: "Order No",
+      dataIndex: 'orderNo',
+      render: (text, record) => (
+        <Link to={`/app/dashboards/orders/order-view/${record.orderId}`}>
+          {text}
+        </Link>
+      ),
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'orderNo'),
+    },
+    {
+      title: "Vendor Name",
+      dataIndex: 'vendorName',
+      render: (text, record) => (
+      <Link to={`/app/dashboards/users/vendor/edit-vendor/${record.vendorId}`}>
+          {text}
+        </Link>),
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'vendorName'),
+    },
+    {
+      title: "Product Name",
+      dataIndex: 'itemName',
+      render: (text, record) => (
+        <Link to={`/app/dashboards/catalog/product/edit-product/${record.itemId}`}>
+            {text}
+          </Link>),
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'itemName'),
+    },
+    {
+      title: 'Customers',
+      dataIndex: 'userName',
       render: (_, record) => (
-        <div className="d-flex">
+        <Flex alignItems="center">
           <AvatarStatus
             size={60}
             type="square"
             src={record.image}
             name={record.name}
           />
-        </div>
+          <Link to={`/app/dashboards/users/customer/edit-customer/${record.userId}`}>
+          {record.userName}
+          </Link>
+        </Flex>
       ),
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'userImage'),
-    },
-    {
-      title: "User Name",
-      dataIndex: 'userName',
       sorter: (a, b) => utils.antdTableSorter(a, b, 'userName'),
     },
     
+    
     {
-      title: "Title",
+      title: "Title & Rating",
       dataIndex: 'title',
+      render: (_, record) => (
+        <Flex alignItems="center">
+          {record.title}({record.rating})
+        </Flex>),
       sorter: (a, b) => utils.antdTableSorter(a, b, 'title'),
     },
+
     {
       title: "Message",
       dataIndex: 'message',
       sorter: (a, b) => utils.antdTableSorter(a, b, 'message'),
     },
-    {
-      title: "Rating",
-      dataIndex: 'rating',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'rating'),
-    },
+    // {
+    //   title: "Rating",
+    //   dataIndex: 'rating',
+    //   sorter: (a, b) => utils.antdTableSorter(a, b, 'rating'),
+    // },
     
-    // {
-    //   title: 'District',
-    //   dataIndex: 'districtName',
-
-    //   sorter: (a, b) => utils.antdTableSorter(a, b, 'districtName'),
-    // },
-    // {
-    //   title: 'State',
-    //   dataIndex: 'stateName',
-
-    //   sorter: (a, b) => utils.antdTableSorter(a, b, 'stateName'),
-    // },
-    // {
-    //   title: 'Country',
-    //   dataIndex: 'countryName',
-
-    //   sorter: (a, b) => utils.antdTableSorter(a, b, 'countryName'),
-    // },
+    {
+      title: "Review Time",
+      dataIndex: 'updatedAt',
+      render: (createdAt) => (
+        <Flex alignItems="center">
+        {moment(new Date(createdAt * 1000)).format('DD-MMM-YYYY hh:mm:a')}          
+        </Flex>
+      ),
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'updatedAt'),
+    },
     
 
   ]
@@ -192,30 +278,87 @@ const ReviewList = () => {
       name="filter_form"
       className="ant-advanced-search-form"
     >
-      <Row gutter={8} align="bottom">
-        <Col md={6} sm={24} xs={24} lg={6}>
+          <Row gutter={8} align="bottom">
+      {/* <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item name="search" label="Search">
             <Input placeholder="Search" prefix={<SearchOutlined />} />
           </Form.Item>
-        </Col>
-        {/* <Col md={6} sm={24} xs={24} lg={6}> */}
-          {/* <Form.Item name="status" label="Status">
+        </Col> */}
+        <Col md={6} sm={24} xs={24} lg={6}>
+           <Form.Item name="userId" label="Customers">
             <Select
+              showSearch
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              optionFilterProp="children"
               className="w-100"
               style={{ minWidth: 180 }}
-              placeholder="Status"
+              placeholder="Customers"
             >
               <Option value="">All</Option>
-              {statuses.map((item) => (
-                <Option key={item.id} value={item}>
-                  {item}
+              {customers.map((user) => (
+                <Option key={user.id} value={user.id}>
+                  {user.fullName}
                 </Option>
               ))}
             </Select>
-          </Form.Item> */}
-        {/* </Col> */}
+          </Form.Item> 
+        </Col>
+        <Col md={6} sm={24} xs={24} lg={6}>
+           <Form.Item name="vendorId" label="Vendors">
+            <Select
+              showSearch
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              optionFilterProp="children"
+              className="w-100"
+              style={{ minWidth: 180 }}
+              placeholder="Vendors"
+            >
+              <Option value="">All</Option>
+              {vendors.map((users) => (
+                <Option key={users.id} value={users.id}>
+                  {users.fullName}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item> 
+        </Col>
+        <Col md={6} sm={24} xs={24} lg={6}>
+           <Form.Item name="itemId" label="Products">
+            <Select
+              showSearch
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              optionFilterProp="children"
+              className="w-100"
+              style={{ minWidth: 180 }}
+              placeholder="Products"
+            >
+              <Option value="">All</Option>
+              {products.map((users) => (
+                <Option key={users.id} value={users.id}>
+                  {users.fullName}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item> 
+        </Col>
+        <Col md={6} sm={24} xs={24} lg={6}>
+           <Form.Item name="orderNo" label="Order No">
+           <Input placeholder="Order No" prefix={<SearchOutlined />} />
+          </Form.Item> 
+        </Col>
+        {/* <Col md={6} sm={24} xs={24} lg={6}>
+           <Form.Item name="orderId" label="Order Id">
+           <Input placeholder="Order Id" prefix={<SearchOutlined />} />
+          </Form.Item> 
+        </Col> */}
 
-        &nbsp;  &nbsp;  &nbsp; &nbsp;  &nbsp;  &nbsp;
+        {/* &nbsp;  &nbsp;  &nbsp; &nbsp;  &nbsp;  &nbsp; */}
         <Col className="mb-4">
           <Button type="primary" onClick={handleFilterSubmit}>
             Filter
@@ -239,7 +382,7 @@ const ReviewList = () => {
             </Select>
           </Form.Item>
         </Col> */}
-        </Row>
+              </Row>
     </Form>
   )
   return (

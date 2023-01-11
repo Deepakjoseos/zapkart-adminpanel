@@ -180,7 +180,7 @@ const GeneralField = ({ propsImages, categories, handleChange, form, form_status
           >
             <CustomIcon className="display-3" svg={ImageSvg} />
           </Upload>
-          size: 80px * 80px
+          size: 200px * 200px
         
         </Card>
         <Card title="Banner">

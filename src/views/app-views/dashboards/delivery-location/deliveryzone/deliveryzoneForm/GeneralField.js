@@ -79,6 +79,7 @@ const GeneralField = ({
   const [searchCities, setSearchCities] = useState([])
   const [searchCity, setSearchCity] = useState(null)
   const [pincodeSearchLoading, setPincodeSearchLoading] = useState(false)
+  const [citySearchLoading, setCitySearchLoading] = useState(false)
 
   const [expandedKeys, setExpandedKeys] = useState([])
   const [autoExpandParent, setAutoExpandParent] = useState(true)
@@ -317,7 +318,7 @@ const GeneralField = ({
   const onCitySearchSubmit = async (value) => {
     const cities = await getCityForSearch(`search=${value}`)
 
-    const matchedCityWithSearchValue = cities.find((city) => city.name == value)
+    const matchedCityWithSearchValue = cities.find((city) => city.name.toLowerCase() == value)
 
     if (matchedCityWithSearchValue) {
       setSearchCity(matchedCityWithSearchValue)
@@ -550,6 +551,9 @@ const GeneralField = ({
               >
                 <Input.Search
                   size="large"
+                  filterOption={(input, option) =>
+                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                  }
                   placeholder="Search City"
                   onSearch={(val) => onCitySearchSubmit(val)}
                   enterButton="Search"

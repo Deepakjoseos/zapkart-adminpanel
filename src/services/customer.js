@@ -161,4 +161,28 @@ customerService.verifyEmailAdress = async(id) =>{
 
 // *******************************EDIT**************************************************************
 
+// *******************************DELETE**************************************************************
+
+customerService.deleteCustomer = async function (id) {
+  
+  try {
+  const res = await fetch({
+    url: `https://ecommercelive.riolabz.com/api/v1/admin/delete-user/{userId}?userId=${id}`,
+      method: 'delete',
+    })
+    //   const data = res.data.filter((cur) => cur.status !== 'Deleted')
+    return res
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
+
+
+
+
+
+// *******************************DELETE**************************************************************
+
+
+
 export default customerService

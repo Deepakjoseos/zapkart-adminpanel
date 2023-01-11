@@ -3,7 +3,7 @@ import PageHeaderAlt from 'components/layout-components/PageHeaderAlt'
 import { Tabs, Form, Button, message } from 'antd'
 import Flex from 'components/shared-components/Flex'
 import GeneralField from './GeneralField'
-import notificationService from 'services/notification'
+import templateService from 'services/template'
 import { useHistory } from 'react-router-dom'
 import constantsService from 'services/constants'
 import { PresetStatusColorTypes } from 'antd/lib/_util/colors'
@@ -13,7 +13,7 @@ const { TabPane } = Tabs
 
 const ADD = 'ADD'
 const EDIT = 'EDIT'
-const MULTIPLE = "MULTIPLE"
+const mode = "multiple"
 
 const TemplateForm = (props) => {
   const { mode = ADD, param } = props
@@ -24,9 +24,9 @@ const TemplateForm = (props) => {
   const [submitLoading, setSubmitLoading] = useState(false)
   const [tempConstants, setTempConstants] = useState({})
   const [editorRender, setEditorRender] = useState(false)
-  const[customers,setCustomers] = useState([])
-  
   const[form_statuses,setStatuses] = useState([])
+  const[customer,setCustomers] = useState([])
+  
 
   useEffect(() => {
     const fetchConstants = async () => {
@@ -34,18 +34,19 @@ const TemplateForm = (props) => {
       if (data) {
         setTempConstants(data.TEMPLATE)
         setStatuses(Object.values(data.GENERAL['FORM_STATUS']))
-        
       }
     }
 
     fetchConstants()
   }, [])
   if (tempConstants?.KEYS) {
-    console.log(Object.values(tempConstants['KEYS']), 'constanttyys')
+    // console.log(Object.values(tempConstants['KEYS']), 'constanttyys')
   }
 
-  useEffect(()=>{
+
   
+  useEffect(()=>{
+    if (mode === EDIT) {
     const getCustomers = async () => {
       const data = await customerService.getCustomers()
       if (data) {
@@ -60,13 +61,13 @@ const TemplateForm = (props) => {
     }
   
   getCustomers()
-
+    }
   }, [])
   useEffect(() => {
     if (mode === EDIT) {
-      const fetchNotificationsById = async () => {
+      const fetchTemplateById = async () => {
         const { id } = param
-        const data = await notificationService.getNotificationsById(id)
+        const data = await templateService.getTemplateById(id)
         if (data) {
           form.setFieldsValue({
             name: data.name,
@@ -86,11 +87,11 @@ const TemplateForm = (props) => {
           })
           setEditorRender(true)
         } else {
-          history.replace('/app/dashboards/notification/notification-list')
+          history.replace('/app/dashboards/template/template-list')
         }
       }
 
-      fetchNotificationsById()
+      fetchTemplateById()
     }
   }, [form, mode, param, props])
 
@@ -122,19 +123,19 @@ const TemplateForm = (props) => {
         }
 
         if (mode === ADD) {
-          const created = await notificationService.createNotifications(sendingValues)
+          const created = await templateService.createTemplate(sendingValues)
           if (created) {
-            message.success(`Created ${values.name} to Notification list`)
+            message.success(`Created ${values.name} to Template list`)
             history.goBack()
           }
         }
         if (mode === EDIT) {
-          const edited = await notificationService.editNotifications(
+          const edited = await templateService.editTemplate(
             param.id,
             sendingValues
           )
           if (edited) {
-            message.success(`Edited ${values.name} to Notification list`)
+            message.success(`Edited ${values.name} to Template list`)
             history.goBack()
           }
         }
@@ -142,10 +143,11 @@ const TemplateForm = (props) => {
       })
       .catch((info) => {
         setSubmitLoading(false)
-        console.log('info', info)
+        // console.log('info', info)
         message.error('Please enter all required field ')
       })
   }
+
 
   return (
     <>
@@ -167,13 +169,13 @@ const TemplateForm = (props) => {
               alignItems="center"
             >
               <h2 className="mb-3">
-                {mode === 'ADD' ? 'Add New Notification' : `Edit Notification`}{' '}
+                {mode === 'ADD' ? 'Add New Template' : `Edit Template`}{' '}
               </h2>
               <div className="mb-3">
                 <Button
                   className="mr-2"
                   onClick={() =>
-                    history.push('/app/dashboards/notifications/notification-list')
+                    history.push('/app/dashboards/template/template-list')
                   }
                 >
                   Discard
@@ -194,8 +196,7 @@ const TemplateForm = (props) => {
         <div className="container">
           <Tabs defaultActiveKey="1" style={{ marginTop: 30 }}>
             <TabPane tab="General" key="1">
-              <GeneralField tempConstants={tempConstants} form={form}  form_statuses={form_statuses}  customers={customers}
-             />
+              <GeneralField tempConstants={tempConstants} form={form}  form_statuses={form_statuses} customer={customer} />
             </TabPane>
           </Tabs>
         </div>

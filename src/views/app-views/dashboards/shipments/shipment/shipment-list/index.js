@@ -188,7 +188,7 @@ const ShipmentList = () => {
   }
 
   // For deleting a row
-  // const deleteRow = async (row) => {
+  // const deleteRow = async (row) => {  
   //   const resp = await shipmentService.dele(row.id)
 
   //   if (resp) {
@@ -234,7 +234,7 @@ const ShipmentList = () => {
           ))}
         </div>
       ),
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
+      // sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
     },
     {
       title: 'Shipped By',
