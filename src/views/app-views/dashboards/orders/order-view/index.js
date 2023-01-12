@@ -286,7 +286,7 @@ const OrderView = () => {
               <>
                 <p>Prescriptions: </p>
                 {order?.prescriptions?.map((cur) => (
-                  <Image width={100} src={cur} />
+                  <Image width={100} height={100} src={cur} />
                 ))}
               </>
             )}
