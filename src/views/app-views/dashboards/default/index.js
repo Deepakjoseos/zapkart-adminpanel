@@ -39,6 +39,7 @@ import customerService from 'services/customer'
 import orderService from 'services/orders'
 import authAdminService from 'services/auth/admin'
 import moment from 'moment'
+import Flex from 'components/shared-components/Flex'
 
 const MembersChart = (props) => <ApexChart {...props} />
 
@@ -160,7 +161,9 @@ const tableColumns = [
     title: 'Payment Status',
     dataIndex: 'payment',
     key: 'payment',
-    render:(data) => data.status
+    render: (payment) => {
+      return <Flex alignItems="centre">{payment?.status === "PENDING" ? (<Tag color="#f50">PENDING</Tag>) : (<Tag color="#87d068">CONFIRMED</Tag>)}</Flex>
+    },
   },
   // {
   //   title: () => <div className="text-right">Status</div>,
