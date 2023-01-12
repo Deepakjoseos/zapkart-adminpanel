@@ -146,9 +146,21 @@ const tableColumns = [
 
   },
   {
+    title: 'Order Date',
+    dataIndex: 'createdAt',
+    key: 'createdAt',
+    render:(data) => moment(new Date(data * 1000)).format('DD-MMM-YYYY hh:mm:a')
+  },
+  {
     title: 'Status',
     dataIndex: 'status',
     key: 'status',
+  },
+  {
+    title: 'Payment Status',
+    dataIndex: 'payment',
+    key: 'payment',
+    render:(data) => data.status
   },
   // {
   //   title: () => <div className="text-right">Status</div>,
