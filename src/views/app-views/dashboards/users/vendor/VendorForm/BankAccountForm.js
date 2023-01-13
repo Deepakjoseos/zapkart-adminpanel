@@ -34,7 +34,7 @@ const BankAccountForm = ({
   // refreshData,
   selectedVendorId
 }) => {
-  console.log('vendorId', selectedVendorId)
+  // console.log('vendorId', selectedVendorId)
   const [form] = Form.useForm()
 
   const [submitLoading, setSubmitLoading] = useState(false)
@@ -79,13 +79,13 @@ const BankAccountForm = ({
 
       
 
-      console.log('wallet',data.WALLET)
+      // console.log('wallet',data.WALLET)
    
 
     }
   }
 
-  console.log('accountTypes',Object.keys(accountTypes));
+  // console.log('accountTypes',Object.keys(accountTypes));
   useEffect(() => {
     fetchConstants()
   }, [])
@@ -104,7 +104,7 @@ const BankAccountForm = ({
           nickName: values?.nickName
 
         }
-        console.log(values, 'values')
+        // console.log(values, 'values')
 
         // if (selectedBankAccount === null) {
         // Checking if image exists
@@ -131,7 +131,7 @@ const BankAccountForm = ({
       })
       .catch((info) => {
         setSubmitLoading(false)
-        console.log('info', info)
+        // console.log('info', info)
         message.error('Please enter all required field ')
       })
   }
