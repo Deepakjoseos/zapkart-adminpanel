@@ -48,7 +48,8 @@ const NotificationList = () => {
   const [notificationtype, setNotificationType] = useState([])
   const [list, setList] = useState([])
   const [searchBackupList, setSearchBackupList] = useState([])
-  const [selected, setSelected] = useState({searchdata:'',data1:'',data2:''})
+  const [selectedRows, setSelectedRows] = useState([])
+  const [selectedRowKeys, setSelectedRowKeys] = useState([])
   const [notificationCategory, setNotificationCategory] = useState([])
   const [loading, setLoading] = useState(false)
   const [filterEnabled, setFilterEnabled] = useState(false)
@@ -91,9 +92,9 @@ const NotificationList = () => {
         total: data.total,
       })
       setLoading(false)
-      console.log(data, 'show-notifications')
-      console.log(pagination,'setpagination')
-      console.log(data.total)
+      // console.log(data, 'show-notifications')
+      // console.log(pagination,'setpagination')
+      // console.log(data.total)
     }
   }
   
@@ -157,25 +158,25 @@ const handleClearFilter = async () => {
   setFilterEnabled(false)
 }
 
-  // const dropdownMenu = (row) => (
-  //   <Menu>
-  //     <Menu.Item onClick={() => viewDetails(row)}>
-  //       <Flex alignItems="center">
-  //         <EyeOutlined />
-  //         <span className="ml-2">View Details</span>
-  //       </Flex>
-  //     </Menu.Item>
+  const dropdownMenu = (row) => (
+    <Menu>
+      <Menu.Item onClick={() => viewDetails(row)}>
+        <Flex alignItems="center">
+          <EyeOutlined />
+          <span className="ml-2">View Details</span>
+        </Flex>
+      </Menu.Item>
       
-  //   </Menu>
-  // )
+    </Menu>
+  )
 
   // const addProduct = () => {
   //   history.push(`/app/dashboards/notifications/add-notification`)
   // }
 
-  // const viewDetails = (row) => {
-  //   history.push(`/app/dashboards/notifications/edit-notification/${row.id}`)
-  // }
+  const viewDetails = (row) => {
+    history.push(`/app/dashboards/notifications/notification-history/edit-notification/${row.id}`)
+  }
 
 
 
@@ -186,17 +187,17 @@ const handleClearFilter = async () => {
       title: 'Email',
       dataIndex: 'email',
       render: (email) => (
-        <Flex alignItems="center">{email.email}</Flex>
+        <Flex alignItems="center">{email?.email}</Flex>
       ),
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'email'),
+      // sorter: (a, b) => utils.antdTableSorter(a, b, 'email.email'),
     },
     {
       title: 'Email Subject',
       dataIndex: 'email',
       render: (email) => (
-        <Flex alignItems="center">{email.subject}</Flex>
+        <Flex alignItems="center">{email?.subject}</Flex>
       ),
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'subject'),
+      // sorter: (a, b) => utils.antdTableSorter(a, b, 'subject'),
     },
     {
       title: 'Listing Type',
@@ -218,10 +219,18 @@ const handleClearFilter = async () => {
       dataIndex: 'createdAt',
       render: (createdAt) => (
         <Flex alignItems="center">
-        {moment(new Date(createdAt * 1000)).format('DD-MM-YYYY hh:mm:a')}          
+        {moment(new Date(createdAt * 1000)).format('DD-MMM-YYYY hh:mm:a')}           
         </Flex>
       ),
       sorter: (a, b) => utils.antdTableSorter(a, b, 'createdAt'),
+    },{
+      title: '',
+      dataIndex: 'actions',
+      render: (_, elm) => (
+        <div className="text-right">
+          <EllipsisDropdown menu={dropdownMenu(elm)} />
+        </div>
+      ),
     },
   ]
 
@@ -234,6 +243,9 @@ const handleClearFilter = async () => {
   //   setSelectedRowKeys([])
 
   // }
+  const addNotification = () => {
+    history.push(`/app/dashboards/notifications/notification-history/add-notification`)
+  }
 
   const handleShowStatus = (value) => {
     if (value !== 'All') {
@@ -340,6 +352,17 @@ const handleClearFilter = async () => {
     <Card>
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
         {filters()}
+        <div className='mt-5'>
+          <Button
+            onClick={addNotification}
+            type="primary"
+            icon={<PlusCircleOutlined />}
+            block
+            className='mt-2'
+          >
+            Add General Notification
+          </Button>
+        </div>
         </Flex>
       <div className="table-responsive">
         <Table 

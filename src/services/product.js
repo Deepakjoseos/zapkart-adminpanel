@@ -14,6 +14,23 @@ productService.getProducts = async function (paginationQuery = '', query = '') {
     console.log(err, 'show-err')
   }
 }
+
+
+productService.getPublicProducts = async function (paginationQuery = '', query = '') {
+  try {
+    let url = `${api}/public?${paginationQuery}&${query}`
+    const res = await fetch({
+      url,
+      method: 'get',
+    })
+    return res
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
+
+
+
 // productService.getProducts = async function (query) {
 //   try {
 //     let url = `${api}`

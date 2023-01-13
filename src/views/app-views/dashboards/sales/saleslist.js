@@ -62,6 +62,7 @@ const { TabPane } = Tabs;
 const SalesDashboard = () => {
   return (
     <div className="container">
+      <h2 className="mb-3">Sales</h2>
       <Tabs defaultActiveKey="1" style={{ marginTop: 30 }}>
         <TabPane tab="Vendor" key="1">
           <SalesVendor />

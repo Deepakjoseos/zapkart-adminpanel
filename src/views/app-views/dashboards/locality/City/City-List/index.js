@@ -229,7 +229,7 @@ const CityList = () => {
     {
       title: SITE_NAME === 'zapkart' ? 'City' : 'Emirates',
       dataIndex: 'name',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'cityName'),
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
     },
     // {
     //   title: 'District',

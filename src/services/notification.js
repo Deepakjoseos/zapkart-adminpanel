@@ -5,6 +5,7 @@ const apiRoute = '/notifications'
 
 notificationService.getNotifications = async function (paginationQuery='', query ='') {
   try {
+    // ${paginationQuery}&${query}
     const res = await fetch({
       url: `${apiRoute}?${paginationQuery}&${query}`,
       method: 'get',
@@ -29,6 +30,30 @@ notificationService.createNotifications = async function (data) {
     }
   }
 
+  notificationService.getNotificationsById = async function (id) {
+    try {
+      const res = await fetch({
+        url:`${apiRoute}/${id}` ,
+        method: 'get',
+      })
+      return res
+    } catch (err) {
+      console.log(err, 'show-err')
+    }
+  }
+
+  // notificationService.editNotifications = async function (userId, data) {
+  //   try {
+  //     const res = await fetch({
+  //       url: `${apiRoute}?userId=${userId}`,
+  //       method: 'post',
+  //       data: data,
+  //     })
+  //     return res
+  //   } catch (err) {
+  //     console.log(err, 'show-err')
+  //   }
+  // }
 
   notificationService.createCartReminder= async function (data) {
     // console.log(data);

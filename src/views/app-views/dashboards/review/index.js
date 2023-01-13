@@ -1,6 +1,6 @@
 import React from 'react'
 import { Route, Switch, Redirect } from 'react-router-dom'
-import ReviewList from './Review-List'
+import ReviewList from './review-list'
 // import AddReview from './Add-Review'
 // import EditReview from './Edit-Review'
 // import Orders from './orders'
@@ -12,7 +12,7 @@ const Review = (props) => {
       <Redirect
         exact
         from={`${match.url}`}
-        to={`${match.url}/Review-List`}
+        to={`${match.url}/review-list`}
       />
       {/* <Route path={`${match.url}/Add-Review`} component={AddReview} />
       <Route
@@ -20,7 +20,7 @@ const Review = (props) => {
         component={EditReview}
       /> */}
       <Route
-        path={`${match.url}/Review-List`}
+        path={`${match.url}/review-list`}
         component={ReviewList}
       />
     </Switch>

@@ -68,7 +68,7 @@ const TemplateList = () => {
       if (data) {
         setList(data)
         setSearchBackupList(data)
-        console.log(data, 'show-data')
+        // console.log(data, 'show-data')
         setPagination({
           ...paginationParams.pagination,
           total: data.total,
@@ -119,11 +119,11 @@ const TemplateList = () => {
   )
 
   const addProduct = () => {
-    history.push(`/app/dashboards/template/add-template`)
+    history.push(`/app/dashboards/notifications/template/add-template`)
   }
 
   const viewDetails = (row) => {
-    history.push(`/app/dashboards/template/edit-template/${row.id}`)
+    history.push(`/app/dashboards/notifications/template/edit-template/${row.id}`)
   }
 
   const deleteRow = async (row) => {
@@ -161,7 +161,7 @@ const TemplateList = () => {
         getTemplates({ pagination: resetPagination() }, sendingValues)
       })
       .catch((info) => {
-        console.log('info', info)
+        // console.log('info', info)
         setFilterEnabled(false)
       })
   }
@@ -244,13 +244,13 @@ const TemplateList = () => {
               ))}
             </Select>
       </div>
-   
-          <Button type="primary" onClick={handleFilterSubmit}>
+            
+          <Button className="ml-3" type="primary" onClick={handleFilterSubmit}>
             Filter
           </Button>
        
       
-          <Button type="primary" onClick={handleClearFilter}>
+          <Button className="ml-2" type="primary" onClick={handleClearFilter}>
             Clear
           </Button>
      

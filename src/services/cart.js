@@ -13,6 +13,18 @@ cartService.getCart = async function (customerId) {
       console.log(err, 'show-err')
     }
   }
+  cartService.addCart = async function (customerId,data) {
+    try {
+      const res = await fetch({
+        url: `${api}/items/${customerId}`,
+        method: 'post',
+        data,
+      })
+      return res
+    } catch (err) {
+      console.log(err, 'show-err')
+    }
+  }
   
 
 

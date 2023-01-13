@@ -67,7 +67,7 @@ const CustomerList = () => {
     if (data) {
       setList(data)
       setSearchBackupList(data)
-      console.log(selectedViewAddress, 'show-data')
+      // console.log(data, 'show-data')
 
       if (selectedCustomerId) {
         data?.forEach((cur) => {
@@ -122,7 +122,7 @@ const CustomerList = () => {
           <span className="ml-2">View Prescriptions</span>
         </Flex>
       </Menu.Item> */}
-      {/* <Menu.Item onClick={() => deleteRow(row)}>
+      <Menu.Item onClick={() => deleteRow(row)}>
         <Flex alignItems="center">
           <DeleteOutlined />
           <span className="ml-2">
@@ -131,7 +131,7 @@ const CustomerList = () => {
               : 'Delete'}
           </span>
         </Flex>
-      </Menu.Item> */}
+      </Menu.Item>
     </Menu>
   )
 
@@ -143,24 +143,24 @@ const CustomerList = () => {
     history.push(`/app/dashboards/users/customer/edit-customer/${id}`)
   }
 
-  // const deleteRow = async (row) => {
-  //   const resp = await customerService.deleteUserGroup(row.id)
+  const deleteRow = async (row) => {
+    const resp = await customerService.deleteCustomer(row.id)
 
-  //   if (resp) {
-  //     const objKey = 'id'
-  //     let data = list
-  //     if (selectedRows.length > 1) {
-  //       selectedRows.forEach((elm) => {
-  //         data = utils.deleteArrayRow(data, objKey, elm.id)
-  //         setList(data)
-  //         setSelectedRows([])
-  //       })
-  //     } else {
-  //       data = utils.deleteArrayRow(data, objKey, row.id)
-  //       setList(data)
-  //     }
-  //   }
-  // }
+    if (resp) {
+      const objKey = 'id'
+      let data = list
+      if (selectedRows.length > 1) {
+        selectedRows.forEach((elm) => {
+          data = utils.deleteArrayRow(data, objKey, elm.id)
+          setList(data)
+          setSelectedRows([])
+        })
+      } else {
+        data = utils.deleteArrayRow(data, objKey, row.id)
+        setList(data)
+      }
+    }
+  }
   const addCustomer = () => {
     history.push(`/app/dashboards/users/customer/add-customer`)
   }
@@ -201,12 +201,12 @@ const CustomerList = () => {
           />
         </div>
       ),
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'firstName'),
     },
     {
       title: 'Last Name',
       dataIndex: 'lastName',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'lastname'),
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'lastName'),
     },
 
     {

@@ -116,7 +116,7 @@ const ShipmentForm = (props) => {
       })
       .catch((info) => {
         setSubmitLoading(false)
-        console.log('info', info)
+        // console.log('info', info)
         message.error('Please enter all required field ')
       })
   }

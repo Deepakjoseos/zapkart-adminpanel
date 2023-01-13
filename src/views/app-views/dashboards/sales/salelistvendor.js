@@ -41,8 +41,8 @@ import {
   sessionColor,
   recentOrderData,
 } from './SalesDashboardData'
-// import moment from 'moment';
-// import { DATE_FORMAT_DD_MM_YYYY } from 'constants/DateConstant'
+import moment from 'moment';
+import { DATE_FORMAT_DD_MM_YYYY } from 'constants/DateConstant'
 // import utils from 'utils'
 import { useSelector } from 'react-redux'
 import salesService from 'services/sales'
@@ -77,55 +77,55 @@ const { TabPane } = Tabs
 // 	return ''
 // }
 
-const WeeklyRevenue = () => {
-  const { direction } = useSelector((state) => state.theme)
-  return (
-    <Card>
-      <Row gutter={16}>
-        <Col xs={24} sm={24} md={24} lg={8}>
-          <flex
-            className="h-100"
-            flexDirection="column"
-            justifyContent="between"
-          >
-            <div>
-              <h4 className="mb-0">Weekly Revenue</h4>
-              <span className="text-muted">8 - 15 Jul, 2020</span>
-            </div>
-            <div className="mb-4">
-              <h1 className="font-weight-bold">$27,188.00</h1>
-              <p className="text-success">
-                <span>
-                  <ArrowUpOutlined />
-                  <span> 17% </span>
-                </span>
-                <span>growth from last week</span>
-              </p>
-              <p>
-                Total gross income figure based from the date range given above.
-              </p>
-            </div>
-          </flex>
-        </Col>
-        <Col xs={24} sm={24} md={24} lg={16}>
-          <div className="mb-3 text-right">
-            <Button icon={<CloudDownloadOutlined />}>Download Report</Button>
-          </div>
-          <ChartWidget
-            card={false}
-            series={weeklyRevenueData.series}
-            xAxis={weeklyRevenueData.categories}
-            title="Unique Visitors"
-            height={250}
-            type="bar"
-            customOptions={{ colors: COLORS }}
-            direction={direction}
-          />
-        </Col>
-      </Row>
-    </Card>
-  )
-}
+// const WeeklyRevenue = () => {
+//   const { direction } = useSelector((state) => state.theme)
+//   return (
+//     <Card>
+//       <Row gutter={16}>
+//         <Col xs={24} sm={24} md={24} lg={8}>
+//           <flex
+//             className="h-100"
+//             flexDirection="column"
+//             justifyContent="between"
+//           >
+//             <div>
+//               <h4 className="mb-0">Weekly Revenue</h4>
+//               <span className="text-muted">8 - 15 Jul, 2020</span>
+//             </div>
+//             <div className="mb-4">
+//               <h1 className="font-weight-bold">$27,188.00</h1>
+//               <p className="text-success">
+//                 <span>
+//                   <ArrowUpOutlined />
+//                   <span> 17% </span>
+//                 </span>
+//                 <span>growth from last week</span>
+//               </p>
+//               <p>
+//                 Total gross income figure based from the date range given above.
+//               </p>
+//             </div>
+//           </flex>
+//         </Col>
+//         <Col xs={24} sm={24} md={24} lg={16}>
+//           <div className="mb-3 text-right">
+//             <Button icon={<CloudDownloadOutlined />}>Download Report</Button>
+//           </div>
+//           <ChartWidget
+//             card={false}
+//             series={weeklyRevenueData.series}
+//             xAxis={weeklyRevenueData.categories}
+//             title="Unique Visitors"
+//             height={250}
+//             type="bar"
+//             customOptions={{ colors: COLORS }}
+//             direction={direction}
+//           />
+//         </Col>
+//       </Row>
+//     </Card>
+//   )
+// }
 
 // const DisplayDataSet = () => (
 // 	<Row gutter={16}>
@@ -235,25 +235,27 @@ const SalesVendor = () => {
     pageSize: 15,
   })
   const [list, setList] = useState([])
+  const [testData, setTestData] = useState([])
   const [vendors, setVendors] = useState([])
   const [filterEnabled, setFilterEnabled] = useState(false)
+  const [vendorList, setVendorList] = useState([])
 
   const getSales = async (paginationParams = {}, filterParams) => {
     setLoading(true)
-    const data = await salesService.getSales(
-      qs.stringify(getPaginationParams(paginationParams)),
-      qs.stringify(filterParams)
+    const data = await salesService.getSales(paginationParams, filterParams
+      // qs.stringify(getPaginationParams(paginationParams))
+      // qs.stringify(filterParams)  , filterParams
     )
-    console.log(data, 'hihihihihih')
     if (data) {
       setList([data])
-      console.log(data, 'hihihihihih')
       // Pagination
       setPagination({
         ...paginationParams.pagination,
         total: data.total,
       })
       setLoading(false)
+
+
     }
   }
 
@@ -276,12 +278,25 @@ const SalesVendor = () => {
         }
       })
       setVendors(users)
+    //   if(data && vendors) {
+    //     const vendorList = Object.values(list.vendors).map((data) => {
+    //       for(let i=0 ; i<vendors.length-1 ; i++){
+    //         if(data.id === vendors[i].id){return vendors}
+    //     }
+    //   })
+    // }
     }
   }
+
+  
 
   useEffect(() => {
     getProductTemplates()
   }, [])
+
+  useEffect(() => {
+    setVendorList(list[0]?.vendors)
+  }, [list])
 
   useEffect(() => {
     getVendors()
@@ -339,6 +354,29 @@ const SalesVendor = () => {
       },
     },
   ]
+
+  const tableColumns2 =[
+    {
+      title: 'Vendor Name',
+      dataIndex: 'name'
+    }, 
+    {
+      title: 'Total Customers',
+      dataIndex: 'totalCustomers'
+    },
+    {
+      title: 'Total Products',
+      dataIndex: 'totalProducts'
+    },
+    {
+      title: 'Total Commission',
+      dataIndex: 'totalCommission'
+    },
+    {
+      title: 'Total Amount',
+      dataIndex: 'totalAmount'
+    }
+  ]
   const resetPagination = () => ({
     ...pagination,
     current: 1,
@@ -346,18 +384,23 @@ const SalesVendor = () => {
   })
 
   const handleFilterSubmit = async () => {
+    setVendorList(list[0]?.vendors)
     setPagination(resetPagination())
 
     form
       .validateFields()
       .then(async (values) => {
+        
         setFilterEnabled(true)
         // Removing falsy Values from values
-        const sendingValues = _.pickBy(values, _.identity)
+        const sendingValues = _.pickBy({...values,
+          fromDate: values.fromDate ? moment(values.fromDate).format() : '', 
+          toDate: values.toDate ? moment(values.toDate).format():''},           
+          _.identity)
+
         getSales({ pagination: resetPagination() }, sendingValues)
       })
       .catch((info) => {
-        console.log('info', info)
         setFilterEnabled(false)
       })
   }
@@ -369,6 +412,7 @@ const SalesVendor = () => {
     setPagination(resetPagination())
     getSales({ pagination: resetPagination() }, {})
     setFilterEnabled(false)
+
   }
   // const handleQuery = async () => {
   //   const query = {}
@@ -397,20 +441,22 @@ const SalesVendor = () => {
           </Form.Item>
         </Col>
 
-        <Col md={6} sm={24} xs={24} lg={2}>
-          <Form.Item name="toDate" label="To Date">
-            <DatePicker />
+        <Col md={6} sm={24} xs={24} lg={4}>
+          <Form.Item name="toDate" label="To Date" >
+            <DatePicker 
+            />
           </Form.Item>
         </Col>
 
         <Col md={6} sm={24} xs={24} lg={5}>
           <Form.Item name="vendorIds" label="Vendors">
             <Select
+              mode="multiple"
               className="w-100"
-              style={{ minWidth: 180 }}
+              style={{ minWidth: 100 }}
               placeholder="Vendors"
             >
-              <Option value="">All</Option>
+              {/* <Option value="">All</Option> */}
               {vendors.map((users) => (
                 <Option key={users.id} value={users.id}>
                   {users.fullName}
@@ -423,11 +469,12 @@ const SalesVendor = () => {
         <Col md={6} sm={24} xs={24} lg={5}>
           <Form.Item name="customerIds" label="Customers">
             <Select
+              mode="multiple"
               className="w-100"
-              style={{ minWidth: 180 }}
+              style={{ minWidth: 100 }}
               placeholder="Customers"
             >
-              <Option value="">All</Option>
+              {/* <Option value="">All</Option> */}
               {customers.map((user) => (
                 <Option key={user.id} value={user.id}>
                   {user.fullName}
@@ -440,18 +487,19 @@ const SalesVendor = () => {
         <Col md={6} sm={24} xs={24} lg={5}>
           <Form.Item name="productTemplateIds" label="product Templates">
             <Select
+              mode="multiple"
               className="w-100"
-              style={{ minWidth: 180 }}
+              style={{ minWidth: 100 }}
               placeholder="Product Templates"
             >
-              <Option value="">All</Option>
+              {/* <Option value="">All</Option> */}
               {productTemplates.map((temp) => (
                 <Option value={temp.id}>{temp.name}</Option>
               ))}
             </Select>
           </Form.Item>
         </Col>
-
+        {/* <div style={{display:"flex", alignItems:"end"}} > */}
         <Col className="mb-4">
           <Button type="primary" onClick={handleFilterSubmit}>
             Filter
@@ -462,28 +510,10 @@ const SalesVendor = () => {
             Clear
           </Button>
         </Col>
+        {/* </div> */}
       </Row>
     </Form>
   )
-
-  const tableColumns3 = [
-    {
-      title: 'Total Vendors',
-      dataIndex: 'totalVendors',
-      // sorter: (a, b) => utils.antdTableSorter(a, b, 'totalAmount'),
-
-      // render: (items, record) => <div>{items?.length}</div>,
-    },
-
-    {
-      title: 'Total Amount',
-      dataIndex: 'totalAmount',
-      render: (totalAmount) => {
-        return <Flex alignItems="centre">{totalAmount}</Flex>
-      },
-    },
-  ]
-
   
   return (
     <div>
@@ -491,23 +521,34 @@ const SalesVendor = () => {
       <span alignItems="center" justifyContent="between" mobileFlex={false}>
         {filtersComponent()}
       </span>
-      <br></br>
+    
+      <div style={{ padding: '15px'}}>
+          <Row gutter={18} style={{display:'flex', justifyContent:'space-around'}} >
+            <Col span={9}>
+              <Card title="Total Vendors">
+                {list[0]?.totalVendors}
+              </Card>
+            </Col>
+            <Col span={9}>
+              <Card title="Total Amount"  style={{}} >
+                {list[0]?.totalAmount}
+              </Card>
+            </Col>
+          </Row>
+        </div>
+
       <Row gutter={16}>
         <Col span={24}>
-          <Table
-            scroll={{
-              x: true,
-            }}
-            columns={tableColumns3}
-            dataSource={list}
-            rowKey="id"
-            pagination={pagination}
-            onChange={handleTableChange}
+          <Table 
+            scroll={{x:true,}}
+            columns={tableColumns2} 
+            dataSource={vendorList} 
+            rowKey="id1" 
+            pagination = {pagination}
+            onChange = {handleTableChange}
+            loading={loading}
           />
         </Col>
-        {/* <Col xs={24} sm={24} md={24} lg={8} xl={9} xxl={10}>
-				<DisplayDataSet />
-			</Col> */}
       </Row>
       </Card>
     </div>

@@ -251,13 +251,13 @@ const MedicineTypeList = () => {
       className="ant-advanced-search-form"
     >
       <Row gutter={8} align="bottom">
-        <Col md={6} sm={24} xs={24} lg={6}>
+        <Col md={6} sm={24} xs={24} lg={7}>
           <Form.Item name="search" label="Search">
             <Input placeholder="Search" prefix={<SearchOutlined />} />
           </Form.Item>
         </Col>
         
-        <Col md={6} sm={24} xs={24} lg={6}>
+        <Col md={6} sm={24} xs={24} lg={5}>
           <Form.Item name="status" label="Status">
             <Select className="w-100" placeholder="Status">
           <Option value="">All</Option>
@@ -268,15 +268,24 @@ const MedicineTypeList = () => {
               ))}
           </Select>
         </Form.Item>
-       
         </Col>
     
-        <Col className="mb-4">
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="orderByName" label="Order By Name">
+            <Select className="w-100" placeholder="Order By Name">
+          <Option value="">All</Option>
+          <Option value="Asc">Asc</Option>
+          <Option value="Desc">Desc</Option>
+          </Select>
+        </Form.Item>
+        </Col>
+
+        <Col md={6} sm={24} xs={24} lg={3} className="mb-4">
           <Button type="primary" onClick={handleFilterSubmit}>
             Filter
           </Button>
         </Col>
-        <Col className="mb-4">
+        <Col md={6} sm={24} xs={24} lg={3} className="mb-4">
           <Button type="primary" onClick={handleClearFilter}>
             Clear
           </Button>
