@@ -76,46 +76,46 @@ const newJoinMemberOption = (
   </Menu>
 )
 
-const latestTransactionOption = (
-  <Menu>
-    <Menu.Item key="0">
-      <span>
-        <div className="d-flex align-items-center">
-          <ReloadOutlined />
-          <span className="ml-2">Refresh</span>
-        </div>
-      </span>
-    </Menu.Item>
-    {/* <Menu.Item key="1">
-      <span>
-        <div className="d-flex align-items-center">
-          <PrinterOutlined />
-          <span className="ml-2">Print</span>
-        </div>
-      </span>
-    </Menu.Item>
-    <Menu.Item key="12">
-      <span>
-        <div className="d-flex align-items-center">
-          <FileExcelOutlined />
-          <span className="ml-2">Export</span>
-        </div>
-      </span>
-    </Menu.Item> */}
-  </Menu>
-)
+// const latestTransactionOption = (
+//   <Menu>
+//     <Menu.Item key="0">
+//       <span >
+//         <div className="d-flex align-items-center">
+//           <ReloadOutlined />
+//           <span className="ml-2">Refresh</span>
+//         </div>
+//       </span>
+//     </Menu.Item>
+//     {/* <Menu.Item key="1">
+//       <span>
+//         <div className="d-flex align-items-center">
+//           <PrinterOutlined />
+//           <span className="ml-2">Print</span>
+//         </div>
+//       </span>
+//     </Menu.Item>
+//     <Menu.Item key="12">
+//       <span>
+//         <div className="d-flex align-items-center">
+//           <FileExcelOutlined />
+//           <span className="ml-2">Export</span>
+//         </div>
+//       </span>
+//     </Menu.Item> */}
+//   </Menu>
+// )
 
-const cardDropdown = (menu) => (
-  <Dropdown overlay={menu} trigger={['click']} placement="bottomRight">
-    <a
-      href="/#"
-      className="text-gray font-size-lg"
-      onClick={(e) => e.preventDefault()}
-    >
-      <EllipsisOutlined />
-    </a>
-  </Dropdown>
-)
+// const cardDropdown = (menu) => (
+//   <Dropdown overlay={menu} trigger={['click']} placement="bottomRight">
+//     <a
+//       href="/#"
+//       className="text-gray font-size-lg"
+//       onClick={(e) => e.preventDefault()}
+//     >
+//       <EllipsisOutlined />
+//     </a>
+//   </Dropdown>
+// )
 
 const tableColumns = [
   {
@@ -220,6 +220,33 @@ export const DefaultDashboard = () => {
 
     getStatics()
   }, [])
+
+
+const latestTransactionOption = (
+  <Menu>
+    <Menu.Item key="0">
+      <span onClick={() => getOrders()}>
+        <div className="d-flex align-items-center">
+          <ReloadOutlined />
+          <span className="ml-2">Refresh</span>
+        </div>
+      </span>
+    </Menu.Item>
+  </Menu>
+)
+
+const cardDropdown = (menu) => (
+  <Dropdown overlay={menu} trigger={['click']} placement="bottomRight">
+    <a
+      href="/#"
+      className="text-gray font-size-lg"
+      onClick={(e) => e.preventDefault()}
+    >
+      <EllipsisOutlined />
+    </a>
+  </Dropdown>
+)
+
 
   return (
     <>
