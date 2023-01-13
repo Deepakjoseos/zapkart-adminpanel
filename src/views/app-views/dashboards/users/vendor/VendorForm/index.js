@@ -159,6 +159,8 @@ const ProductForm = (props) => {
         drugLicense: data?.drugLicense,
         groups: data?.groups.map((cur) => cur.id),
         business: data?.business,
+        emailSubscription: data?.emailSubscription,
+        smsSubscription: data?.smsSubscription,
        
 
         // address:
@@ -233,6 +235,9 @@ const ProductForm = (props) => {
           gst: values.gst,
           drugLicense: values.drugLicense,
           groups: values.groups,
+          emailSubscription: values.emailSubscription,
+          smsSubscription: values.smsSubscription,
+
           
           address: {
             line1: values['address.line1'],
