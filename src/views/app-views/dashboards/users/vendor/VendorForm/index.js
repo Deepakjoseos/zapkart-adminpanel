@@ -17,6 +17,7 @@ import BankAccount from './bankAccount'
 import { useSelector } from 'react-redux'
 import Documents from './documents'
 import PickupLocations from '../VendorForm/pickuplocation'
+import DocumentField from './DocumentField'
 
 // const getAllPickUpLocations = async ()=>{
 //   const data = await shipmentService.getAllPickUpLocations()
@@ -49,6 +50,7 @@ const ProductForm = (props) => {
   const [groupList, setGroupList] = useState([])
   const [transactions, setTransactions] = useState([])
   const [logo, setLogo] = useState(null)
+  const [documentData, setDocumentData] = useState([])
 
   const [wallet, setWallet] = useState({})
   const [selectedVendorId, setSelectedVendorId] = useState(null)
@@ -82,7 +84,6 @@ const ProductForm = (props) => {
   const fetchConstants = async () => {
     const data = await constantsService.getConstants()
     if (data) {
-      // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
 
       setStatuses(Object.values(data.GENERAL['FORM_STATUS']))
     }
@@ -182,6 +183,7 @@ const ProductForm = (props) => {
       })
       setEmailVerified(data?.emailVerified ? true : false)
       setPhoneVerified(data?.phone ? true : false)
+      setDocumentData(data?.documents)
     } else {
       history.replace('/app/dashboards/users/vendor/vendor-list')
     }
@@ -450,6 +452,12 @@ const ProductForm = (props) => {
                     <Documents />
                   </TabPane>
                 )}
+                <TabPane tab="Documents" key="5">
+                  <DocumentField 
+                    documentData={documentData}
+                    refreshData = {fetchVendorById}
+                  />
+                </TabPane>
               </>
             )}
           </Tabs>

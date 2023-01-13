@@ -40,13 +40,13 @@ const Dashboards = ({ match }) => {
           component={lazy(() => import(`./information`))}
         />
          <Route
-          path={`${match.url}/Review`}
-          component={lazy(() => import(`./Review`))}
+          path={`${match.url}/review`}
+          component={lazy(() => import(`./review`))}
         />
-        <Route
+        {/* <Route
           path={`${match.url}/template`}
           component={lazy(() => import(`./template`))}
-        />
+        /> */}
         <Route
           path={`${match.url}/deliverylocation`}
           component={lazy(() => import(`./delivery-location`))}

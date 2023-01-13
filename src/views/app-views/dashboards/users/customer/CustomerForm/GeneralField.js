@@ -42,7 +42,8 @@ const GeneralField = ({
 // *************************************Edited***************************************************
 
   id,                                   //edit
-  setPhoneVerified                      //edit
+  setPhoneVerified,                     //edit
+  setEmailVerified                      //edit  
 
 // *************************************Edited***************************************************
 
@@ -75,6 +76,18 @@ const handleClick = async () => {
 
   }
   setUpdatePhone(false);
+}
+
+const handleVerifyEmail = async() => {
+  setIsLoading(true)
+  const promise = await customerService.verifyEmailAdress(id)
+  if(promise){
+    message.success("verified Email")
+    setEmailVerified(true)
+    setIsLoading(false)
+  } else {
+    setIsLoading(false)
+  }
 }
 
 // *************************************Edited***************************************************
@@ -147,7 +160,6 @@ const handleClick = async () => {
             alignItems="center"
 
           >
-
             {!isLoading ? 
               <>
                  <div>
@@ -169,23 +181,6 @@ const handleClick = async () => {
               </> :
               <Loading />
             }
-
-            {/* <div>
-          <Button 
-          className="mr-2"
-          onClick={() => {
-            setUpdatePhone(false)
-          }}
-          >Cancel</Button>
-          </div>
-          <div >
-          <Button 
-          type= 'primary'
-          onClick={() => {
-            handleClick()
-          }}
-          >Update</Button>
-          </div> */}
           </Flex>
         </Card>
     </div>

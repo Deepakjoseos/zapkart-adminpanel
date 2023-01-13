@@ -10,6 +10,7 @@ import {
   Form,
   Row,
   Col,
+  Modal,
   notification,
 } from 'antd'
 // import BrandListData from 'assets/data/product-list.data.json'
@@ -19,6 +20,7 @@ import {
   SearchOutlined,
   PlusCircleOutlined,
 } from '@ant-design/icons'
+import ItemForm from './ItemForm'
 import AvatarStatus from 'components/shared-components/AvatarStatus'
 import EllipsisDropdown from 'components/shared-components/EllipsisDropdown'
 import Flex from 'components/shared-components/Flex'
@@ -26,6 +28,8 @@ import qs from 'qs'
 import utils from 'utils'
 import cartService from 'services/cart'
 import _ from 'lodash'
+import productTemplate from 'services/productTemplate'
+import productService from 'services/product'
 import { useHistory, Link } from 'react-router-dom'
 import constantsService from 'services/constants'
 import orderService from 'services/orders'
@@ -44,6 +48,11 @@ const Cart = ({
 }) => {
   const [cart, setCart] = useState([])
   const [reminder, setreminder] = useState([])
+  const [viewFormModal, setViewFormModal] = useState(false)
+  const [formMode, setFormMode] = useState()
+  const [selectedFormAddress, setSelectedFormAddress] = useState({})
+  const [productsTemplate, setProductsTemplate] = useState([])
+
   const SITE_NAME = process.env.REACT_APP_SITE_NAME
 
   const getCart = async () => {
@@ -58,13 +67,23 @@ const Cart = ({
       setreminder(data)
     }
   }
-
+  const getProductsTemplate = async () => {
+    const products = await productService.getPublicProducts(
+      '',
+      'status=Active&approval=Approved'
+    )
+    if (products.data) {
+      setProductsTemplate(products.data)
+      // console.log(setProductsTemplate,'products');
+    }
+  }
 
   useEffect(() => {
     if (selectedCustomerId) {
-      console.log(selectedCustomerId);
+      // console.log(selectedCustomerId,'customer');
       getCart()
       cartreminder()
+      getProductsTemplate()
     }
   }, [selectedCustomerId])
 
@@ -134,16 +153,6 @@ const Cart = ({
       },
       
     },
-    
-    {
-      title: '',
-      dataIndex: 'actions',
-      render: (_, elm) => (
-        <div className="text-right">
-        <Button type='primary' onClick={reminder}> Notification </Button> 
-        </div>
-      ),
-    },
    
   ]
 
@@ -177,6 +186,19 @@ const Cart = ({
   
 
   return (
+    <Card>
+    <Flex justifyContent="end" className="mb-2" alignItems="center" mobileFlex={false}>
+        <Button className="ml-2" type='primary' onClick={reminder}> Notify Customer </Button> 
+    <Button 
+      type='primary' 
+      icon={<PlusCircleOutlined />} 
+      className="ml-2"      
+      onClick={() => {
+        setViewFormModal(true)
+        setFormMode('add')
+      }}>
+         Add Items </Button> 
+    </Flex>
     <Table
       scroll={{
         x: true,
@@ -186,7 +208,19 @@ const Cart = ({
       rowKey="id"
       
     />
-   
+
+<ItemForm
+        formMode={formMode}
+        setSelectedFormAddress={setSelectedFormAddress}
+        setFormMode={setFormMode}
+        viewFormModal={viewFormModal}
+        setViewFormModal={setViewFormModal}
+        selectedCustomerId={selectedCustomerId}
+        productsTemplate={productsTemplate}
+      />
+
+
+   </Card>
     
 
   )

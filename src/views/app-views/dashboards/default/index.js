@@ -39,6 +39,7 @@ import customerService from 'services/customer'
 import orderService from 'services/orders'
 import authAdminService from 'services/auth/admin'
 import moment from 'moment'
+import Flex from 'components/shared-components/Flex'
 
 const MembersChart = (props) => <ApexChart {...props} />
 
@@ -75,46 +76,46 @@ const newJoinMemberOption = (
   </Menu>
 )
 
-const latestTransactionOption = (
-  <Menu>
-    <Menu.Item key="0">
-      <span>
-        <div className="d-flex align-items-center">
-          <ReloadOutlined />
-          <span className="ml-2">Refresh</span>
-        </div>
-      </span>
-    </Menu.Item>
-    {/* <Menu.Item key="1">
-      <span>
-        <div className="d-flex align-items-center">
-          <PrinterOutlined />
-          <span className="ml-2">Print</span>
-        </div>
-      </span>
-    </Menu.Item>
-    <Menu.Item key="12">
-      <span>
-        <div className="d-flex align-items-center">
-          <FileExcelOutlined />
-          <span className="ml-2">Export</span>
-        </div>
-      </span>
-    </Menu.Item> */}
-  </Menu>
-)
+// const latestTransactionOption = (
+//   <Menu>
+//     <Menu.Item key="0">
+//       <span >
+//         <div className="d-flex align-items-center">
+//           <ReloadOutlined />
+//           <span className="ml-2">Refresh</span>
+//         </div>
+//       </span>
+//     </Menu.Item>
+//     {/* <Menu.Item key="1">
+//       <span>
+//         <div className="d-flex align-items-center">
+//           <PrinterOutlined />
+//           <span className="ml-2">Print</span>
+//         </div>
+//       </span>
+//     </Menu.Item>
+//     <Menu.Item key="12">
+//       <span>
+//         <div className="d-flex align-items-center">
+//           <FileExcelOutlined />
+//           <span className="ml-2">Export</span>
+//         </div>
+//       </span>
+//     </Menu.Item> */}
+//   </Menu>
+// )
 
-const cardDropdown = (menu) => (
-  <Dropdown overlay={menu} trigger={['click']} placement="bottomRight">
-    <a
-      href="/#"
-      className="text-gray font-size-lg"
-      onClick={(e) => e.preventDefault()}
-    >
-      <EllipsisOutlined />
-    </a>
-  </Dropdown>
-)
+// const cardDropdown = (menu) => (
+//   <Dropdown overlay={menu} trigger={['click']} placement="bottomRight">
+//     <a
+//       href="/#"
+//       className="text-gray font-size-lg"
+//       onClick={(e) => e.preventDefault()}
+//     >
+//       <EllipsisOutlined />
+//     </a>
+//   </Dropdown>
+// )
 
 const tableColumns = [
   {
@@ -146,9 +147,23 @@ const tableColumns = [
 
   },
   {
+    title: 'Order Date',
+    dataIndex: 'createdAt',
+    key: 'createdAt',
+    render:(data) => moment(new Date(data * 1000)).format('DD-MMM-YYYY hh:mm:a')
+  },
+  {
     title: 'Status',
     dataIndex: 'status',
     key: 'status',
+  },
+  {
+    title: 'Payment Status',
+    dataIndex: 'payment',
+    key: 'payment',
+    render: (payment) => {
+      return <Flex alignItems="centre">{payment?.status === "PENDING" ? (<Tag color="#f50">PENDING</Tag>) : (<Tag color="#87d068">CONFIRMED</Tag>)}</Flex>
+    },
   },
   // {
   //   title: () => <div className="text-right">Status</div>,
@@ -206,6 +221,33 @@ export const DefaultDashboard = () => {
     getStatics()
   }, [])
 
+
+const latestTransactionOption = (
+  <Menu>
+    <Menu.Item key="0">
+      <span onClick={() => getOrders()}>
+        <div className="d-flex align-items-center">
+          <ReloadOutlined />
+          <span className="ml-2">Refresh</span>
+        </div>
+      </span>
+    </Menu.Item>
+  </Menu>
+)
+
+const cardDropdown = (menu) => (
+  <Dropdown overlay={menu} trigger={['click']} placement="bottomRight">
+    <a
+      href="/#"
+      className="text-gray font-size-lg"
+      onClick={(e) => e.preventDefault()}
+    >
+      <EllipsisOutlined />
+    </a>
+  </Dropdown>
+)
+
+
   return (
     <>
       <Row gutter={16}>
@@ -214,7 +256,7 @@ export const DefaultDashboard = () => {
             <Col xs={24} sm={24} md={24} lg={24} xl={6}>
               <StatisticWidget
                 title="Total Transaction"
-                value={`${annualStatisticData?.transactions}`}
+                value={annualStatisticData?.transactions}
                 // status={elm.status}
                 subtitle={`This Year ${moment().year()}`}
               />
