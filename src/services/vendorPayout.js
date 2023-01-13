@@ -3,8 +3,8 @@ import fetch from 'auth/FetchInterceptor'
 const vendorPayoutService = {}
 const apiRoute = '/vendorPayout'
 
-vendorPayoutService.getPayouts =async() =>{
-    let url = `${apiRoute}/get`
+vendorPayoutService.getPayouts =async(pagination, filter) =>{
+    let url = `${apiRoute}/get?${pagination}&${filter}`
     try{
         const res = await fetch({
             url: url,

@@ -62,18 +62,43 @@ const PayoutList = () => {
     pageSize: 10,
   })
 
-  const getPayout = async(paginationParams = {}, filterParams) => {
+  const dropdownMenu = (row) => (
+    <Menu>
+      <Menu.Item 
+      onClick={() => viewDetails(row)}
+      >
+        <Flex alignItems="center">
+          <EyeOutlined />
+          <span className="ml-2">View Details</span>
+        </Flex>
+      </Menu.Item>
+      {/* <Menu.Item onClick={() => deleteRow(row)}>
+        <Flex alignItems="center">
+          <DeleteOutlined />
+          <span className="ml-2">
+            {selectedRows.length > 0
+              ? `Delete (${selectedRows.length})`
+              : 'Delete'}
+          </span>
+        </Flex>
+      </Menu.Item> */}
+    </Menu>
+  )
+
+  const viewDetails = (row) => {
+    history.push(`/app/dashboards/vendor-payout/payout-details/${row.id}`)
+
+  }
+
+  const getPayout = async (paginationParams = {}, filterParams) => {
     const data = await vendorPayoutService.getPayouts(
       qs.stringify(getPaginationParams(paginationParams)),
       qs.stringify(filterParams)
     )
-    if(data) {
-      setUsers(data)
-      const userIds = data.map((cont) => ({
-        id: cont.userId,
-        name: cont.userName
-      })) 
-      setUserId(userIds)
+    if (data) {
+      console.log(data.total,"total");
+      setUsers(data.data)
+
       setPagination({
         ...paginationParams.pagination,
         total: data.total,
@@ -82,24 +107,6 @@ const PayoutList = () => {
     }
   }
 
-  const approvePayout = async (data) => {
-    const res = await payoutService.approvePayout(data)
-    if(res){
-      message.success('Approved')
-    }
-    getPayout();
-  }
-
-  const clickHandle = (value) => {
-    // console.log(value, moment().format('DD-MM-YYYY hh:mm:a'))
-    const data={
-      walletPayoutId: value.id,
-      approved: true,
-      approvedOn: moment().format('DD-MM-YYYY hh:mm:a')
-    }
-    // console.log(data, "rohit")
-    approvePayout(data)
-  }
 
   useEffect(() => {
     getPayout({
@@ -126,68 +133,50 @@ const PayoutList = () => {
 
   const tableColumns = [
     {
-      title: 'Vendors',
-      dataIndex: 'userName',
+      title: 'Vendor',
+      dataIndex: 'vendorName',
     },
     {
-      title: 'Bank',
-      dataIndex: 'bankAccount',
-      render:(data) => {
-        // console.log(data,"rohit")
-        return (<div>{data?.nickName}</div>)}
+      title: 'Customer',
+      dataIndex: 'customerName',
     },
     {
-      title: 'Amount',
-      dataIndex: 'amount',
-      // render: (text, record) => (
-      //   <Link to={`/app/dashboards/orders/order-view/${record.id}`}>
-      //     {text}
-      //   </Link>
-      // ),
+      title: 'Item',
+      dataIndex: 'itemName',
     },
     {
-      title: 'Approved',
-      dataIndex: 'approved',
-      render:(app) => (app ? 
-        <div>Yes</div> : <div>No</div> )
+      title: 'Order No',
+      dataIndex: 'orderNo',
     },
     {
-      title: 'Created At',
-      dataIndex: 'createdAt',
-      render: (createdAt) => (<div>{moment(new Date(createdAt * 1000)).format('DD-MMM-YYYY hh:mm:a')}</div>)
+      title: 'Vendor Amount',
+      dataIndex: 'vendorAmount',
     },
     {
-      title: 'Updated At',
-      dataIndex: 'updatedAt',
-      render: (updatedAt) => (<div>{moment(new Date(updatedAt * 1000)).format('DD-MMM-YYYY hh:mm:a')}</div>)
+      title: 'commission Amount',
+      render: (_, record) => `${record.commissionAmount}  (${record.commissionPercentage}%)`
     },
     {
-      title: '',
-      dataIndex: 'id',
-      render: (id) => {
-        const sendingValue = users.filter((user) => user.id === id)
-        return(
-          <>
-              {sendingValue[0].approved ? 
-                <>
-                <Button disabled>Approved</Button>
-                </> : <>
-                <Button 
-                  onClick={()=> clickHandle(sendingValue[0])}
-                  type='primary'
-                >Approve</Button>
-                </>
-              }
-          </>
-        )
-        // return(<Button disabled={sendingValue[0].approved} type='primary' onClick={()=> clickHandle(sendingValue[0])}>Approve</Button>)
-      }
-      // render: (approved) => (<Button 
-      //   onClick={() =>clickHandle()}
-      //   type='primary' 
-      //   disabled={approved}
-      // >{approved ? 'Approved' : 'Approve'}</Button>)
+      title: 'commission Amount',
+      render: (_, record) => `${record.tdsAmount}  (${record.tdsPercentage}%)`
     },
+    // {
+    //   title: 'tds Amount',
+    //   dataIndex: 'tdsAmount',
+    // },
+    // {
+    //   title: 'tds Percentage',
+    //   dataIndex: 'tdsPercentage',
+    // },
+    // {
+    //   title: '',
+    //   dataIndex: 'actions',
+    //   render: (_, elm) => (
+    //     <div className="text-right">
+    //       <EllipsisDropdown menu={dropdownMenu(elm)} />
+    //     </div>
+    //   ),
+    // },
   ]
 
   const resetPagination = () => ({
@@ -250,10 +239,10 @@ const PayoutList = () => {
             >
               <Option value="">All</Option>
               {vendorList?.map((item) => (
-              <Option key={item.id} value={item.id}>
-                {`${item.firstName} ${item.lastName}`}
-              </Option>
-            ))}
+                <Option key={item.id} value={item.id}>
+                  {`${item.firstName} ${item.lastName}`}
+                </Option>
+              ))}
             </Select>
 
           </Form.Item>
@@ -298,30 +287,32 @@ const PayoutList = () => {
     </Form>
   )
 
-  const getVendors = async() => {
+  const getVendors = async () => {
     const data = await vendorService.getVendors()
-    if(data) setVendorList(data)
+    if (data) setVendorList(data)
   }
 
-return(
-  <Card> 
-    <div alignItems="center" justifyContent="between" mobileFlex={false}>
-      {filtersComponent()}
-    </div>
-    <div className="table-responsive">
+  return (
+    <Card>
+      <div alignItems="center" justifyContent="between" mobileFlex={false}>
+        {filtersComponent()}
+      </div>
+      <div className="table-responsive">
         <Table
-          scroll={{
-            x: true,
-          }} pagination={pagination}
-          loading={loading}
-          onChange={handleTableChange}
+          // scroll={{
+          //   x: true,
+          // }} 
+
           columns={tableColumns}
           dataSource={users}
           rowKey="id"
+          pagination={pagination}
+          loading={loading}
+          onChange={handleTableChange}
         />
       </div>
-  </Card>
-)
+    </Card>
+  )
 }
 
 export default PayoutList
