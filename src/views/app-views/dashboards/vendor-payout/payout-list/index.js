@@ -32,10 +32,11 @@ import orderService from 'services/orders'
 import moment from 'moment'
 import payoutService from 'services/payout'
 import vendorService from 'services/vendor'
+import vendorPayoutService from 'services/vendorPayout'
 
 const { Option } = Select
 
-const Payout = () => {
+const PayoutList = () => {
   const [vendorList, setVendorList] = useState(null)
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
   const [userId, setUserId] = useState([])
@@ -62,7 +63,7 @@ const Payout = () => {
   })
 
   const getPayout = async(paginationParams = {}, filterParams) => {
-    const data = await payoutService.getPayoutReq(
+    const data = await vendorPayoutService.getPayouts(
       qs.stringify(getPaginationParams(paginationParams)),
       qs.stringify(filterParams)
     )
@@ -323,4 +324,4 @@ return(
 )
 }
 
-export default Payout
+export default PayoutList
