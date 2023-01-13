@@ -190,10 +190,10 @@ const handleTableChange = (newPagination) => {
 
 
   const tableColumns = [
-    {
-      title: 'Tax Category Id',
-      dataIndex: 'id'
-    },
+    // {
+    //   title: 'Tax Category Id',
+    //   dataIndex: 'id'
+    // },
     {
       title: 'Name',
       dataIndex: 'name'

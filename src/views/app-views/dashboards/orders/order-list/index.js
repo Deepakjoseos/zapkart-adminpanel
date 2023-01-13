@@ -432,7 +432,7 @@ const Orders = () => {
       title: 'Payment Status',
       dataIndex: 'payment',
       render: (payment) => {
-        return <Flex alignItems="centre">{payment?.status}</Flex>
+        return <Flex alignItems="centre">{payment?.status === "PENDING" ? (<Tag color="#f50">PENDING</Tag>) : (<Tag color="#87d068">CONFIRMED</Tag>)}</Flex>
       },
     },
     // {

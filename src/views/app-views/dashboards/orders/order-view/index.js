@@ -238,12 +238,14 @@ const OrderView = () => {
                 <h4 className="mb-1 font-weight-semibold">
                   Order No : {order?.orderNo}
                 </h4>
-
                 <h4 className="mb-1 font-weight-semibold">
                   Order Date : {moment(new Date(order?.createdAt * 1000)).format(
                     'DD-MMM-YYYY hh:mmA'
                   )}
                   {/* {moment(parseInt(order?.createdAt)).format('YYYY-MM-DD')} */}
+                </h4>
+                <h4 className="mb-1 font-weight-semibold">
+                  Order Status : {order?.status}
                 </h4>
                 {/* <p>Status: {order?.status}</p> */}
                 {/* <p>shipping Charge: {order?.shippingCharge}</p> */}
@@ -286,7 +288,7 @@ const OrderView = () => {
               <>
                 <p>Prescriptions: </p>
                 {order?.prescriptions?.map((cur) => (
-                  <Image width={100} src={cur} />
+                  <Image width={100} height={100} src={cur} />
                 ))}
               </>
             )}
@@ -342,7 +344,7 @@ const OrderView = () => {
                 <Column title="PRICE" dataIndex="price" key="price" />
                 <Column title="DISC" dataIndex="discount" key="discount" />
                 {/* <Column title="TAXABLE" dataIndex="taxableAmount" key="taxableAmount" /> */}
-                <Column
+                {/* <Column
                   title="TAX"
                   dataIndex="taxSplitup"
                   render={(taxSplitup) => {
@@ -358,7 +360,7 @@ const OrderView = () => {
                       </>
                     )
                   }}
-                />
+                /> */}
 
                 {/* <Column title="AMOUNT" dataIndex="price" key="price" /> */}
 
