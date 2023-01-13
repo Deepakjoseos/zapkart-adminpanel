@@ -1,19 +1,20 @@
 import React from 'react'
-import { Route, Switch, Redirect } from 'react-router-dom'
-import NotificationList from './notification-list'
-import AddNotification from './add-notification'
-import EditNotification from './edit-notification'
+import { Redirect, Route, Switch } from 'react-router-dom'
+import Template from './template'
+import NotificationHistory from './notification-history'
 
-const Notification = (props) => {
-  const { match } = props
+const notifications = ({ match }) => {
   return (
     <Switch>
-      <Redirect exact from={`${match.url}`} to={`${match.url}/notification-list`} />
-      <Route path={`${match.url}/add-notification`} component={AddNotification} />
-      <Route path={`${match.url}/edit-notification/:id`} component={EditNotification} />
-      <Route path={`${match.url}/notification-list`} component={NotificationList} />
+      <Redirect
+        exact
+        from={`${match.url}`}
+        to={`${match.url}/notifications/template`}
+      />
+      <Route path={`${match.url}/template`} component={Template} />
+      <Route path={`${match.url}/notification-history`}  component={NotificationHistory} />
     </Switch>
   )
 }
 
-export default Notification
+export default notifications;

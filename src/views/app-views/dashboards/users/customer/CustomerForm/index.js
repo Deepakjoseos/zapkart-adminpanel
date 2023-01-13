@@ -5,6 +5,7 @@ import Flex from 'components/shared-components/Flex'
 import GeneralField from './GeneralField'
 import useUpload from 'hooks/useUpload'
 import Cart from '../customer-list/cart'
+import Reviews from '../customer-list/Reviews'
 import {
   multipleImageUpload,
   singleImageUploader,
@@ -161,7 +162,7 @@ const ProductForm = (props) => {
             history.goBack()
           }
         }
-        console.log('mode', mode)
+        // console.log('mode', mode)
         if (mode === EDIT) {
           // Checking if image exists
           if (displayImage.length !== 0 && displayImage !== null) {
@@ -192,7 +193,7 @@ const ProductForm = (props) => {
       })
       .catch((info) => {
         setSubmitLoading(false)
-        console.log('info', info)
+        // console.log('info', info)
         message.error('Please enter all required field ')
       })
   }
@@ -297,6 +298,15 @@ const ProductForm = (props) => {
                     setSelectedPrescriptionCustomerId={setSelectedPrescriptionCustomerId}
                   /> */}
                   <Cart selectedCustomerId={selectedCustomerId} />
+                </TabPane>
+                )}
+                {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+                <TabPane tab="Reviews" key="6">
+                  {/* <Orders
+                    selectedPrescriptionCustomerId={selectedPrescriptionCustomerId}
+                    setSelectedPrescriptionCustomerId={setSelectedPrescriptionCustomerId}
+                  /> */}
+                  <Reviews selectedCustomerId={selectedCustomerId} />
                 </TabPane>
                 )}
               </>

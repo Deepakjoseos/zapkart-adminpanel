@@ -28,6 +28,7 @@ import brandService from 'services/brand'
 import _ from 'lodash'
 import categoryService from 'services/category'
 import constantsService from 'services/constants'
+import { placeholder } from '@babel/types'
 
 const { Option } = Select
 
@@ -299,6 +300,12 @@ const handleTableChange = (newPagination) => {
             <Input placeholder="Search" prefix={<SearchOutlined />} />
           </Form.Item>
         </Col>
+        {/* <Col md={6} sm={24} xs={24} lg={6}> */}
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="level" label="Level">
+            <Input type='number' placeholder="level(number)" prefix={<SearchOutlined />} />
+          </Form.Item>
+        </Col>
         <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item name="status" label="Status">
             <Select
@@ -354,6 +361,30 @@ const handleTableChange = (newPagination) => {
               <Option value="">All</Option>
               <Option value="true">Yes</Option>
               <Option value="false">No</Option>
+            </Select>
+          </Form.Item>
+        </Col>
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="orderByName" label="Order By Name">
+            <Select className="w-100" placeholder="Order By Name">
+              <Option value="">All</Option>
+              <Option value="Asc">Asc</Option>
+              <Option value="Desc">Desc</Option>
+            </Select>
+          </Form.Item>
+        </Col>
+        {/* <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="excludePriorityZero" label="Exclude Priority Zero">
+            <Select className="w-100" placeholder="excludePriorityZero">
+              <Option value="">All</Option>
+              <Option value="true">true</Option>
+              <Option value="false">false</Option>
+            </Select>
+          </Form.Item>
+        </Col> */}
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="tags" label="Tags">
+            <Select dropdownStyle={{display: "none"}} mode = 'tags' style={{width: '100%'}} placeholder='tags'>
             </Select>
           </Form.Item>
         </Col>

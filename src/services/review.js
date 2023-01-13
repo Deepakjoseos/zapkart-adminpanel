@@ -16,5 +16,18 @@ reviewService.getReviews = async function (data,paginationQuery = '', filterQuer
   }
 }
 
+reviewService.getReviewsById = async function (customerId) {
+  try {
+    let url = `${apiRoute}?userId=${customerId}`
+    const res = await fetch({
+      url,
+      method: 'get',
+    })
+    return res
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
+
 
 export default reviewService

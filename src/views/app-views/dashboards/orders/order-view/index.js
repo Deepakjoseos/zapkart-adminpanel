@@ -137,7 +137,7 @@ const OrderView = () => {
     <>
       <div className="container">
         <Flex justifyContent="end">
-          {order.status === 'Verifying Prescription' && (
+          {order?.status === 'Verifying Prescription' && (
             <Button
               type="primary"
               className="mb-4 mr-2"
@@ -206,7 +206,7 @@ const OrderView = () => {
                     <span className="font-weight-semibold text-dark font-size-md">
                       {order?.userName}
                     </span>
-                    <br />
+                    {/* <br /> */}
                     {/* <span>Invoice No: {order?.invoice?.invoiceNo}</span> */}
 
                     <br />
@@ -232,21 +232,21 @@ const OrderView = () => {
                   </p>
                 </address>
               </div>
-
-              <div className="text-right">
+              <div className="text-left">
                 {/* <p>GSTIN:</p>
               <p>Drug License No:</p> */}
                 <h4 className="mb-1 font-weight-semibold">
-                  Order No: {order?.orderNo}
+                  Order No : {order?.orderNo}
                 </h4>
-
-                <h6>
-                  Order Date:
-                  {moment(new Date(order?.createdAt * 1000)).format(
-                    'DD-MM-YYYY'
+                <h4 className="mb-1 font-weight-semibold">
+                  Order Date : {moment(new Date(order?.createdAt * 1000)).format(
+                    'DD-MMM-YYYY hh:mmA'
                   )}
                   {/* {moment(parseInt(order?.createdAt)).format('YYYY-MM-DD')} */}
-                </h6>
+                </h4>
+                <h4 className="mb-1 font-weight-semibold">
+                  Order Status : {order?.status}
+                </h4>
                 {/* <p>Status: {order?.status}</p> */}
                 {/* <p>shipping Charge: {order?.shippingCharge}</p> */}
                 {order?.transaction ? (
@@ -255,11 +255,11 @@ const OrderView = () => {
                   ''
                 )}
                 {/* <p>Total Amount: ₹{order?.totalAmount}</p> */}
-
+                <h4 className="mb-1 font-weight-semibold">Payment method : {order?.payment?.type}</h4>
                 <address>
                   <p>
                     <span className="font-weight-semibold text-dark font-size-md">
-                      Payment Status: {order?.payment?.status}
+                      Payment Status : {order?.payment?.status}
                     </span>
                     <br />
                     {/* <span>8626 Maiden Dr. </span>
@@ -288,7 +288,7 @@ const OrderView = () => {
               <>
                 <p>Prescriptions: </p>
                 {order?.prescriptions?.map((cur) => (
-                  <Image width={100} src={cur} />
+                  <Image width={100} height={100} src={cur} />
                 ))}
               </>
             )}
@@ -326,16 +326,25 @@ const OrderView = () => {
                   key="invoiceId"
                 />
 
-                <Column title="Product Name" dataIndex="name" key="name" />
-                <Column title="HSN" dataIndex="hsn" key="hsn" />
+                <Column 
+                  title="Product Name" 
+                  dataIndex="name" 
+                  // key="name"
+                  render={(_, record) => (
+                    <Flex alignItems="center">
+                      {record.name}
+                      ({record.vendorName})
+                    </Flex>)
+                  } />
+                {/* <Column title="HSN" dataIndex="hsn" key="hsn" />
                 <Column title="BATCH" dataIndex="batch" key="batch" />
 
-                <Column title="EXP" dataIndex="expiry" key="expiry" />
+                <Column title="EXP" dataIndex="expiry" key="expiry" /> */}
                 <Column title="QTY" dataIndex="quantity" key="quantity" />
                 <Column title="PRICE" dataIndex="price" key="price" />
                 <Column title="DISC" dataIndex="discount" key="discount" />
                 {/* <Column title="TAXABLE" dataIndex="taxableAmount" key="taxableAmount" /> */}
-                <Column
+                {/* <Column
                   title="TAX"
                   dataIndex="taxSplitup"
                   render={(taxSplitup) => {
@@ -351,15 +360,15 @@ const OrderView = () => {
                       </>
                     )
                   }}
-                />
+                /> */}
 
                 {/* <Column title="AMOUNT" dataIndex="price" key="price" /> */}
 
-                <Column
+                {/* <Column
                   title="Vendor"
                   dataIndex="vendorName"
                   key="vendorName"
-                />
+                /> */}
 
                 {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
                   <Column
@@ -418,15 +427,16 @@ const OrderView = () => {
               </div>
               </Table>
               <div className="d-flex justify-content-end">
-                <div className="text-right ">
+                <div className="text-left">
+                <h2 className="font-weight-semibold mt-3">
                   <span className="mr-1">
-                    shipping Charge: {order?.shippingCharge}
+                    Shipping Charge : {order?.shippingCharge}
                   </span>
-                  <div>Payment method : {order?.payment?.type}</div>
+                  </h2>
                   <div>
                     {order?.couponCode ? (
                       <div className="mr-1">
-                        Coupon Code: {order?.couponCode}
+                        Coupon Code : {order?.couponCode}
                       </div>
                     ) : (
                       ''
@@ -441,7 +451,7 @@ const OrderView = () => {
                     )}
                   </div>
                   <h2 className="font-weight-semibold mt-3">
-                    <span className="mr-1">Grand Total: </span>
+                    <span className="mr-1">Grand Total : </span>
                     {order?.totalAmount}
                   </h2>
                 </div>
@@ -517,7 +527,7 @@ const OrderView = () => {
                     {/* {moment(parseInt(order?.createdAt)).format('YYYY-MM-DD')} */}
                   </h6>
                   <h4 className="mb-1 font-weight-semibold">
-                    Payment Status: {order?.payment?.status}
+                    Payment Status : {order?.payment?.status}
                   </h4>
                   {/* <p>Status: {order?.status}</p> */}
                   {/* <p>shipping Charge: {order?.shippingCharge}</p> */}

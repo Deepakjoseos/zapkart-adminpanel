@@ -17,6 +17,7 @@ import CustomIcon from "components/util-components/CustomIcon";
 import cityService from "services/city";
 import Editor from "components/shared-components/Editor";
 import TextArea from "antd/lib/input/TextArea";
+import constantsService from "services/constants";
 // const { Dragger } = Upload
 const { Option } = Select;
 
@@ -118,6 +119,12 @@ const rules = {
       message: "Required",
     },
   ],
+  status: [
+    {
+      required: true,
+      message: "Required",
+    },
+  ],
 };
 
 const GeneralField = ({
@@ -140,7 +147,7 @@ mode
   const [variants, setVariants] = useState([]);
   const [selectedVendorId, setSelectedVendorId] = useState(null);
   const [cities, setCities] = useState([]);
-  const [isWarrantyProvided, setWarrantyprovided] = useState()
+  const [statuses, setStatuses] = useState([])
   const [condition, setCondition] = useState()
 
   const getVariants = (id) => {
@@ -157,8 +164,17 @@ mode
       setCities(data.data);
     }
   };
+
+  const fetchConstants = async () => {
+    const data = await constantsService.getConstants()
+    if (data) {
+      setStatuses(Object.values(data.GENERAL['STATUS']))
+    }
+  }
+
   useEffect(() => {
     getCities();
+    fetchConstants();
   }, []);
 
   useEffect(() => {
@@ -216,6 +232,24 @@ mode
           </Select>
         </Form.Item>
        
+        <Form.Item
+          name="status"
+          label="Status"
+          rules={rules.status}
+        >
+          <Select
+            placeholder="status"
+            showSearch
+            optionFilterProp="children"
+            filterOption={(input, option) =>
+              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
+          >
+            {statuses.map((status) => (
+              <Option value={status}>{status}</Option>
+            ))}
+          </Select>
+        </Form.Item>
 
         <Form.Item
           name="deliveryZoneId"
@@ -451,7 +485,7 @@ mode
       </Form.Item>
                 
 
-      {productBuyType === 'Purchase'  && (
+      {/* {productBuyType === 'Purchase'  && (
            <Form.Item
           name="isWarrantyProvided"
           label="Do you provide warranty for your product"
@@ -481,7 +515,7 @@ mode
 
     
         
-      )}
+      )} */}
            
 
 

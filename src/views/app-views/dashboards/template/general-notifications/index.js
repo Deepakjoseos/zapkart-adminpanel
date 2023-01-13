@@ -11,6 +11,7 @@ import EllipsisDropdown from 'components/shared-components/EllipsisDropdown'
 import Flex from 'components/shared-components/Flex'
 import { useHistory } from 'react-router-dom'
 import utils from 'utils'
+import qs from 'qs'
 import notificationService from 'services/notification'
 import constantsService from 'services/constants'
 
@@ -41,6 +42,24 @@ const NotificationList = () => {
   const [selectedRows, setSelectedRows] = useState([])
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
   const [statuses,setStatuses] = useState([])
+
+  const getTemplates = async (paginationParams, filterParams={}) => {
+    const data = await notificationService.getNotifications(
+      qs.stringify(getPaginationParams(paginationParams)),
+      qs.stringify(filterParams)
+    )
+    if (data) {
+      setList(data.data)
+      setPagination({
+        ...paginationParams.pagination,
+        total: data.total,
+      })
+      // setLoading(false)
+      setSearchBackupList(data.data)
+      console.log(data, 'show-data', list , "list")
+    }
+  }
+
   const fetchConstants = async () => {
     const data = await constantsService.getConstants()
     if (data) {
@@ -50,16 +69,36 @@ const NotificationList = () => {
   
     }
   }
+
+  const [pagination, setPagination] = useState({
+    current: 1,
+    pageSize: 15,
+  })
+
+  const getPaginationParams = (params) => ({
+    limit: params.pagination?.pageSize,
+    page: params.pagination?.current,
+    // ...params,
+  })
+
+  const resetPagination = () => ({
+    ...pagination,
+    current: 1,
+    pageSize: 10,
+  })
+
+  const handleTableChange = (newPagination) => {
+    getTemplates(
+      {
+        pagination: newPagination,
+      },
+      // filterEnabled ? _.pickBy(form.getFieldsValue(), _.identity) : {}
+    )
+  }
+
   useEffect(() => {
-    const getTemplates = async () => {
-      const data = await notificationService.getNotifications()
-      if (data) {
-        setList(data)
-        setSearchBackupList(data)
-        console.log(data, 'show-data')
-      }
-    }
-    getTemplates()
+
+    getTemplates(pagination)
     fetchConstants()
   }, [])
 
@@ -89,28 +128,32 @@ const NotificationList = () => {
 
   const tableColumns = [
     {
-      title: 'Notifications',
-      dataIndex: 'name',
+      title: 'Name',
+      dataIndex: 'userName',
       sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
     },
-    
     {
-      title: 'Status',
-      dataIndex: 'status',
-      render: (status) => (
-        <Flex alignItems="center">{getStockStatus(status)}</Flex>
-      ),
+      title: 'Notification Category',
+      dataIndex: 'notificationCategoryType',
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
+    },
+    {
+      title: 'Listing Type',
+      dataIndex: 'listingType',
+      // render: (status) => (
+      //   <Flex alignItems="center">{getStockStatus(status)}</Flex>
+      // ),
       sorter: (a, b) => utils.antdTableSorter(a, b, 'status'),
     },
-    {
-      title: '',
-      dataIndex: 'actions',
-      render: (_, elm) => (
-        <div className="text-right">
-          <EllipsisDropdown menu={dropdownMenu(elm)} />
-        </div>
-      ),
-    },
+    // {
+    //   title: '',
+    //   dataIndex: 'actions',
+    //   render: (_, elm) => (
+    //     <div className="text-right">
+    //       <EllipsisDropdown menu={dropdownMenu(elm)} />
+    //     </div>
+    //   ),
+    // },
   ]
 
   const onSearch = (e) => {
@@ -147,7 +190,7 @@ const NotificationList = () => {
               placeholder="Status"
             >
               <Option value="">All</Option>
-            {statuses.map((item) => (
+            {statuses?.map((item) => (
                 <Option key={item.id} value={item}>
                   {item}
                 </Option>
@@ -173,7 +216,14 @@ const NotificationList = () => {
         </div>
       </Flex>
       <div className="table-responsive">
-        <Table columns={tableColumns} dataSource={list} rowKey="id" />
+        <Table 
+          columns={tableColumns} 
+          dataSource={list} 
+          rowKey="id" 
+          pagination={pagination}
+          //  loading={loading}
+          onChange={handleTableChange}
+        />
       </div>
     </Card>
   )
