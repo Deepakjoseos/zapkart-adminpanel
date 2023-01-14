@@ -57,6 +57,12 @@ const rules = {
       message: 'Required',
     },
   ],
+  smsSubscription:[
+    {
+      required: true,
+      message: 'Required',
+    },
+  ],
   password: [
     {
       required: true,
@@ -178,6 +184,26 @@ const handleClick = async () => {
                   rules={rules.emailVerified}
                 >
                   <Select placeholder="Email Verified">
+                    <Option value={true}>Yes</Option>
+                    <Option value={false}>No</Option>
+                  </Select>
+                </Form.Item>
+                <Form.Item
+                  name="emailSubscription"
+                  label="Email Subscription"
+                  rules={rules.emailSubscription}
+                >
+                  <Select placeholder="emailSubscription">
+                    <Option value={true}>Yes</Option>
+                    <Option value={false}>No</Option>
+                  </Select>
+                </Form.Item>
+                <Form.Item
+                  name="smsSubscription"
+                  label="Email Subscription"
+                  rules={rules.smsSubscription}
+                >
+                  <Select placeholder="smsSubscription">
                     <Option value={true}>Yes</Option>
                     <Option value={false}>No</Option>
                   </Select>
