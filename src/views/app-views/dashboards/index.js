@@ -89,10 +89,10 @@ const Dashboards = ({ match }) => {
           path={`${match.url}/image-categories`}
           component={lazy(() => import(`./Image-categories`))}
         />
-           <Route
-          path={`${match.url}/return-request`}
-          component={lazy(() => import(`./returnRequest`))}
-        />
+           {/* <Route
+          path={`${match.url}/main-banner`}
+          component={lazy(() => import(`./main-banner`))}
+        /> */}
         {/* <Route
           path={`${match.url}/brand`}
           component={lazy(() => import(`./brand`))}
@@ -101,10 +101,6 @@ const Dashboards = ({ match }) => {
           path={`${match.url}/attribute`}
           component={lazy(() => import(`./attribute`))}
         /> */}
-        <Route
-          path={`${match.url}/payout`}
-          component={lazy(() => import(`./payout`))}
-        />
         <Redirect from={`${match.url}`} to={`${match.url}/default`} />
       </Switch>
     </Suspense>

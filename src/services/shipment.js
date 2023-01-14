@@ -222,16 +222,4 @@ shipmentService.selectShipmentType = async function (data) {
   }
 }
 
-shipmentService.SyncWithShipRocket = async function(id) {
-  try {
-    const res = await fetch({
-      url: `${apiRoute}/syncWithShipRocket/${id}`,
-      method: 'patch'
-    })
-    return res
-  } catch (err) {
-    console.log(err, 'show-err')
-  }
-}
-
 export default shipmentService

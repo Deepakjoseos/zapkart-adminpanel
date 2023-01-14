@@ -109,8 +109,6 @@ const ProductForm = (props) => {
         password: data?.password,
         emailVerified: data?.emailVerified,
         groups: data?.groups.map((cur) => cur.id),
-        smsSubscription: data?.smsSubscription,
-        emailSubscription: data?.emailSubscription,
       })
 
       setEmailVerified(data?.emailVerified)
@@ -155,8 +153,6 @@ const ProductForm = (props) => {
           status: values.status,
           password: values.password,
           emailVerified: values.emailVerified,
-          emailSubscription: values.emailSubscription,
-          smsSubscription: values.smsSubscription,
         }
 
         if (mode === ADD) {
@@ -166,7 +162,7 @@ const ProductForm = (props) => {
             history.goBack()
           }
         }
-        // console.log('mode', mode)
+        console.log('mode', mode)
         if (mode === EDIT) {
           // Checking if image exists
           if (displayImage.length !== 0 && displayImage !== null) {
@@ -197,7 +193,7 @@ const ProductForm = (props) => {
       })
       .catch((info) => {
         setSubmitLoading(false)
-        // console.log('info', info)
+        console.log('info', info)
         message.error('Please enter all required field ')
       })
   }
@@ -261,7 +257,6 @@ const ProductForm = (props) => {
 
                 id = {id}                                       //Edit
                 setPhoneVerified={setPhoneVerified}             //Edit
-                setEmailVerified={setEmailVerified}             //Edit
 
 // *************************************Edited***************************************************
 

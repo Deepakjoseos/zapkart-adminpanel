@@ -149,7 +149,6 @@ const VariantsForm = ({
             )
 
             values.images = imgValues
-            values.thumbnails=imgValues
 
             const created =
               await productTemplateService.createProductTemplateVariant(
@@ -181,7 +180,6 @@ const VariantsForm = ({
             )
 
             values.images = imgValues
-            values.thumbnails=imgValues
 
             const edited =
               await productTemplateService.editProductTemplateVariant(

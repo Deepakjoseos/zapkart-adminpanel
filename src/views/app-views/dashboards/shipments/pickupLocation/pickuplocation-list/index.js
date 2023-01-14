@@ -154,7 +154,7 @@ const PickupLocationList = () => {
     },
     {
       title: 'Pin Code',
-      dataIndex: 'pin_code',
+      dataIndex: 'pinCode',
       sorter: (a, b) => utils.antdTableSorter(a, b, 'pinCode'),
     },
 
@@ -199,7 +199,7 @@ const PickupLocationList = () => {
           onChange={(e) => onSearch(e)}
         />
       </div>
-      {/* <div className="mb-3">
+      <div className="mb-3">
       <Select
               className="w-100"
               style={{ minWidth: 180 }}
@@ -212,7 +212,7 @@ const PickupLocationList = () => {
                 </Option>
               ))}
             </Select>
-      </div> */}
+      </div>
     </Flex>
   )
 

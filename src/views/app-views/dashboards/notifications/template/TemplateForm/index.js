@@ -40,7 +40,7 @@ const TemplateForm = (props) => {
     fetchConstants()
   }, [])
   if (tempConstants?.KEYS) {
-    // console.log(Object.values(tempConstants['KEYS']), 'constanttyys')
+    console.log(Object.values(tempConstants['KEYS']), 'constanttyys')
   }
 
 
@@ -143,7 +143,7 @@ const TemplateForm = (props) => {
       })
       .catch((info) => {
         setSubmitLoading(false)
-        // console.log('info', info)
+        console.log('info', info)
         message.error('Please enter all required field ')
       })
   }

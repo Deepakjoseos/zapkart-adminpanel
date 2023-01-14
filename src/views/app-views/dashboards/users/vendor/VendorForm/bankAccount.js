@@ -83,7 +83,7 @@ const BankAccountList = ({ selectedVendorId }) => {
     if (data) {
       setList(data)
       setSearchBackupList(data)
-      // console.log(data, 'show-bankacccounts')
+      console.log(data, 'show-bankacccounts')
     }
   }
 

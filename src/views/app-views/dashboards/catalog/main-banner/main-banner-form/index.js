@@ -11,7 +11,6 @@ import { useHistory } from 'react-router-dom'
 import constantsService from 'services/constants'
 import mainBannerService from 'services/MainBanner'
 import { useSelector } from 'react-redux'
-import _ from 'lodash'
 const { TabPane } = Tabs
 
 const ADD = 'ADD'
@@ -77,7 +76,7 @@ const MainBannerForm = (props) => {
             setFileListImages(himg)
           }
 
-        
+          
 
           if (data.mobileImage) {
             himg = [
@@ -97,17 +96,15 @@ const MainBannerForm = (props) => {
             name: data.name,
             status: data.status,
             priority: data.priority,
-            forwardUrl: data?.forwardUrl,
-            
+            forwardUrl: data.forwardUrl,
           })
-         
         } else {
           history.replace(
             '/app/dashboards/catalog/main-banner/main-banner-list'
           )
         }
       }
-      
+
       fetchMainBannerById()
     }
   }, [form, mode, param, props])
@@ -174,8 +171,6 @@ const MainBannerForm = (props) => {
 
             
             values.mobileImage = mobileImgValue
-
-         
           
             const created = await mainBannerService.createMainBanner(values)
             if (created) {
@@ -188,8 +183,6 @@ const MainBannerForm = (props) => {
         }
         if (mode === EDIT) {
           // Checking if image exists
-         
-          
           if (
             uploadedImg.length !== 0 &&
             uploadedImg !== null &&
@@ -218,13 +211,6 @@ const MainBannerForm = (props) => {
 
             values.image = imgValue
             values.mobileImage = mobileImgValue
-
-            
-
-
-
-          
-
 
             const edited = await mainBannerService.editMainBanner(
               param.id,

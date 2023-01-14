@@ -1,6 +1,6 @@
 import React, { Component, useEffect, useRef, useState } from 'react'
 import { PrinterOutlined } from '@ant-design/icons'
-import { Card, Table, Button, Select, notification, Image, Modal, message } from 'antd'
+import { Card, Table, Button, Select, notification, Image, Modal } from 'antd'
 import { invoiceData } from '../../../pages/invoice/invoiceData'
 import NumberFormat from 'react-number-format'
 import { useParams, Link } from 'react-router-dom'
@@ -44,20 +44,15 @@ const OrderView = () => {
     // },
   })
 
+  console.log(printing, 'ljkshdl')
 
   const getOrderById = async () => {
-    const orderData = await orderService.getOrderById(id)  
+    const orderData = await orderService.getOrderById(id)
 
-    if (orderData) {
+    if (order) {
       setOrder(orderData)
     }
-  }
-
-  const clickSync = async (docID) => {
-    const res = await orderService.syncRazorPay(docID)
-    if(res){
-      message.success("synced with RazorPay")
-    }
+    console.log('order payment', order.payment)
   }
 
   useEffect(() => {
@@ -83,6 +78,7 @@ const OrderView = () => {
   const fetchConstants = async () => {
     const data = await constantsService.getConstants()
     if (data) {
+      // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
       setOrderItemsStatuses(Object.values(data.ORDER['ORDER_ITEM_STATUS']))
     }
   }
@@ -181,22 +177,7 @@ const OrderView = () => {
               Download Invoices
             </Button>
           )}
-
-          {order?.payment?.type === "Online" && order?.payment?.status === "PENDING" && (
-          <Flex 
-            justifyContent="end"
-          >
-            <Button 
-            type="primary"
-            className="mb-4 mr-2"
-            onClick={() => clickSync(order.payment.id)}
-            >
-              Sync with RazorPay
-            </Button>
-          </Flex>
-          )}
-          </Flex>
-
+        </Flex>
         <div>
           <Card>
             <div className="d-md-flex justify-content-md-between">
@@ -218,6 +199,17 @@ const OrderView = () => {
                       {order?.shippingAddress?.country}
                       {order?.shippingAddress?.uniqueId}
                     </span>
+                    {/* <span>
+                  {
+      title: 'OrderNo',
+      dataIndex: 'orderNo',
+      render: (text, record) => (
+        <Link to={`/app/dashboards/orders/order-view/${record.id}`}>
+          {text}
+        </Link>
+      ),
+    },
+                  </span> */}
 
                     <br />
                     <abbr className="text-dark" title="Phone">
@@ -238,14 +230,12 @@ const OrderView = () => {
                 <h4 className="mb-1 font-weight-semibold">
                   Order No : {order?.orderNo}
                 </h4>
+
                 <h4 className="mb-1 font-weight-semibold">
                   Order Date : {moment(new Date(order?.createdAt * 1000)).format(
                     'DD-MMM-YYYY hh:mmA'
                   )}
                   {/* {moment(parseInt(order?.createdAt)).format('YYYY-MM-DD')} */}
-                </h4>
-                <h4 className="mb-1 font-weight-semibold">
-                  Order Status : {order?.status}
                 </h4>
                 {/* <p>Status: {order?.status}</p> */}
                 {/* <p>shipping Charge: {order?.shippingCharge}</p> */}
@@ -288,7 +278,7 @@ const OrderView = () => {
               <>
                 <p>Prescriptions: </p>
                 {order?.prescriptions?.map((cur) => (
-                  <Image width={100} height={100} src={cur} />
+                  <Image width={100} src={cur} />
                 ))}
               </>
             )}
@@ -344,7 +334,7 @@ const OrderView = () => {
                 <Column title="PRICE" dataIndex="price" key="price" />
                 <Column title="DISC" dataIndex="discount" key="discount" />
                 {/* <Column title="TAXABLE" dataIndex="taxableAmount" key="taxableAmount" /> */}
-                {/* <Column
+                <Column
                   title="TAX"
                   dataIndex="taxSplitup"
                   render={(taxSplitup) => {
@@ -360,7 +350,7 @@ const OrderView = () => {
                       </>
                     )
                   }}
-                /> */}
+                />
 
                 {/* <Column title="AMOUNT" dataIndex="price" key="price" /> */}
 
@@ -422,9 +412,6 @@ const OrderView = () => {
                     }}
                   />
                 )}
-              <div >
-                <Button type='primary'>ShipRocket</Button>
-              </div>
               </Table>
               <div className="d-flex justify-content-end">
                 <div className="text-left">
@@ -561,7 +548,6 @@ const OrderView = () => {
                   ))}
                 </>
               )}
-
               <div className="mt-4">
                 <Table
                   dataSource={order?.items}

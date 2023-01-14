@@ -60,7 +60,6 @@ productTemplate.getProductTemplates = async function (
   paginationQuery = '',
   query = ''
 ) {
-  console.log(paginationQuery);
   try {
     let url = `${api}?${paginationQuery}&${query}`
     const res = await fetch({

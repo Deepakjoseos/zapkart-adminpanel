@@ -60,8 +60,8 @@ const WidgetForm = (props) => {
             status: data.status,
             listingPlatform: data.listingPlatform,
             startEndDate: [
-              moment(data.startDate, 'YYYY-MM-DD HH:mm:ss'),
-              moment(data.endDate, 'YYYY-MM-DD HH:mm:ss'),
+              moment(data.startDate, 'YYYY-MM-DD'),
+              moment(data.endDate, 'YYYY-MM-DD'),
             ],
           })
 
@@ -251,10 +251,10 @@ const WidgetForm = (props) => {
 
         if (values.startEndDate) {
           sendingValues.startDate = moment(values.startEndDate[0]).format(
-            'YYYY-MM-DD HH:mm:ss'
+            'YYYY-MM-DD'
           )
           sendingValues.endDate = moment(values.startEndDate[1]).format(
-            'YYYY-MM-DD HH:mm:ss'
+            'YYYY-MM-DD'
           )
         }
 
