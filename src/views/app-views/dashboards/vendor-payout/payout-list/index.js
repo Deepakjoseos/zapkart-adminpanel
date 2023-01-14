@@ -33,11 +33,14 @@ import moment from 'moment'
 import payoutService from 'services/payout'
 import vendorService from 'services/vendor'
 import vendorPayoutService from 'services/vendorPayout'
+import customerService from 'services/customer'
+
 
 const { Option } = Select
 
 const PayoutList = () => {
   const [vendorList, setVendorList] = useState(null)
+  const [customerList, setCustomerList] = useState(null)
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
   const [userId, setUserId] = useState([])
   const [users, setUsers] = useState([])
@@ -46,6 +49,7 @@ const PayoutList = () => {
   const [orderStatuses, setOrderStatuses] = useState([])
   const [customerPrescriptions, setCustomerPrescriptions] = useState([])
   const [statuses, setStatuses] = useState([])
+  
   let history = useHistory()
   const [form] = Form.useForm()
 
@@ -113,6 +117,7 @@ const PayoutList = () => {
       pagination,
     })
     getVendors()
+    getCustomers()
   }, [])
 
 
@@ -225,6 +230,18 @@ const PayoutList = () => {
           </Form.Item>
         </Col> */}
 
+        {/* <Col md={6} sm={24} xs={24} lg={4}>
+          <Form.Item name="fromDate" label="From Date">
+            <DatePicker />
+          </Form.Item>
+        </Col>
+
+        <Col md={6} sm={24} xs={24} lg={4}>
+          <Form.Item name="toDate" label="To Date">
+            <DatePicker />
+          </Form.Item>
+        </Col> */}
+
         <Col md={6} sm={24} xs={24} lg={5}>
           <Form.Item name="userId" label="Vendor Name">
 
@@ -245,6 +262,43 @@ const PayoutList = () => {
               ))}
             </Select>
 
+          </Form.Item>
+        </Col>
+
+        <Col md={6} sm={24} xs={24} lg={5}>
+          <Form.Item name="customerIds" label="Customers">
+            <Select
+              mode="multiple"
+              className="w-100"
+              style={{ minWidth: 100 }}
+              placeholder="Customers"
+            >
+              {/* <Option value="">All</Option> */}
+              {customerList.map((user) => (
+                <Option key={user.id} value={user.id}>
+                  {user.fullName}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </Col>
+
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="orderByPriority" label="Order By Priority">
+            <Select className="w-100" placeholder="Order By Priority">
+              <Option value="">All</Option>
+              <Option value="true">Yes</Option>
+              <Option value="false">No</Option>
+            </Select>
+          </Form.Item>
+        </Col>
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="orderByName" label="Order By Name">
+            <Select className="w-100" placeholder="Order By Name">
+              <Option value="">Nil</Option>
+              <Option value="Asc">Asc</Option>
+              <Option value="Desc">Desc</Option>
+            </Select>
           </Form.Item>
         </Col>
         {/* <Col md={6} sm={24} xs={24} lg={6}>
@@ -290,6 +344,18 @@ const PayoutList = () => {
   const getVendors = async () => {
     const data = await vendorService.getVendors()
     if (data) setVendorList(data)
+  }
+  const getCustomers = async () => {
+    const data = await customerService.getCustomers()
+    if (data) {
+      const customerList = data.map((cur) => {
+        return {
+          ...cur,
+          fullName: `${cur.firstName} ${cur.lastName}`,
+        }
+      })
+      setUsers(users)
+    }
   }
 
   return (
