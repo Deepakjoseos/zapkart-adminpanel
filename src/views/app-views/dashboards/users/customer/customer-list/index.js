@@ -67,7 +67,7 @@ const CustomerList = () => {
     if (data) {
       setList(data)
       setSearchBackupList(data)
-      // console.log(data, 'show-data')
+      console.log(data, 'show-data')
 
       if (selectedCustomerId) {
         data?.forEach((cur) => {
@@ -201,12 +201,12 @@ const CustomerList = () => {
           />
         </div>
       ),
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'firstName'),
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
     },
     {
       title: 'Last Name',
       dataIndex: 'lastName',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'lastName'),
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'lastname'),
     },
 
     {

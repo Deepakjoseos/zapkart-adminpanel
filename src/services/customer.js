@@ -147,18 +147,6 @@ customerService.updatePhoneNumber = async function (data, id) {
 }
 }
 
-customerService.verifyEmailAdress = async(id) =>{
-  try {
-  const res = await fetch({
-    url: `https://ecommercelive.riolabz.com/api/v1/admin/verify-user-email/${id}`,
-    method: 'put'
-  })
-  return res
-} catch (err) {
-  console.log(err, 'show-err')
-}
-}
-
 // *******************************EDIT**************************************************************
 
 // *******************************DELETE**************************************************************

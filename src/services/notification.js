@@ -5,7 +5,6 @@ const apiRoute = '/notifications'
 
 notificationService.getNotifications = async function (paginationQuery='', query ='') {
   try {
-    // ${paginationQuery}&${query}
     const res = await fetch({
       url: `${apiRoute}?${paginationQuery}&${query}`,
       method: 'get',

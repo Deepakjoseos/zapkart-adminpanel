@@ -52,7 +52,7 @@ const NotificationForm = (props) => {
   const { imageCategories } = useSelector((state) => state.auth)
 
 useEffect(() => {
-    // console.log(fileListImages, 'filesimages')
+    console.log(fileListImages, 'filesimages')
     setImages(fileListImages)
     // console.log(uploadedImg,'uploadimages');
   }, [fileListImages])
@@ -204,7 +204,7 @@ useEffect(() => {
       })
       .catch((info) => {
         setSubmitLoading(false)
-        // console.log('info', info)
+        console.log('info', info)
         message.error('Please enter all required field ')
       })
   }

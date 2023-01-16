@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import PageHeaderAlt from 'components/layout-components/PageHeaderAlt';
-import { Tabs, Form, Button, message } from 'antd';
-import Flex from 'components/shared-components/Flex';
-import GeneralField from './GeneralField';
-import { useHistory } from 'react-router-dom';
-import authAdminService from 'services/auth/admin';
-import settingsService from 'services/settings';
+import React, { useState, useEffect } from "react";
+import PageHeaderAlt from "components/layout-components/PageHeaderAlt";
+import { Tabs, Form, Button, message } from "antd";
+import Flex from "components/shared-components/Flex";
+import GeneralField from "./GeneralField";
+import { useHistory } from "react-router-dom";
+import authAdminService from "services/auth/admin";
+import settingsService from "services/settings";
 
 const { TabPane } = Tabs;
 
-const ADD = 'ADD';
-const EDIT = 'EDIT';
+const ADD = "ADD";
+const EDIT = "EDIT";
 
 const SettingsForm = (props) => {
   const { mode = ADD, param } = props;
@@ -18,54 +18,48 @@ const SettingsForm = (props) => {
   const [form] = Form.useForm();
   console.log(mode);
   const [submitLoading, setSubmitLoading] = useState(false);
-  const [settings, setSettings] = useState({});
-  const [setmode, setMode] = useState('');
-  useEffect(() => {
+  const [settings, setSettings] = useState({})
+const[setmode,setMode]=useState('')
+  useEffect(()=>{
     const getSettings = async () => {
-      const data = await settingsService.getSettings();
+
+      const data = await settingsService.getSettings()
       if (data) {
         // const isEmpty = Object.keys(data).length === 0;
+       
+    
+          setMode('Edit')
 
-        setMode(EDIT);
+          form.setFieldsValue({
+            name: data.name,
+            address: data.address,
+            email: data.email,
+            phone: data.phone,
+            facebookUrl: data.facebookUrl,
+            instagramUrl: data.instagramUrl,
+            twitterUrl: data.twitterUrl,
+            vendorCommission:data.vendorCommission,
+            deliveryCharges: data.deliveryCharges,
+            metaTitle: data.metaTitle,
+            metaDescription: data.metaDescription,
+            keywords: data.keywords,
+            whatsappNo:data.whatsappNo,
+            razorPayPayoutAccountNumber:data.razorPayPayoutAccountNumber,
+            agreement:data.agreement,
+            footer:data.footer
+          })
+        
+        setSettings(data)
+        console.log(data, 'settings')
+      }else {
+        setMode('Add')
 
-        const codDeliveryCharges =
-          data.deliveryCharges.find((charge) => charge.paymentType === 'Cod')
-            ?.values || [];
-
-        const onlineDeliveryCharges =
-          data.deliveryCharges.find((charge) => charge.paymentType === 'Online')
-            ?.values || [];
-
-        form.setFieldsValue({
-          name: data.name,
-          address: data.address,
-          email: data.email,
-          phone: data.phone,
-          facebookUrl: data.facebookUrl,
-          instagramUrl: data.instagramUrl,
-          twitterUrl: data.twitterUrl,
-          vendorCommission: data.vendorCommission,
-          codDeliveryCharges: codDeliveryCharges,
-          onlineDeliveryCharges: onlineDeliveryCharges,
-          metaTitle: data.metaTitle,
-          metaDescription: data.metaDescription,
-          keywords: data.keywords,
-          whatsappNo: data.whatsappNo,
-          razorPayPayoutAccountNumber: data.razorPayPayoutAccountNumber,
-          agreement: data.agreement,
-          footer: data.footer,
-          tdsPercentage: data.tdsPercentage
-        });
-
-        setSettings(data);
-        console.log(data, 'settings-settings');
-      } else {
-        setMode(ADD);
       }
-    };
-
-    getSettings();
-  }, []);
+    }
+  
+    getSettings()
+  
+  },[])
 
   // Trigger When Submit Button pressed
   const onFinish = async () => {
@@ -78,39 +72,31 @@ const SettingsForm = (props) => {
         //   endAmount:values?.endAmount,
         //   charge:values?.charge
         // }
-
-        const codDeliveryCharges = {
-          paymentType: 'Cod',
-          values: values?.codDeliveryCharges || []
-        };
-
-        const onlineDeliveryCharges = {
-          paymentType: 'Online',
-          values: values?.onlineDeliveryCharges || []
-        };
-
-        const sendingValues = {
+        const sendingValues =
+        {
           name: values?.name,
           address: values?.address,
           email: values?.email,
           phone: values?.phone,
-          keywords: values?.keywords,
-          metaTitle: values?.metaTitle,
-          metaDescription: values?.metaDescription,
+          keywords:values?.keywords,
+          metaTitle:values?.metaTitle,
+          metaDescription:values?.metaDescription,
           facebookUrl: values?.facebookUrl,
           instagramUrl: values?.instagramUrl,
           twitterUrl: values?.twitterUrl,
-          vendorCommission: values?.vendorCommission,
-          deliveryCharges: [codDeliveryCharges, onlineDeliveryCharges],
-          whatsappNo: values?.whatsappNo,
-          razorPayPayoutAccountNumber: values?.razorPayPayoutAccountNumber,
-          agreement: values?.agreement,
-          footer: values?.footer,
-          tdsPercentage: values?.tdsPercentage
-        };
+          vendorCommission:values?.vendorCommission,
+          deliveryCharges: values?.deliveryCharges,
+          whatsappNo:values?.whatsappNo,
+          razorPayPayoutAccountNumber:values?.razorPayPayoutAccountNumber,
+          agreement:values?.agreement,
+          footer:values?.footer
+        }
 
-        if (setmode === ADD) {
-          console.log(sendingValues, 'values=====');
+
+
+
+        if (setmode === 'Add') {
+            console.log(sendingValues, "values=====");
 
           const created = await settingsService.createSettings(sendingValues);
           if (created) {
@@ -119,29 +105,30 @@ const SettingsForm = (props) => {
             // history.goBack();
           }
         }
-        if (setmode === EDIT) {
-          console.log(sendingValues, 'values=====');
+        if (setmode === 'Edit') {
+
           const edited = await settingsService.editSettings(
             param.id,
-            sendingValues
-          );
+            values
+          )
           if (edited) {
-            message.success(`Edited settings list`);
+            message.success(`Edited settings list`)
             // history.goBack()
           }
         }
-        setSubmitLoading(false);
+        setSubmitLoading(false)
       })
       .catch((info) => {
-        setSubmitLoading(false);
-        console.log('info', info);
-        message.error('Please enter all required field ');
-      });
-  };
+        setSubmitLoading(false)
+        console.log('info', info)
+        message.error('Please enter all required field ')
+      })
+  }
 
   return (
     <>
       <Form
+       
         layout="vertical"
         form={form}
         name="advanced_search"
@@ -151,9 +138,9 @@ const SettingsForm = (props) => {
             {
               startAmount: '',
               endAmount: '',
-              charge: ''
-            }
-          ]
+              charge:''
+            },
+          ],
         }}
       >
         <PageHeaderAlt className="border-bottom" overlap>
@@ -165,7 +152,7 @@ const SettingsForm = (props) => {
               alignItems="center"
             >
               <h2 className="mb-3">
-                {setmode === 'ADD' ? 'Add New settings' : `Edit settings`}{' '}
+                {setmode === "ADD" ? "Add New settings" : `Edit settings`}{" "}
               </h2>
               <div className="mb-3">
                 {/* <Button
@@ -182,7 +169,7 @@ const SettingsForm = (props) => {
                   htmlType="submit"
                   loading={submitLoading}
                 >
-                  {setmode === 'ADD' ? 'Add' : `Save`}
+                  {setmode === "ADD" ? "Add" : `Save`}
                 </Button>
               </div>
             </Flex>
@@ -191,7 +178,7 @@ const SettingsForm = (props) => {
         <div className="container">
           <Tabs defaultActiveKey="1" style={{ marginTop: 30 }}>
             <TabPane tab="General" key="1">
-              <GeneralField form={form} mode={setmode} />
+              <GeneralField form={form} mode={setmode}  />
             </TabPane>
           </Tabs>
         </div>

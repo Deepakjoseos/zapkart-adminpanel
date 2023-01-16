@@ -68,7 +68,7 @@ const TemplateList = () => {
       if (data) {
         setList(data)
         setSearchBackupList(data)
-        // console.log(data, 'show-data')
+        console.log(data, 'show-data')
         setPagination({
           ...paginationParams.pagination,
           total: data.total,
@@ -161,7 +161,7 @@ const TemplateList = () => {
         getTemplates({ pagination: resetPagination() }, sendingValues)
       })
       .catch((info) => {
-        // console.log('info', info)
+        console.log('info', info)
         setFilterEnabled(false)
       })
   }

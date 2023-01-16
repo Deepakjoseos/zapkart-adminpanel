@@ -317,16 +317,6 @@ const BrandList = () => {
             </Select>
           </Form.Item>
         </Col>
-        <Col md={6} sm={24} xs={24} lg={6}>
-          <Form.Item name="orderByName" label="Order By Name">
-            <Select className="w-100" placeholder="Order By Name">
-              <Option value="">Nil</Option>
-              <Option value="Asc">Asc</Option>
-              <Option value="Desc">Desc</Option>
-            </Select>
-          </Form.Item>
-        </Col>
-
         <Col className="mb-4">
           <Button type="primary" onClick={handleFilterSubmit}>
             Filter

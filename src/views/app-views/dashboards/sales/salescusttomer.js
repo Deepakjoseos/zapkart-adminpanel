@@ -19,9 +19,7 @@ import _ from 'lodash'
 import vendorService from 'services/vendor'
 import productTemplateService from 'services/productTemplate'
 import customerService from 'services/customer'
-import moment from 'moment';
 const { Option } = Select
-
 
 
 const SalesCustomer = () => {
@@ -36,18 +34,19 @@ const SalesCustomer = () => {
     pageSize: 15,
   })
   const [list, setList] = useState([])
-  const [customerList, setCustomerList] = useState([])
   const [vendors, setVendors] = useState([])
   const [filterEnabled, setFilterEnabled] = useState(false)
 
   const getSales = async (paginationParams = {}, filterParams) => {
     setLoading(true)
-    const data = await salesService.getSales(paginationParams, filterParams
-      // qs.stringify(getPaginationParams(paginationParams)),
-      // qs.stringify(filterParams)
+    const data = await salesService.getSales(
+      qs.stringify(getPaginationParams(paginationParams)),
+      qs.stringify(filterParams)
     )
+    console.log(data, 'hihihihihih')
     if (data) {
       setList([data])
+      console.log(data, 'hihihihihih')
       // Pagination
       setPagination({
         ...paginationParams.pagination,
@@ -86,10 +85,6 @@ const SalesCustomer = () => {
   useEffect(() => {
     getVendors()
   }, [])
-
-  useEffect(() => {
-    setCustomerList(list[0]?.customers)
-  }, [list])
 
   const getCustomers = async () => {
     const data = await customerService.getCustomers()
@@ -143,10 +138,7 @@ const SalesCustomer = () => {
       .then(async (values) => {
         setFilterEnabled(true)
         // Removing falsy Values from values
-        const sendingValues = _.pickBy({...values,
-          fromDate: values.fromDate ? moment(values.fromDate).format() : '', 
-          toDate: values.toDate ? moment(values.toDate).format():''}, 
-          _.identity)
+        const sendingValues = _.pickBy(values, _.identity)
         getSales({ pagination: resetPagination() }, sendingValues)
       })
       .catch((info) => {
@@ -184,13 +176,13 @@ const SalesCustomer = () => {
       className="ant-advanced-search-form"
     >
       <Row gutter={8} align="bottom">
-        <Col md={6} sm={24} xs={24} lg={4}>
+        <Col md={6} sm={24} xs={24} lg={2}>
           <Form.Item name="fromDate" label="From Date">
             <DatePicker />
           </Form.Item>
         </Col>
 
-        <Col md={6} sm={24} xs={24} lg={4}>
+        <Col md={6} sm={24} xs={24} lg={2}>
           <Form.Item name="toDate" label="To Date">
             <DatePicker />
           </Form.Item>
@@ -199,11 +191,11 @@ const SalesCustomer = () => {
         <Col md={6} sm={24} xs={24} lg={5}>
           <Form.Item name="vendorIds" label="Vendors">
             <Select
-              mode="multiple"
               className="w-100"
-              style={{ minWidth: 100 }}
+              style={{ minWidth: 180 }}
               placeholder="Vendors"
             >
+              <Option value="">All</Option>
               {vendors.map((users) => (
                 <Option key={users.id} value={users.id}>
                   {users.fullName}
@@ -216,11 +208,11 @@ const SalesCustomer = () => {
         <Col md={6} sm={24} xs={24} lg={5}>
           <Form.Item name="customerIds" label="Customers">
             <Select
-              mode="multiple"
               className="w-100"
-              style={{ minWidth: 100 }}
+              style={{ minWidth: 180 }}
               placeholder="Customers"
             >
+              <Option value="">All</Option>
               {customers.map((user) => (
                 <Option key={user.id} value={user.id}>
                   {user.fullName}
@@ -233,11 +225,11 @@ const SalesCustomer = () => {
         <Col md={6} sm={24} xs={24} lg={5}>
           <Form.Item name="productTemplateIds" label="product Templates">
             <Select
-              mode="multiple"
               className="w-100"
-              style={{ minWidth: 100 }}
+              style={{ minWidth: 180 }}
               placeholder="Product Templates"
             >
+              <Option value="">All</Option>
               {productTemplates.map((temp) => (
                 <Option value={temp.id}>{temp.name}</Option>
               ))}
@@ -275,71 +267,43 @@ const SalesCustomer = () => {
     },
   ]
 
-  const tableColumns =[
-    {
-      title: 'Customer Name',
-      dataIndex: 'name'
-    }, 
-    {
-      title: 'Total Orders',
-      dataIndex: 'totalOrders',
-      render: (totalOrders) => {return totalOrders.totalOrders}
-    },
-    {
-      title: 'Completed Orders',
-      dataIndex: 'totalOrders',
-      render: (totalOrders) => {return totalOrders.completedOrders}
-    },
-    {
-      title: 'Cancelled Orders',
-      dataIndex: 'totalOrders',
-      render: (totalOrders) => {return totalOrders.cancelledOrders}
-    },
-    {
-      title: 'Total Products',
-      dataIndex: 'totalProducts'
-    },
-    {
-      title: 'Total Amount',
-      dataIndex: 'totalAmount'
-    }
-  ]
  
   return (
     <div>
-
         <Card>
-      <span alignItems="center" justifyContent="center"  mobileFlex={false}>
+      <span alignItems="center" justifyContent="between" mobileFlex={false}>
         {filtersComponent()}
       </span>
-  
-        <div style={{padding: '15px', flexDirection:'space-between', justifyContent:'center', alignItems:'flex-start'}}>
-          <Row gutter={18} style={{display:'flex', justifyContent:'space-around'}}>
-            <Col span={9} >
-              <Card style={{}} title="Total Customers">
-                {list[0]?.totalCustomers}
-              </Card>
-            </Col>
-            <Col span={9}>
-              <Card title="Total Amount"  style={{justifyContent:'center'}} >
-                {list[0]?.totalAmount}
-              </Card>
-            </Col>
-          </Row>
-        </div>
+      <br></br>
+      <Row gutter={5}>
+      
+      
+       
+      </Row>
 
+      <br></br>
       <Row gutter={16}>
         <Col span={24}>
-          <Table 
-            scroll={{x:true,}}
-            columns={tableColumns}
-            dataSource={customerList}
-            rowKey='id1'
-            pagination = {pagination}
-            onChange = {handleTableChange}
+          <Table
+            scroll={{
+              x: true,
+            }}
+            columns={tableColumns2}
+            dataSource={list}
+            rowKey="id"
+            pagination={pagination}
+            onChange={handleTableChange}
+           
+           
+       
+           
             loading={loading}
+          
           />
         </Col>
+
+       
+    
       </Row>
       </Card>
     </div>

@@ -14,7 +14,6 @@ const Product = (props) => {
       <Redirect exact from={`${match.url}`} to={`${match.url}/orders-list`} />
       <Route path={`${match.url}/create-order`} component={OrderCreate} />
       {/* <Route path={`${match.url}/edit-product/:id`} component={EditProduct} /> */}
-      
       <Route path={`${match.url}/orders-list`} component={OrderList} />
       <Route path={`${match.url}/order-view/:id`} component={OrderView} />
     </Switch>

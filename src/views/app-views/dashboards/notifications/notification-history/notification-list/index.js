@@ -92,9 +92,9 @@ const NotificationList = () => {
         total: data.total,
       })
       setLoading(false)
-      // console.log(data, 'show-notifications')
-      // console.log(pagination,'setpagination')
-      // console.log(data.total)
+      console.log(data, 'show-notifications')
+      console.log(pagination,'setpagination')
+      console.log(data.total)
     }
   }
   
@@ -111,7 +111,7 @@ const NotificationList = () => {
 const getPaginationParams = (params) => ({
   limit: params.pagination?.pageSize,
   page: params.pagination?.current,
-  // ...params,
+  ...params,
 })
 
 
@@ -189,7 +189,7 @@ const handleClearFilter = async () => {
       render: (email) => (
         <Flex alignItems="center">{email?.email}</Flex>
       ),
-      // sorter: (a, b) => utils.antdTableSorter(a, b, 'email.email'),
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'email'),
     },
     {
       title: 'Email Subject',
@@ -197,7 +197,7 @@ const handleClearFilter = async () => {
       render: (email) => (
         <Flex alignItems="center">{email?.subject}</Flex>
       ),
-      // sorter: (a, b) => utils.antdTableSorter(a, b, 'subject'),
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'subject'),
     },
     {
       title: 'Listing Type',
