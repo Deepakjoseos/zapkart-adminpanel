@@ -102,8 +102,8 @@ const Dashboards = ({ match }) => {
           component={lazy(() => import(`./attribute`))}
         /> */}
         <Route
-          path={`${match.url}/payout`}
-          component={lazy(() => import(`./payout`))}
+          path={`${match.url}/vendor-payout`}
+          component={lazy(() => import(`./vendor-payout`))}
         />
         <Redirect from={`${match.url}`} to={`${match.url}/default`} />
       </Switch>
