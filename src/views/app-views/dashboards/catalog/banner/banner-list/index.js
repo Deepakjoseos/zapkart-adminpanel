@@ -177,7 +177,7 @@ const handleTableChange = (newPagination) => {
         getBanners({ pagination: resetPagination() }, sendingValues)
       })
       .catch((info) => {
-        console.log('info', info)
+        // console.log('info', info)
         setFilterEnabled(false)
       })
   }

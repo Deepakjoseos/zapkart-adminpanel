@@ -536,6 +536,14 @@ const dashBoardNavTree = [
         breadcrumb: false,
         submenu: [],
       },
+      {
+        key: 'dashboards-vendor-payout',
+        path: `${APP_PREFIX_PATH}/dashboards/vendor-payout`,
+        title: 'Vendor Payout',
+        icon: UserOutlined,
+        breadcrumb: false,
+        submenu: [],
+      },
 
       {
         key: 'dashboards-settings',
