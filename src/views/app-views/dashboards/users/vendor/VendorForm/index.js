@@ -85,7 +85,7 @@ const ProductForm = (props) => {
     const data = await constantsService.getConstants()
     if (data) {
 
-      setStatuses(Object.values(data.GENERAL['FORM_STATUS']))
+      setStatuses(Object.values(data.USER['STATUS']))
     }
   }
   const getTransactions = async () => {
@@ -161,6 +161,7 @@ const ProductForm = (props) => {
         business: data?.business,
         emailSubscription: data?.emailSubscription,
         smsSubscription: data?.smsSubscription,
+        status:data?.status,
        
 
         // address:
@@ -374,7 +375,7 @@ const ProductForm = (props) => {
         name="advanced_search"
         className="ant-advanced-search-form"
         initialValues={{
-          status: 'Hold',
+          status: 'Blocked',
         }}
       >
         <PageHeaderAlt className="border-bottom" overlap>

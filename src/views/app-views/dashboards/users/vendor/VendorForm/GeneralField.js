@@ -162,12 +162,10 @@ const handleClick = async () => {
             </Form.Item>
           )}
             {SITE_NAME === 'zapkart' && (
- <Form.Item name="firstName" label="Display Name">
- <Input placeholder="First Name" />
-</Form.Item>
-
-
-                )}
+              <Form.Item name="firstName" label="Display Name">
+                <Input placeholder="First Name" />
+              </Form.Item>
+            )}
 
            
               <>
@@ -200,16 +198,16 @@ const handleClick = async () => {
                     <Input placeholder="Gst" />
                   </Form.Item>
                 )}
-           {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
-                <Form.Item name="pan" label="Pan" rules={rules.pan}>
-                  <Input placeholder="Pan" />
-                </Form.Item>
-                     )}
- {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
-                <Form.Item name="drugLicense" label="Drug License">
-                  <Input placeholder="drugLicense" />
-                </Form.Item>
-                     )}
+                {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+                  <Form.Item name="pan" label="Pan" rules={rules.pan}>
+                    <Input placeholder="Pan" />
+                  </Form.Item>
+                )}
+                {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+                  <Form.Item name="drugLicense" label="Drug License">
+                    <Input placeholder="drugLicense" />
+                  </Form.Item>
+                )}
                {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
                 <Form.Item name="tanNumber" label="Tan Number">
                   <Input placeholder="tanNumber" />
@@ -320,6 +318,16 @@ const handleClick = async () => {
             </Form.Item>
             <Form.Item name="lastName" label="Last Name">
               <Input placeholder="Last Name" />
+            </Form.Item>
+
+            <Form.Item name="status" label="Status" rules={rules.status}>
+              <Select placeholder="Status">
+                {form_statuses.map((item) => (
+                  <Option key={item.id} value={item}>
+                    {item}
+                  </Option>
+                ))}
+              </Select>
             </Form.Item>
 
             <>

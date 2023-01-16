@@ -54,7 +54,8 @@ const SettingsForm = (props) => {
           razorPayPayoutAccountNumber: data.razorPayPayoutAccountNumber,
           agreement: data.agreement,
           footer: data.footer,
-          tdsPercentage: data.tdsPercentage
+          tdsPercentage: data.tdsPercentage,
+          vendorDeliveryCharges: data.vendorDeliveryCharges,
         });
 
         setSettings(data);

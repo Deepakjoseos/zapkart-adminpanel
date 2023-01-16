@@ -68,6 +68,13 @@ const rules = {
       required: true,
       message: 'Required'
     }
+  ],
+
+  vendorDeliveryCharges: [
+    {
+      required: true,
+      message: 'Required'
+    }
   ]
 };
 
@@ -151,6 +158,13 @@ const GeneralField = ({ setmode, form }) => {
               <Input placeholder="TDS Percentage" type="number" />
             </Form.Item>
           )}
+          <Form.Item
+            name="vendorDeliveryCharges"
+            label="Vendor Delivery Charges"
+            rules={rules.vendorDeliveryCharges}
+          >
+            <Input placeholder="Vendor Delivery Charge" type="text" />
+          </Form.Item>
           {/* </div> */}
         </>
         {/* <div>
@@ -259,7 +273,7 @@ const GeneralField = ({ setmode, form }) => {
                       <Form.Item
                         label="end Amount"
                         {...field}
-                        rules={[{ required: true, message: 'required' }]}
+                        // rules={[{ required: true, message: 'required' }]}
                         name={[field.name, 'endAmount']}
                         fieldKey={[field.fieldKey, 'quantity']}
                       >
@@ -337,7 +351,7 @@ const GeneralField = ({ setmode, form }) => {
                       <Form.Item
                         label="end Amount"
                         {...field}
-                        rules={[{ required: true, message: 'required' }]}
+                        // rules={[{ required: true, message: 'required' }]}
                         name={[field.name, 'endAmount']}
                         fieldKey={[field.fieldKey, 'quantity']}
                       >
