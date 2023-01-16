@@ -109,6 +109,8 @@ const ProductForm = (props) => {
         password: data?.password,
         emailVerified: data?.emailVerified,
         groups: data?.groups.map((cur) => cur.id),
+        smsSubscription: data?.smsSubscription,
+        emailSubscription: data?.emailSubscription,
       })
 
       setEmailVerified(data?.emailVerified)
@@ -153,6 +155,8 @@ const ProductForm = (props) => {
           status: values.status,
           password: values.password,
           emailVerified: values.emailVerified,
+          emailSubscription: values.emailSubscription,
+          smsSubscription: values.smsSubscription,
         }
 
         if (mode === ADD) {
