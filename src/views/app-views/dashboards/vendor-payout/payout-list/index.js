@@ -7,6 +7,7 @@ import {
   Button,
   Menu,
   Tag,
+  DatePicker,
   Form,
   Row,
   Col, notification, message
@@ -33,7 +34,6 @@ import moment from 'moment'
 import payoutService from 'services/payout'
 import vendorService from 'services/vendor'
 import vendorPayoutService from 'services/vendorPayout'
-import customerService from 'services/customer'
 
 
 const { Option } = Select
@@ -111,8 +111,26 @@ const PayoutList = () => {
     }
   }
 
+  const getVendors = async () => {
+    const data = await vendorService.getVendors()
+    if (data) setVendorList(data)
+  }
+  const getCustomers = async () => {
+    const data = await customerService.getCustomers()
+    if (data) {
+      const users = data.map((cur) => {
+        return {
+          ...cur,
+          fullName: `${cur.firstName} ${cur.lastName}`,
+        }
+      })
+      setCustomerList(users)
+    }
+  }
+
 
   useEffect(() => {
+
     getPayout({
       pagination,
     })
@@ -158,11 +176,11 @@ const PayoutList = () => {
       dataIndex: 'vendorAmount',
     },
     {
-      title: 'commission Amount',
+      title: 'Commission Amount',
       render: (_, record) => `${record.commissionAmount}  (${record.commissionPercentage}%)`
     },
     {
-      title: 'commission Amount',
+      title: 'TDS Amount',
       render: (_, record) => `${record.tdsAmount}  (${record.tdsPercentage}%)`
     },
     // {
@@ -199,7 +217,10 @@ const PayoutList = () => {
         setFilterEnabled(true)
         // console.log(values, "heyy");
         // Removing falsy Values from values
-        const sendingValues = _.pickBy(values, _.identity)
+        const sendingValues = _.pickBy({...values,
+          fromDate: values.fromDate ? moment(values.fromDate).format() : '', 
+          toDate: values.toDate ? moment(values.toDate).format():''},           
+          _.identity)
         getPayout({ pagination: resetPagination() }, sendingValues)
       })
       .catch((info) => {
@@ -230,20 +251,20 @@ const PayoutList = () => {
           </Form.Item>
         </Col> */}
 
-        {/* <Col md={6} sm={24} xs={24} lg={4}>
+        <Col md={6} sm={24} xs={24} lg={3}>
           <Form.Item name="fromDate" label="From Date">
             <DatePicker />
           </Form.Item>
         </Col>
 
-        <Col md={6} sm={24} xs={24} lg={4}>
+        <Col md={6} sm={24} xs={24} lg={3}>
           <Form.Item name="toDate" label="To Date">
             <DatePicker />
           </Form.Item>
-        </Col> */}
+        </Col>
 
-        <Col md={6} sm={24} xs={24} lg={5}>
-          <Form.Item name="userId" label="Vendor Name">
+        <Col md={6} sm={24} xs={24} lg={4}>
+          <Form.Item name="vendorId" label="Vendor Name">
 
             <Select showSearch
               optionFilterProp="children"
@@ -265,16 +286,16 @@ const PayoutList = () => {
           </Form.Item>
         </Col>
 
-        <Col md={6} sm={24} xs={24} lg={5}>
-          <Form.Item name="customerIds" label="Customers">
+        <Col md={6} sm={24} xs={24} lg={4}>
+          <Form.Item name="customerId" label="Customers">
             <Select
               mode="multiple"
               className="w-100"
               style={{ minWidth: 100 }}
               placeholder="Customers"
             >
-              {/* <Option value="">All</Option> */}
-              {customerList.map((user) => (
+              <Option value="">All</Option>
+              {customerList?.map((user) => (
                 <Option key={user.id} value={user.id}>
                   {user.fullName}
                 </Option>
@@ -282,49 +303,6 @@ const PayoutList = () => {
             </Select>
           </Form.Item>
         </Col>
-
-        <Col md={6} sm={24} xs={24} lg={6}>
-          <Form.Item name="orderByPriority" label="Order By Priority">
-            <Select className="w-100" placeholder="Order By Priority">
-              <Option value="">All</Option>
-              <Option value="true">Yes</Option>
-              <Option value="false">No</Option>
-            </Select>
-          </Form.Item>
-        </Col>
-        <Col md={6} sm={24} xs={24} lg={6}>
-          <Form.Item name="orderByName" label="Order By Name">
-            <Select className="w-100" placeholder="Order By Name">
-              <Option value="">Nil</Option>
-              <Option value="Asc">Asc</Option>
-              <Option value="Desc">Desc</Option>
-            </Select>
-          </Form.Item>
-        </Col>
-        {/* <Col md={6} sm={24} xs={24} lg={6}>
-          <Form.Item name="userId" label="Customers">
-            <Select
-              showSearch
-              optionFilterProp="children"
-              filterOption={(input, option) =>
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }
-              className="w-100"
-              style={{ minWidth: 180 }}
-              // onChange={(value) => setSelectedUserId(value)}
-              // onSelect={handleQuery}
-              // value={selectedUserId}
-              placeholder="Users"
-            >
-              <Option value="">All</Option>
-              {users.map((user) => (
-                <Option key={user.id} value={user.id}>
-                  {user.fullName}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
-        </Col> */}
 
         <Col className="mb-4">
           <Button type="primary" onClick={handleFilterSubmit}>
@@ -341,28 +319,15 @@ const PayoutList = () => {
     </Form>
   )
 
-  const getVendors = async () => {
-    const data = await vendorService.getVendors()
-    if (data) setVendorList(data)
-  }
-  const getCustomers = async () => {
-    const data = await customerService.getCustomers()
-    if (data) {
-      const customerList = data.map((cur) => {
-        return {
-          ...cur,
-          fullName: `${cur.firstName} ${cur.lastName}`,
-        }
-      })
-      setUsers(users)
-    }
-  }
+
 
   return (
+    
     <Card>
       <div alignItems="center" justifyContent="between" mobileFlex={false}>
         {filtersComponent()}
       </div>
+
       <div className="table-responsive">
         <Table
           // scroll={{
