@@ -270,6 +270,7 @@ const PayoutList = () => {
           <Form.Item name="vendorId" label="Vendor Name">
 
             <Select showSearch
+              mode="multiple"
               optionFilterProp="children"
               filterOption={(input, option) =>
                 option.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0
@@ -304,6 +305,12 @@ const PayoutList = () => {
                 </Option>
               ))}
             </Select>
+          </Form.Item>
+        </Col>
+
+        <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="orderNo" label="Order Number">
+            <Input />
           </Form.Item>
         </Col>
 
