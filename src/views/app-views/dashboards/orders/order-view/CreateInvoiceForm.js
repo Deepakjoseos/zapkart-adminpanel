@@ -58,10 +58,23 @@ const CreateInvoiceForm = ({
   //     setPickUpLocations(data.shipping_address)
   //   }
   // }
-
   // useEffect(() => {
   //   getPickupLocations()
   // }, [])
+  // const uniquevendor = vendorBasedInvoiceData.filter((item, index) => {
+  //   return vendorBasedInvoiceData.findIndex(i => i.vendorId === item.vendorId) === index;
+  // });
+  let uniquevendor ={};
+  let vendorDetails = {};
+  vendorBasedInvoiceData.map((item) => {
+      vendorDetails[item.items[0].vendorId] = {vendorId:item.items[0].vendorId,vendorName:item.items[0].vendorName}
+      if (uniquevendor[item.items[0].vendorId]) 
+      uniquevendor[item.items[0].vendorId].push(item.items[0]);
+      else uniquevendor[item.items[0].vendorId] = [item.items[0]];
+    });
+ 
+    console.log(uniquevendor,'vendoris')
+
 
   useEffect(() => {
     if (items?.length > 0) {
@@ -215,8 +228,8 @@ const CreateInvoiceForm = ({
                   }))
                 }
               >
-                {vendorBasedInvoiceData?.map((cur) => (
-                  <Option value={cur?.vendorId}>{cur?.vendorName}</Option>
+                {Object.entries(uniquevendor)?.map(([vendorId,cur]) => (
+                  <Option value={vendorId}>{vendorDetails[vendorId].vendorName}</Option>
                 ))}
               </Select>
 
@@ -233,9 +246,7 @@ const CreateInvoiceForm = ({
 
               <Table
                 dataSource={
-                  vendorBasedInvoiceData?.find(
-                    (cur) => cur.vendorId === creatingInvoiceValue?.vendorId
-                  )?.items
+                  uniquevendor[creatingInvoiceValue?.vendorId]
                 }
                 pagination={false}
                 className="mb-5"

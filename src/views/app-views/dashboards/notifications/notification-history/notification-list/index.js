@@ -111,7 +111,7 @@ const NotificationList = () => {
 const getPaginationParams = (params) => ({
   limit: params.pagination?.pageSize,
   page: params.pagination?.current,
-  // ...params,
+  ...params,
 })
 
 

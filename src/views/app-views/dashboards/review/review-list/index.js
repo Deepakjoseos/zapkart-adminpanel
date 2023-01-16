@@ -73,8 +73,15 @@ const ReviewList = () => {
     qs.stringify(filterParams))
     
     if (data) {
-      setList(data)
+      setList(data.data)
+      // Pagination
+      setPagination({
+        ...paginationParams.pagination,
+        total: data.total,
+      })
     }
+    setLoading(false)
+
     // console.log(data,'reviews')
   }
 
@@ -135,7 +142,7 @@ const ReviewList = () => {
   const getPaginationParams = (params) => ({
     limit: params.pagination?.pageSize,
     page: params.pagination?.current,
-    // ...params,
+    ...params,
   })
   const handleTableChange = (newPagination) => {
     getReviews(

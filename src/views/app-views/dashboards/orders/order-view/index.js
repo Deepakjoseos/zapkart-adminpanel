@@ -44,7 +44,7 @@ const OrderView = () => {
     // },
   })
 
-  console.log(printing, 'ljkshdl')
+  // console.log(printing, 'ljkshdl')
 
   const getOrderById = async () => {
     const orderData = await orderService.getOrderById(id)
@@ -52,8 +52,8 @@ const OrderView = () => {
     if (order) {
       setOrder(orderData)
     }
-    console.log('order payment', order.payment)
   }
+  // console.log('orders', order)
 
   useEffect(() => {
     getOrderById()

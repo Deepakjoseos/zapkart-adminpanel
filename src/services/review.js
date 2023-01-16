@@ -10,7 +10,7 @@ reviewService.getReviews = async function (data,paginationQuery = '', filterQuer
       url,
       method: 'get',
     })
-    return res.data
+    return res
   } catch (err) {
     console.log(err, 'show-err')
   }

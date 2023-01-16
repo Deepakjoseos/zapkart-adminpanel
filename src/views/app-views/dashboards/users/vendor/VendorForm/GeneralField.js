@@ -57,12 +57,6 @@ const rules = {
       message: 'Required',
     },
   ],
-  smsSubscription:[
-    {
-      required: true,
-      message: 'Required',
-    },
-  ],
   password: [
     {
       required: true,
@@ -184,26 +178,6 @@ const handleClick = async () => {
                   rules={rules.emailVerified}
                 >
                   <Select placeholder="Email Verified">
-                    <Option value={true}>Yes</Option>
-                    <Option value={false}>No</Option>
-                  </Select>
-                </Form.Item>
-                <Form.Item
-                  name="emailSubscription"
-                  label="Email Subscription"
-                  rules={rules.emailSubscription}
-                >
-                  <Select placeholder="emailSubscription">
-                    <Option value={true}>Yes</Option>
-                    <Option value={false}>No</Option>
-                  </Select>
-                </Form.Item>
-                <Form.Item
-                  name="smsSubscription"
-                  label="Email Subscription"
-                  rules={rules.smsSubscription}
-                >
-                  <Select placeholder="smsSubscription">
                     <Option value={true}>Yes</Option>
                     <Option value={false}>No</Option>
                   </Select>
@@ -445,6 +419,31 @@ const handleClick = async () => {
                 </Select>
                 </Form.Item>
          )}
+         {/* {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+                <Form.Item name="tdsEnabled" label="TDS Enabled">
+                  <Select placeholder="TDS Enabled">
+                  <Option value={true}>Yes</Option>
+                  <Option value={false}>No</Option>
+                </Select>
+                </Form.Item>
+         )} */}
+         {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+                <Form.Item name="smsSubscription" label="SMS Subscription">
+                  <Select placeholder="SMS Subscription">
+                  <Option value={true}>Yes</Option>
+                  <Option value={false}>No</Option>
+                </Select>
+                </Form.Item>
+         )}
+         {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+                <Form.Item name="emailSubscription" label="Email Subscription">
+                  <Select placeholder="Email Subscription">
+                  <Option value={true}>Yes</Option>
+                  <Option value={false}>No</Option>
+                </Select>
+                </Form.Item>
+         )}
+
             </>
 
             {/* <Form.Item name="drugLicense" label="Drug License Number" rules={rules.drugLicense}>
