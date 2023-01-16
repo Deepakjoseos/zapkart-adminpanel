@@ -34,6 +34,7 @@ import moment from 'moment'
 import payoutService from 'services/payout'
 import vendorService from 'services/vendor'
 import vendorPayoutService from 'services/vendorPayout'
+import StatisticWidget from 'components/shared-components/StatisticWidget'
 
 
 const { Option } = Select
@@ -49,6 +50,8 @@ const PayoutList = () => {
   const [orderStatuses, setOrderStatuses] = useState([])
   const [customerPrescriptions, setCustomerPrescriptions] = useState([])
   const [statuses, setStatuses] = useState([])
+  const [vendorTotal, setVendorTotal] = useState(null)
+
   
   let history = useHistory()
   const [form] = Form.useForm()
@@ -102,7 +105,7 @@ const PayoutList = () => {
     if (data) {
       console.log(data.total,"total");
       setUsers(data.data)
-
+      setVendorTotal(data.vendorTotalAmount)
       setPagination({
         ...paginationParams.pagination,
         total: data.total,
@@ -324,6 +327,18 @@ const PayoutList = () => {
   return (
     
     <Card>
+
+      <>
+      <Row gutter={16}>
+        <Col xs={24} sm={24} md={24} lg={24} xl={6}>
+          <StatisticWidget
+            title="Total Vendor Amount"
+            value={vendorTotal}
+          />
+        </Col>
+      
+      </Row>
+     </>
       <div alignItems="center" justifyContent="between" mobileFlex={false}>
         {filtersComponent()}
       </div>
