@@ -165,85 +165,7 @@ const GeneralField = ({ setmode, form }) => {
           >
             <Input placeholder="Vendor Delivery Charge" type="text" />
           </Form.Item>
-          {/* </div> */}
         </>
-        {/* <div>
-          <p>Delivery Charges</p>
-          <Form.List name="deliveryCharges">
-            {(fields, { add, remove }) => {
-              console.log(fields, 'show-filelds');
-              return (
-                <>
-                  {fields.map((field) => (
-                    <Space
-                      key={field.key}
-                      style={{ display: 'flex', width: '100%' }}
-                      align="baseline"
-                    >
-                      <Form.Item
-                        {...field}
-                        label="Start Amount"
-                        rules={[{ required: true, message: 'required' }]}
-                        name={[field.name, 'startAmount']}
-                        fieldKey={[field.fieldKey, 'startAmount']}
-                      >
-                        <InputNumber
-                          placeholder="Start Amount"
-                          style={{ width: '100%' }}
-                        />
-                      </Form.Item>
-                      <Form.Item
-                        label="end Amount"
-                        {...field}
-                        rules={[{ required: true, message: 'required' }]}
-                        name={[field.name, 'endAmount']}
-                        fieldKey={[field.fieldKey, 'quantity']}
-                      >
-                        <InputNumber
-                          placeholder="End Amount"
-                          style={{ width: '100%' }}
-                        />
-                      </Form.Item>
-                      <Form.Item
-                        label="Charge"
-                        {...field}
-                        rules={[{ required: true, message: 'required' }]}
-                        name={[field.name, 'charge']}
-                        fieldKey={[field.fieldKey, 'charge']}
-                      >
-                        <InputNumber
-                          placeholder="Charge"
-                          style={{ width: '100%' }}
-                        />
-                      </Form.Item>
-                      {fields.length > 1 && (
-                        <MinusCircleOutlined
-                          onClick={() => {
-                            // onAttributeChange()
-                            remove(field.name);
-                            // checkPrescriptionRequired()
-                          }}
-                        />
-                      )}
-                    </Space>
-                  ))}
-                  <Form.Item>
-                    <Button
-                      type="primary"
-                      onClick={() => {
-                        add();
-                        // checkPrescriptionRequired()
-                      }}
-                      icon={<PlusOutlined />}
-                    >
-                      Add Delivery charges
-                    </Button>
-                  </Form.Item>
-                </>
-              );
-            }}
-          </Form.List>
-        </div> */}
       </Card>
       <Card title="Delivery Charges">
         <Card title="Cash On Delivery">
@@ -273,7 +195,6 @@ const GeneralField = ({ setmode, form }) => {
                       <Form.Item
                         label="end Amount"
                         {...field}
-                        // rules={[{ required: true, message: 'required' }]}
                         name={[field.name, 'endAmount']}
                         fieldKey={[field.fieldKey, 'quantity']}
                       >
