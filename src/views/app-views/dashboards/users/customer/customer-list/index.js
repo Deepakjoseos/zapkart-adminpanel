@@ -83,7 +83,7 @@ const CustomerList = () => {
     if (data) {
       // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
 
-      setStatuses(Object.values(data.GENERAL['STATUS']))
+      setStatuses(Object.values(data.USER['STATUS']))
 
     }
   }
