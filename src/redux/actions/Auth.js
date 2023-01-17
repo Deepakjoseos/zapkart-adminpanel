@@ -12,6 +12,8 @@ import {
   SIGNIN_WITH_GOOGLE_AUTHENTICATED,
   SIGNIN_WITH_FACEBOOK,
   SIGNIN_WITH_FACEBOOK_AUTHENTICATED,
+  GET_IMAGE_CATEGORIES,
+  SET_IMAGE_CATEGORIES,
 } from '../constants/Auth'
 
 export const signIn = (user) => {
@@ -97,5 +99,12 @@ export const showLoading = (loading) => {
   return {
     type: SHOW_LOADING,
     loading,
+  }
+}
+
+export const setImageCategories = (imageCategories) => {
+  return {
+    type: SET_IMAGE_CATEGORIES,
+    imageCategories,
   }
 }

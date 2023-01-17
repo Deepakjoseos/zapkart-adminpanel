@@ -28,8 +28,6 @@ import shipmentService from 'services/shipment'
 import constantsService from 'services/constants'
 import walletService from 'services/Wallet'
 import moment from 'moment'
-import authVendorService from 'services/auth/vendor'
-import WithdrawBalance from './withdrawBalance'
 
 const { Option } = Select
 
@@ -66,18 +64,6 @@ const TransactionList = () => {
     const [selectedRowKeys, setSelectedRowKeys] = useState([])
     const [checkIfDeliverableOpen, setCheckIfDeliverableOpen] = useState(false)
     const [statuses, setStatuses] = useState([])
-    const [currentUserId, setCurrentUserId] = useState([])
-    const [wallet, setWallet] = useState({})
-    const [isFormOpen, setisFormOpen] = useState(false)
-    const [bank_accounts,setBankAccounts]= useState([])
-
-
-    // const getUser = async ()=>{
-    //     const data = await authVendorService.getProfile()
-    //     if(data){
-    //         setCurrentUserId(data.id)
-    //     }
-    // }
 
     // Getting Brands List to display in the table
     const getTransactions = async () => {
@@ -85,26 +71,10 @@ const TransactionList = () => {
         if (data) {
             setList(data)
             setSearchBackupList(data)
-            // console.log(data, 'show-data')
+            console.log(data, 'show-data')
         }
     }
-    const getWallet = async () => {
-        const data = await walletService.getWallet()
-        if (data) {
-            const bankaccount = data.bankAccounts
-            setWallet(data)
-            setBankAccounts(bankaccount)
 
-        }
-        // console.log('walletvendor',wallet)
-        // console.log('walletbankaccounts',wallet.bankAccounts)
-        
-    }
-//  const getBankAccounts = async ()=>{
-//     if(wallet){
-//         setBankAccounts(wallet.bankAccounts)
-//     }
-//  }
 
     //   const fetchConstants = async () => {
     //     const data = await constantsService.getConstants()
@@ -117,11 +87,7 @@ const TransactionList = () => {
     //   }
 
     useEffect(() => {
-        // getUser()
         getTransactions()
-        getWallet()
-        // getBankAccounts()
-
     }, [])
 
     // Dropdown menu for each row
@@ -197,21 +163,16 @@ const TransactionList = () => {
 
     // Antd Table Columns
     const tableColumns = [
-        
-        {
-            title: "Type",
-            dataIndex: 'type'
-        },
-        {
-            title: "Description",
-            dataIndex: 'description'
-        },
         {
             title: 'Amount',
             dataIndex: 'amount',
             //   render: (text) => <Link to={`/app/dashboards/shipments/shipment/shipment-view/${text}`}>
             //     {text}
             //   </Link>
+        },
+        {
+            title:"Type",
+            dataIndex:'type'
         },
         {
             title: 'Confirmed',
@@ -226,32 +187,25 @@ const TransactionList = () => {
         {
             title: 'Date',
             dataIndex: 'createdAt',
-            render: (text) => <div>{moment(new Date(text * 1000)).format('DD-MMM-YYYY hh:mm:a')}</div>,
+            render: (text) => <div>{moment(text).format('YYYY-MM-DD hh:mm:a')}</div>,
         },
         {
-            title: 'Quantity',
-            dataIndex: "itemQty",
-            render: (text) => <Flex justifyContent='center'>{text}</Flex>,
-
+            title:'User',
+            dataIndex:"userId"
         },
         {
             title: 'Order',
             render: (_, row) => {
                 return (
-                    
                     <Flex flexDirection="column" justifyContent="center">
 
                         {/* {row.name}{row?.variant && `(${row.variant.name})`}   */}
-                        {/* <span>Order No : </span> */}
+                        <span>OrderId:</span>
                         <Link to={`/app/dashboards/orders/order-view/${row.orderId}`}>
-                          {row.orderNo}
-                        </Link> 
-                       ({row.itemName})
-                        {/* <p>Item Name:</p> */}
-                        
-                        {/* <p>Item Quantity</p>
-                        {row.itemQty} */}
-
+                            {row.orderId}
+                            <p>ItemId:</p>
+                            {row.itemId}
+                        </Link>
                     </Flex>
                 )
             }
@@ -310,11 +264,10 @@ const TransactionList = () => {
 
 
     return (
-        <>
         <Card>
             <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
-                {/* {filters()} */}
-                {/* <div className="d-flex">
+                {filters()}
+                <div className="d-flex">
                     <Button
                         onClick={() => setCheckIfDeliverableOpen(true)}
                         block
@@ -330,39 +283,13 @@ const TransactionList = () => {
                     >
                         Add Shipment
                     </Button>
-                </div> */}
+                </div>
             </Flex>
             <div className="table-responsive">
-                <div>
-                <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
-
-                            <h1 className='ml-2 mb-5'>Wallet</h1>
-
-                            <div style={{marginLeft:"400px"}}>
-                            <Card className='ml-5' bordered={true} >
-                            <p>Balance : {wallet.balance}</p>
-                            </Card>
-                                                        </div>
-
-                            <Card className='ml-5' bordered={true} >
-                            <p>Pending Balance : {wallet.pendingBalance}</p>
-                            </Card>
-                            {/* </div> */}
-                            {/* <div > */}
-                            {/* <Card className='ml-3' bordered={true}>
-                            </Card> */}
-                            {/* </div> */}
-                        <Button className='ml-2 mb-4' type="primary" onClick={() => { setisFormOpen(true) }} > Withdraw Balance From Wallet</Button>
-
-                    </Flex>
-                </div>
                 <Table columns={tableColumns} dataSource={list} rowKey="id" />
             </div>
-            <WithdrawBalance setisFormOpen={setisFormOpen} isFormOpen={isFormOpen} bank_accounts={bank_accounts}  />
-
+         
         </Card>
-
-        </>
     )
 }
 

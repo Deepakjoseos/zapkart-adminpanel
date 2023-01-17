@@ -39,7 +39,6 @@ export function* signInWithFBEmail() {
           .then((res) => window.localStorage.setItem(AUTH_TOKEN, res.token))
         // localStorage.setItem(AUTH_TOKEN, user.user.uid)
         // yield put(authenticated(user.user.uid))
-        window.location.href = '/app/dashboards/authdetails'
       }
     } catch (err) {
       yield put(showAuthMessage(err))
@@ -72,22 +71,11 @@ export function* signUpWithFBEmail() {
         email,
         password
       )
-      // if (user.message) {
-      //   yield put(showAuthMessage(user.message))
-      // } else {
-      //   localStorage.setItem(AUTH_TOKEN, user.user.uid)
-      //   yield put(signUpSuccess(user.user.uid))
-      // }
       if (user.message) {
         yield put(showAuthMessage(user.message))
       } else {
-        user.user
-          .getIdTokenResult(true)
-          .then((res) => window.localStorage.setItem(AUTH_TOKEN, res.token))
-
-        window.location.href = '/app/dashboards/authdetails'
-        // localStorage.setItem(AUTH_TOKEN, user.user.uid)
-        // yield put(authenticated(user.user.uid))
+        localStorage.setItem(AUTH_TOKEN, user.user.uid)
+        yield put(signUpSuccess(user.user.uid))
       }
     } catch (error) {
       yield put(showAuthMessage(error))
@@ -99,22 +87,11 @@ export function* signInWithFBGoogle() {
   yield takeEvery(SIGNIN_WITH_GOOGLE, function* () {
     try {
       const user = yield call(FirebaseService.signInGoogleRequest)
-      // if (user.message) {
-      //   yield put(showAuthMessage(user.message))
-      // } else {
-      //   localStorage.setItem(AUTH_TOKEN, user.user.uid)
-      //   yield put(signInWithGoogleAuthenticated(user.user.uid))
-      // }
       if (user.message) {
         yield put(showAuthMessage(user.message))
       } else {
-        user.user
-          .getIdTokenResult(true)
-          .then((res) => window.localStorage.setItem(AUTH_TOKEN, res.token))
-
-        window.location.href = '/app/dashboards/authdetails'
-        // localStorage.setItem(AUTH_TOKEN, user.user.uid)
-        // yield put(authenticated(user.user.uid))
+        localStorage.setItem(AUTH_TOKEN, user.user.uid)
+        yield put(signInWithGoogleAuthenticated(user.user.uid))
       }
     } catch (error) {
       yield put(showAuthMessage(error))

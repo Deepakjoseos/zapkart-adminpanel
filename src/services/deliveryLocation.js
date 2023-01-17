@@ -1,15 +1,15 @@
 import fetch from 'auth/FetchInterceptor'
 
 const deliveryLocation = {}
-
-deliveryLocation.getDeliveryLocations = async function () {
+const api = '/deliverylocations'
+deliveryLocation.getDeliveryLocations = async function (paginationQuery = '', query = '') {
   try {
+    let url = `${api}?${paginationQuery}&${query}`
     const res = await fetch({
-      url: '/deliverylocations',
+      url,
       method: 'get',
     })
-    const data = res.data.filter((cur) => cur.status !== 'Deleted')
-    return data
+    return res
   } catch (err) {
     console.log(err, 'show-err')
   }
@@ -29,6 +29,7 @@ deliveryLocation.deleteDeliveryLocation = async function (id) {
 }
 
 deliveryLocation.getDeliveryLocationById = async function (id) {
+  console.log('parentidservice',id)
   try {
     const res = await fetch({
       url: `/deliverylocations/${id}`,

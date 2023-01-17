@@ -20,7 +20,8 @@ import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import shipmentService from 'services/shipment'
 import orderService from 'services/orders'
-import authVendorService from 'services/auth/vendor'
+import taxCategoryService from 'services/TaxCategory'
+
 const CreateInvoiceForm = ({
   orderId,
   setIsInvoiceFormOpen,
@@ -38,18 +39,18 @@ const CreateInvoiceForm = ({
 
   const [vendorBasedInvoiceData, setVendorBasedInvoiceData] = useState([])
 
-  const [creatingInvoiceValue, setCreatingInvoiceValue] = useState({
-    items: [],
-  })
+  const [creatingInvoiceValue, setCreatingInvoiceValue] = useState({})
 
   const [isAddInvoiceModalOpen, setIsAddInvoiceModalOpen] = useState(false)
 
   const [selectedCurrentItemId, setSelectedCurrentItemId] = useState(null)
-  const [currentUser, setCurrentUser] = useState([])
 
   // Items Form
   const [batch, setBatch] = useState(null)
+  const [hsn, setHsn] = useState(null)
+  const [taxCategoryId, setTaxCategoryId] = useState(null)
   const [expiry, setExpiry] = useState(null)
+  const [taxCategories, setTaxCategories] = useState([])
 
   // const getPickupLocations = async () => {
   //   const data = await shipmentService.getPickupLocations()
@@ -57,58 +58,77 @@ const CreateInvoiceForm = ({
   //     setPickUpLocations(data.shipping_address)
   //   }
   // }
-
   // useEffect(() => {
   //   getPickupLocations()
   // }, [])
-  const getCurrentUser = async () => {
-    const data = authVendorService.getProfile()
-    if (data) {
-      setCurrentUser(data)
-    }
-    console.log('currentUser', currentUser)
-  }
+  // const uniquevendor = vendorBasedInvoiceData.filter((item, index) => {
+  //   return vendorBasedInvoiceData.findIndex(i => i.vendorId === item.vendorId) === index;
+  // });
+  let uniquevendor ={};
+  let vendorDetails = {};
+  vendorBasedInvoiceData.map((item) => {
+      vendorDetails[item.items[0].vendorId] = {vendorId:item.items[0].vendorId,vendorName:item.items[0].vendorName}
+      if (uniquevendor[item.items[0].vendorId]) 
+      uniquevendor[item.items[0].vendorId].push(item.items[0]);
+      else uniquevendor[item.items[0].vendorId] = [item.items[0]];
+    });
+ 
+    console.log(uniquevendor,'vendoris')
+    console.log(vendorDetails,'vendordetails')
+    console.log(items,'items')
+
   useEffect(() => {
-    getCurrentUser()
+    if (items?.length > 0) {
+      const invoicesAvailableData = []
+      items?.forEach((cur) => {
+        const isAlreadyAddedVendor = vendorBasedInvoiceData?.find(
+          (inv) => inv.vendorId === cur.vendorId
+        )
+
+        if (!isAlreadyAddedVendor) {
+          invoicesAvailableData.push({
+            vendorId: cur?.vendorId,
+            vendorName: cur?.vendorName,
+            items: [cur],
+          })
+        } else {
+          invoicesAvailableData.forEach((inv, i) => {
+            if (isAlreadyAddedVendor.vendorId === inv.vendorId) {
+              invoicesAvailableData[i].items.push(cur)
+            }
+          })
+        }
+      })
+      setVendorBasedInvoiceData(invoicesAvailableData)
+    }
+  }, [items])
+
+  const fetchTaxCategories = async () => {
+    const allTaxCategories = await taxCategoryService.getTaxCategories()
+    if (allTaxCategories) {
+      setTaxCategories(allTaxCategories)
+    }
+  }
+
+  useEffect(() => {
+    fetchTaxCategories()
   }, [])
-
-  // useEffect(() => {
-  //   if (items?.length > 0) {
-  //     const invoicesAvailableData = []
-  //     items?.forEach((cur) => {
-  //       const isAlreadyAddedVendor = vendorBasedInvoiceData?.find(
-  //         (inv) => inv.vendorId === cur.vendorId
-  //       )
-
-  //       if (!isAlreadyAddedVendor) {
-  //         invoicesAvailableData.push({
-  //           vendorId: cur?.vendorId,
-  //           vendorName: cur?.vendorName,
-  //           items: [cur],
-  //         })
-  //       } else {
-  //         invoicesAvailableData.forEach((inv, i) => {
-  //           if (isAlreadyAddedVendor.vendorId === inv.vendorId) {
-  //             invoicesAvailableData[i].items.push(cur)
-  //           }
-  //         })
-  //       }
-  //     })
-  //     setVendorBasedInvoiceData(invoicesAvailableData)
-  //   }
-  //  }, [items])
 
   const resetInvoiceItemStateValues = () => {
     setBatch(null)
+    setHsn(null)
+    setTaxCategoryId(null)
     setExpiry(null)
     setSelectedCurrentItemId(null)
   }
 
   const addToCreatingInvoiceValue = () => {
-    console.log('invoicedara')
     setCreatingInvoiceValue((prev) => ({
       ...prev,
-      items: [...prev?.items, { id: selectedCurrentItemId, batch, expiry }],
+      items: [
+        ...prev?.items,
+        { id: selectedCurrentItemId, batch, expiry, hsn, taxCategoryId },
+      ],
     }))
     resetInvoiceItemStateValues()
     setIsAddInvoiceModalOpen(false)
@@ -197,22 +217,22 @@ const CreateInvoiceForm = ({
         <Row gutter={16}>
           <Col xs={24} sm={24} md={24}>
             <Card title="Basic Info">
-              {/* <Select
-                  className="w-100 mb-3"
-                  placeholder="Select Vendor"
-                  value={creatingInvoiceValue?.vendorId}
-                  onChange={(val) =>
-                    setCreatingInvoiceValue((prev) => ({
-                      ...prev,
-                      vendorId: val,
-                      items: [],
-                    }))
-                  }
-                >
-                  {vendorBasedInvoiceData?.map((cur) => (
-                    <Option value={cur?.vendorId}>{cur?.vendorName}</Option>
-                  ))}
-                </Select> */}
+              <Select
+                className="w-100 mb-3"
+                placeholder="Select Vendor"
+                value={creatingInvoiceValue?.vendorId}
+                onChange={(val) =>
+                  setCreatingInvoiceValue((prev) => ({
+                    ...prev,
+                    vendorId: val,
+                    items: [],
+                  }))
+                }
+              >
+                {Object.entries(uniquevendor)?.map(([vendorId,cur]) => (
+                  <Option value={vendorId}>{vendorDetails[vendorId].vendorName}</Option>
+                ))}
+              </Select>
 
               <Input
                 placeholder="Invoice No"
@@ -225,29 +245,101 @@ const CreateInvoiceForm = ({
                 }
               />
 
-              <Table dataSource={items} pagination={false} className="mb-5">
-                <Column title="Product" dataIndex="name" key="name" />
-                <Column title="Quantity" dataIndex="quantity" key="quantity" />
-                <Column title="Price" dataIndex="price" key="price" />
+              <Table
+                dataSource={
+                  uniquevendor[creatingInvoiceValue?.vendorId]
+                }
+                pagination={false}
+                className="mb-5"
+              >
+                <Column title="Product" 
+                // dataIndex="name" 
+                // key="name"
+                render={(text) =>
+                  !text.invoiceId ? (
+                    
+                    text?.name
+                  ) : (
+                    ''
+                  )
+                }
+                />
+                <Column title="Quantity"
+                //  dataIndex="quantity"
+                  // key="quantity"
+                  render={(text) =>
+                    !text.invoiceId ? (
+                      
+                      text?.quantity
+                    ) : (
+                      ''
+                    )
+                  } 
+                  />
+                <Column title="Price" 
+                  // dataIndex="price"
+                  // key="price"
+                  render={(text) =>
+                    !text.invoiceId ? (
+                      
+                      text?.price
+                    ) : (
+                      ''
+                    )
+                  }  />
                 <Column
                   title="Vendor"
-                  dataIndex="vendorName"
-                  key="vendorName"
+                  // dataIndex="vendorName"
+                  // key="vendorName"
+                  render={(text) =>
+                    !text.invoiceId ? (
+                      // <Link
+                      //   to={`/app/dashboards/shipment/shipment-view/${text.shipmentId}`}
+                      // >
+                      //   {' '}
+                      //   {text.shipmentNo}
+                      // </Link>
+                      text?.vendorName
+                    ) : (
+                      ''
+                    )
+                  } 
                 />
                 {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
                   <Column
                     title="Prescription Required"
-                    dataIndex="prescriptionRequired"
-                    key="prescriptionRequired"
-                    render={(presc) => <>{presc ? 'Yes' : 'No'}</>}
+                    // dataIndex="prescriptionRequired"
+                    // key="prescriptionRequired"
+                    render={(presc) => 
+                    !presc.invoiceId ?
+                    (
+                    <>
+                    {presc.prescriptionRequired ? 'Yes' : 'No'}
+                    </>
+                    ): (
+                      ''
+                    )
+                  }
                   />
                 )}
 
-                <Column title="Status" dataIndex="status" key="status" />
+                <Column title="Status"
+                //  dataIndex="status" 
+                //  key="status"
+                 render={(text) =>
+                  !text.invoiceId ? (
+                    
+                    text?.status
+                  ) : (
+                    ''
+                  )
+                } />
                 <Column
-                  title="Invoice"
-                  render={(_, row) => (
+                  title="Action"
+                  render={(row) => (
+                    !row.invoiceId ?(
                     <>
+
                       {ifItemIdIsInCreatingInvoiceValue(row.id) ? (
                         <Button
                           onClick={() =>
@@ -263,13 +355,19 @@ const CreateInvoiceForm = ({
                             setIsAddInvoiceModalOpen(true)
                             setSelectedCurrentItemId(row.id)
                             setBatch(row.batch ? row.batch : null)
+                            setHsn(row.batch ? row.hsn : null)
+                            setTaxCategoryId(
+                              row.batch ? row.taxCategoryId : null
+                            )
                             setExpiry(row.expiry ? moment(row.expiry) : null)
                           }}
                         >
-                          Add To Invoice
+                          Add Invoice
                         </Button>
                       )}
+
                     </>
+                    ):('')
                   )}
                 />
               </Table>
@@ -279,7 +377,7 @@ const CreateInvoiceForm = ({
       </Drawer>
 
       <Modal
-        title="Add Item"
+        title="Add Invoice"
         style={{ top: 20 }}
         visible={isAddInvoiceModalOpen}
         onCancel={() => setIsAddInvoiceModalOpen(false)}
@@ -295,12 +393,14 @@ const CreateInvoiceForm = ({
         ]}
         destroyOnClose
       >
+        <p>Batch</p>
         <Input
           placeholder="Batch"
           className="mb-3"
           onChange={(e) => setBatch(e.target.value)}
           value={batch}
         />
+        <p>Expiry</p>
         <DatePicker
           placeholder="Expiry Date"
           format="YYYY-MM-DD"
@@ -308,6 +408,34 @@ const CreateInvoiceForm = ({
           className="w-100"
           onChange={(date, dateString) => setExpiry(dateString)}
         />
+        <br/>
+        <br/>
+        <p>Hsn</p>
+        <Input
+          placeholder="Hsn"
+          className="mb-3"
+          onChange={(e) => setHsn(e.target.value)}
+          value={hsn}
+        />
+
+        <p>TaxCategory</p>
+        <Select
+          placeholder="Tax Category"
+          showSearch
+          optionFilterProp="children"
+          filterOption={(input, option) =>
+            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+          }
+          style={{ width: '100%' }}
+          onChange={(e) => setTaxCategoryId(e)}
+          value={taxCategoryId}
+        >
+          {taxCategories.map((medicineType) => (
+            <Option key={medicineType.id} value={medicineType.id}>
+              {medicineType.name}
+            </Option>
+          ))}
+        </Select>
       </Modal>
     </>
   )

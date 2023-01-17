@@ -31,8 +31,9 @@ const ForgotPassword = () => {
     // setLoading(false)
     // 	message.success('New password has send to your email!');
     // }, 1500);
+    // if(process.env.SITE_NAME === '')
     const config = {
-      url: 'https://vendorbackend.riolabz.com/auth/login',
+      url: 'https://ecommercenewbackend.riolabz.com/auth/login',
       handleCodeInApp: true,
     }
     await auth
@@ -64,7 +65,7 @@ const ForgotPassword = () => {
                       src={`/img/${
                         theme === 'light' ? 'logo.png' : 'logo-white.png'
                       }`}
-                      alt=""
+                      alt="athathy.png"
                     />
                   ) : process.env.REACT_APP_SITE_NAME === 'athathy' ? (
                     <img

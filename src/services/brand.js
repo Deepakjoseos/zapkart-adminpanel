@@ -1,15 +1,19 @@
 import fetch from 'auth/FetchInterceptor'
 
 const brandService = {}
+const api = `/brands`
 
-brandService.getBrands = async function () {
+brandService.getBrands = async function (
+  paginationQuery = '',
+  filterQuery = ''
+) {
   try {
+    let url = `${api}?${paginationQuery}&${filterQuery}`
     const res = await fetch({
-      url: '/brands',
+      url,
       method: 'get',
     })
-    const data = res.data.filter((cur) => cur.status !== 'Deleted')
-    return data
+    return res
   } catch (err) {
     console.log(err, 'show-err')
   }

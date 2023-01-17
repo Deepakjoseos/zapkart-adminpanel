@@ -11,7 +11,6 @@ import useBodyClass from 'hooks/useBodyClass'
 import Loading from 'components/shared-components/Loading'
 
 function RouteInterceptor({ children, isAuthenticated, loading, ...rest }) {
-  console.log(loading, isAuthenticated, 'state')
   return (
     <Route
       {...rest}

@@ -1,19 +1,20 @@
 import fetch from 'auth/FetchInterceptor'
 
 const bannerService = {}
-
-bannerService.getBanners = async function () {
+const api = '/banners'
+bannerService.getBanners = async function (paginationQuery = '', filterQuery = '') {
   try {
+    let url = `${api}?${paginationQuery}&${filterQuery}`
     const res = await fetch({
-      url: '/banners',
+      url,
       method: 'get',
     })
-    const data = res.data.filter((cur) => cur.status !== 'Deleted')
-    return data
+    return res
   } catch (err) {
     console.log(err, 'show-err')
   }
 }
+
 
 bannerService.deleteBanner = async function (id) {
   try {
