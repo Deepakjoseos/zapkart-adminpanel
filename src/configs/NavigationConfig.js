@@ -7,10 +7,8 @@ import {
   EnvironmentOutlined,
   AntDesignOutlined,
   SafetyOutlined,
-  HomeOutlined,
   StopOutlined,
   DotChartOutlined,
-  NodeExpandOutlined,
   MailOutlined,
   MessageOutlined,
   CalendarOutlined,
@@ -32,21 +30,11 @@ import {
   FundProjectionScreenOutlined,
   UsergroupAddOutlined,
   FormatPainterOutlined,
-  NotificationOutlined,
   UserOutlined,
   ApartmentOutlined,
-  SettingOutlined,
-  BorderOuterOutlined,
-  AlignCenterOutlined,
-  CheckSquareOutlined,
-  MedicineBoxOutlined,
-  BuildOutlined,
-  DeliveredProcedureOutlined,
-  ExperimentOutlined,
   ShoppingFilled,
-  ShopOutlined,
-  FileImageOutlined,
-  SafetyCertificateOutlined,
+  DeliveredProcedureOutlined,
+  NodeExpandOutlined,
   MoneyCollectOutlined,
 } from '@ant-design/icons'
 import { APP_PREFIX_PATH, AUTH_PREFIX_PATH } from 'configs/AppConfig'
@@ -82,6 +70,14 @@ const extraNavTree = [
             breadcrumb: true,
             submenu: [],
           },
+          // {
+          //   key: 'dashboards-sales',
+          //   path: `${APP_PREFIX_PATH}/dashboards/sales`,
+          //   title: 'Sales',
+          //   icon: '',
+          //   breadcrumb: false,
+          //   submenu: [],
+          // },
           {
             key: 'extra-pages-invoice',
             path: `${APP_PREFIX_PATH}/pages/invoice`,
@@ -226,161 +222,100 @@ const dashBoardNavTree = [
         icon: AppstoreOutlined,
         breadcrumb: false,
         submenu: [
-          {
-            key: 'dashboards-catalog-brands',
-            path: `${APP_PREFIX_PATH}/dashboards/catalog/brand/brands-list`,
-            title: 'Brands',
-            icon: SafetyCertificateOutlined,
-            breadcrumb: false,
-            submenu: [],
-          },
-          {
-            key: 'dashboards-main-banner',
-            path: `${APP_PREFIX_PATH}/dashboards/catalog/main-banner/main-banner-list`,
-            title: 'Main Banner',
-            icon: FileImageOutlined,
-            breadcrumb: false,
-            submenu: [],
-          },
-          {
-            key: 'dashboards-catalog-banner',
-            path: `${APP_PREFIX_PATH}/dashboards/catalog/banner/banner-list`,
-            title: 'Banner',
-            icon: FileImageOutlined,
-            breadcrumb: false,
-            submenu: [],
-          },
-          {
-            key: 'dashboards-catalog-category',
-            path: `${APP_PREFIX_PATH}/dashboards/catalog/category/category-list`,
-            title: 'Category',
-            icon: ApartmentOutlined,
-            breadcrumb: false,
-            submenu: [],
-          },
-          {
-            key: 'dashboards-catalog-producttemplate',
-            path: `${APP_PREFIX_PATH}/dashboards/catalog/producttemplate/producttemplate-list`,
-            title: 'Product Template',
-            icon: ShopOutlined,
-            breadcrumb: false,
-            submenu: [],
-          },
+          // {
+          //   key: 'dashboards-catalog-brands',
+          //   path: `${APP_PREFIX_PATH}/dashboards/catalog/brand/brands-list`,
+          //   title: 'Brands',
+          //   icon: VerifiedOutlined,
+          //   breadcrumb: false,
+          //   submenu: [],
+          // },
+          // {
+          //   key: 'dashboards-catalog-banner',
+          //   path: `${APP_PREFIX_PATH}/dashboards/catalog/banner/banner-list`,
+          //   title: 'Banner',
+          //   icon: BorderOutlined,
+          //   breadcrumb: false,
+          //   submenu: [],
+          // },
+          // {
+          //   key: 'dashboards-catalog-category',
+          //   path: `${APP_PREFIX_PATH}/dashboards/catalog/category/category-list`,
+          //   title: 'Category',
+          //   icon: ApartmentOutlined,
+          //   breadcrumb: false,
+          //   submenu: [],
+          // },
+          // {
+          //   key: 'dashboards-catalog-producttemplate',
+          //   path: `${APP_PREFIX_PATH}/dashboards/catalog/producttemplate/producttemplate-list`,
+          //   title: 'Product Template',
+          //   icon: BookOutlined,
+          //   breadcrumb: false,
+          //   submenu: [],
+          // },
+
+          // {
+          //   key: 'dashboards-catalog-attribute',
+          //   path: `${APP_PREFIX_PATH}/dashboards/catalog/attribute/attribute-list`,
+          //   title: 'Attribute',
+          //   icon: FundProjectionScreenOutlined,
+          //   breadcrumb: false,
+          //   submenu: [],
+          // },
+          // {
+          //   key: 'dashboards-catalog-manufacturer',
+          //   path: `${APP_PREFIX_PATH}/dashboards/catalog/manufacturer/manufacturer-list`,
+          //   title: 'Manufacturer',
+          //   icon: FormatPainterOutlined,
+          //   breadcrumb: false,
+          //   submenu: [],
+          // },
           {
             key: 'dashboards-catalog-product',
             path: `${APP_PREFIX_PATH}/dashboards/catalog/product/product-list`,
-            title: 'Product',
+            title: 'Products',
             icon: ShoppingFilled,
             breadcrumb: false,
             submenu: [],
           },
-          {
-            key: 'dashboards-catalog-coupon',
-            path: `${APP_PREFIX_PATH}/dashboards/catalog/coupon/coupon-list`,
-            title: 'Coupon',
-            icon: BookOutlined,
-            breadcrumb: false,
-            submenu: [],
-          },
-
-          {
-            key: 'dashboards-catalog-attribute',
-            path: `${APP_PREFIX_PATH}/dashboards/catalog/attribute/attribute-list`,
-            title: 'Attribute',
-            icon: FundProjectionScreenOutlined,
-            breadcrumb: false,
-            submenu: [],
-          },
         ],
       },
 
-      {
-        key: 'dashboards-users',
-        path: `${APP_PREFIX_PATH}/dashboards/users`,
-        title: 'Users',
-        icon: UsergroupAddOutlined,
-        breadcrumb: false,
-        submenu: [
-          {
-            key: 'dashboards-users-usergroup',
-            path: `${APP_PREFIX_PATH}/dashboards/users/usergroup/usergroup-list`,
-            title: 'User Group',
-            icon: UsergroupAddOutlined,
-            breadcrumb: false,
-            submenu: [],
-          },
-          {
-            key: 'dashboards-users-customers',
-            path: `${APP_PREFIX_PATH}/dashboards/users/customer/customer-list`,
-            title: 'Customer',
-            icon: UserOutlined,
-            breadcrumb: false,
-            submenu: [],
-          },
+      // {
+      //   key: 'dashboards-users',
+      //   path: `${APP_PREFIX_PATH}/dashboards/users`,
+      //   title: 'Users',
+      //   icon: UsergroupAddOutlined,
+      //   breadcrumb: false,
+      //   submenu: [
+      //     {
+      //       key: 'dashboards-users-usergroup',
+      //       path: `${APP_PREFIX_PATH}/dashboards/users/usergroup/usergroup-list`,
+      //       title: 'User Group',
+      //       icon: UsergroupAddOutlined,
+      //       breadcrumb: false,
+      //       submenu: [],
+      //     },
+      //     {
+      //       key: 'dashboards-users-customers',
+      //       path: `${APP_PREFIX_PATH}/dashboards/users/customer/customer-list`,
+      //       title: 'Customer',
+      //       icon: UserOutlined,
+      //       breadcrumb: false,
+      //       submenu: [],
+      //     },
+      //   ],
+      // },
 
-          {
-            key: 'dashboards-users-vendors',
-            path: `${APP_PREFIX_PATH}/dashboards/users/vendor/vendor-list`,
-            title: 'Vendor',
-            icon: UserOutlined,
-            breadcrumb: false,
-            submenu: [],
-          },
-        ],
-      },
-
-      {
-        key: 'dashboards-information',
-        path: `${APP_PREFIX_PATH}/dashboards/information/information-list`,
-        title: 'Information',
-        // icon: DotChartOutlined,
-        icon: InfoCircleOutlined,
-        breadcrumb: false,
-        submenu: [],
-      },
-      
       {
         key: 'dashboards-review',
         path: `${APP_PREFIX_PATH}/dashboards/review/review-list`,
         title: 'Review',
-        // icon: DotChartOutlined,
         icon: InfoCircleOutlined,
         breadcrumb: false,
         submenu: [],
       },
-      {
-        key: 'dashboards-notifications',
-        path: `${APP_PREFIX_PATH}/dashboards/notifications`,
-        title: 'Notifications',
-        icon: NotificationOutlined,
-        breadcrumb: false,
-        submenu: [
-          {
-              key: 'dashboards-notifications-template',
-              path: `${APP_PREFIX_PATH}/dashboards/notifications/template`,
-              title: 'Template',
-              icon: AlignCenterOutlined,
-              breadcrumb: false,
-              submenu: [],
-            },{
-              key: 'dashboards-notifications-notificationhistory',
-              path: `${APP_PREFIX_PATH}/dashboards/notifications/notification-history`,
-              title: 'Notification History',
-              icon: NotificationOutlined,
-              breadcrumb: false,
-              submenu: [],
-            },
-        ],
-      },
-      // {
-      //   key: 'dashboards-notifications',
-      //   path: `${APP_PREFIX_PATH}/dashboards/notifications/notification-list`,
-      //   title: 'Notifications',
-      //   icon: NotificationOutlined ,
-      //   breadcrumb: false,
-      //   submenu: [],
-      // },
-
       {
         key: 'dashboards-orders',
         path: `${APP_PREFIX_PATH}/dashboards/orders/orders-list`,
@@ -389,247 +324,68 @@ const dashBoardNavTree = [
         breadcrumb: false,
         submenu: [],
       },
-
       {
-        key: 'dashboards-deliverylocation-deliveryzones',
-        path: `${APP_PREFIX_PATH}/dashboards/deliverylocation/deliveryzone/deliveryzone-list`,
-        title: 'Delivery zones',
+        key: 'dashboards-deliveryzones',
+        path: `${APP_PREFIX_PATH}/dashboards/deliveryzone/deliveryzone-list`,
+        title: 'Delivery Zone',
         icon: DeliveredProcedureOutlined,
-        breadcrumb: false,
-        submenu: [],
-      },
-        // key: 'dashboards-deliverylocation',
-        // path: `${APP_PREFIX_PATH}/dashboards/delivery-location`,
-        // title: 'Delivery Location',
-        // icon: DeliveredProcedureOutlined,
-        // breadcrumb: false,
-        // submenu: [
-        //   {
-        //     key: 'dashboards-deliverylocation-deliveryzones',
-        //     path: `${APP_PREFIX_PATH}/dashboards/deliverylocation/deliveryzone/deliveryzone-list`,
-        //     title: 'Delivery zones',
-        //     icon: DeliveredProcedureOutlined,
-        //     breadcrumb: false,
-        //     submenu: [],
-        //   },
-        // ],
-     
-      {
-        key: 'dashboards-locality',
-        path: `${APP_PREFIX_PATH}/dashboards/locality`,
-        title: 'Locality',
-        icon: HomeOutlined,
-        breadcrumb: false,
-        submenu: [
-          // {
-          //   key: 'dashboards-locality-country',
-          //   path: `${APP_PREFIX_PATH}/dashboards/locality/country/country-list`,
-          //   title: 'Country',
-          //   icon: AppstoreOutlined,
-          //   breadcrumb: false,
-          //   submenu: [],
-          // },
-
-          // {
-          //   key: 'dashboards-locality-state',
-          //   path: `${APP_PREFIX_PATH}/dashboards/locality/state/statelist`,
-          //   title:
-          //     process.env.REACT_APP_SITE_NAME === 'athathy'
-          //       ? 'Emirates'
-          //       : 'State',
-          //   icon: AppstoreOutlined,
-          //   breadcrumb: false,
-          //   submenu: [],
-          // },
-          {
-            key: 'dashboards-locality-district',
-            path: `${APP_PREFIX_PATH}/dashboards/locality/district/districtlist`,
-            title:
-              process.env.REACT_APP_SITE_NAME === 'zapkart'
-                ? 'District'
-                : 'Country',
-            icon: AppstoreOutlined,
-            breadcrumb: false,
-            submenu: [],
-          },
-          {
-            key: 'dashboards-locality-city',
-            path: `${APP_PREFIX_PATH}/dashboards/locality/city/city-list`,
-            title:
-              process.env.REACT_APP_SITE_NAME === 'zapkart'
-                ? 'City'
-                : 'Emirates',
-            icon: AppstoreOutlined,
-            breadcrumb: false,
-            submenu: [],
-          },
-          {
-            key: 'dashboards-locality-pincode',
-            path: `${APP_PREFIX_PATH}/dashboards/locality/pincode/pincodelist`,
-            title:
-              process.env.REACT_APP_SITE_NAME === 'zapkart'
-                ? 'Pincode'
-                : 'City',
-            icon: AppstoreOutlined,
-            breadcrumb: false,
-            submenu: [],
-          },
-        ],
-      },
-
-      {
-        key: 'dashboards-widget',
-        path: `${APP_PREFIX_PATH}/dashboards/widget/widget-list`,
-        title: 'Widget',
-        icon: DotChartOutlined,
         breadcrumb: false,
         submenu: [],
       },
       {
         key: 'dashboards-shipment',
-        path: `${APP_PREFIX_PATH}/dashboards/shipments`,
+        path: `${APP_PREFIX_PATH}/dashboards/shipment/shipment-list`,
         title: 'Shipment',
         icon: NodeExpandOutlined,
         breadcrumb: false,
+        submenu: [],
+      },
+
+      {
+        key: 'dashboards-payout',
+        path: `${APP_PREFIX_PATH}/dashboards/payout`,
+        title: 'Payout',
+        icon: NodeExpandOutlined,
+        breadcrumb: false,
+        submenu: [],
+      },
+
+      {
+        key: 'dashboards-wallet',
+        path: `${APP_PREFIX_PATH}/dashboards/wallet`,
+        title: 'Wallet',
+        icon: MoneyCollectOutlined,
+        breadcrumb: false,
         submenu: [
           {
-            key: 'dashboards-shipment-shipment',
-            path: `${APP_PREFIX_PATH}/dashboards/shipments/shipment/shipment-list`,
-            title: 'Shipment',
-            icon: NodeExpandOutlined,
+            key: 'dashboards-wallet-transactions',
+            path: `${APP_PREFIX_PATH}/dashboards/wallet/transactions/transaction-list`,
+            title: 'Transactions',
+            icon: MoneyCollectOutlined,
             breadcrumb: false,
             submenu: [],
           },
           {
-            key: 'dashboards-shipment-pickuplocation',
-            path: `${APP_PREFIX_PATH}/dashboards/shipments/pickuplocation/pickuplocation-list`,
-            title: 'Pickup Location',
-            icon: NodeExpandOutlined,
+            key: 'dashboards-wallet-bank-accounts',
+            path: `${APP_PREFIX_PATH}/dashboards/wallet/bank-account/bank-account-list`,
+            title: 'Bank Accounts',
+            icon: MoneyCollectOutlined,
             breadcrumb: false,
             submenu: [],
           },
         ],
       },
       {
-        key: 'dashboards-tax-category',
-        path: `${APP_PREFIX_PATH}/dashboards/tax-category`,
-        title: 'Tax Category',
-        icon: MoneyCollectOutlined,
-        breadcrumb: false,
-        submenu: [],
-      },
-     
-       {
-        key: 'dashboards-imagecategories',
-        path: `${APP_PREFIX_PATH}/dashboards/image-categories/image-list`,
-        title: 'Images',
-        icon: DotChartOutlined,
-        breadcrumb: false,
-        submenu: [],
-      },
-      
-      {
-        key: 'dashboards-sales',
-        path: `${APP_PREFIX_PATH}/dashboards/sales`,
-        title: 'Sales',
-        icon: SettingOutlined,
-        breadcrumb: false,
-        submenu: [],
-      },
-      {
-        key: 'dashboards-vendor-payout',
-        path: `${APP_PREFIX_PATH}/dashboards/vendor-payout`,
-        title: 'Vendor Payout',
-        icon: UserOutlined,
-        breadcrumb: false,
-        submenu: [],
-      },
-
-      {
-        key: 'dashboards-settings',
-        path: `${APP_PREFIX_PATH}/dashboards/settings`,
-        title: 'Settings',
-        icon: SettingOutlined,
+        key: 'dashboards-document-upload',
+        path: `${APP_PREFIX_PATH}/dashboards/document-upload`,
+        title: 'Document Upload',
+        icon: NodeExpandOutlined,
         breadcrumb: false,
         submenu: [],
       },
     ],
   },
 ]
-
-// {
-//   key: 'dashboards-catalog-medicinetype',
-//   path: `${APP_PREFIX_PATH}/dashboards/catalog/medicinetype/medicinetype-list`,
-//   title: 'Medicine Type',
-//   icon: FormatPainterOutlined,
-//   breadcrumb: false,
-//   submenu: [],
-// },
-// {
-//   key: 'dashboards-catalog-manufacturer',
-//   path: `${APP_PREFIX_PATH}/dashboards/catalog/manufacturer/manufacturer-list`,
-//   title: 'Manufacturer',
-//   icon: FormatPainterOutlined,
-//   breadcrumb: false,
-//   submenu: [],
-// },
-// {
-//   key: 'dashboards-catalog-composition',
-//   path: `${APP_PREFIX_PATH}/dashboards/catalog/composition/composition-list`,
-//   title: 'Composition',
-//   icon: FormatPainterOutlined,
-//   breadcrumb: false,
-//   submenu: [],
-// },
-
-if (process.env.REACT_APP_SITE_NAME === 'zapkart') {
-  dashBoardNavTree[0].submenu[1].submenu.push({
-    key: 'dashboards-catalog-medicinetype',
-    path: `${APP_PREFIX_PATH}/dashboards/catalog/medicinetype/medicinetype-list`,
-    title: 'Medicine Type',
-    icon: MedicineBoxOutlined,
-    breadcrumb: false,
-    submenu: [],
-  })
-
-  dashBoardNavTree[0].submenu[1].submenu.push({
-    key: 'dashboards-catalog-manufacturer',
-    path: `${APP_PREFIX_PATH}/dashboards/catalog/manufacturer/manufacturer-list`,
-    title: 'Manufacturer',
-    icon: BuildOutlined,
-    breadcrumb: false,
-    submenu: [],
-  })
-
-  dashBoardNavTree[0].submenu[1].submenu.push({
-    key: 'dashboards-catalog-composition',
-    path: `${APP_PREFIX_PATH}/dashboards/catalog/composition/composition-list`,
-    title: 'Composition',
-    icon: ExperimentOutlined,
-    breadcrumb: false,
-    submenu: [],
-  })
-
-  // For locality
-
-  dashBoardNavTree[0].submenu[8].submenu.unshift({
-    key: 'dashboards-locality-state',
-    path: `${APP_PREFIX_PATH}/dashboards/locality/state/statelist`,
-    title: 'State',
-    icon: AppstoreOutlined,
-    breadcrumb: false,
-    submenu: [],
-  })
-
-  dashBoardNavTree[0].submenu[8].submenu.unshift({
-    key: 'dashboards-locality-country',
-    path: `${APP_PREFIX_PATH}/dashboards/locality/country/country-list`,
-    title: 'Country',
-    icon: AppstoreOutlined,
-    breadcrumb: false,
-    submenu: [],
-  })
-}
 
 const appsNavTree = [
   {

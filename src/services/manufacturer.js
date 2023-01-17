@@ -1,16 +1,15 @@
 import fetch from 'auth/FetchInterceptor'
 
 const manufacturerService = {}
-const api= '/manufacturers'
 
-manufacturerService.getManufacturers = async function (paginationQuery = '', query = '') {
+manufacturerService.getManufacturer = async function () {
   try {
-    let url = `${api}?${paginationQuery}&${query}`
     const res = await fetch({
-      url,
+      url: '/manufacturers',
       method: 'get',
     })
-    return res
+    const data = res.data.filter((cur) => cur.status !== 'Deleted')
+    return data
   } catch (err) {
     console.log(err, 'show-err')
   }

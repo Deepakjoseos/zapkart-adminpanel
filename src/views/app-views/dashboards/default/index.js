@@ -10,12 +10,14 @@ import {
   Menu,
   Tag,
 } from 'antd'
+import Flex from 'components/shared-components/Flex'
 import StatisticWidget from 'components/shared-components/StatisticWidget'
 import ChartWidget from 'components/shared-components/ChartWidget'
 import AvatarStatus from 'components/shared-components/AvatarStatus'
 import GoalWidget from 'components/shared-components/GoalWidget'
 import {
   VisitorChartData,
+  AnnualStatisticData,
   ActiveMembersData,
   NewMembersData,
   RecentTransactionData,
@@ -35,9 +37,9 @@ import {
 import utils from 'utils'
 import { withRouter,Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-import customerService from 'services/customer'
 import orderService from 'services/orders'
-import authAdminService from 'services/auth/admin'
+import customerService from 'services/customer'
+import authVendorService from 'services/auth/vendor'
 import moment from 'moment'
 
 const MembersChart = (props) => <ApexChart {...props} />
@@ -53,6 +55,32 @@ const memberChartOption = {
     colors: [COLOR_2],
   },
 }
+
+
+
+function refreshPage() {
+  window.location.reload(false);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 const newJoinMemberOption = (
   <Menu>
@@ -75,7 +103,7 @@ const newJoinMemberOption = (
   </Menu>
 )
 
-const latestTransactionOption =(getOrders) => (
+const latestTransactionOption =(getOrders)=> (
   <Menu>
     <Menu.Item key="0">
       <span>
@@ -118,7 +146,7 @@ const cardDropdown = (menu) => (
 
 const tableColumns = [
   {
-    title: 'OrderNo',
+    title: 'Order No',
     dataIndex: 'orderNo',
     render: (text, record) => (
       <Link to={`/app/dashboards/orders/order-view/${record.id}`}>
@@ -126,201 +154,167 @@ const tableColumns = [
       </Link>
     ),
   },
-  {
-    title: 'User Name',
-    dataIndex: 'userName',
-    // sorter: (a, b) => utils.antdTableSorter(a, b, 'totalAmount'),
 
-    // render: (items, record) => <div>{items?.length}</div>,
+  {
+    title: 'Customer Name',
+    dataIndex: 'userName',
+
   },
-  // {
-  //   title: 'Date',
-  //   dataIndex: 'date',
-  //   key: 'date',
-  // },
+
   {
     title: 'Total Amount',
     dataIndex: 'totalAmount',
-    key: 'totalAmount',
-    render :(totalAmount)=><div>{totalAmount}</div>,
+    // sorter: (a, b) => utils.antdTableSorter(a, b, 'totalAmount'),
 
   },
   {
-    title: 'Status',
-    dataIndex: 'status',
-    key: 'status',
+    title: 'Shipping Charge',
+    dataIndex: 'shippingCharge',
+    // sorter: (a, b) => utils.antdTableSorter(a, b, 'shippingCharge'),
   },
-  // {
-  //   title: () => <div className="text-right">Status</div>,
-  //   key: 'status',
-  //   // render: (_, record) => (
-  //   //   <div className="text-right">
-  //   //     <Tag
-  //   //       className="mr-0"
-  //   //       color={
-  //   //         record.status === 'Approved'
-  //   //           ? 'cyan'
-  //   //           : record.status === 'Pending'
-  //   //           ? 'blue'
-  //   //           : 'volcano'
-  //   //       }
-  //   //     >
-  //   //       {record.status}
-  //   //     </Tag>
-  //   //   </div>
-  //   // ),
-  // },
+  
+  {
+    title: 'Order Date',
+    dataIndex: 'createdAt',
+    render: (createdAt) => (
+      <Flex alignItems="center">
+      {moment(new Date(createdAt * 1000)).format('DD-MMM-YYYY hh:mm:a')}          
+      </Flex>
+    ),
+    // sorter: (a, b) => utils.antdTableSorter(a, b, 'createdAt'),
+  }, 
+  {
+    title: 'Order Status',
+    dataIndex: 'status',
+    render: (status, record) => (
+      <>
+        {status}
+      </>
+    ),
+    // sorter: (a, b) => utils.antdTableSorter(a, b, 'orderStatus'),
+  },
+  {
+    title: 'Payment Status',
+    dataIndex: 'payment',
+    render: (payment, record) => {
+      return <Flex alignItems="centre" >
+       
+        {payment?.status === 'COMPLETED' ? 
+        <Tag style={{backgroundColor:"#87d068",color:"white"}}>COMPLETED</Tag> : 
+        <Tag  style={{backgroundColor:"#f50",color:"white"}}>PENDING</Tag>}
+        </Flex>
+    },
+  },
 ]
 
 export const DefaultDashboard = () => {
   const [visitorChartData] = useState(VisitorChartData)
-  const [annualStatisticData, setAnnualStatisticData] = useState({})
+  const [annualStatisticData,setAnnualStatisticData] = useState({})
   const [activeMembersData] = useState(ActiveMembersData)
   const [newMembersData, setNewMembersData] = useState([])
   const [recentTransactionData, setRecentTransactionData] = useState([])
   const { direction } = useSelector((state) => state.theme)
 
-  const getCustomers = async () => {
-    const customers = await customerService.getCustomers('limit=5')
-    setNewMembersData(customers?.slice(0, 5))
-  }
-
   const getOrders = async () => {
-    const orders = await orderService.getOrders("","limit=5")
-    console.log('orders',orders)
-    setRecentTransactionData(orders?.data)
-   
+    const orders = await orderService.getOrders()
+    setRecentTransactionData(orders?.data?.slice(0, 5))
   }
-
+  
   const getStatics = async () => {
-    const staticsData = await authAdminService.getStatistics()
+    const staticsData = await authVendorService.getStatistics()
     if (staticsData) {
       setAnnualStatisticData(staticsData)
     }
   }
 
   useEffect(() => {
-    getCustomers()
     getOrders()
-
     getStatics()
   }, [])
+  return(
 
-  return (
-    <>
+  <>
+  <Row gutter={16}>
+    <Col xs={24} sm={24} md={24} lg={24}>
       <Row gutter={16}>
-        <Col xs={24} sm={24} md={24} lg={24}>
-          <Row gutter={16}>
-            <Col xs={24} sm={24} md={24} lg={24} xl={6}>
-              <StatisticWidget
-                title="Total Transaction"
-                value={`${annualStatisticData?.transactions}`}
-                // status={elm.status}
-                subtitle={`This Year ${moment().year()}`}
-              />
-            </Col>
-            
-            <Col xs={24} sm={24} md={24} lg={24} xl={6}>
-              <StatisticWidget
-                title="Total Sales"
-                value={annualStatisticData?.orders}
-                subtitle={`This Year ${moment().year()}`}
-              />
-            </Col>
-            <Col xs={24} sm={24} md={24} lg={24} xl={6}>
-              <StatisticWidget
-                title="Total Customers"
-                value={annualStatisticData?.customers}
-                subtitle={`This Year ${moment().year()}`}
-              />
-            </Col>
-            <Col xs={24} sm={24} md={24} lg={24} xl={6}>
-              <StatisticWidget
-                title="Total Vendors"
-                value={annualStatisticData?.vendors}
-                subtitle={`This Year ${moment().year()}`}
-              />
-            </Col>
-          </Row>
-          {/* <Row gutter={16}>
-            <Col span={24}>
-              <ChartWidget
-                title="Unique Visitors"
-                series={visitorChartData.series}
-                xAxis={visitorChartData.categories}
-                height={'400px'}
-                direction={direction}
-              />
-            </Col>
-          </Row> */}
-        </Col>
-        {/* <Col xs={24} sm={24} md={24} lg={6}>
-          <GoalWidget 
-            title="Monthly Target" 
-            value={87}
-            subtitle="You need abit more effort to hit monthly target"
-            extra={<Button type="primary">Learn More</Button>}
-          />
+        <Col xs={24} sm={24} md={24} lg={24} xl={6}>
           <StatisticWidget
-            title={
-              <MembersChart
-                options={memberChartOption}
-                series={activeMembersData}
-                height={145}
-              />
-            }
-            value="17,329"
-            status={3.7}
-            subtitle="Total Vendors"
+            title="Total Products"
+            value={`${annualStatisticData?.products}`}
+            // status={elm.status}
+            subtitle={`This Year ${moment().year()}`}
           />
-        </Col> */}
+        </Col>
+      
       </Row>
-      <Row gutter={16}>
-        <Col xs={24} sm={24} md={24} lg={7}>
-          <Card title="New Customers">
-            <div className="mt-3">
-              {newMembersData?.map((elm, i) => (
-                <div
-                  key={i}
-                  className={`d-flex align-items-center justify-content-between mb-4`}
+      {/* <Row gutter={16}>
+        <Col span={24}>
+          <ChartWidget
+            title="Unique Visitors"
+            series={visitorChartData.series}
+            xAxis={visitorChartData.categories}
+            height={'400px'}
+            direction={direction}
+          />
+        </Col>
+      </Row> */}
+    </Col>
+    {/* <Col xs={24} sm={24} md={24} lg={6}>
+      <GoalWidget 
+        title="Monthly Target" 
+        value={87}
+        subtitle="You need abit more effort to hit monthly target"
+        extra={<Button type="primary">Learn More</Button>}
+      />
+      <StatisticWidget
+        title={
+          <MembersChart
+            options={memberChartOption}
+            series={activeMembersData}
+            height={145}
+          />
+        }
+        value="17,329"
+        status={3.7}
+        subtitle="Total Vendors"
+      />
+    </Col> */}
+  </Row>
+  <Row gutter={16}>
+    
+       
+              
+              {/* <div>
+                <Button
+                  icon={<UserAddOutlined />}
+                  type="default"
+                  size="small"
                 >
-                  <AvatarStatus
-                    id={i}
-                    src={elm.displayImage}
-                    name={`${elm.firstName} ${elm.lastName}`}
-                    subTitle={elm?.email}
-                  />
-                  {/* <div>
-                    <Button
-                      icon={<UserAddOutlined />}
-                      type="default"
-                      size="small"
-                    >
-                      Add
-                    </Button>
-                  </div> */}
-                </div>
-              ))}
-            </div>
-          </Card>
-        </Col>
-        <Col xs={24} sm={24} md={24} lg={17}>
-          <Card
-            title="Latest Orders"
-            extra={cardDropdown(latestTransactionOption(getOrders))}
-          >
-            <Table
-              className="no-border-last"
-              columns={tableColumns}
-              dataSource={recentTransactionData}
-              rowKey="id"
-              pagination={false}
-            />
-          </Card>
-        </Col>
-      </Row>
-    </>
-  )
+                  Add
+                </Button>
+              </div> */}
+          
+         
+     
+  
+  
+    <Col xs={24} sm={24} md={24} lg={25}>
+      <Card
+        title="Latest Orders"
+        extra={cardDropdown(latestTransactionOption(getOrders))}
+      >
+        <Table
+          className="no-border-last"
+          columns={tableColumns}
+          dataSource={recentTransactionData}
+          rowKey="id"
+          pagination={false}
+        />
+      </Card>
+    </Col>
+  </Row>
+</>
+)
 }
 
 export default withRouter(DefaultDashboard)

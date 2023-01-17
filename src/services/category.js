@@ -1,43 +1,19 @@
 import fetch from 'auth/FetchInterceptor'
 
 const categoryService = {}
-const api = '/categories'
-categoryService.getCategories = async function (paginationQuery = '', query = '') {
+
+categoryService.getCategories = async function () {
   try {
-    let url = `${api}?${paginationQuery}&${query}`
     const res = await fetch({
-      url,
+      url: '/categories',
       method: 'get',
     })
-    return res
+    const data = res.data.filter((cur) => cur.status !== 'Deleted')
+    return data
   } catch (err) {
     console.log(err, 'show-err')
   }
 }
-
-// categoryService.getCategories = async function (query) {
-//   try {
-
-//     let url = `${api}`;
-//     const orderByPriority = query?.orderByPriority;
-//     const orderByLevel = query?.orderByLevel;
-
-//     if (orderByPriority) url = `${url}?orderByPriority=${orderByPriority}`;
-//     if (orderByLevel)
-//       url =
-//       orderByPriority && orderByPriority !== null
-//           ? `${url}&orderByLevel=${orderByLevel}`
-//           : `${url}?orderByLevel=${orderByLevel}`;
-//     const res = await fetch({
-//       url,
-//       method: 'get',
-//     })
-//     const data = res.data.filter((cur) => cur.status !== 'Deleted')
-//     return data
-//   } catch (err) {
-//     console.log(err, 'show-err')
-//   }
-// }
 
 categoryService.deleteCategory = async function (id) {
   try {

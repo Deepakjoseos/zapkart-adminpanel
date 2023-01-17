@@ -8,7 +8,7 @@ import {
 } from '@ant-design/icons'
 // import notificationData from 'assets/data/notification.data.json'
 import Flex from 'components/shared-components/Flex'
-import notificationService from 'services/notification'
+import notificationService from 'services/Notification'
 
 const getIcon = (icon) => {
   switch (icon) {

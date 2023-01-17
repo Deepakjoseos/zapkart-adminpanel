@@ -19,33 +19,16 @@ const RegisterOne = (props) => {
             <Card>
               <div className="my-2">
                 <div className="text-center">
-                  {process.env.REACT_APP_SITE_NAME === 'zapkart' ? (
-                    <img
-                      className="img-fluid"
-                      src={`/img/${
-                        theme === 'light' ? 'logo.png' : 'logo-white.png'
-                      }`}
-                      alt=""
-                    />
-                  ) : process.env.REACT_APP_SITE_NAME === 'athathy' ? (
-                    <img
-                      className="img-fluid"
-                      src={`/img/${
-                        theme === 'light' ? 'athathy.png' : 'logo-white.png'
-                      }`}
-                      alt=""
-                    />
-                  ) : (
-                    process.env.REACT_APP_SITE_NAME === 'awen' && (
-                      <img
-                        className="img-fluid"
-                        src={`/img/${
-                          theme === 'light' ? 'awenlogo.png' : 'logo-white.png'
-                        }`}
-                        alt=""
-                      />
-                    )
-                  )}
+                  <img
+                    className="img-fluid"
+                    src={`/img/${
+                      theme === 'light' ? 'athathy.png' : 'logo-white.png'
+                    }`}
+                    alt=""
+                  />
+                  <p>
+                    Have an account yet? <a href="/auth/login">Sign In</a>
+                  </p>
                   <p className="text-muted">Create a new account:</p>
                 </div>
                 <Row justify="center">

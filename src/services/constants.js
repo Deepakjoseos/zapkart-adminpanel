@@ -14,18 +14,5 @@ constantsService.getConstants = async function () {
     console.log(err, 'show-err')
   }
 }
-constantsService.getSample = async function () {
-  try {
-    const res = await fetch({
-      url: '/sample-files',
-      method: 'get',
-    })
-
-    return res
-  } catch (err) {
-    console.log(err, 'show-err')
-  }
-}
-
 
 export default constantsService

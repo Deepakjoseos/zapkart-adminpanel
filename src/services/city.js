@@ -5,8 +5,7 @@ const api = `/city`
 
 cityService.getCity = async function (
   paginationQuery = '',
-  filterQuery = '',
-  
+  filterQuery = ''
 ) {
   try {
     let url = `${api}?${paginationQuery}&${filterQuery}`

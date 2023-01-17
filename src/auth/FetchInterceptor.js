@@ -1,16 +1,24 @@
 import axios from 'axios'
 import { API_BASE_URL } from 'configs/AppConfig'
-import history from '../history'
+import { history } from '../App'
 import { AUTH_TOKEN } from 'redux/constants/Auth'
 import { notification } from 'antd'
 import FirebaseService from 'services/FirebaseService'
+
+import storeAction from 'redux/store'
 import Utils from 'utils'
-import { currentUser } from './FirebaseAuth'
+import { signOut } from 'redux/actions/Auth'
 
 const service = axios.create({
   baseURL: API_BASE_URL,
   timeout: 60000,
 })
+
+let store
+
+export const injectStore = (_store) => {
+  store = _store
+}
 
 // Config
 const ENTRY_ROUTE = '/auth/login'
@@ -19,18 +27,11 @@ const PUBLIC_REQUEST_KEY = 'public-request'
 
 // API Request interceptor
 service.interceptors.request.use(
-  async (config) => {
+  (config) => {
     const jwtToken = localStorage.getItem(AUTH_TOKEN)
 
-    const refreshedToken = await FirebaseService.refreshToken()
-
-    // .then((token) => {
-    //   console.log(token, 'heyteg')
-    // })
-
-    if (refreshedToken || jwtToken) {
-      config.headers[TOKEN_PAYLOAD_KEY] = `Bearer ${refreshedToken || jwtToken}`
-      config.headers.deviceToken = window.localStorage.getItem('deviceToken')
+    if (jwtToken) {
+      config.headers[TOKEN_PAYLOAD_KEY] = `Bearer ${jwtToken}`
     }
 
     // if (!jwtToken && !config.headers[PUBLIC_REQUEST_KEY]) {
@@ -49,58 +50,69 @@ service.interceptors.request.use(
   }
 )
 
+let alreadyShownError = false
+
 // API respone interceptor
 service.interceptors.response.use(
   (response) => {
     return response.data
   },
-  async (error) => {
+  (error) => {
+    console.log('show-errerer')
+    // if (store.getState().auth.authorized) {
+
     let notificationParam = {
       message: '',
     }
-    const originalRequest = error.config
 
     // Remove token and redirect
-    if (error.response.status === 401 || error.response.status === 403) {
-      // if (currentUser) {
-      //   const refreshed = await FirebaseService.refreshToken()
+    if (error.response.status === 401) {
+      if (store.getState().auth.authorized) {
+        if (window.location.pathname !== '/app/dashboards/authdetails') {
+          if (!alreadyShownError) {
+            notification.warning({ message: 'Verification needed' })
+          }
+          alreadyShownError = true
+        }
 
-      //   if (refreshed) {
-      //     originalRequest._retry = true
+        if (alreadyShownError) {
+          setTimeout(() => {
+            alreadyShownError = false
+          }, 3000)
+        }
 
-      //     axios.defaults.headers.common['authorization'] = 'Bearer ' + refreshed
-      //     return service(originalRequest)
-      //   } else {
-      //     FirebaseService.signOutRequest()
-      //     localStorage.removeItem(AUTH_TOKEN)
-      //     history.push(ENTRY_ROUTE)
-      //     window.location.reload()
-      //     notificationParam.message = 'Authentication Fail'
-      //     notificationParam.description = 'Please login again'
-      //   }
-      // } else {
+        // window.location.reload()
+        if (!window.location.href.includes('/app/dashboards/authdetails')) {
+          history.replace('/app/dashboards/authdetails')
+        }
+      } else {
+        notificationParam.message = 'Verification failed'
+        notificationParam.description = 'Please login again'
+        storeAction.dispatch(signOut())
+        FirebaseService.signOutRequest()
+        localStorage.removeItem(AUTH_TOKEN)
+        window.location.reload()
+        history.push(ENTRY_ROUTE)
+      }
+    }
+    if (error.response.status === 403) {
+      // notificationParam.message = 'Verification failed'
+      // notificationParam.description = 'Please login again'
+      // const fetchUser = () => async (getState, dispatch) => {
+      //   storeAction.dispatch(signOut())
+      // }
+      // fetchUser()
+      // console.log(storeAction, store, 'storeds')
+      // ;(async () => {
+      //   store.dispatch(await signOut())
+      //   // dispatch(await getChartData());
+      // })()
+      store.dispatch(signOut())
+
       FirebaseService.signOutRequest()
       localStorage.removeItem(AUTH_TOKEN)
-      history.push(ENTRY_ROUTE)
-      window.location.reload()
-      notificationParam.message = 'Authentication Fail'
-      notificationParam.description = 'Please login again'
-      // }
-      // const refreshed = await FirebaseService.refreshToken()
-
-      // if (refreshed && currentUser) {
-      //   originalRequest._retry = true
-
-      //   axios.defaults.headers.common['authorization'] = 'Bearer ' + refreshed
-      //   return service(originalRequest)
-      // } else {
-      //   FirebaseService.signOutRequest()
-      //   localStorage.removeItem(AUTH_TOKEN)
-      //   history.push(ENTRY_ROUTE)
-      //   window.location.reload()
-      //   notificationParam.message = 'Authentication Fail'
-      //   notificationParam.description = 'Please login again'
-      // }
+      history.replace(ENTRY_ROUTE)
+      // window.location.reload()
     }
 
     if (error.response.status === 404) {
@@ -114,8 +126,10 @@ service.interceptors.response.use(
     if (error.response.status === 508) {
       notificationParam.message = 'Time Out'
     }
+    // if (notificationParam?.message) {
+    //   notification.error(notificationParam)
+    // }
 
-    // notification.error(notificationParam)
     Utils.errorValidator(error.response.data)
 
     return Promise.reject(error)

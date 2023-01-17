@@ -3,9 +3,9 @@ import fetch from 'auth/FetchInterceptor'
 const reviewService = {}
 const apiRoute = '/reviews'
 
-reviewService.getReviews = async function (data,paginationQuery = '', filterQuery = '') {
+reviewService.getReviews = async function (vendorId,paginationQuery = '', filterQuery = '',) {
   try {
-    let url = `${apiRoute}?${paginationQuery}&${filterQuery}`
+    let url = `${apiRoute}?vendorId=${vendorId}&${paginationQuery}&${filterQuery}`
     const res = await fetch({
       url,
       method: 'get',
@@ -16,9 +16,9 @@ reviewService.getReviews = async function (data,paginationQuery = '', filterQuer
   }
 }
 
-reviewService.getReviewsById = async function (customerId) {
+reviewService.getReviewsById = async function (vendorId) {
   try {
-    let url = `${apiRoute}?userId=${customerId}`
+    let url = `${apiRoute}?userId=${vendorId}`
     const res = await fetch({
       url,
       method: 'get',

@@ -173,7 +173,6 @@ const UpdateCardForm = ({onSubmit, cardData, listId}) => {
 			<Form.Item label="Due Date" name="dueDate" className="blockform-col col-3">
 				<DatePicker placeholder="Due date unset" className="board-card-modal date-picker w-100" format={DATE_FORMAT_DD_MM_YYYY} />
 			</Form.Item>
-			
 			<Form.Item label="Labels" name="labels" className="blockform-col col-3">
 				<Select 
 					filterOption={false} 

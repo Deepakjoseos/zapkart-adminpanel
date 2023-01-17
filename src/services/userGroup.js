@@ -1,15 +1,15 @@
 import fetch from 'auth/FetchInterceptor'
 
 const userGroupService = {}
-const apiRoute = '/userGroups'
+const apiRoute = '/userGroup'
 
 userGroupService.getUserGroups = async function () {
   try {
     const res = await fetch({
-      url: `${apiRoute}`,
+      url: `${apiRoute}?page=1&limit=10`,
       method: 'get',
     })
-    const data = res.data.filter((cur) => cur.status !== 'Deleted')
+    const data = res.filter((cur) => cur.status !== 'Deleted')
     return data
   } catch (err) {
     console.log(err, 'show-err')
@@ -35,7 +35,7 @@ userGroupService.getUserGroupById = async function (id) {
       url: `${apiRoute}/${id}`,
       method: 'get',
     })
-    return res.data
+    return res
   } catch (err) {
     console.log(err, 'show-err')
   }

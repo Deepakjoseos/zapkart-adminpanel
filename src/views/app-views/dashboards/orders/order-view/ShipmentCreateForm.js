@@ -15,8 +15,8 @@ import {
 import moment from 'moment'
 import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
+import authVendorService from 'services/auth/vendor'
 import shipmentService from 'services/shipment'
-import vendorService from 'services/vendor'
 
 const ShipmentCreateForm = ({
   setIsFormOpen,
@@ -28,46 +28,22 @@ const ShipmentCreateForm = ({
   const [form] = Form.useForm()
   const history = useHistory()
 
-  const [shippedBy, setShippedBy] = useState(null)
+  const [shippedByVendor, setShippedByVendor] = useState(null)
   const { Option } = Select
 
   const [pickupLocations, setPickUpLocations] = useState([])
   const [submitLoading, setSubmitLoading] = useState(false)
-  const [vendors, setVendors] = useState([])
-  const [selectedVendorId, setSelectedVendorId] = useState(null)
-  const [vendorBasedItems, setVendorBasedItems] = useState([])
 
-  const getPickupLocations = async (id) => {
-    // const data = await shipmentService.getPickupLocations()
-    // if (data?.shipping_address) {
-    //   setPickUpLocations(data.shipping_address)
-    // }
-    const data = await vendorService.getVendorById(id)
-    if (data) {
+  const getPickupLocations = async () => {
+    const data = await authVendorService.getProfile()
+    if (data?.pickupLocations) {
       setPickUpLocations(data.pickupLocations)
     }
   }
 
   useEffect(() => {
-    console.log(orderItems, 'hjvj')
-    if (orderItems?.length > 0) {
-      const vendors = orderItems?.map((cur) => {
-        return {
-          id: cur.vendorId,
-          name: cur.vendorName,
-        }
-      })
-      setVendors(vendors)
-    }
-  }, [orderItems])
-
-  const getVendorItems = (vendorId) => {
-    const itemsBasedVendor = orderItems?.filter(
-      (cur) => cur.vendorId === vendorId && !cur.shipmentId
-    )
-
-    setVendorBasedItems(itemsBasedVendor)
-  }
+    getPickupLocations()
+  }, [])
 
   const onFinish = async () => {
     setSubmitLoading(true)
@@ -76,8 +52,7 @@ const ShipmentCreateForm = ({
       .validateFields()
       .then(async (values) => {
         const sendingValues = {
-          vendorId: values.vendorId,
-          shippedBy: values.shippedBy,
+          shippedByVendor: values.shippedByVendor,
           items: [
             {
               orderId: orderId,
@@ -88,7 +63,7 @@ const ShipmentCreateForm = ({
             'YYYY-MM-DD'
           ),
           shipRocket: {
-            pickupLocation: values.pickupLocation,
+            pickupLocation: values.pickup_location,
             length: values.length,
             breadth: values.breadth,
             height: values.height,
@@ -98,7 +73,7 @@ const ShipmentCreateForm = ({
 
         const created = await shipmentService.createShipment(sendingValues)
         if (created) {
-          message.success(`Created Shipment`)
+          message.success(`Created ${values.name} to Shipment list`)
           history.goBack()
           setIsFormOpen(false)
           form.resetFields()
@@ -146,10 +121,9 @@ const ShipmentCreateForm = ({
           <Col xs={24} sm={24} md={24}>
             <Card title="Basic Info">
               <h3>Order No: {orderNo}</h3>
-
               <Form.Item
-                name="vendorId"
-                label="Select Vendor"
+                name="shippedByVendor"
+                label="Shipped By Vendor"
                 rules={[
                   {
                     required: true,
@@ -158,54 +132,13 @@ const ShipmentCreateForm = ({
                 ]}
               >
                 <Select
-                  placeholder="Select Vendor"
-                  showSearch
-                  optionFilterProp="children"
-                  filterOption={(input, option) =>
-                    option.children
-                      .toLowerCase()
-                      .indexOf(input.toLowerCase()) >= 0
-                  }
+                  placeholder="Shipped By Vendoratus"
                   onChange={(e) => {
-                    setSelectedVendorId(e)
-                    getVendorItems(e)
-                    getPickupLocations(e)
-
-                    // getPickupLocationByVendorId(e)
-                    form.resetFields()
-                    form.setFieldsValue({
-                      vendorId: e,
-                      shippedBy: null,
-                    })
-
-                    setShippedBy(null)
+                    setShippedByVendor(e)
                   }}
                 >
-                  {vendors?.map((cur) => (
-                    <Option value={cur.id}>{cur?.name}</Option>
-                  ))}
-                </Select>
-              </Form.Item>
-
-              <Form.Item
-                name="shippedBy"
-                label="Shipped By"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Required',
-                  },
-                ]}
-              >
-                <Select
-                  placeholder="Shipped By"
-                  onChange={(e) => {
-                    setShippedBy(e)
-                  }}
-                >
-                  <Option value={'Vendor'}>Vendor</Option>
-                  <Option value={'Ship Rocket'}>Ship Rocket</Option>
-                  <Option value={'Track On'}>Track On</Option>
+                  <Option value={true}>Yes</Option>
+                  <Option value={false}>No</Option>
                 </Select>
               </Form.Item>
 
@@ -221,18 +154,12 @@ const ShipmentCreateForm = ({
               >
                 <Select
                   mode="multiple"
-                  optionFilterProp="children"
-                  filterOption={(input, option) =>
-                    option.children
-                      .toLowerCase()
-                      .indexOf(input.toLowerCase()) >= 0
-                  }
                   //   size={size}
                   placeholder="Products Items"
                   defaultValue={[]}
                   //   onChange={handleChange}
                 >
-                  {vendorBasedItems?.map((item) => (
+                  {orderItems?.map((item) => (
                     <Option key={item.id} value={item.id}>
                       {item.name}
                     </Option>
@@ -240,7 +167,7 @@ const ShipmentCreateForm = ({
                 </Select>
               </Form.Item>
 
-              {shippedBy === 'Vendor' && (
+              {shippedByVendor && (
                 <Form.Item
                   name="expectedDeliveryDate"
                   label="Expected Delivery Date"
@@ -275,14 +202,14 @@ const ShipmentCreateForm = ({
             <Input placeholder="Name" />
           </Form.Item> */}
             </Card>
-            {shippedBy && shippedBy !== 'Vendor' && (
+            {shippedByVendor === false && (
               <Card title="Shipment Details">
                 <Form.Item name="description" label="Description">
                   <Input placeholder="Description" />
                 </Form.Item>
 
                 <Form.Item
-                  name="pickupLocation"
+                  name="pickup_location"
                   label="Pickup Location"
                   rules={[
                     {
@@ -293,7 +220,7 @@ const ShipmentCreateForm = ({
                 >
                   <Select placeholder="Pickup Location">
                     {pickupLocations.map((item) => (
-                      <Option value={item?.pickupLocation}>
+                      <Option value={item?.pickup_location}>
                         {`${item.address}, ${item.city}, ${item.state}, ${item?.pinCode}`}
                       </Option>
                     ))}

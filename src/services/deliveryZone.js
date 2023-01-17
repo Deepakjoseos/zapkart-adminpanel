@@ -1,64 +1,91 @@
 import fetch from 'auth/FetchInterceptor'
 
-const deliveryzoneService = {}
-const api = '/deliveryzones/view_all/admin'
-deliveryzoneService.getDeliveryZones = async function (
-  paginationQuery = '',
-  query = ''
-) {
-  console.log(query, 'oslj')
+const deliveryLocation = {}
+
+deliveryLocation.getDeliveryZones = async function () {
   try {
-    let url = `${api}?${paginationQuery}&${query}`
     const res = await fetch({
-      url,
+      url: '/deliveryzones',
       method: 'get',
     })
+    return res.data
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
+
+deliveryLocation.deleteDeliveryZone = async function (id) {
+  try {
+    const res = await fetch({
+      url: `/deliveryZones/${id}`,
+      method: 'delete',
+    })
+    //   const data = res.data.filter((cur) => cur.status !== 'Deleted')
     return res
   } catch (err) {
     console.log(err, 'show-err')
   }
 }
 
-deliveryzoneService.getDeliveryZonesByVendorId = async function (vendorId) {
+deliveryLocation.getDeliveryZoneById = async function (id) {
   try {
     const res = await fetch({
-      url: `/deliveryzones/public?vendorId=${vendorId}&status=Active`,
+      url: `/deliveryZones/${id}`,
       method: 'get',
     })
+    return res.data
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
 
-    return res.data
-  } catch (err) {
-    console.log(err, 'show-err')
-  }
-}
-deliveryzoneService.getDeliveryZoneById = async function (id) {
+deliveryLocation.createDeliveryZone = async function (data) {
   try {
     const res = await fetch({
-      url: `/deliveryzones/${id}/admin`,
-      method: 'get',
-    })
-    return res.data
-  } catch (err) {
-    console.log(err, 'show-err')
-  }
-}
-deliveryzoneService.createDeliveryZone = async function (data) {
-  try {
-    const res = await fetch({
-      url: `/deliveryzones/admin?vendorId=${data?.vendorId}`,
+      url: `/deliveryZones`,
       method: 'post',
       data: data,
     })
-
     return res
   } catch (err) {
-    console.log(data, 'HElloooooooo')
+    console.log(err, 'show-err')
   }
 }
-deliveryzoneService.editDeliveryZone = async function (id, data) {
+
+deliveryLocation.addDeliveryLocationZone = async function (
+  deliveryZoneId,
+  deliveryLocationId
+) {
   try {
     const res = await fetch({
-      url: `/deliveryzones/${id}/admin?vendorId=${data?.vendorId}`,
+      url: `/deliveryZones/${deliveryZoneId}/${deliveryLocationId}`,
+      method: 'post',
+    })
+    return res
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
+
+deliveryLocation.removeDeliveryLocationZone = async function (
+  deliveryZoneId,
+  deliveryLocationId
+) {
+  try {
+    const res = await fetch({
+      url: `/deliveryZones/${deliveryZoneId}/${deliveryLocationId}`,
+      method: 'delete',
+    })
+    return res
+  } catch (err) {
+    console.log(err, 'show-err')
+  }
+}
+
+deliveryLocation.editDeliveryZone = async function (id, data) {
+  try {
+    const res = await fetch({
+      url: `/deliveryZones/${id}`,
       method: 'put',
       data: data,
     })
@@ -67,54 +94,5 @@ deliveryzoneService.editDeliveryZone = async function (id, data) {
     console.log(err, 'show-err')
   }
 }
-deliveryzoneService.addDeliveryLocationZone = async function (
-  deliveryZoneId,
-  deliveryLocationId,
-  vendorId
-) {
-  try {
-    const res = await fetch({
-      url: `/deliveryZones/${deliveryZoneId}/${deliveryLocationId}/${vendorId}/admin`,
-      method: 'post',
-    })
-    return res
-  } catch (err) {
-    console.log(err, 'show-err')
-  }
-}
 
-deliveryzoneService.removeDeliveryLocationZone = async function (
-  deliveryZoneId,
-  deliveryLocationId,
-  vendorId
-) {
-  try {
-    const res = await fetch({
-      url: `/deliveryZones/${deliveryZoneId}/${deliveryLocationId}/${vendorId}/admin`,
-      method: 'delete',
-    })
-    return res
-  } catch (err) {
-    console.log(err, 'show-err')
-  }
-}
-
-deliveryzoneService.deleteDeliveryZone = async function (
-  deliveryZoneId,
-  deliveryLocationId,
-  vendorId,
-  data
-) {
-  try {
-    const res = await fetch({
-      url: `/deliveryZones/${deliveryZoneId}/admin?vendorId=${data?.vendorId}`,
-      method: 'delete',
-    })
-    return res
-  } catch (err) {
-    console.log(err, 'show-err')
-  }
-}
-
-
-export default deliveryzoneService
+export default deliveryLocation

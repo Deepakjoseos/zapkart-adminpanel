@@ -3,6 +3,7 @@ import { Route, Switch, Redirect } from 'react-router-dom'
 import productList from './product-list'
 import AddProduct from './add-product'
 import EditProduct from './edit-product'
+// import Orders from './orders'
 
 const Product = (props) => {
   const { match } = props
