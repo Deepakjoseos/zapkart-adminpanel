@@ -107,7 +107,8 @@ const SettingsForm = (props) => {
           razorPayPayoutAccountNumber: values?.razorPayPayoutAccountNumber,
           agreement: values?.agreement,
           footer: values?.footer,
-          tdsPercentage: values?.tdsPercentage
+          tdsPercentage: values?.tdsPercentage,
+          vendorDeliveryCharges: values?.vendorDeliveryCharges
         };
 
         if (setmode === ADD) {
