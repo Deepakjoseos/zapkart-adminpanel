@@ -51,6 +51,7 @@ const ProductForm = (props) => {
   const [transactions, setTransactions] = useState([])
   const [logo, setLogo] = useState(null)
   const [documentData, setDocumentData] = useState([])
+  const [downloadAgreement, setDownloadAgreement] = useState(null)
 
   const [wallet, setWallet] = useState({})
   const [selectedVendorId, setSelectedVendorId] = useState(null)
@@ -117,6 +118,7 @@ const ProductForm = (props) => {
     // console.log('id_vendor',param.id)
     const data = await vendorService.getVendorById(id)
     if (data) {
+      setDownloadAgreement(data.agreement)
       setSelectedVendorId(data.id)
       // console.log('datavendorid', data)
       setPickUpLocation(data.pickupLocations)
@@ -426,7 +428,7 @@ const ProductForm = (props) => {
 
                 id = {id}
                 setPhoneVerified={setPhoneVerified}
-
+                downloadAgreement={downloadAgreement}
 
 /* *********************************EDIT****************************************** */
               />

@@ -90,6 +90,7 @@ const rules = {
   
 }
 
+
 const SITE_NAME = process.env.REACT_APP_SITE_NAME
 
 const GeneralField = ({
@@ -103,7 +104,8 @@ const GeneralField = ({
   propsLogo,
   userGroups,
   id,                                       // edit
-  setPhoneVerified                          // edit
+  setPhoneVerified,                          // edit
+  downloadAgreement
 }) => {
   
 /* *********************************EDIT****************************************** */
@@ -135,10 +137,23 @@ const handleClick = async () => {
   setUpdatePhone(false);
 }
 
+const handleDownload = () => {
+  window.open(downloadAgreement,"_blanc","noopener","noreferrer")
+}
 /* *********************************EDIT****************************************** */
 
   return (
   <Row gutter={16}>
+    {downloadAgreement && 
+    <Col xs={24} sm={24} md={17}>
+      <div style={{display:'flex', flexDirection:'row-reverse',paddingBottom:'10px'}}>
+      <Button
+      type='primary'
+        onClick={handleDownload}
+      >Download Agreement</Button>
+      </div>
+    </Col>
+    }
     <Col xs={24} sm={24} md={17}>
       <Card title="Basic Info">
         {mode === 'ADD' ? (
