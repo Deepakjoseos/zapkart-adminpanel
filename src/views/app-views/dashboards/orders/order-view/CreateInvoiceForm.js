@@ -20,8 +20,7 @@ import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import shipmentService from 'services/shipment'
 import orderService from 'services/orders'
-import taxCategoryService from 'services/TaxCategory'
-
+import authVendorService from 'services/auth/vendor'
 const CreateInvoiceForm = ({
   orderId,
   setIsInvoiceFormOpen,
@@ -39,18 +38,18 @@ const CreateInvoiceForm = ({
 
   const [vendorBasedInvoiceData, setVendorBasedInvoiceData] = useState([])
 
-  const [creatingInvoiceValue, setCreatingInvoiceValue] = useState({})
+  const [creatingInvoiceValue, setCreatingInvoiceValue] = useState({
+    items: [],
+  })
 
   const [isAddInvoiceModalOpen, setIsAddInvoiceModalOpen] = useState(false)
 
   const [selectedCurrentItemId, setSelectedCurrentItemId] = useState(null)
+  const [currentUser, setCurrentUser] = useState([])
 
   // Items Form
   const [batch, setBatch] = useState(null)
-  const [hsn, setHsn] = useState(null)
-  const [taxCategoryId, setTaxCategoryId] = useState(null)
   const [expiry, setExpiry] = useState(null)
-  const [taxCategories, setTaxCategories] = useState([])
 
   // const getPickupLocations = async () => {
   //   const data = await shipmentService.getPickupLocations()
@@ -58,76 +57,58 @@ const CreateInvoiceForm = ({
   //     setPickUpLocations(data.shipping_address)
   //   }
   // }
+
   // useEffect(() => {
   //   getPickupLocations()
   // }, [])
-  // const uniquevendor = vendorBasedInvoiceData.filter((item, index) => {
-  //   return vendorBasedInvoiceData.findIndex(i => i.vendorId === item.vendorId) === index;
-  // });
-  let uniquevendor ={};
-  let vendorDetails = {};
-  vendorBasedInvoiceData.map((item) => {
-      vendorDetails[item.items[0].vendorId] = {vendorId:item.items[0].vendorId,vendorName:item.items[0].vendorName}
-      if (uniquevendor[item.items[0].vendorId]) 
-      uniquevendor[item.items[0].vendorId].push(item.items[0]);
-      else uniquevendor[item.items[0].vendorId] = [item.items[0]];
-    });
- 
-    console.log(uniquevendor,'vendoris')
-
-
-  useEffect(() => {
-    if (items?.length > 0) {
-      const invoicesAvailableData = []
-      items?.forEach((cur) => {
-        const isAlreadyAddedVendor = vendorBasedInvoiceData?.find(
-          (inv) => inv.vendorId === cur.vendorId
-        )
-
-        if (!isAlreadyAddedVendor) {
-          invoicesAvailableData.push({
-            vendorId: cur?.vendorId,
-            vendorName: cur?.vendorName,
-            items: [cur],
-          })
-        } else {
-          invoicesAvailableData.forEach((inv, i) => {
-            if (isAlreadyAddedVendor.vendorId === inv.vendorId) {
-              invoicesAvailableData[i].items.push(cur)
-            }
-          })
-        }
-      })
-      setVendorBasedInvoiceData(invoicesAvailableData)
+  const getCurrentUser = async () => {
+    const data = authVendorService.getProfile()
+    if (data) {
+      setCurrentUser(data)
     }
-  }, [items])
-
-  const fetchTaxCategories = async () => {
-    const allTaxCategories = await taxCategoryService.getTaxCategories()
-    if (allTaxCategories) {
-      setTaxCategories(allTaxCategories)
-    }
+    console.log('currentUser', currentUser)
   }
-
   useEffect(() => {
-    fetchTaxCategories()
+    getCurrentUser()
   }, [])
+
+  // useEffect(() => {
+  //   if (items?.length > 0) {
+  //     const invoicesAvailableData = []
+  //     items?.forEach((cur) => {
+  //       const isAlreadyAddedVendor = vendorBasedInvoiceData?.find(
+  //         (inv) => inv.vendorId === cur.vendorId
+  //       )
+
+  //       if (!isAlreadyAddedVendor) {
+  //         invoicesAvailableData.push({
+  //           vendorId: cur?.vendorId,
+  //           vendorName: cur?.vendorName,
+  //           items: [cur],
+  //         })
+  //       } else {
+  //         invoicesAvailableData.forEach((inv, i) => {
+  //           if (isAlreadyAddedVendor.vendorId === inv.vendorId) {
+  //             invoicesAvailableData[i].items.push(cur)
+  //           }
+  //         })
+  //       }
+  //     })
+  //     setVendorBasedInvoiceData(invoicesAvailableData)
+  //   }
+  //  }, [items])
 
   const resetInvoiceItemStateValues = () => {
     setBatch(null)
-    setHsn(null)
-    setTaxCategoryId(null)
     setExpiry(null)
     setSelectedCurrentItemId(null)
   }
 
   const addToCreatingInvoiceValue = () => {
+    console.log('invoicedara')
     setCreatingInvoiceValue((prev) => ({
       ...prev,
-      items: [
-        ...prev?.items,
-        { id: selectedCurrentItemId, batch, expiry, hsn, taxCategoryId },
-      ],
+      items: [...prev?.items, { id: selectedCurrentItemId, batch, expiry }],
     }))
     resetInvoiceItemStateValues()
     setIsAddInvoiceModalOpen(false)
@@ -216,22 +197,22 @@ const CreateInvoiceForm = ({
         <Row gutter={16}>
           <Col xs={24} sm={24} md={24}>
             <Card title="Basic Info">
-              <Select
-                className="w-100 mb-3"
-                placeholder="Select Vendor"
-                value={creatingInvoiceValue?.vendorId}
-                onChange={(val) =>
-                  setCreatingInvoiceValue((prev) => ({
-                    ...prev,
-                    vendorId: val,
-                    items: [],
-                  }))
-                }
-              >
-                {Object.entries(uniquevendor)?.map(([vendorId,cur]) => (
-                  <Option value={vendorId}>{vendorDetails[vendorId].vendorName}</Option>
-                ))}
-              </Select>
+              {/* <Select
+                  className="w-100 mb-3"
+                  placeholder="Select Vendor"
+                  value={creatingInvoiceValue?.vendorId}
+                  onChange={(val) =>
+                    setCreatingInvoiceValue((prev) => ({
+                      ...prev,
+                      vendorId: val,
+                      items: [],
+                    }))
+                  }
+                >
+                  {vendorBasedInvoiceData?.map((cur) => (
+                    <Option value={cur?.vendorId}>{cur?.vendorName}</Option>
+                  ))}
+                </Select> */}
 
               <Input
                 placeholder="Invoice No"
@@ -244,13 +225,7 @@ const CreateInvoiceForm = ({
                 }
               />
 
-              <Table
-                dataSource={
-                  uniquevendor[creatingInvoiceValue?.vendorId]
-                }
-                pagination={false}
-                className="mb-5"
-              >
+              <Table dataSource={items} pagination={false} className="mb-5">
                 <Column title="Product" dataIndex="name" key="name" />
                 <Column title="Quantity" dataIndex="quantity" key="quantity" />
                 <Column title="Price" dataIndex="price" key="price" />
@@ -270,7 +245,7 @@ const CreateInvoiceForm = ({
 
                 <Column title="Status" dataIndex="status" key="status" />
                 <Column
-                  title="Action"
+                  title="Invoice"
                   render={(_, row) => (
                     <>
                       {ifItemIdIsInCreatingInvoiceValue(row.id) ? (
@@ -288,10 +263,6 @@ const CreateInvoiceForm = ({
                             setIsAddInvoiceModalOpen(true)
                             setSelectedCurrentItemId(row.id)
                             setBatch(row.batch ? row.batch : null)
-                            setHsn(row.batch ? row.hsn : null)
-                            setTaxCategoryId(
-                              row.batch ? row.taxCategoryId : null
-                            )
                             setExpiry(row.expiry ? moment(row.expiry) : null)
                           }}
                         >
@@ -324,14 +295,12 @@ const CreateInvoiceForm = ({
         ]}
         destroyOnClose
       >
-        <p>Batch</p>
         <Input
           placeholder="Batch"
           className="mb-3"
           onChange={(e) => setBatch(e.target.value)}
           value={batch}
         />
-        <p>Expiry</p>
         <DatePicker
           placeholder="Expiry Date"
           format="YYYY-MM-DD"
@@ -339,34 +308,6 @@ const CreateInvoiceForm = ({
           className="w-100"
           onChange={(date, dateString) => setExpiry(dateString)}
         />
-        <br/>
-        <br/>
-        <p>Hsn</p>
-        <Input
-          placeholder="Hsn"
-          className="mb-3"
-          onChange={(e) => setHsn(e.target.value)}
-          value={hsn}
-        />
-
-        <p>TaxCategory</p>
-        <Select
-          placeholder="Tax Category"
-          showSearch
-          optionFilterProp="children"
-          filterOption={(input, option) =>
-            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-          }
-          style={{ width: '100%' }}
-          onChange={(e) => setTaxCategoryId(e)}
-          value={taxCategoryId}
-        >
-          {taxCategories.map((medicineType) => (
-            <Option key={medicineType.id} value={medicineType.id}>
-              {medicineType.name}
-            </Option>
-          ))}
-        </Select>
       </Modal>
     </>
   )

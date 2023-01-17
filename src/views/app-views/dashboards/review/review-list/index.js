@@ -18,19 +18,16 @@ import {
   SearchOutlined,
   PlusCircleOutlined,
 } from '@ant-design/icons'
-import AvatarStatus from 'components/shared-components/AvatarStatus'
+import AvatarStatus from 'components/shared-components/AvatarStatus' 
 import EllipsisDropdown from 'components/shared-components/EllipsisDropdown'
 import Flex from 'components/shared-components/Flex'
 import { useHistory , Link } from 'react-router-dom'
 import qs from 'qs'
 import utils from 'utils'
-import orderService from 'services/orders'
-import cityService from 'services/city'
 import _ from 'lodash'
 import moment from 'moment'
 import productService from 'services/product'
-import customerService from 'services/customer'
-import vendorService from 'services/vendor'
+import authVendorService from 'services/auth/vendor'
 import reviewService from 'services/review'
 const { Option } = Select
 
@@ -42,7 +39,7 @@ const ReviewList = () => {
   const [form] = Form.useForm()
   const [orders, setOrders] = useState([])
   const [customers, setUsers] = useState([])
-  const [vendors, setVendors] = useState([])
+  const [vendorId, setVendors] = useState(null)
   const [list, setList] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
 
@@ -60,82 +57,56 @@ const ReviewList = () => {
   })
  
   useEffect(() => {
-    getReviews(pagination)
-    getVendors()
-    getCustomers()
+    const getVendorsId = async () => {
+      const data = await authVendorService.getProfile()
+      if (data) {
+        const users = data.id
+          
+        setVendors(users)
+      //  console.log(users,'vendorId')
+      }
+    }
+
+    const getProductsTemplate = async () => {
+      const data = await productService.getPublicProducts(
+      )
+      const productsTemplate = data.data;
+      if (productsTemplate) {
+        const users = productsTemplate.map((cur) => {
+          return {
+            ...cur,
+            fullName: `${cur.name} `,
+          }
+        })
+        setProducts(users)
+        console.log(users,'products');
+      }
+    }
+
+    if(vendorId)
+    getReviews({pagination}) 
+    getVendorsId()
     getProductsTemplate()
-    }, [])
+    }, [vendorId])
 
-
-
-  const getReviews = async (paginationParams = {}, filterParams) => {
-    const data = await reviewService.getReviews( qs.stringify(getPaginationParams(paginationParams)),
-    qs.stringify(filterParams))
     
-    if (data) {
-      setList(data.data)
-      // Pagination
-      setPagination({
-        ...paginationParams.pagination,
-        total: data.total,
-      })
-    }
-    setLoading(false)
-
-    // console.log(data,'reviews')
-  }
-
-  const getVendors = async () => {
-    const data = await vendorService.getVendors()
-    if (data) {
-      const users = data.map((cur) => {
-        return {
-          ...cur,
-          fullName: `${cur.firstName} ${cur.lastName}`,
-        }
-      })
-      setVendors(users)
-    }
-  }
-
-  const getProductsTemplate = async () => {
-    const data = await productService.getPublicProducts(
-    )
-    const productsTemplate = data.data;
-    if (productsTemplate) {
-      const users = productsTemplate.map((cur) => {
-        return {
-          ...cur,
-          fullName: `${cur.name} `,
-        }
-      })
-      setProducts(users)
-      // console.log(users,'products');
-    }
-  }
-
-  const getCustomers = async () => {
-    const data = await customerService.getCustomers()
-    if (data) {
-      const users = data.map((cur) => {
-        return {
-          ...cur,
-          fullName: `${cur.firstName} ${cur.lastName}`,
-        }
-      })
-      setUsers(users)
-      // console.log(users,'Customers')
-    }
-  }
-
   
 
-  // useEffect(() => {
-  //   // getReviews(pagination)
-  //   getVendors()
-  //   getCustomers()
-  //   getProductsTemplate()
-  //   }, [])
+//  console.log(vendorId,'idven')
+
+const getReviews = async (paginationParams = {}, filterParams,) => {
+  const data = await reviewService.getReviews( vendorId ,
+    qs.stringify(getPaginationParams(paginationParams)),
+  qs.stringify(filterParams))
+  if (data) {
+    setList(data.data)
+    setPagination({
+      ...paginationParams.pagination,
+      total: data.total,
+    })
+  } 
+  console.log(data,'reviews')
+}
 
 
   // pagination generator
@@ -153,11 +124,6 @@ const ReviewList = () => {
     )
   }
 
-
-
- 
-
- 
   
   const resetPagination = () => ({
     ...pagination,
@@ -203,17 +169,9 @@ const ReviewList = () => {
           {text}
         </Link>
       ),
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'orderNo'),
+      // sorter: (a, b) => utils.antdTableSorter(a, b, 'orderNo'),
     },
-    {
-      title: "Vendor Name",
-      dataIndex: 'vendorName',
-      render: (text, record) => (
-      <Link to={`/app/dashboards/users/vendor/edit-vendor/${record.vendorId}`}>
-          {text}
-        </Link>),
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'vendorName'),
-    },
+    
     {
       title: "Product Name",
       dataIndex: 'itemName',
@@ -221,7 +179,7 @@ const ReviewList = () => {
         <Link to={`/app/dashboards/catalog/product/edit-product/${record.itemId}`}>
             {text}
           </Link>),
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'itemName'),
+      // sorter: (a, b) => utils.antdTableSorter(a, b, 'itemName'),
     },
     {
       title: 'Customers',
@@ -234,12 +192,12 @@ const ReviewList = () => {
             src={record.image}
             name={record.name}
           />
-          <Link to={`/app/dashboards/users/customer/edit-customer/${record.userId}`}>
+          {/* <Link to={`/app/dashboards/users/customer/edit-customer/${record.userId}`}> */}
           {record.userName}
-          </Link>
+          {/* </Link> */}
         </Flex>
       ),
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'userName'),
+      // sorter: (a, b) => utils.antdTableSorter(a, b, 'userName'),
     },
     
     
@@ -250,13 +208,13 @@ const ReviewList = () => {
         <Flex alignItems="center">
           {record.title}({record.rating})
         </Flex>),
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'title'),
+      // sorter: (a, b) => utils.antdTableSorter(a, b, 'title'),
     },
 
     {
       title: "Message",
       dataIndex: 'message',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'message'),
+      // sorter: (a, b) => utils.antdTableSorter(a, b, 'message'),
     },
     // {
     //   title: "Rating",
@@ -272,7 +230,7 @@ const ReviewList = () => {
         {moment(new Date(createdAt * 1000)).format('DD-MMM-YYYY hh:mm:a')}          
         </Flex>
       ),
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'updatedAt'),
+      // sorter: (a, b) => utils.antdTableSorter(a, b, 'updatedAt'),
     },
     
 
@@ -285,54 +243,14 @@ const ReviewList = () => {
       name="filter_form"
       className="ant-advanced-search-form"
     >
-          <Row gutter={8} align="bottom">
-      {/* <Col md={6} sm={24} xs={24} lg={6}>
-          <Form.Item name="search" label="Search">
-            <Input placeholder="Search" prefix={<SearchOutlined />} />
-          </Form.Item>
-        </Col> */}
-        <Col md={6} sm={24} xs={24} lg={6}>
-           <Form.Item name="userId" label="Customers">
-            <Select
-              showSearch
-              filterOption={(input, option) =>
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }
-              optionFilterProp="children"
-              className="w-100"
-              style={{ minWidth: 180 }}
-              placeholder="Customers"
-            >
-              <Option value="">All</Option>
-              {customers.map((user) => (
-                <Option key={user.id} value={user.id}>
-                  {user.fullName}
-                </Option>
-              ))}
-            </Select>
+    <Row gutter={8} align="bottom">
+            
+    <Col md={6} sm={24} xs={24} lg={6}>
+           <Form.Item name="orderNo" label="Order No">
+           <Input placeholder="Order No" prefix={<SearchOutlined />} />
           </Form.Item> 
         </Col>
-        <Col md={6} sm={24} xs={24} lg={6}>
-           <Form.Item name="vendorId" label="Vendors">
-            <Select
-              showSearch
-              filterOption={(input, option) =>
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }
-              optionFilterProp="children"
-              className="w-100"
-              style={{ minWidth: 180 }}
-              placeholder="Vendors"
-            >
-              <Option value="">All</Option>
-              {vendors.map((users) => (
-                <Option key={users.id} value={users.id}>
-                  {users.fullName}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item> 
-        </Col>
+        
         <Col md={6} sm={24} xs={24} lg={6}>
            <Form.Item name="itemId" label="Products">
             <Select
@@ -354,19 +272,9 @@ const ReviewList = () => {
             </Select>
           </Form.Item> 
         </Col>
-        <Col md={6} sm={24} xs={24} lg={6}>
-           <Form.Item name="orderNo" label="Order No">
-           <Input placeholder="Order No" prefix={<SearchOutlined />} />
-          </Form.Item> 
-        </Col>
-        {/* <Col md={6} sm={24} xs={24} lg={6}>
-           <Form.Item name="orderId" label="Order Id">
-           <Input placeholder="Order Id" prefix={<SearchOutlined />} />
-          </Form.Item> 
-        </Col> */}
-
-        {/* &nbsp;  &nbsp;  &nbsp; &nbsp;  &nbsp;  &nbsp; */}
-        <Col className="mb-4">
+        
+        
+        <Col className="mb-4 ml-5">
           <Button type="primary" onClick={handleFilterSubmit}>
             Filter
           </Button>

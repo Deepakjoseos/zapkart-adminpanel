@@ -29,12 +29,12 @@ const getLogoWidthGutter = (props, isMobile) => {
 
 const getLogo = (props) => {
   const { navCollapsed, logoType } = props
-  // if (logoType === 'light') {
-  //   if (navCollapsed) {
-  //     return '/img/logo-sm-white.png'
-  //   }
-  //   return '/img/logo-white.png'
-  // }
+  if (logoType === 'light') {
+    if (navCollapsed) {
+      return '/img/logo-sm-white.png'
+    }
+    return '/img/logo-white.png'
+  }
 
   if (navCollapsed) {
     return '/img/logo-sm.png'

@@ -81,7 +81,7 @@ const Demo = () => {
           },
         ]}
       >
-        <Select mode="multiple" placeholder="Please select favourite colors" >
+        <Select mode="multiple" placeholder="Please select favourite colors">
           <Option value="red">Red</Option>
           <Option value="green">Green</Option>
           <Option value="blue">Blue</Option>

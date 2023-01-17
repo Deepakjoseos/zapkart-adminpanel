@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import {
   UserOutlined,
   LockOutlined,
-  // CreditCardOutlined,
+  CreditCardOutlined,
   // BellOutlined,
 } from '@ant-design/icons'
 import { Menu } from 'antd'
@@ -10,6 +10,7 @@ import { Link, Route, Switch } from 'react-router-dom'
 import InnerAppLayout from 'layouts/inner-app-layout'
 import EditProfile from './EditProfile'
 import ChangePassword from './ChangePassword'
+import PickupLocation from './PickupLocation'
 // import Billing from './Billing'
 // import Notification from './Notification'
 
@@ -30,12 +31,13 @@ const SettingOption = ({ match, location }) => {
         <span>Change Password</span>
         <Link to={`${match.url}?id=change-password`} />
       </Menu.Item>
-      {/* <Menu.Item key={`${match.url}/billing`}>
+
+      <Menu.Item key={`${match.url}/pickuplocation`}>
         <CreditCardOutlined />
-        <span>Billing</span>
-        <Link to={`${match.url}?id=billing`} />
+        <span>Pickup Location</span>
+        <Link to={`${match.url}?id=pickuplocation`} />
       </Menu.Item>
-      <Menu.Item key={`${match.url}/notification`}>
+      {/* <Menu.Item key={`${match.url}/notification`}>
         <BellOutlined />
         <span>Notification</span>
         <Link to={`${match.url}?id=notification`} />
@@ -54,8 +56,8 @@ const SettingContent = (props) => {
         return EditProfile
       case 'change-password':
         return ChangePassword
-      // case 'billing':
-      //   return Billing
+      case 'pickuplocation':
+        return PickupLocation
       // case 'notification':
       //   return Notification
       default:

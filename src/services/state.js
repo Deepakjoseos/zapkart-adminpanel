@@ -19,7 +19,7 @@ stateService.getState = async function (
   }
 }
 
-stateService.deleteState = async function (id) {
+stateService.deleteState= async function (id) {
   try {
     const res = await fetch({
       url: `/state/${id}`,
@@ -44,7 +44,7 @@ stateService.getStateById = async function (id) {
   }
 }
 
-stateService.createState = async function (data) {
+stateService.createState= async function (data) {
   try {
     const res = await fetch({
       url: `/state`,
@@ -78,4 +78,4 @@ stateService.editState = async function (id, data) {
 //   })
 // }
 
-export default stateService
+export default stateService 

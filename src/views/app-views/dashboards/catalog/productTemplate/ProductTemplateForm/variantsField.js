@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import {
   Input,
   Row,
@@ -26,7 +26,6 @@ const VariantsField = ({ variantsList, refreshData }) => {
   const propsVariantImages = []
   const [openVariantsForm, setOpenVariantsForm] = useState(false)
   const [selectedVariant, setSelectedVariant] = useState(null)
-
   const { id } = useParams()
 
   const [form] = Form.useForm()
@@ -37,8 +36,8 @@ const VariantsField = ({ variantsList, refreshData }) => {
     setSelectedVariant(variant)
     setOpenVariantsForm(true)
   }
-  const onDeleteVariant = async (productTemplateVariantId) => {
-    const deleted = await productTemplateService.deleteProductTemplateVariant(
+  const onDeleteVariant = (productTemplateVariantId) => {
+    const deleted = productTemplateService.deleteProductTemplateVariant(
       id,
       productTemplateVariantId
     )
@@ -62,7 +61,7 @@ const VariantsField = ({ variantsList, refreshData }) => {
         {variantsList.map((variant, index) => (
           <Col xs={24} sm={24} md={12} key={index}>
             <Card
-              title={variant.name}
+              title={variant.description}
               extra={
                 <Flex alignItems="center">
                   <Button
@@ -101,7 +100,6 @@ const VariantsField = ({ variantsList, refreshData }) => {
           selectedVariant={selectedVariant}
           setSelectedVariant={setSelectedVariant}
           refreshData={refreshData}
-          form={form}
         />
       </Row>
     </>

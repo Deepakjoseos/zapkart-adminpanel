@@ -1,6 +1,6 @@
 import React, { Component, useEffect, useRef, useState } from 'react'
 import { PrinterOutlined } from '@ant-design/icons'
-import { Card, Table, Button, Select, notification, Image, Modal } from 'antd'
+import { Card, Table, Button, Select, notification, Image, Modal, Tag } from 'antd'
 import { invoiceData } from '../../../pages/invoice/invoiceData'
 import NumberFormat from 'react-number-format'
 import { useParams, Link } from 'react-router-dom'
@@ -13,6 +13,7 @@ import customerService from 'services/customer'
 import PrescriptionSelector from './PrescriptionSelector'
 import CreateInvoiceForm from './CreateInvoiceForm'
 import './Order.css'
+import OrderVerification from './OrderVerification'
 import constantsService from 'services/constants'
 
 const { Column } = Table
@@ -44,7 +45,7 @@ const OrderView = () => {
     // },
   })
 
-  // console.log(printing, 'ljkshdl')
+  console.log(printing, 'ljkshdl')
 
   const getOrderById = async () => {
     const orderData = await orderService.getOrderById(id)
@@ -52,8 +53,8 @@ const OrderView = () => {
     if (order) {
       setOrder(orderData)
     }
+    console.log('orders', order)
   }
-  // console.log('orders', order)
 
   useEffect(() => {
     getOrderById()
@@ -62,6 +63,14 @@ const OrderView = () => {
   useEffect(() => {
     fetchConstants()
   }, [])
+
+  const fetchConstants = async () => {
+    const data = await constantsService.getConstants()
+    if (data) {
+      // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
+      setOrderItemsStatuses(Object.values(data.ORDER['ORDER_ITEM_STATUS']))
+    }
+  }
 
   const showModal = () => {
     setIsModalOpen(true)
@@ -73,14 +82,6 @@ const OrderView = () => {
 
   const handleCancel = () => {
     setIsModalOpen(false)
-  }
-
-  const fetchConstants = async () => {
-    const data = await constantsService.getConstants()
-    if (data) {
-      // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
-      setOrderItemsStatuses(Object.values(data.ORDER['ORDER_ITEM_STATUS']))
-    }
   }
 
   const handleOrderStatusChange = async (value, selectedRow) => {
@@ -133,7 +134,7 @@ const OrderView = () => {
     <>
       <div className="container">
         <Flex justifyContent="end">
-          {order?.status === 'Verifying Prescription' && (
+          {/* {order.status === 'Verifying Prescription' && (
             <Button
               type="primary"
               className="mb-4 mr-2"
@@ -141,9 +142,9 @@ const OrderView = () => {
             >
               Verify Prescription
             </Button>
-          )}
+          )} */}
 
-          {order?.status === 'Prescriptions Missing' && (
+          {/* {order?.status === 'Prescriptions Missing' && (
             <Button
               type="primary"
               className="mb-4 mr-2"
@@ -151,8 +152,8 @@ const OrderView = () => {
             >
               Re-Upload Prescription
             </Button>
-          )}
-          {order.status === 'Cancelled' ? (
+          )} */}
+          {/* {order.status === 'Cancelled' ? (
             ''
           ) : (
             <>
@@ -171,12 +172,24 @@ const OrderView = () => {
                 Create Invoice
               </Button>
             </>
-          )}
-          {order?.invoice?.vendorInvoices.length > 0 && (
+          )} */}
+
+          <Button
+            type="primary"
+            className="mb-4 mr-2"
+            onClick={() => setIsFormOpen(true)}
+          >
+            See Order Informations
+          </Button>
+          {/* {order?.invoice?.vendorInvoices && (
             <Button type="primary" className="mb-4 mr-2" onClick={showModal}>
               Download Invoices
             </Button>
-          )}
+          )} */}
+
+          {/* <Button type="primary" className="mb-4" onClick={handlePrint}>
+            Print this out!
+          </Button> */}
         </Flex>
         <div>
           <Card>
@@ -187,10 +200,10 @@ const OrderView = () => {
                     <span className="font-weight-semibold text-dark font-size-md">
                       {order?.userName}
                     </span>
-                    {/* <br /> */}
+                    <br />
                     {/* <span>Invoice No: {order?.invoice?.invoiceNo}</span> */}
 
-                    <br />
+                    {/* <br /> */}
                     <span>
                       {/* ShippingAddress: */}
                       {order?.shippingAddress?.addressLine1},{' '}
@@ -246,10 +259,14 @@ const OrderView = () => {
                 )}
                 {/* <p>Total Amount: ₹{order?.totalAmount}</p> */}
                 <h4 className="mb-1 font-weight-semibold">Payment method : {order?.payment?.type}</h4>
+                <h4 className="mb-1 font-weight-semibold">Order Status : {order?.status}</h4>
+
                 <address>
                   <p>
                     <span className="font-weight-semibold text-dark font-size-md">
-                      Payment Status : {order?.payment?.status}
+                      Payment Status :  {order?.payment?.status ==='COMPLETED' ?
+                      <Tag style={{backgroundColor:"#87d068",color:"white"}}>COMPLETED</Tag> : 
+                      <Tag  style={{backgroundColor:"#f50",color:"white"}}>PENDING</Tag>}
                     </span>
                     <br />
                     {/* <span>8626 Maiden Dr. </span>
@@ -278,7 +295,7 @@ const OrderView = () => {
               <>
                 <p>Prescriptions: </p>
                 {order?.prescriptions?.map((cur) => (
-                  <Image width={100} src={cur} />
+                  <Image width={100} height={100} src={cur} />
                 ))}
               </>
             )}
@@ -294,47 +311,41 @@ const OrderView = () => {
                 {/* <Column title="SN" dataIndex="name" key="name" /> */}
                 <Column
                   title="Shipment"
-                  dataIndex="shipmentId"
-                  key="shipmentId"
+                  // dataIndex="shipmentId"
+                  // key="shipmentId"
                   render={(text) =>
-                    text ? (
-                      <Link
-                        to={`/app/dashboards/shipments/shipment/shipment-view/${text}`}
+                    text.shipmentNo ? (
+                      <Link style={{ width: 400 }}
+                        to={`/app/dashboards/shipment/shipment-view/${text.shipmentId}`}
                       >
                         {' '}
-                        {text}
+                        {text.shipmentNo}
                       </Link>
                     ) : (
                       'Not Shipped Yet'
                     )
                   }
                 />
+                <Column title="Invoice No" dataIndex="invoice" key="invoice"
+                render={ (_, record) => (
+                  <Flex alignItems="center">
+                  {record?.invoice?.invoiceNo}
+                  </Flex>)}
+                 /> 
+                <Column title="Product Name" dataIndex="name" key="name"
+                render={ (_, record) => (
+                        <Flex alignItems="center" style={{ width: 100 }}>
+                        {record.name}({record.vendorName})
+                        </Flex>)}
+       />
+                {/* <Column title="HSN" dataIndex="hsn" key="hsn" />*/}
 
-                <Column
-                  title="Invoice Number"
-                  dataIndex="invoiceId"
-                  key="invoiceId"
-                />
-
-                <Column 
-                  title="Product Name" 
-                  dataIndex="name" 
-                  // key="name"
-                  render={(_, record) => (
-                    <Flex alignItems="center">
-                      {record.name}
-                      ({record.vendorName})
-                    </Flex>)
-                  } />
-                {/* <Column title="HSN" dataIndex="hsn" key="hsn" />
-                <Column title="BATCH" dataIndex="batch" key="batch" />
-
-                <Column title="EXP" dataIndex="expiry" key="expiry" /> */}
+                {/* <Column title="EXP" dataIndex="expiry" key="expiry" /> */}
                 <Column title="QTY" dataIndex="quantity" key="quantity" />
                 <Column title="PRICE" dataIndex="price" key="price" />
                 <Column title="DISC" dataIndex="discount" key="discount" />
                 {/* <Column title="TAXABLE" dataIndex="taxableAmount" key="taxableAmount" /> */}
-                <Column
+                {/* <Column
                   title="TAX"
                   dataIndex="taxSplitup"
                   render={(taxSplitup) => {
@@ -342,15 +353,15 @@ const OrderView = () => {
                       <>
                         {taxSplitup?.map((item) => (
                           <>
-                            <p>Amount:{item.taxAmount}</p>({item.taxPercentage}
-                            %)
-                            {item.taxType}
+                            <p>Amount:{item.taxAmount}</p>
+                            <p>Percentage:{item.taxPercentage}</p>
+                            <p>Type:{item.taxType}</p>
                           </>
                         ))}
                       </>
                     )
                   }}
-                />
+                /> */}
 
                 {/* <Column title="AMOUNT" dataIndex="price" key="price" /> */}
 
@@ -375,16 +386,8 @@ const OrderView = () => {
                   key="status"
                   render={(status, row) => (
                     <Select
-                      showSearch
-                      optionFilterProp="children"
-                      filterOption={(input, option) =>
-                        option.children
-                          .toString()
-                          .toLowerCase()
-                          .indexOf(input.toLowerCase()) >= 0
-                      }
                       defaultValue={status}
-                      style={{ width: 200 }}
+                      // style={{ width: 200 }}
                       onChange={(e) => handleOrderStatusChange(e, row)}
                     >
                       {orderItemsStatuses.map((item) => (
@@ -405,7 +408,7 @@ const OrderView = () => {
                             type="primary"
                             onClick={() => cancleOrderItem(row.id)}
                           >
-                            Cancel Order Item
+                            Cancel Item
                           </Button>
                         )
                       )
@@ -414,16 +417,14 @@ const OrderView = () => {
                 )}
               </Table>
               <div className="d-flex justify-content-end">
-                <div className="text-left">
-                <h2 className="font-weight-semibold mt-3">
-                  <span className="mr-1">
+                <div className="text-right ">
+                  <h2 className="font-weight-semibold mt-3">
                     Shipping Charge : {order?.shippingCharge}
-                  </span>
                   </h2>
                   <div>
                     {order?.couponCode ? (
                       <div className="mr-1">
-                        Coupon Code : {order?.couponCode}
+                        Coupon Code: {order?.couponCode}
                       </div>
                     ) : (
                       ''
@@ -438,7 +439,7 @@ const OrderView = () => {
                     )}
                   </div>
                   <h2 className="font-weight-semibold mt-3">
-                    <span className="mr-1">Grand Total : </span>
+                    <span className="mr-1">Grand Total: </span>₹
                     {order?.totalAmount}
                   </h2>
                 </div>
@@ -509,12 +510,12 @@ const OrderView = () => {
                   <h6>
                     Order Date:
                     {moment(new Date(order?.createdAt * 1000)).format(
-                      'DD-MM-YYYY'
+                      'DD-MMM-YYYY'
                     )}
                     {/* {moment(parseInt(order?.createdAt)).format('YYYY-MM-DD')} */}
                   </h6>
                   <h4 className="mb-1 font-weight-semibold">
-                    Payment Status : {order?.payment?.status}
+                    Payment Status: {order?.payment?.status}
                   </h4>
                   {/* <p>Status: {order?.status}</p> */}
                   {/* <p>shipping Charge: {order?.shippingCharge}</p> */}
@@ -575,8 +576,9 @@ const OrderView = () => {
                         <>
                           {taxSplitup?.map((item) => (
                             <>
-                              <p>Amount:{item.taxAmount}</p>(
-                              {item.taxPercentage}%) -{item.taxType}
+                              {/* <p>Amount:{item.taxAmount}</p>
+                              <p>Percentage:{item.taxPercentage}</p> */}
+                              <p>{item.taxType}-{item.taxAmount}({item.taxPercentage}%)</p>
                             </>
                           ))}
                         </>
@@ -603,15 +605,15 @@ const OrderView = () => {
                   <Column title="Status" dataIndex="status" key="status" />
                 </Table>
                 <div className="d-flex justify-content-end">
-                  <div className="text-right ">
+                  <div className="text-left ">
                     <h2 className="font-weight-semibold mt-3">
                       <span className="mr-1">
-                        Shipping Charge: {order?.shippingCharge}
+                        Shipping Charge : {order?.shippingCharge}
                       </span>
                       <div>
                         {order?.couponCode ? (
                           <div className="mr-1">
-                            Coupon Code: {order?.couponCode}
+                            Coupon Code : {order?.couponCode}
                           </div>
                         ) : (
                           ''
@@ -625,7 +627,7 @@ const OrderView = () => {
                           ''
                         )}
                       </div>
-                      <span className="mr-1">Grand Total: </span>
+                      <span className="mr-1">Grand Total : </span>₹
                       {order?.totalAmount}
                     </h2>
                   </div>
@@ -653,8 +655,8 @@ const OrderView = () => {
           </div>
         </div>
 
-        <Modal
-          title="Product Excel Upload"
+        {/* <Modal
+          title="Re upload prescription"
           visible={isPrescriptionModalOpen}
           onCancel={() => {
             setIsPrescriptionModalOpen(false)
@@ -666,14 +668,27 @@ const OrderView = () => {
             userId={order.userId}
             setIsPrescriptionModalOpen={setIsPrescriptionModalOpen}
           />
-        </Modal>
+        </Modal> */}
 
-        <ShipmentCreateForm
+        {/* <ShipmentCreateForm
           setIsFormOpen={setIsFormOpen}
           isFormOpen={isFormOpen}
           orderItems={order?.items}
           orderNo={order?.orderNo}
           orderId={order?.id}
+        /> */}
+
+        <OrderVerification
+          setOpen={setIsFormOpen}
+          open={isFormOpen}
+          products={order?.items}
+          orderId={id}
+          userId={order?.userId}
+          orderStatus={order?.status}
+          reFetchOrderData={getOrderById}
+          prescriptions={order?.prescriptions}
+          orderNo={order?.orderNo}
+          vendorInvoices={order?.invoice?.vendorInvoices}
         />
 
         <CreateInvoiceForm
@@ -684,6 +699,7 @@ const OrderView = () => {
           orderId={order?.id}
         />
       </div>
+
       <Modal
         title="Invoices"
         visible={isModalOpen}
@@ -702,7 +718,6 @@ const OrderView = () => {
             dataIndex="invoiceId"
             key="invoiceId"
           />
-          <Column title="Vendor Name" dataIndex="vendorName" key="vendorName" />
           <Column
             title="Actions"
             render={(_, row) => {

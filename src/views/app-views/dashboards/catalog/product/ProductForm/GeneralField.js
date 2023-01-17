@@ -43,18 +43,6 @@ const rules = {
   //     message: 'Required',
   //   },
   // ],
-  vendor: [
-    {
-      required: true,
-      message: 'Required',
-    },
-  ],
-  commission: [
-    {
-      required: true,
-      message: 'Required',
-    },
-  ],
   productTemplateId: [
     {
       required: true,
@@ -73,12 +61,14 @@ const rules = {
       message: 'Required',
     },
   ],
-  mrpPrice: [
-    {
-      required: true,
-      message: 'Required',
-    },
-  ],
+  
+  // mrpPrice: [
+  //   {
+  //     required: true,
+  //     message: 'Required',
+  //   },
+  // ],
+
   productCode: [
     {
       required: true,
@@ -125,20 +115,16 @@ const GeneralField = ({
   productTemplateId,
   productBuyType,
   setProductBuyType,
-  vendors,
-  getDeliveryZones,
-  statuses,
   // subscriptionPrice,
   // bulkPrice,
 }) => {
   console.log(productTemplates, 'plss')
   const [variants, setVariants] = useState([])
-  const [selectedVendorId, setSelectedVendorId] = useState(null)
 
   const getVariants = (id) => {
     const curTemp = productTemplates.find((cur) => cur.id === id)
     console.log(curTemp, 'hoooooo')
-    setVariants(curTemp?.variants)
+    setVariants(curTemp.variants)
     form.setFieldsValue({
       productVariantId: '',
     })
@@ -153,7 +139,7 @@ const GeneralField = ({
           (cur) => cur.id === productTemplateId
         )
 
-        setVariants(curTemp?.variants)
+        setVariants(curTemp.variants)
       }
     }
   }, [productTemplateId, productTemplates])
@@ -161,61 +147,34 @@ const GeneralField = ({
   return (
     <>
       <Card title="Basic Info">
-        <Form.Item name="vendorId" label="Vendor" rules={rules.vendor}>
-          <Select
-            showSearch
-            optionFilterProp="children"
-            filterOption={(input, option) =>
-              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-            }
-            placeholder="Vendor"
-            onChange={(e) => {
-              getDeliveryZones('', { vendorId: e })
-              form.setFieldsValue({
-                deliveryZoneId: '',
-              })
-            }}
-          >
-            {vendors.map((vendor) => (
-              <Option value={vendor.id}>{vendor.fullName}</Option>
-            ))}
-          </Select>
-        </Form.Item>
-        <Form.Item name="hsn" label="HSN" rules={rules.hsn}>
-          <Input placeholder="hsn" />
-        </Form.Item>
-
-        <Form.Item
-          name="deliveryZoneId"
-          label="DeliveryZone"
-          rules={rules.deliveryZoneId}
+        
+      {process.env.REACT_APP_SITE_NAME === 'athathy' && (
+           <Form.Item
+          name="SKU"
+          label="SKU"
+          rules={rules.SKU}
         >
-          <Select
-            placeholder="deliveryZone"
-            showSearch
-            optionFilterProp="children"
-            filterOption={(input, option) =>
-              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-            }
-          >
-            {deliveryZones.map((deliveryZone) => (
-              <Option value={deliveryZone.id}>{deliveryZone.name}</Option>
-            ))}
-          </Select>
+          <Input placeholder="SKU" />
+        </Form.Item>
+)}
+{process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+  <Form.Item
+          name="hsn"
+          label="HSN"
+          rules={rules.HSN}
+        >
+          <Input placeholder="HSN" />
         </Form.Item>
 
+)}
         <Form.Item
           name="productTemplateId"
-          label="ProductTemplate"
+          label="Product"
           rules={rules.productTemplateId}
         >
+
           <Select
-            showSearch
-            optionFilterProp="children"
-            filterOption={(input, option) =>
-              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-            }
-            placeholder="productTemplate"
+            placeholder="Product "
             onChange={(e) => getVariants(e)}
           >
             {productTemplates.map((temp) => (
@@ -223,49 +182,47 @@ const GeneralField = ({
             ))}
           </Select>
         </Form.Item>
-
-        {variants?.length > 0 && (
-          <Form.Item
-            name="productVariantId"
-            label="productVariant"
-            rules={[
+        <Form.Item rules={[
               {
                 required: variants?.length > 0 ? true : false,
                 message: 'Product Template Have Variants. Please Select One',
+              
               },
+              
             ]}
-            // rules={rules.productVariantId}
-          >
-            <Select
-              placeholder="productVariant"
-              showSearch
-              optionFilterProp="children"
-              filterOption={(input, option) =>
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }
-            >
-              {variants?.map((variant) => (
-                <Option value={variant.id}>{variant.name}</Option>
-              ))}
-            </Select>
-          </Form.Item>
-        )}
+          
+          name="productVariantId"
+          label= " Product Variant"
+          // rules={rules.productVariantId}
+        >
+          <Select placeholder="Product Variant">
+            {variants?.map((variant) => (
+              <Option value={variant.id}>{variant.name}</Option>
+            ))}
+          </Select>
+        </Form.Item>
 
         <Form.Item
           name="productCode"
-          label="productCode"
+          label="Product Code"
           rules={rules.productCode}
         >
           <Input placeholder="Product Code" />
         </Form.Item>
-        <Form.Item
-          name="commission"
-          label="Vendor Commission"
-          rules={rules.commission}
-        >
-          <Input placeholder="Vendor Commission" />
-        </Form.Item>
 
+        
+
+        <Form.Item
+          name="deliveryZoneId"
+          label="Delivery Zone"
+          rules={rules.deliveryZoneId}
+        >
+          <Select placeholder="Delivery Zone">
+            {deliveryZones.map((deliveryZone) => (
+              <Option value={deliveryZone.id}>{deliveryZone.name}</Option>
+            ))}
+          </Select>
+        </Form.Item>
         <Form.Item name="status" label="Status" rules={rules.status}>
           <Select placeholder="Status">
             <Option value="Active">Active</Option>
@@ -273,19 +230,14 @@ const GeneralField = ({
           </Select>
         </Form.Item>
         <Form.Item name="qty" label="Quantity" rules={rules.qty}>
-          <InputNumber
-            placeholder="Quantity"
-            type="number"
-            min={0}
-            max={100000}
-          />
+          <InputNumber placeholder="QTY" type="number" min={0} max={100000} />
         </Form.Item>
         <Form.Item
           name="isUnlimited"
-          label="Unlimited"
+          label="Is Unlimited"
           rules={rules.isUnlimited}
         >
-          <Select placeholder="is Unlimited">
+          <Select placeholder="Is Unlimited">
             <Option value={true}>Yes</Option>
             <Option value={false}>No</Option>
           </Select>
@@ -300,11 +252,6 @@ const GeneralField = ({
             rules={rules.acquirementMethod}
           >
             <Select
-              showSearch
-              optionFilterProp="children"
-              filterOption={(input, option) =>
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }
               placeholder="Acquirement Method"
               onChange={(e) => setProductBuyType(e)}
             >
@@ -315,42 +262,36 @@ const GeneralField = ({
             </Select>
           </Form.Item>
         )}
-
-        {productBuyType === 'Purchase' && (
-          <Form.Item name="mrpPrice" label="MRP Price" rules={rules.mrpPrice}>
-            <InputNumber
-              placeholder="mrp Price"
-              type="number"
-              min={0}
-              max={100000}
-            />
-          </Form.Item>
+{process.env.REACT_APP_SITE_NAME === 'athathy' && (
+        <Form.Item name="mrpPrice" label="AED Price" >
+          <InputNumber
+            placeholder="AED Price"
+            type="number"
+            min={0}
+            max={100000}
+          />
+        </Form.Item>
+)}
+{process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+<Form.Item name="mrpPrice" label="MRP Price" rules={rules.mrpPrice}>
+          <InputNumber
+            placeholder="MRP Price"
+            type="number"
+            min={0}
+            max={100000}
+          />
+        </Form.Item>
         )}
+        <Form.Item name="price" label="Sale Price" rules={rules.price}>
+          <InputNumber
+            placeholder="Sale Price"
+            type="number"
+            min={0}
+            max={100000}
+          />
+        </Form.Item>
 
-        {productBuyType !== 'Giveaway' && (
-          <Form.Item
-            name="price"
-            label={
-              productBuyType === 'Rent' || productBuyType === 'Lend'
-                ? 'Security Deposit'
-                : 'Sale Price'
-            }
-            rules={rules.price}
-          >
-            <InputNumber
-              placeholder={
-                productBuyType === 'Rent' || productBuyType === 'Lend'
-                  ? 'Security Deposit'
-                  : 'Sale Price'
-              }
-              type="number"
-              min={0}
-              max={100000}
-            />
-          </Form.Item>
-        )}
-
-        {productBuyType === 'Rent' && (
+        {(productBuyType === 'Rent' || productBuyType === 'Lend') && (
           <>
             <label style={{ fontWeight: 500 }}>subscriptionPrice</label>
             <Form.List name="subscriptionPrice">
@@ -396,56 +337,50 @@ const GeneralField = ({
           </>
         )}
 
-        {productBuyType === 'Purchase' && (
-          <>
-            <label style={{ fontWeight: 500 }}>Bulk Price</label>
-            <Form.List name="bulkPrice">
-              {(fields, { add, remove }) => {
-                console.log(fields, 'show-filelds')
-                return (
-                  <>
-                    {fields.map((field) => (
-                      <Space
-                        key={field.key}
-                        style={{ display: 'flex' }}
-                        align="baseline"
-                      >
-                        <Form.Item
-                          {...field}
-                          rules={[{ required: true, message: 'required' }]}
-                          name={[field.name, 'price']}
-                          fieldKey={[field.fieldKey, 'price']}
-                        >
-                          <Input placeholder="price" />
-                        </Form.Item>
-                        <Form.Item
-                          {...field}
-                          rules={[{ required: true, message: 'required' }]}
-                          name={[field.name, 'qty']}
-                          fieldKey={[field.fieldKey, 'qty']}
-                        >
-                          <Input placeholder="Qty" />
-                        </Form.Item>
-                        <MinusCircleOutlined
-                          onClick={() => remove(field.name)}
-                        />
-                      </Space>
-                    ))}
-                    <Form.Item>
-                      <Button
-                        type="dashed"
-                        onClick={() => add()}
-                        icon={<PlusOutlined />}
-                      >
-                        Add item
-                      </Button>
+        <label style={{ fontWeight: 500 }}>Bulk Price</label>
+        <Form.List name="bulkPrice">
+          {(fields, { add, remove }) => {
+            console.log(fields, 'show-filelds')
+            return (
+              <>
+                {fields.map((field) => (
+                  <Space
+                    key={field.key}
+                    style={{ display: 'flex' }}
+                    align="baseline"
+                  >
+                    <Form.Item
+                      {...field}
+                      rules={[{ required: true, message: 'required' }]}
+                      name={[field.name, 'price']}
+                      fieldKey={[field.fieldKey, 'price']}
+                    >
+                      <Input placeholder="price" />
                     </Form.Item>
-                  </>
-                )
-              }}
-            </Form.List>
-          </>
-        )}
+                    <Form.Item
+                      {...field}
+                      rules={[{ required: true, message: 'required' }]}
+                      name={[field.name, 'qty']}
+                      fieldKey={[field.fieldKey, 'qty']}
+                    >
+                      <Input placeholder="Qty" />
+                    </Form.Item>
+                    <MinusCircleOutlined onClick={() => remove(field.name)} />
+                  </Space>
+                ))}
+                <Form.Item>
+                  <Button
+                    type="dashed"
+                    onClick={() => add()}
+                    icon={<PlusOutlined />}
+                  >
+                    Add item
+                  </Button>
+                </Form.Item>
+              </>
+            )
+          }}
+        </Form.List>
       </Card>
     </>
   )

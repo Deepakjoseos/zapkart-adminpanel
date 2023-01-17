@@ -53,7 +53,7 @@ const LoginTwo = (props) => {
               </Col>
             </Row>
             <div className="d-flex justify-content-end pb-4">
-              {/* <div>
+              <div>
                 <a
                   className="text-white"
                   href="/#"
@@ -69,7 +69,7 @@ const LoginTwo = (props) => {
                 >
                   Privacy & Policy
                 </a>
-              </div> */}
+              </div>
             </div>
           </div>
         </Col>

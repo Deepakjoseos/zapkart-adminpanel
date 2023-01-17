@@ -4,7 +4,6 @@ const shipmentService = {}
 const apiRoute = '/shipment'
 
 shipmentService.getShipments = async function () {
-  console.log('shipments')
   try {
     const res = await fetch({
       url: `${apiRoute}`,
@@ -67,37 +66,12 @@ shipmentService.editShipment = async function (id, data) {
   }
 }
 
-shipmentService.getPickupLocations = async function () {
+shipmentService.updateShipmentStatus = async function (data) {
   try {
     const res = await fetch({
-      url: `${apiRoute}/pickupLocations/get_all`,
-      method: 'get',
-    })
-    return res.data
-  } catch (err) {
-    console.log(err, 'show-err')
-  }
-}
-
-shipmentService.createPickupLocation = async function (data) {
-  try {
-    const res = await fetch({
-      url: `/vendors/pickuplocation/new/${data.vendorId}`,
-      method: 'post',
-      data,
-    })
-    return res
-  } catch (err) {
-    console.log(err, 'show-err')
-  }
-}
-
-shipmentService.changePickupLocation = async function (data) {
-  try {
-    const res = await fetch({
-      url: `${apiRoute}/pickupLocations`,
+      url: `${apiRoute}/update/status/vendor`,
       method: 'put',
-      data,
+      data: data,
     })
     return res
   } catch (err) {
@@ -139,84 +113,6 @@ shipmentService.checkIfDeliverable = async function (data) {
       data: data,
     })
     return res.data?.available_courier_companies
-  } catch (err) {
-    console.log(err, 'show-err')
-  }
-}
-
-// Generate Api's
-shipmentService.generateAwb = async function (data) {
-  console.log('data', data)
-  try {
-    const res = await fetch({
-      url: `${apiRoute}/generateAwb`,
-      method: 'post',
-      data,
-    })
-
-    return res
-  } catch (err) {
-    console.log(err, 'show-err')
-  }
-}
-
-shipmentService.generateManifest = async function (data) {
-  try {
-    const res = await fetch({
-      url: `${apiRoute}/generateManifest`,
-      method: 'post',
-      data,
-    })
-    return res
-  } catch (err) {
-    console.log(err, 'show-err')
-  }
-}
-shipmentService.generateLabel = async function (data) {
-  try {
-    const res = await fetch({
-      url: `${apiRoute}/generateLabel`,
-      method: 'post',
-      data,
-    })
-    return res
-  } catch (err) {
-    console.log(err, 'show-err')
-  }
-}
-shipmentService.generateInvoice = async function (data) {
-  try {
-    const res = await fetch({
-      url: `${apiRoute}/generateInvoice`,
-      method: 'post',
-      data,
-    })
-    return res
-  } catch (err) {
-    console.log(err, 'show-err')
-  }
-}
-shipmentService.generatePickupInfo = async function (data) {
-  try {
-    const res = await fetch({
-      url: `${apiRoute}/generatePickupInfo`,
-      method: 'post',
-      data,
-    })
-    return res
-  } catch (err) {
-    console.log(err, 'show-err')
-  }
-}
-
-shipmentService.selectShipmentType = async function (data) {
-  try {
-    const res = await fetch({
-      url: `${apiRoute}/selectShipmentType`,
-      method: 'put',
-      data,
-    })
-    return res
   } catch (err) {
     console.log(err, 'show-err')
   }

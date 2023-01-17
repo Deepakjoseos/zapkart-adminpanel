@@ -10,7 +10,6 @@ import {
   SHOW_LOADING,
   SIGNIN_WITH_GOOGLE_AUTHENTICATED,
   SIGNIN_WITH_FACEBOOK_AUTHENTICATED,
-  SET_IMAGE_CATEGORIES,
 } from '../constants/Auth'
 
 const initState = {
@@ -21,7 +20,6 @@ const initState = {
   user: null,
   authorized: null,
   token: null,
-  imageCategories: [],
 }
 
 const auth = (state = initState, action) => {
@@ -54,7 +52,7 @@ const auth = (state = initState, action) => {
         token: null,
         user: null,
         authorized: null,
-        redirect: '/',
+        redirect: '/auth/login',
         loading: false,
       }
     }
@@ -83,12 +81,6 @@ const auth = (state = initState, action) => {
         ...state,
         loading: false,
         token: action.token,
-      }
-    }
-    case SET_IMAGE_CATEGORIES: {
-      return {
-        ...state,
-        imageCategories: action.imageCategories,
       }
     }
     default:

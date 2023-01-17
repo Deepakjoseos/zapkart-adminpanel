@@ -9,7 +9,7 @@ import {
   Tag,
   Form,
   Row,
-  Col, notification
+  Col, notification, DatePicker
 } from 'antd'
 // import BrandListData from 'assets/data/product-list.data.json'
 import {
@@ -26,9 +26,10 @@ import utils from 'utils'
 import brandService from 'services/brand'
 import _ from 'lodash'
 import { useHistory, Link } from 'react-router-dom'
-import customerService from 'services/customer'
-import constantsService from 'services/constants'
+// import customerService from 'services/customer'
+// import constantsService from 'services/constants'
 import orderService from 'services/orders'
+import constantsService from 'services/constants'
 import moment from 'moment'
 
 const { Option } = Select
@@ -58,19 +59,20 @@ const getShippingStatus = (status) => {
 
 const Orders = () => {
   const [searchBackupList, setSearchBackupList] = useState([])
-  const [selectedRowKeys, setSelectedRowKeys] = useState([])
   const [selectedStatus, setSelectedStatus] = useState('')
   const [users, setUsers] = useState([])
   const [selectedUserId, setSelectedUserId] = useState(null)
+  const [selectedRows, setSelectedRows] = useState([])
+  const [selectedRowKeys, setSelectedRowKeys] = useState([])
   const [paymentStatuses, setPaymentStatuses] = useState([])
-  const [orderStatuses, setOrderStatuses] = useState([])
-  const [customerPrescriptions, setCustomerPrescriptions] = useState([])
+  const [, setOrderStatuses] = useState([])
+  const [paymentType, setPaymentType] = useState([])
   const [statuses, setStatuses] = useState([])
+  const [orderStats, setOrderStats] = useState([])
   let history = useHistory()
   const [form] = Form.useForm()
 
   const [list, setList] = useState([])
-  const [selectedRows, setSelectedRows] = useState([])
 
   // Added for Pagination
   const [loading, setLoading] = useState(false)
@@ -81,28 +83,27 @@ const Orders = () => {
     current: 1,
     pageSize: 15,
   })
-  const getCustomers = async () => {
-    const data = await customerService.getCustomers()
-    if (data) {
-      const users = data.map(cur => {
-        return {
-          ...cur, fullName: `${cur.firstName} ${cur.lastName}`
-        }
-      })
-      setUsers(users)
-    }
-  }
-
+  
+  const orderStatuses = ["Pending","Verifying Prescription","Prescriptions Missing","Failed","Confirmed","Shipping Soon","Shipped","Delivered","Cancelled","Returned","Completed"]
 
   const fetchConstants = async () => {
     const data = await constantsService.getConstants()
     if (data) {
       // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
-      setOrderStatuses(Object.values(data.ORDER['ORDER_STATUS']))
-      setPaymentStatuses(Object.values(data.PAYMENT['PAYMENT_STATUS']))
-      setStatuses(Object.values(data.GENERAL['STATUS']))
+      // console.log(data)
+      // setStatuses(Object.values(data.GENERAL['FORM_STATUS']))
+      setPaymentType(Object.values(data.GENERAL['PAYMENT_TYPE']))
+    data.ORDER['ORDER_STATUS'] 
+      &&
+      setOrderStats(Object.values(data.ORDER['ORDER_STATUS']))
+      // data.TEMPLATE['NOTIFICATION_TYPE'] &&
+      //     setNotificationType(Object.values(data.TEMPLATE['NOTIFICATION_TYPE']))
+      // data.TEMPLATE['NOTIFICATION_CATEGORY_TYPE'] &&
+      //     setNotificationCategory(Object.values(data.TEMPLATE['NOTIFICATION_CATEGORY_TYPE']))
     }
+
   }
+  
   const getOrders = async (paginationParams = {}, filterParams) => {
     setLoading(true)
     const data = await orderService.getOrders(
@@ -110,7 +111,7 @@ const Orders = () => {
       qs.stringify(filterParams)
     )
 
-    if (data) {
+    if (data.data) {
       setList(data.data)
 
       // Pagination
@@ -119,144 +120,54 @@ const Orders = () => {
         total: data.total,
       })
       setLoading(false)
-    }
+    } 
+    console.log(data,'orders')
   }
 
   useEffect(() => {
     getOrders({
       pagination,
     })
-    // getVendors()
-    fetchConstants()
-    getCustomers()
+    fetchConstants() 
   }, [])
 
   // pagination generator
   const getPaginationParams = (params) => ({
     limit: params.pagination?.pageSize,
     page: params.pagination?.current,
-    // ...params,
+    ...params,
   })
 
   // On pagination Change
   const handleTableChange = (newPagination) => {
-    getOrders(
-      {
-        pagination: newPagination,
-      },
-      filterEnabled ? _.pickBy(form.getFieldsValue(), _.identity) : {}
-    )
+    
+    form
+      .validateFields()
+      .then(async (values) => {
+        setFilterEnabled(true)
+        // Removing falsy Values from values 
+        const sendingValues = _.pickBy({...values,
+          fromDate: values.fromDate ? moment(values.fromDate).format() : '', 
+          toDate: values.toDate ? moment(values.toDate).format():'',
+        }, _.identity,)
+
+        getOrders({ pagination: newPagination }, sendingValues)
+      })
+      .catch((info) => {
+        // console.log('info', info)
+        setFilterEnabled(false)
+      })
   }
 
-  console.log('order Status', orderStatuses)
+  // console.log('order Status', orderStatuses)
 
-  // const handleShowStatus = (value) => {
-  //   if (value !== 'All') {
-  //     const key = 'paymentStatus'
-  //     const data = utils.filterArray(OrderListData, key, value)
-  //     setList(data)
-  //   } else {
-  //     setList(OrderListData)
-  //   }
-  // }
 
-  const dropdownMenu = (row) => (
-    <Menu>
-      <Menu.Item
-        onClick={() =>
-          history.push(`/app/dashboards/orders/order-view/${row.id}`)
-        }
-      >
-        <Flex alignItems="center">
-          <EyeOutlined />
-          <span className="ml-2">View Details</span>
-        </Flex>
-      </Menu.Item>
-    </Menu>
-  )
-
-  // const orderStatuses = [
-  //   'Prescriptions Missing',
-  //   'Pending',
-  //   'Received',
-  //   'Confirmed',
-  //   'Shipping Soon',
-  //   'Shipped',
-  //   'Shipment Delayed',
-  //   'Arriving Early',
-  //   'Out for Delivery',
-  //   'Delivery Refused by Customer',
-  //   'Delivery Rescheduled',
-  //   'Delivered',
-  //   'Shipment Failed',
-  //   'Items damaged during transit',
-  //   'and being returned back to us',
-  //   'Payment Failed',
-  //   'Cancelled',
-  //   'Attempting Cancellation',
-  //   'Return Requested',
-  //   'Return Initiated',
-  //   'Return Rescheduled',
-  //   'Return Completed',
-  //   'Items Returning Back',
-  //   'Return Delayed',
-  //   'Return Items Received',
-  //   'Return Items Verification Failed',
-  //   'Return Items Verification Completed',
-  //   'Return Failed',
-  //   'Return Cancelled',
-  //   'Refund Initiated',
-  //   'Refund Delayed',
-  //   'Refund Completed',
-  //   'Refund Failed',
-  // ]
-
-  const handleOrderStatusChange = async (value, selectedRow) => {
-    const updatedOrderStatus = await orderService.updateOrderStatus(
-      selectedRow.id,
-      value
-    )
-
-    if (updatedOrderStatus) {
-      notification.success({ message: 'Order Status Updated' })
-
-      // const objKey = 'id'
-      // let data = list
-      // data = utils.updateArrayRow(
-      //   data,
-      //   objKey,
-      //   selectedRow.id,
-      //   'approval',
-      //   value
-      // )
-      // setList(data)
-    }
-  }
-  const handlePaymentStatusChange = () => { }
-
-  const getCustomerPrescriptions = async (customerId) => {
-    const data = await customerService.getCustomerPrescription(customerId)
-    if (data) {
-      setCustomerPrescriptions(data.prescriptions)
-    }
-  }
-
-  const cancelOrder = async (orderId) => {
-    notification.warning({ message: 'Order Cancelling...' })
-    const cancelOrder = await orderService.cancelOrder(orderId)
-
-    if (cancelOrder) {
-      notification.success({ message: 'Order Cancelled' })
-
-      setTimeout(() => {
-        window.location.reload()
-      }, 2000)
-    }
-  }
+  
+  
 
   const tableColumns = [
     {
-      title: 'OrderNo',
+      title: 'Order No',
       dataIndex: 'orderNo',
       render: (text, record) => (
         <Link to={`/app/dashboards/orders/order-view/${record.id}`}>
@@ -264,173 +175,56 @@ const Orders = () => {
         </Link>
       ),
     },
-    // {
-    //   title: 'shipment',
-    //   dataIndex: 'items',
-    //   render: (items) => {`
-    //     return (
-    //       <>
-    //         {items?.map((item) => (
-    //           <>
-    //           {item.shipmentId ? 
-    //           <Link to={`/app/dashboards/shipments/shipment/shipment-view/${item.shipmentId}`}> {item.shipmentId}</Link>
-    //           :
-    //           "No shipment"}
-    //             {/* {item.shipmentId ? item.shipmentId :"No Shipment"} */}
-    //             {/* <p>Type:{group.type}</p>
-    //       <p>Status:{group.status}</p> */}
-    //           </>
-    //         ))}
-    //       </>
-    //     )
-    //   },
-    //   // sorter: (a, b) => utils.antdTableSorter(a, b, 'lastname'),
-    // },
 
     {
       title: 'Customer Name',
       dataIndex: 'userName',
-      // sorter: (a, b) => utils.antdTableSorter(a, b, 'totalAmount'),
 
-      // render: (items, record) => <div>{items?.length}</div>,
     },
-
-
-    // {
-    //   title: 'Products Count',
-    //   dataIndex: 'items',
-    //   render: (items, record) => <div>{items?.length}</div>,
-    // },
 
     {
       title: 'Total Amount',
       dataIndex: 'totalAmount',
-      render: (totalAmount) => (
-        <div>
-          
-          {totalAmount}
-        </div>
-      ),
+      // sorter: (a, b) => utils.antdTableSorter(a, b, 'totalAmount'),
 
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'totalAmount'),
-
-      // render: (items, record) => <div>{items?.length}</div>,
     },
-    // {
-    //   title: 'Shipping Charge',
-    //   dataIndex: 'shippingCharge',
-    //   sorter: (a, b) => utils.antdTableSorter(a, b, 'shippingCharge'),
-    //   // render: (items, record) => <div>{items?.length}</div>,
-    // },
+    {
+      title: 'Shipping Charge',
+      dataIndex: 'shippingCharge',
+      // sorter: (a, b) => utils.antdTableSorter(a, b, 'shippingCharge'),
+    },
+    
     {
       title: 'Order Date',
       dataIndex: 'createdAt',
       render: (createdAt) => (
         <Flex alignItems="center">
-          {moment(new Date(createdAt * 1000)).format('DD-MMM-YYYY hh:mm:a')}
+        {moment(new Date(createdAt * 1000)).format('DD-MMM-YYYY hh:mm:a')}          
         </Flex>
       ),
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'createdAt'),
+      // sorter: (a, b) => utils.antdTableSorter(a, b, 'createdAt'),
     },
-    // {
-    //   title: 'Date',
-    //   dataIndex: 'date',
-    //   render: (_, record) => (
-    //     <span>{moment.unix(record.date).format(DATE_FORMAT_DD_MM_YYYY)}</span>
-    //   ),
-    //   sorter: (a, b) => utils.antdTableSorter(a, b, 'date'),
-    // },
-    // {
-    //   title: 'Order status',
-    //   dataIndex: 'status',
-    //   render: (status, record) => (
-    //     <>
-    //       {status}
-    //     </>
-    //   ),
-    //   sorter: (a, b) => utils.antdTableSorter(a, b, 'orderStatus'),
-    // },
-
     {
-      title: 'Order status',
+      title: 'Order Status',
       dataIndex: 'status',
-      render: (status, row) => {
-        return (
-          <Select
-            defaultValue={status}
-            style={{ width: 150 }}
-            onChange={(e) => handleOrderStatusChange(e, row)}
-          >
-            {orderStatuses?.map((item) => (
-              <Option key={item} value={item}>
-                {item}
-              </Option>
-            ))}
-          </Select>
-        )
-      },
-      // render: (isUnlimited) => <Flex>{isUnlimited ? 'Yes' : 'No'}</Flex>,
-      // sorter: (a, b) => utils.antdTableSorter(a, b, 'approval'),
+      render: (status, record) => (
+        <>
+          {status}
+        </>
+      ),
+      // sorter: (a, b) => utils.antdTableSorter(a, b, 'orderStatus'),
     },
     {
       title: 'Payment Status',
       dataIndex: 'payment',
-      render: (payment) => {
-        return <Flex alignItems="centre">{payment?.status}</Flex>
-      },
-    },
-    // {
-    //   title: 'Payment status',
-    //   dataIndex: 'status',
-    //   render: (status, row) => {
-    //     return (
-    //       <Select
-    //         defaultValue={status}
-    //         style={{ width: 150 }}
-    //         onChange={(e) => handlePaymentStatusChange(e, row)}
-    //       >
-    //         {paymentStatuses?.map((item) => (
-    //           <Option key={item} value={item}>
-    //             {item}
-    //           </Option>
-    //         ))}
-    //       </Select>
-    //     )
-    //   },
-    //   // render: (isUnlimited) => <Flex>{isUnlimited ? 'Yes' : 'No'}</Flex>,
-    //   // sorter: (a, b) => utils.antdTableSorter(a, b, 'approval'),
-    // },
-    // {
-    //   title: 'Payment status',
-    //   dataIndex: 'payment',
-    //   render: (payment, record) => (
-    //     <>
-    //       {/* <Badge status={getPaymentStatus(record.paymentStatus)} /> */}
-    //       <span>{payment.completed ? 'Completed' : 'Not Completed'}</span>
-    //     </>
-    //   ),
-    //   // sorter: (a, b) => utils.antdTableSorter(a, b, 'paymentStatus'),
-    // },
-
-    {
-      title: '',
-      dataIndex: 'actions',
-      render: (_, elm) => (
-        <div className="text-right">
-          <Flex>
-            <EllipsisDropdown menu={dropdownMenu(elm)} />
-            {elm.status !== 'Cancelled' && (
-              <Button
-                type="primary"
-                className="ml-2"
-                onClick={() => cancelOrder(elm.id)}
-              >
-                Cancel Order
-              </Button>
-            )}
+      render: (payment, record) => {
+        return <Flex alignItems="centre" >
+         
+          {payment?.status === 'COMPLETED' ? 
+          <Tag style={{backgroundColor:"#87d068",color:"white"}}>COMPLETED</Tag> : 
+          <Tag  style={{backgroundColor:"#f50",color:"white"}}>PENDING</Tag>}
           </Flex>
-        </div>
-      ),
+      },
     },
   ]
 
@@ -456,11 +250,14 @@ const Orders = () => {
       .then(async (values) => {
         setFilterEnabled(true)
         // Removing falsy Values from values
-        const sendingValues = _.pickBy(values, _.identity)
+        const sendingValues = _.pickBy({...values,
+          fromDate: values.fromDate ? moment(values.fromDate).format() : '', 
+          toDate: values.toDate ? moment(values.toDate).format():''},           
+          _.identity)
         getOrders({ pagination: resetPagination() }, sendingValues)
       })
       .catch((info) => {
-        console.log('info', info)
+        // console.log('info', info)
         setFilterEnabled(false)
       })
   }
@@ -481,14 +278,15 @@ const Orders = () => {
       className="ant-advanced-search-form"
     >
       <Row gutter={8} align="bottom">
-        <Col md={6} sm={24} xs={24} lg={6}>
+        <Flex className="mb-1 flex-wrap" mobileFlex={false}>
+        <Col md={7} sm={24} xs={24} lg={7}>
           <Form.Item name="search" label="Search">
             <Input placeholder="Search" prefix={<SearchOutlined />} />
           </Form.Item>
         </Col>
 
-        <Col md={6} sm={24} xs={24} lg={6}>
-          <Form.Item name="status" label="Status">
+        <Col md={7} sm={24} xs={24} lg={7}>
+          <Form.Item name="status" label="Order Status">
 
             <Select showSearch
               optionFilterProp="children"
@@ -497,10 +295,10 @@ const Orders = () => {
               }
               className="w-100"
               style={{ minWidth: 180 }}
-              placeholder="Status"
+              placeholder="Order Status"
             >
               <Option value="">All</Option>
-              {orderStatuses?.map((item) => (
+              {orderStats?.map((item) => (
               <Option key={item} value={item}>
                 {item}
               </Option>
@@ -509,41 +307,84 @@ const Orders = () => {
 
           </Form.Item>
         </Col>
-        <Col md={6} sm={24} xs={24} lg={6}>
-          <Form.Item name="userId" label="Customers">
-            <Select
-              showSearch
+
+        {/* <Col md={6} sm={24} xs={24} lg={6}>
+          <Form.Item name="statusOtherThan" label="Status Other Than">
+
+            <Select showSearch
+              defaultValue="Failed"
               optionFilterProp="children"
               filterOption={(input, option) =>
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                option.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0
               }
               className="w-100"
               style={{ minWidth: 180 }}
-              // onChange={(value) => setSelectedUserId(value)}
-              // onSelect={handleQuery}
-              // value={selectedUserId}
-              placeholder="Users"
+              placeholder="Status Other Than"
             >
               <Option value="">All</Option>
-              {users.map((user) => (
-                <Option key={user.id} value={user.id}>
-                  {user.fullName}
-                </Option>
-              ))}
+              {orderStats?.map((item) => (
+              <Option key={item} value={item}>
+                {item}
+              </Option>
+            ))}
             </Select>
+
+          </Form.Item>
+        </Col> */}
+
+        <Col md={7} sm={24} xs={24} lg={7}>
+          <Form.Item name="paymentType" label="Payment Type">
+
+            <Select showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              className="w-100"
+              style={{ minWidth: 180 }}
+              placeholder="Payment Type"
+            >
+              <Option value="">All</Option>
+              {paymentType?.map((item) => (
+              <Option key={item} value={item}>
+                {item}
+              </Option>
+            ))}
+            </Select>
+
+          </Form.Item>
+        </Col>        
+                
+        <Col className="mr-md-3 mb-3">
+          <Form.Item name="fromDate" label="From Date">
+
+          <DatePicker/>
+
           </Form.Item>
         </Col>
 
-        <Col className="mb-4 ml-2">
-          <Button type="primary" onClick={handleFilterSubmit}>
+        <Col className="mr-md-3 mb-3">
+          <Form.Item name="toDate" label="To Date">
+
+          <DatePicker />
+
+          </Form.Item>
+        </Col>
+
+        <Col className="mt-4">
+          <Button  className='mr-3'  type="primary" onClick={handleFilterSubmit}>
             Filter
           </Button>
-          <Button className="ml-1" type="primary" onClick={handleClearFilter}>
+          {/* </Col> */}
+
+          {/* <Col md={3} sm={6} xs={6} lg={6}> */}
+          <Button  type="primary" onClick={handleClearFilter}>
             Clear
           </Button>
         </Col>
-
+        </Flex>
       </Row>
+      
     </Form>
   )
 
@@ -551,99 +392,9 @@ const Orders = () => {
     <Card>
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
         {filtersComponent()}
-        {/* <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
-        <Flex className="mb-1" mobileFlex={false}>
-          <div className="mr-md-3 mb-3">
-            <label className="mt-2"> Search</label>
-            <Input
-              placeholder="Search"
-              prefix={<SearchOutlined />}
-              onChange={(e) => onSearch(e)}
-            />
-          </div>
-          <div className="mr-md-3 mb-3">
-            <label className="mt-2">Status</label>
-            <Select
-              className="w-100"
-              style={{ minWidth: 180 }}
-              onChange={(value) => setSelectedStatus(value)}
-              // onSelect={handleQuery}
-              value={selectedStatus}
-              placeholder="Status"
-            >
-              <Option value="">All</Option>
-              {orderStatuses?.map((status) => (
-                <Option key={status} value={status}>
-                  {status}
-                </Option>
-              ))}
-            </Select>
-          </div>
-          <div className="mr-md-3 mb-3">
-            <label className="mt-2">Customers</label>
-            <Select
-              showSearch
-              optionFilterProp="children"
-              filterOption={(input, option) =>
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }
-              className="w-100"
-              style={{ minWidth: 180 }}
-              onChange={(value) => setSelectedUserId(value)}
-              // onSelect={handleQuery}
-              value={selectedUserId}
-              placeholder="Users"
-            >
-              <Option value="">All</Option>
-              {users.map((user) => (
-                <Option key={user.id} value={user.id}>
-                  {user.fullName}
-                </Option>
-              ))}
-            </Select>
-          </div>
-          <div>
-            <Button type="primary" className="mr-1 mt-4" onClick={handleQuery}>
-              Filter
-            </Button>
-          </div>
-          <div>
-            <Button
-              type="primary"
-              className="mr-1 mt-4"
-              onClick={handleClearFilter}
-            >
-              Clear
-            </Button>
-          </div>
-          {/* <div className="mb-3">
-            <Select
-              defaultValue="All"
-              className="w-100"
-              style={{ minWidth: 180 }}
-              onChange={handleShowStatus}
-              placeholder="Status"
-            >
-              <Option value="All">All payment </Option>
-              {paymentStatusList.map((elm) => (
-                <Option key={elm} value={elm}>
-                  {elm}
-                </Option>
-              ))}
-            </Select>
-          </div> */}
+    
       </Flex>
-      {/* </Flex> */}
-      {/* </Flex> */}
-      <div>
-        <Button
-          onClick={() => history.push('/app/dashboards/orders/create-order')}
-          type="primary"
-          icon={<PlusCircleOutlined />}
-        >
-          Create Order
-        </Button>
-      </div>
+     
       <div className="table-responsive">
         <Table
           scroll={{
@@ -654,12 +405,12 @@ const Orders = () => {
           columns={tableColumns}
           dataSource={list}
           rowKey="id"
-        // rowSelection={{
-        //   selectedRowKeys: selectedRowKeys,
-        //   type: 'checkbox',
-        //   preserveSelectedRowKeys: false,
-        //   ...rowSelection,
-        // }}
+          rowSelection={{
+            selectedRowKeys: selectedRowKeys,
+            type: 'checkbox',
+            preserveSelectedRowKeys: false,
+            ...rowSelection,
+        }}
         />
 
       </div>

@@ -1,18 +1,18 @@
 
    
     .line {
-      width: 100%;
-      margin-left: auto;
-      margin-right: auto;
-      line-height: 25px;
-    
-    }
-    .text{
-        font-size:100px;
-        font-family: sans-serif;
-        color: rgb(13, 13, 107);
-       
-    }
-
-    
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+        line-height: 25px;
+      
+      }
+      .text{
+          font-size:100px;
+          font-family: sans-serif;
+          color: rgb(13, 13, 107);
+         
+      }
   
+      
+    
