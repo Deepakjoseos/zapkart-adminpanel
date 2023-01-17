@@ -1,12 +1,11 @@
 import { createStore, applyMiddleware, compose } from 'redux'
 import reducers from '../reducers'
 import createSagaMiddleware from 'redux-saga'
-import thunk from 'redux-thunk'
 import rootSaga from '../sagas/index'
 
 const sagaMiddleware = createSagaMiddleware()
 
-const middlewares = [thunk, sagaMiddleware]
+const middlewares = [sagaMiddleware]
 
 function configureStore(preloadedState) {
   const composeEnhancers =

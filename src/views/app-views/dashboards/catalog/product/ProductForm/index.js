@@ -9,6 +9,11 @@ import productTemplateService from 'services/productTemplate'
 import deliveryZoneService from 'services/deliveryZone'
 import Utils from 'utils'
 import { useHistory } from 'react-router-dom'
+import vendorService from 'services/vendor'
+import constantsService from 'services/constants'
+import shipmentService from 'services/shipment'
+import qs from 'qs'
+import utils from 'utils'
 
 const { TabPane } = Tabs
 
@@ -21,6 +26,7 @@ const ProductForm = (props) => {
 
   const [form] = Form.useForm()
 
+  const [vendors, setVendors] = useState([])
   const [productTemplates, setTemplates] = useState([])
   const [deliveryZones, setDeliveryZones] = useState([])
   const [subscriptionPrice, setSubscriptionPrice] = useState([])
@@ -28,7 +34,12 @@ const ProductForm = (props) => {
   const [bulkPrice, setBulkPrice] = useState([])
   //   const [uploadLoading, setUploadLoading] = useState(false)
   const [submitLoading, setSubmitLoading] = useState(false)
-  const [productBuyType, setProductBuyType] = useState(null)
+  const [productBuyType, setProductBuyType] = useState('Purchase')
+  const [statuses, setStatuses] = useState([])
+  const [pickupLocations, setPickupLocations] = useState([])
+  const [selectedVendorId, setSelectedVendorId] = useState(null)
+
+  // const [deliveryZones,setDeliveryZones] = useState([])
 
   // // For selecting DELIVERY LOCATION PARENT
   // const getDeliveryLocations = async () => {
@@ -52,25 +63,50 @@ const ProductForm = (props) => {
   //   getDeliveryLocations()
   // }, [])
 
+  const fetchConstants = async () => {
+    const data = await constantsService.getConstants()
+    if (data) {
+      // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
+
+      setStatuses(Object.values(data.GENERAL['STATUS']))
+    }
+  }
+  const getPickupLocations = async () => {
+    const data = await shipmentService.getPickupLocations()
+    if (data) {
+      setPickupLocations(data)
+    }
+  }
+  const getVendors = async () => {
+    const data = await vendorService.getVendors()
+    if (data) {
+      const vendorsList = data.map((cur) => {
+        return {
+          ...cur,
+          fullName: `${cur.firstName} ${cur.lastName}`,
+        }
+      })
+      setVendors(vendorsList)
+    }
+  }
+
   const getProductTemplates = async () => {
     const data = await productTemplateService.getProductTemplates()
-    const activeProductTemplates = data.filter((cur) => cur.status === 'Active')
+    const activeProductTemplates = data.data.filter(
+      (cur) => cur.status === 'Active'
+    )
     if (activeProductTemplates) {
       setTemplates(activeProductTemplates)
     }
   }
 
-  const getDeliveryZones = async () => {
-    const data = await deliveryZoneService.getDeliveryZones()
-    if (data) {
-      setDeliveryZones(data)
-    }
-  }
   useEffect(() => {
+    fetchConstants()
     if (mode === EDIT) {
       const fetchProductById = async () => {
         const { id } = param
         const data = await productService.getProductById(id)
+
         if (data) {
           form.setFieldsValue({
             productTemplateId: data.productTemplateId,
@@ -81,14 +117,18 @@ const ProductForm = (props) => {
             deliveryZoneId: data?.deliveryZone?.id,
             status: data.status,
             qty: data.qty,
-            hsn:data.hsn,
             isUnlimited: data.isUnlimited,
             subscriptionPrice: data?.subscriptionPrice,
             bulkPrice: data?.bulkPrice,
             productCode: data?.productCode,
+            vendorId: data?.userId,
+            commission: data?.commission,
+            hsn: data?.hsn,
           })
+          setSelectedVendorId(data?.userId)
           setProductTemplateId(data.productTemplateId)
           setProductBuyType(data.acquirementMethod)
+          getDeliveryZones({}, { vendorId: data?.userId })
 
           // const subscriptionPrice = data.subscriptionPrice.map((item) => {
           //   return {
@@ -107,9 +147,45 @@ const ProductForm = (props) => {
       fetchProductById()
     }
     getProductTemplates()
-    getDeliveryZones()
+    getVendors()
+
+    // getDeliveryZones()
   }, [form, mode, param, props])
 
+  // const getDeliveryZones = async () => {
+  //   const data = await deliveryZoneService.getDeliveryZones({vendorId:selectedVendorId})
+  //   if (data) {
+  //     setDeliveryZones(data.data)
+  //   }
+  // }  // pagination generator
+  const getPaginationParams = (params) => ({
+    limit: params.pagination?.pageSize,
+    page: params.pagination?.current,
+    // ...params,
+  })
+
+  const getDeliveryZones = async (
+    paginationParams = {},
+    filterParams = { vendorId: selectedVendorId }
+  ) => {
+    // setLoading(true)
+    console.log('selectedVendorId', selectedVendorId)
+    const data = await deliveryZoneService.getDeliveryZones(
+      qs.stringify(getPaginationParams(paginationParams)),
+      qs.stringify(filterParams)
+    )
+
+    if (data) {
+      setDeliveryZones(data.data)
+
+      // // Pagination
+      // setPagination({
+      //   ...paginationParams.pagination,
+      //   total: data.total,
+      // })
+      // setLoading(false)
+    }
+  }
   console.log(productBuyType, 'productBuyType')
 
   const onFinish = async () => {
@@ -133,6 +209,9 @@ const ProductForm = (props) => {
         }
 
         if (mode === ADD) {
+          if (productBuyType === 'Giveaway') {
+            values.price = 0
+          }
           const created = await productService.createProduct(values)
           if (created) {
             message.success(`Created Product Success`)
@@ -140,6 +219,9 @@ const ProductForm = (props) => {
           }
         }
         if (mode === EDIT) {
+          if (productBuyType === 'Giveaway') {
+            values.price = 0
+          }
           const edited = await productService.editProduct(param.id, values)
           if (edited) {
             message.success(`Edited Product Success`)
@@ -179,12 +261,7 @@ const ProductForm = (props) => {
                 {mode === 'ADD' ? 'Add New Product' : `Edit Product`}{' '}
               </h2>
               <div className="mb-3">
-                <Button
-                  className="mr-2"
-                  onClick={() =>
-                    history.push('/app/dashboards/product/product-list')
-                  }
-                >
+                <Button className="mr-2" onClick={() => history.goBack()}>
                   Discard
                 </Button>
                 <Button
@@ -209,6 +286,9 @@ const ProductForm = (props) => {
                 productTemplateId={productTemplateId}
                 productBuyType={productBuyType}
                 setProductBuyType={setProductBuyType}
+                vendors={vendors}
+                getDeliveryZones={getDeliveryZones}
+                statuses={statuses}
                 // subscriptionPrice={subscriptionPrice}
                 // bulkPrice={bulkPrice}
                 // isFinalTrue={isFinalTrue}

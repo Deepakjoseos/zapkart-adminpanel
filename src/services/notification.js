@@ -1,38 +1,70 @@
 import fetch from 'auth/FetchInterceptor'
 
 const notificationService = {}
+const apiRoute = '/notifications'
 
-notificationService.getNotifications = async function () {
+notificationService.getNotifications = async function (paginationQuery='', query ='') {
   try {
     const res = await fetch({
-      url: '/notifications',
+      url: `${apiRoute}?${paginationQuery}&${query}`,
       method: 'get',
     })
     const data = res.data.filter((cur) => cur.status !== 'Deleted')
-    return data
-  } catch (err) {
-    console.log(err, 'show-err')
-  }
-}
-
-
-
-
-notificationService.createNotification = async function (data) {
-  try {
-    const res = await fetch({
-      url: `/notifications/general`,
-      method: 'post',
-      data: data,
-    })
     return res
   } catch (err) {
     console.log(err, 'show-err')
   }
 }
 
+notificationService.createNotifications = async function (data) {
+    try {
+      const res = await fetch({
+        url:`${apiRoute}/general` ,
+        method: 'post',
+        data: data,
+      })
+      return res
+    } catch (err) {
+      console.log(err, 'show-err')
+    }
+  }
 
+  notificationService.getNotificationsById = async function (id) {
+    try {
+      const res = await fetch({
+        url:`${apiRoute}/${id}` ,
+        method: 'get',
+      })
+      return res
+    } catch (err) {
+      console.log(err, 'show-err')
+    }
+  }
 
+  // notificationService.editNotifications = async function (userId, data) {
+  //   try {
+  //     const res = await fetch({
+  //       url: `${apiRoute}?userId=${userId}`,
+  //       method: 'post',
+  //       data: data,
+  //     })
+  //     return res
+  //   } catch (err) {
+  //     console.log(err, 'show-err')
+  //   }
+  // }
 
-
-export default notificationService
+  notificationService.createCartReminder= async function (data) {
+    // console.log(data);
+    try {
+      const res = await fetch({
+        url:`${apiRoute}/cartreminder`,
+        method: 'post',
+        data: {userId: data}
+      })
+      return res
+    } catch (err) {
+      console.log(err, 'show-err')
+    }
+  }
+  export default notificationService

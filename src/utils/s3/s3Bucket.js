@@ -1,4 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
+
+// No need for this file
+
 import S3 from 'react-aws-s3'
 
 const config = {

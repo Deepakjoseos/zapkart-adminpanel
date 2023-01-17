@@ -1,10 +1,21 @@
 import React, { useEffect, useState } from 'react'
-import { Card, Table, Select, Input, Button, Menu, Tag } from 'antd'
-// import ProductListData from 'assets/data/product-list.data.json'
+import {
+  Card,
+  Table,
+  Select,
+  Input,
+  Button,
+  Menu,
+  Tag,
+  notification,
+  Drawer,
+} from 'antd'
+// import CustomerListData from 'assets/data/product-list.data.json'
 import {
   EyeOutlined,
   DeleteOutlined,
   SearchOutlined,
+  EditOutlined,
   PlusCircleOutlined,
 } from '@ant-design/icons'
 import EllipsisDropdown from 'components/shared-components/EllipsisDropdown'
@@ -13,6 +24,8 @@ import { useHistory } from 'react-router-dom'
 import utils from 'utils'
 import customerService from 'services/customer'
 import AvatarStatus from 'components/shared-components/AvatarStatus'
+import { groupList } from 'views/app-views/pages/profile/profileData'
+import constantsService from 'services/constants'
 
 const { Option } = Select
 
@@ -33,35 +46,83 @@ const getStockStatus = (status) => {
   }
   return null
 }
-const ProductList = () => {
+const CustomerList = () => {
   let history = useHistory()
 
   const [list, setList] = useState([])
   const [searchBackupList, setSearchBackupList] = useState([])
+  const [selectedViewAddress, setSelectedViewAddress] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
+  const [customerAddressOpen, setCustomerAddressOpen] = useState(false)
+  const [customerAddFormOpen, setCustomerAddFormOpen] = useState(false)
 
-  useEffect(() => {
-    const getUserGroup = async () => {
-      const data = await customerService.getCustomers()
-      if (data) {
-        setList(data)
-        setSearchBackupList(data)
-        console.log(data, 'show-data')
+  const [selectedCustomerId, setSelectedCustomerId] = useState(null)
+  const [selectedPrescriptionCustomerId, setSelectedPrescriptionCustomerId] =
+    useState(null)
+  const [statuses, setStatuses] = useState([])
+
+  const getCustomers = async () => {
+    const data = await customerService.getCustomers()
+    if (data) {
+      setList(data)
+      setSearchBackupList(data)
+      console.log(data, 'show-data')
+
+      if (selectedCustomerId) {
+        data?.forEach((cur) => {
+          if (cur.id === selectedCustomerId) {
+            setSelectedViewAddress(cur.address)
+          }
+        })
       }
     }
-    getUserGroup()
+  }
+  const fetchConstants = async () => {
+    const data = await constantsService.getConstants()
+    if (data) {
+      // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
+
+      setStatuses(Object.values(data.GENERAL['STATUS']))
+
+    }
+  }
+  useEffect(() => {
+    getCustomers()
+    fetchConstants()
   }, [])
 
   const dropdownMenu = (row) => (
     <Menu>
-      <Menu.Item>
+      <Menu.Item onClick={() => editUserRedirect(row.id)}>
+        <Flex alignItems="center">
+          <EditOutlined />
+          <span className="ml-2">Edit User</span>
+        </Flex>
+      </Menu.Item>
+      {/* <Menu.Item
+        onClick={() => {
+          setSelectedViewAddress(row.address)
+          setSelectedCustomerId(row.id)
+          setCustomerAddressOpen(true)
+        }}
+      >
         <Flex alignItems="center">
           <EyeOutlined />
           <span className="ml-2">View Address</span>
         </Flex>
-      </Menu.Item>
-      {/* <Menu.Item onClick={() => deleteRow(row)}>
+      </Menu.Item> */}
+      {/* <Menu.Item
+        onClick={() => {
+          setSelectedPrescriptionCustomerId(row.id)
+        }}
+      >
+        <Flex alignItems="center">
+          <EyeOutlined />
+          <span className="ml-2">View Prescriptions</span>
+        </Flex>
+      </Menu.Item> */}
+      <Menu.Item onClick={() => deleteRow(row)}>
         <Flex alignItems="center">
           <DeleteOutlined />
           <span className="ml-2">
@@ -70,7 +131,7 @@ const ProductList = () => {
               : 'Delete'}
           </span>
         </Flex>
-      </Menu.Item> */}
+      </Menu.Item>
     </Menu>
   )
 
@@ -78,28 +139,53 @@ const ProductList = () => {
   //   history.push(`/app/dashboards/users/usergroup/add-usergroup`)
   // }
 
-  // const viewDetails = (row) => {
-  //   history.push(`/app/dashboards/users/usergroup/edit-usergroup/${row.id}`)
-  // }
+  const editUserRedirect = (id) => {
+    history.push(`/app/dashboards/users/customer/edit-customer/${id}`)
+  }
 
-  // const deleteRow = async (row) => {
-  //   const resp = await customerService.deleteUserGroup(row.id)
+  const deleteRow = async (row) => {
+    const resp = await customerService.deleteCustomer(row.id)
 
-  //   if (resp) {
-  //     const objKey = 'id'
-  //     let data = list
-  //     if (selectedRows.length > 1) {
-  //       selectedRows.forEach((elm) => {
-  //         data = utils.deleteArrayRow(data, objKey, elm.id)
-  //         setList(data)
-  //         setSelectedRows([])
-  //       })
-  //     } else {
-  //       data = utils.deleteArrayRow(data, objKey, row.id)
-  //       setList(data)
-  //     }
-  //   }
-  // }
+    if (resp) {
+      const objKey = 'id'
+      let data = list
+      if (selectedRows.length > 1) {
+        selectedRows.forEach((elm) => {
+          data = utils.deleteArrayRow(data, objKey, elm.id)
+          setList(data)
+          setSelectedRows([])
+        })
+      } else {
+        data = utils.deleteArrayRow(data, objKey, row.id)
+        setList(data)
+      }
+    }
+  }
+  const addCustomer = () => {
+    history.push(`/app/dashboards/users/customer/add-customer`)
+  }
+
+  const handleStatusChange = async (value, selectedRow) => {
+    const updatedProductApproval = await customerService.ediCustomerStatus(
+      selectedRow.id,
+      { status: value }
+    )
+
+    if (updatedProductApproval) {
+      notification.success({ message: 'Customer Status Updated' })
+
+      // const objKey = 'id'
+      // let data = list
+      // data = utils.updateArrayRow(
+      //   data,
+      //   objKey,
+      //   selectedRow.id,
+      //   'approval',
+      //   value
+      // )
+      // setList(data)
+    }
+  }
 
   const tableColumns = [
     {
@@ -122,6 +208,7 @@ const ProductList = () => {
       dataIndex: 'lastName',
       sorter: (a, b) => utils.antdTableSorter(a, b, 'lastname'),
     },
+
     {
       title: 'Email',
       dataIndex: 'email',
@@ -132,12 +219,44 @@ const ProductList = () => {
       dataIndex: 'phone',
     },
     {
+      title: 'Groups',
+      dataIndex: 'groups',
+      render: (groups) => {
+        return (
+          <>
+            {groups?.map((group) => (
+              <>
+                <p>{group.name}</p>
+                {/* <p>Type:{group.type}</p>
+          <p>Status:{group.status}</p> */}
+              </>
+            ))}
+          </>
+        )
+      },
+      // sorter: (a, b) => utils.antdTableSorter(a, b, 'lastname'),
+    },
+    {
       title: 'Status',
       dataIndex: 'status',
-      render: (status) => (
-        <Flex alignItems="center">{getStockStatus(status)}</Flex>
-      ),
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'status'),
+      render: (status, row) => {
+        return (
+          <Select
+            defaultValue={status.charAt(0).toUpperCase() + status.slice(1)}
+            // style={{ width: 120 }}
+            onChange={(e) => handleStatusChange(e, row)}
+          >
+            <Option value="Active">
+              <Tag color="green">Active</Tag>
+            </Option>
+            <Option value="Blocked">
+              <Tag color="red">Blocked</Tag>
+            </Option>
+          </Select>
+        )
+      },
+      // render: (isUnlimited) => <Flex>{isUnlimited ? 'Yes' : 'No'}</Flex>,
+      // sorter: (a, b) => utils.antdTableSorter(a, b, 'approval'),
     },
     {
       title: '',
@@ -179,15 +298,16 @@ const ProductList = () => {
       </div>
       <div className="mb-3">
         <Select
-          defaultValue="All"
           className="w-100"
           style={{ minWidth: 180 }}
-          onChange={handleShowStatus}
           placeholder="Status"
         >
-          <Option value="All">All</Option>
-          <Option value="Active">Active</Option>
-          <Option value="Hold">Hold</Option>
+          <Option value="">All</Option>
+          {statuses.map((item) => (
+            <Option key={item.id} value={item}>
+              {item}
+            </Option>
+          ))}
         </Select>
       </div>
     </Flex>
@@ -197,22 +317,36 @@ const ProductList = () => {
     <Card>
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
         {filters()}
-        {/* <div>
+        <div>
           <Button
-            onClick={addProduct}
+            onClick={addCustomer}
             type="primary"
             icon={<PlusCircleOutlined />}
             block
           >
-            Add UserGroup
+            Add Customer
           </Button>
-        </div> */}
+        </div>
       </Flex>
       <div className="table-responsive">
         <Table columns={tableColumns} dataSource={list} rowKey="id" />
+
+        {/* <ViewAddresses
+          selectedViewAddress={selectedViewAddress}
+          setSelectedViewAddress={setSelectedViewAddress}
+          setCustomerAddressOpen={setCustomerAddressOpen}
+          customerAddressOpen={customerAddressOpen}
+          selectedCustomerId={selectedCustomerId}
+          refetchData={getCustomers}
+        />
+        
+        <ViewPrescriptions
+          selectedPrescriptionCustomerId={selectedPrescriptionCustomerId}
+          setSelectedPrescriptionCustomerId={setSelectedPrescriptionCustomerId}
+        /> */}
       </div>
     </Card>
   )
 }
 
-export default ProductList
+export default CustomerList

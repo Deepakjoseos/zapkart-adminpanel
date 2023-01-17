@@ -48,15 +48,12 @@ const LoginOne = (props) => {
                     )
                   )}
 
-                  <p>
-                    Don't have an account yet?{' '}
-                    <a href="/auth/register-1">Sign Up</a>
-                  </p>
+                  {/* <p>Don't have an account yet? <a href="/auth/register-1">Sign Up</a></p> */}
                 </div>
                 <Row justify="center">
                   <Col xs={24} sm={24} md={20} lg={20}>
                     <LoginForm {...props} />
-                    <Link to="/auth/forgot-password">Forgot Password?</Link>
+                    <Link to="/auth/forgot-password">Forgot Password ?</Link>
                   </Col>
                 </Row>
               </div>

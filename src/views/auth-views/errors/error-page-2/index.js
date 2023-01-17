@@ -11,11 +11,31 @@ const ErrorTwo = () => {
     <div className={`h-100 ${theme === 'light' ? 'bg-white' : ''}`}>
       <div className="container-fluid d-flex flex-column justify-content-between h-100 px-md-4 pb-md-4 pt-md-1">
         <div>
-          <img
-            className="img-fluid"
-            src={`/img/${theme === 'light' ? 'logo.png' : 'logo-white.png'}`}
-            alt=""
-          />
+          {process.env.REACT_APP_SITE_NAME === 'zapkart' ? (
+            <img
+              className="img-fluid"
+              src={`/img/${theme === 'light' ? 'logo.png' : 'logo-white.png'}`}
+              alt=""
+            />
+          ) : process.env.REACT_APP_SITE_NAME === 'athathy' ? (
+            <img
+              className="img-fluid"
+              src={`/img/${
+                theme === 'light' ? 'athathy.png' : 'logo-white.png'
+              }`}
+              alt=""
+            />
+          ) : (
+            process.env.REACT_APP_SITE_NAME === 'awen' && (
+              <img
+                className="img-fluid"
+                src={`/img/${
+                  theme === 'light' ? 'awenlogo.png' : 'logo-white.png'
+                }`}
+                alt=""
+              />
+            )
+          )}
         </div>
         <div className="container">
           <div className="text-center mb-5">
@@ -33,7 +53,7 @@ const ErrorTwo = () => {
             Copyright &copy; {`${new Date().getFullYear()}`}{' '}
             <span className="font-weight-semibold">{`${APP_NAME}`}</span>
           </span>
-          <div>
+          {/* <div>
             <a
               className="text-gray"
               href="/#"
@@ -49,7 +69,7 @@ const ErrorTwo = () => {
             >
               Privacy & Policy
             </a>
-          </div>
+          </div> */}
         </Flex>
       </div>
     </div>

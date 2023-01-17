@@ -1,17 +1,22 @@
 import React from 'react'
 import { Route, Switch, Redirect } from 'react-router-dom'
+import AddCustomer from './add-customer'
 import CustomerList from './customer-list/index'
+import EditCustomer from './edit-customer/index'
 // import Orders from './orders'
 
-const Ecommerce = (props) => {
+const Customer = (props) => {
   const { match } = props
   return (
     <Switch>
       <Redirect exact from={`${match.url}`} to={`${match.url}/customer-list`} />
 
       <Route path={`${match.url}/customer-list`} component={CustomerList} />
+      <Route path={`${match.url}/add-customer`} component={AddCustomer} />
+
+      <Route path={`${match.url}/edit-customer/:id`} component={EditCustomer} />
     </Switch>
   )
 }
 
-export default Ecommerce
+export default Customer

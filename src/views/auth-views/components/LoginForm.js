@@ -60,11 +60,6 @@ export const LoginForm = (props) => {
     signInWithFacebook()
   }
 
-  // useEffect(() => {
-
-  //   window.location.reload()
-  // }, [])
-
   useEffect(() => {
     if (token !== null && allowRedirect) {
       history.push(redirect)
@@ -78,7 +73,7 @@ export const LoginForm = (props) => {
 
   const renderOtherSignIn = (
     <div>
-      {/* <Divider>
+      <Divider>
         <span className="text-muted font-size-base font-weight-normal">
           or connect with
         </span>
@@ -91,15 +86,15 @@ export const LoginForm = (props) => {
           icon={<CustomIcon svg={GoogleSVG} />}
         >
           Google
-        </Button> */}
-        {/* <Button
+        </Button>
+        <Button
           onClick={() => onFacebookLogin()}
           icon={<CustomIcon svg={FacebookSVG} />}
           disabled={loading}
         >
           Facebook
-        </Button> */}
-      {/* </div> */}
+        </Button>
+      </div>
     </div>
   )
 
@@ -171,7 +166,9 @@ export const LoginForm = (props) => {
             Sign In
           </Button>
         </Form.Item>
-        {otherSignIn ? renderOtherSignIn : null}
+        {/* {
+					otherSignIn ? renderOtherSignIn : null
+				} */}
         {extra}
       </Form>
     </>

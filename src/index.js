@@ -4,11 +4,7 @@ import store from './redux/store'
 import ReactDOM from 'react-dom'
 import App from './App'
 import * as serviceWorker from './serviceWorker'
-import { injectStore } from 'auth/FetchInterceptor'
-
 import './index.css'
-
-injectStore(store)
 
 ReactDOM.render(
   <Provider store={store}>
