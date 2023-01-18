@@ -203,12 +203,12 @@ const VendorList = () => {
           />
         </div>
       ),
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'firstName'),
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'name'),
     },
     {
       title: 'Last Name',
       dataIndex: 'lastName',
-      sorter: (a, b) => utils.antdTableSorter(a, b, 'lastName'),
+      sorter: (a, b) => utils.antdTableSorter(a, b, 'lastname'),
     },
     {
       title: 'Email',

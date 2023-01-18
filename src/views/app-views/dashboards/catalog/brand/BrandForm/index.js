@@ -210,7 +210,6 @@ const ProductForm = (props) => {
             //  append image url to values object
             values.image = imgValue
             //checking banner exists
-           
             if (uploadedBanner.length !== 0 && uploadedBanner !== null) {
               const imageCategory = imageCategories.find(
                 (imgCat) => imgCat.imageFor === 'BrandBanners'
@@ -226,7 +225,6 @@ const ProductForm = (props) => {
               values.banner = null
             }
 
-          
             const edited = await brandService.editBrand(param.id, values)
             if (edited) {
               message.success(`Edited ${values.name} to Brand list`)

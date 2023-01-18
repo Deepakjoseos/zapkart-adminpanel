@@ -42,8 +42,7 @@ const GeneralField = ({
 // *************************************Edited***************************************************
 
   id,                                   //edit
-  setPhoneVerified,                     //edit
-  setEmailVerified                      //edit  
+  setPhoneVerified                      //edit
 
 // *************************************Edited***************************************************
 
@@ -76,18 +75,6 @@ const handleClick = async () => {
 
   }
   setUpdatePhone(false);
-}
-
-const handleVerifyEmail = async() => {
-  setIsLoading(true)
-  const promise = await customerService.verifyEmailAdress(id)
-  if(promise){
-    message.success("verified Email")
-    setEmailVerified(true)
-    setIsLoading(false)
-  } else {
-    setIsLoading(false)
-  }
 }
 
 // *************************************Edited***************************************************
@@ -160,6 +147,7 @@ const handleVerifyEmail = async() => {
             alignItems="center"
 
           >
+
             {!isLoading ? 
               <>
                  <div>
@@ -181,6 +169,23 @@ const handleVerifyEmail = async() => {
               </> :
               <Loading />
             }
+
+            {/* <div>
+          <Button 
+          className="mr-2"
+          onClick={() => {
+            setUpdatePhone(false)
+          }}
+          >Cancel</Button>
+          </div>
+          <div >
+          <Button 
+          type= 'primary'
+          onClick={() => {
+            handleClick()
+          }}
+          >Update</Button>
+          </div> */}
           </Flex>
         </Card>
     </div>
@@ -191,47 +196,12 @@ const handleVerifyEmail = async() => {
 {/* *************************************Edited*************************************************** */}
 
               <Form.Item
-                name="smsSubscription"
-                label="SMS Subscription"
-                rules={rules.emailVerified}
-              >
-                <Select placeholder="SMS Subscription">
-                  <Option value={true}>Yes</Option>
-                  <Option value={false}>No</Option>
-                </Select>
-              </Form.Item>
-
-              <Form.Item
                 hasFeedback
                 validateStatus={emailVerified ? 'success' : 'error'}
                 name="email"
                 label="Email"
               >
                 <Input disabled id="success" />
-              </Form.Item>
-
-              <div>
-                {!isLoading ? 
-                  <Button
-                    type = 'primary' 
-                    onClick={handleVerifyEmail}
-                  >Verify Email
-                  </Button> :
-                  <Loading />
-                }
-
-              </div>
-              <br/>
-
-              <Form.Item
-                name="emailSubscription"
-                label="Email Subscription"
-                rules={rules.emailVerified}
-              >
-                <Select placeholder="Email Subscription">
-                  <Option value={true}>Yes</Option>
-                  <Option value={false}>No</Option>
-                </Select>
               </Form.Item>
             </>
           ) : (

@@ -70,7 +70,7 @@ const rules = {
 }
 
 const GeneralField = ({ form, tempConstants, form_statuses }) => {
-  // console.log('constants', tempConstants)
+  console.log('constants', tempConstants)
   return (
     <Row gutter={16}>
       <Col xs={24} sm={24} md={24}>

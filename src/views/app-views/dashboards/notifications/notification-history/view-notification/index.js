@@ -28,7 +28,7 @@ const ViewNotfication = () => {
     useEffect(() => {
           const fetchNotificationById = async () => {
             const data = await notificationService.getNotificationsById(id);
-            // console.log(data,'fetchNotify')
+            console.log(data,'fetchNotify')
             setList(data.data)
         }
           fetchNotificationById()

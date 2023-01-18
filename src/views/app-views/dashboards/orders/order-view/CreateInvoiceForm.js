@@ -58,10 +58,24 @@ const CreateInvoiceForm = ({
   //     setPickUpLocations(data.shipping_address)
   //   }
   // }
-
   // useEffect(() => {
   //   getPickupLocations()
   // }, [])
+  // const uniquevendor = vendorBasedInvoiceData.filter((item, index) => {
+  //   return vendorBasedInvoiceData.findIndex(i => i.vendorId === item.vendorId) === index;
+  // });
+  let uniquevendor ={};
+  let vendorDetails = {};
+  vendorBasedInvoiceData.map((item) => {
+      vendorDetails[item.items[0].vendorId] = {vendorId:item.items[0].vendorId,vendorName:item.items[0].vendorName}
+      if (uniquevendor[item.items[0].vendorId]) 
+      uniquevendor[item.items[0].vendorId].push(item.items[0]);
+      else uniquevendor[item.items[0].vendorId] = [item.items[0]];
+    });
+ 
+    console.log(uniquevendor,'vendoris')
+    console.log(vendorDetails,'vendordetails')
+    console.log(items,'items')
 
   useEffect(() => {
     if (items?.length > 0) {
@@ -215,8 +229,8 @@ const CreateInvoiceForm = ({
                   }))
                 }
               >
-                {vendorBasedInvoiceData?.map((cur) => (
-                  <Option value={cur?.vendorId}>{cur?.vendorName}</Option>
+                {Object.entries(uniquevendor)?.map(([vendorId,cur]) => (
+                  <Option value={vendorId}>{vendorDetails[vendorId].vendorName}</Option>
                 ))}
               </Select>
 
@@ -233,35 +247,99 @@ const CreateInvoiceForm = ({
 
               <Table
                 dataSource={
-                  vendorBasedInvoiceData?.find(
-                    (cur) => cur.vendorId === creatingInvoiceValue?.vendorId
-                  )?.items
+                  uniquevendor[creatingInvoiceValue?.vendorId]
                 }
                 pagination={false}
                 className="mb-5"
               >
-                <Column title="Product" dataIndex="name" key="name" />
-                <Column title="Quantity" dataIndex="quantity" key="quantity" />
-                <Column title="Price" dataIndex="price" key="price" />
+                <Column title="Product" 
+                // dataIndex="name" 
+                // key="name"
+                render={(text) =>
+                  !text.invoiceId ? (
+                    
+                    text?.name
+                  ) : (
+                    ''
+                  )
+                }
+                />
+                <Column title="Quantity"
+                //  dataIndex="quantity"
+                  // key="quantity"
+                  render={(text) =>
+                    !text.invoiceId ? (
+                      
+                      text?.quantity
+                    ) : (
+                      ''
+                    )
+                  } 
+                  />
+                <Column title="Price" 
+                  // dataIndex="price"
+                  // key="price"
+                  render={(text) =>
+                    !text.invoiceId ? (
+                      
+                      text?.price
+                    ) : (
+                      ''
+                    )
+                  }  />
                 <Column
                   title="Vendor"
-                  dataIndex="vendorName"
-                  key="vendorName"
+                  // dataIndex="vendorName"
+                  // key="vendorName"
+                  render={(text) =>
+                    !text.invoiceId ? (
+                      // <Link
+                      //   to={`/app/dashboards/shipment/shipment-view/${text.shipmentId}`}
+                      // >
+                      //   {' '}
+                      //   {text.shipmentNo}
+                      // </Link>
+                      text?.vendorName
+                    ) : (
+                      ''
+                    )
+                  } 
                 />
                 {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
                   <Column
                     title="Prescription Required"
-                    dataIndex="prescriptionRequired"
-                    key="prescriptionRequired"
-                    render={(presc) => <>{presc ? 'Yes' : 'No'}</>}
+                    // dataIndex="prescriptionRequired"
+                    // key="prescriptionRequired"
+                    render={(presc) => 
+                    !presc.invoiceId ?
+                    (
+                    <>
+                    {presc.prescriptionRequired ? 'Yes' : 'No'}
+                    </>
+                    ): (
+                      ''
+                    )
+                  }
                   />
                 )}
 
-                <Column title="Status" dataIndex="status" key="status" />
+                <Column title="Status"
+                //  dataIndex="status" 
+                //  key="status"
+                 render={(text) =>
+                  !text.invoiceId ? (
+                    
+                    text?.status
+                  ) : (
+                    ''
+                  )
+                } />
                 <Column
                   title="Action"
-                  render={(_, row) => (
+                  render={(row) => (
+                    !row.invoiceId ?(
                     <>
+
                       {ifItemIdIsInCreatingInvoiceValue(row.id) ? (
                         <Button
                           onClick={() =>
@@ -284,10 +362,12 @@ const CreateInvoiceForm = ({
                             setExpiry(row.expiry ? moment(row.expiry) : null)
                           }}
                         >
-                          Add To Invoice
+                          Add Invoice
                         </Button>
                       )}
+
                     </>
+                    ):('')
                   )}
                 />
               </Table>
@@ -297,7 +377,7 @@ const CreateInvoiceForm = ({
       </Drawer>
 
       <Modal
-        title="Add Item"
+        title="Add Invoice"
         style={{ top: 20 }}
         visible={isAddInvoiceModalOpen}
         onCancel={() => setIsAddInvoiceModalOpen(false)}

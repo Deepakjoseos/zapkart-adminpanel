@@ -190,10 +190,10 @@ const handleTableChange = (newPagination) => {
 
 
   const tableColumns = [
-    // {
-    //   title: 'Tax Category Id',
-    //   dataIndex: 'id'
-    // },
+    {
+      title: 'Tax Category Id',
+      dataIndex: 'id'
+    },
     {
       title: 'Name',
       dataIndex: 'name'
@@ -294,52 +294,52 @@ const handleTableChange = (newPagination) => {
     }
   }
 
-  // const filters = () => (
-  //   <div className="mr-md-3 mb-3">
-  //   <Flex className="mb-1" mobileFlex={false}>
+  const filters = () => (
+    <div className="mr-md-3 mb-3">
+    <Flex className="mb-1" mobileFlex={false}>
      
-  //       <Input
-  //         placeholder="Search"
-  //         prefix={<SearchOutlined />}
-  //         onChange={(e) => onSearch(e)}
-  //       />
+        <Input
+          placeholder="Search"
+          prefix={<SearchOutlined />}
+          onChange={(e) => onSearch(e)}
+        />
       
      
    
       
-  //       <Select
-  //         className="w-100"
-  //         style={{ minWidth: 180 }}
-  //         placeholder="Status"
-  //       >
-  //         <Option value="">All</Option>
-  //         {statuses.map((item) => (
-  //           <Option key={item.id} value={item}>
-  //             {item}
-  //           </Option>
-  //         ))}
-  //       </Select>
+        <Select
+          className="w-100"
+          style={{ minWidth: 180 }}
+          placeholder="Status"
+        >
+          <Option value="">All</Option>
+          {statuses.map((item) => (
+            <Option key={item.id} value={item}>
+              {item}
+            </Option>
+          ))}
+        </Select>
         
-  //         <Button type="primary" onClick={handleFilterSubmit}>
-  //           Filter
-  //         </Button>
+          <Button type="primary" onClick={handleFilterSubmit}>
+            Filter
+          </Button>
       
   
-  //         <Button type="primary" onClick={handleClearFilter}>
-  //           Clear
-  //         </Button>
+          <Button type="primary" onClick={handleClearFilter}>
+            Clear
+          </Button>
      
         
   
   
-  //   </Flex>
-  //   </div>
-  // )
+    </Flex>
+    </div>
+  )
 
   return (
     <Card>
       <Flex alignItems="center" justifyContent="between" mobileFlex={false}>
-        {/* {filters()} */}
+        {filters()}
         <div>
           <Button
             onClick={addTaxCategory}

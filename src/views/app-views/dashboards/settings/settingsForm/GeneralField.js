@@ -7,14 +7,14 @@ import {
   Select,
   Button,
   Space,
-  InputNumber
-} from 'antd';
-import { SearchOutlined, EyeOutlined } from '@ant-design/icons';
-import EllipsisDropdown from 'components/shared-components/EllipsisDropdown';
-import { useState } from 'react';
-import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+  InputNumber,
+} from "antd";
+import { SearchOutlined, EyeOutlined } from "@ant-design/icons";
+import EllipsisDropdown from "components/shared-components/EllipsisDropdown";
+import { useState } from "react";
+import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 
-import Editor from 'components/shared-components/Editor';
+import Editor from "components/shared-components/Editor";
 
 const { Option } = Select;
 
@@ -22,45 +22,45 @@ const rules = {
   name: [
     {
       required: true,
-      message: 'Required'
-    }
+      message: "Required",
+    },
   ],
   address: [
     {
       required: false,
-      message: 'Required'
-    }
+      message: "Required",
+    },
   ],
   email: [
     {
       required: false,
-      message: 'Required'
-    }
+      message: "Required",
+    },
   ],
 
   phone: [
     {
       required: true,
-      message: 'Required'
-    }
+      message: "Required",
+    },
   ],
   facebookUrl: [
     {
       required: true,
-      message: 'Required'
-    }
+      message: "Required",
+    },
   ],
   instagramUrl: [
     {
       required: true,
-      message: 'Required'
-    }
+      message: "Required",
+    },
   ],
   twitterUrl: [
     {
       required: true,
-      message: 'Required'
-    }
+      message: "Required",
+    },
   ],
 
   tdsPercentage: [
@@ -129,21 +129,23 @@ const GeneralField = ({ setmode, form }) => {
           >
             <Input placeholder="Razor Pay Account" type="text" />
           </Form.Item>
-          {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+          {process.env.REACT_APP_SITE_NAME === "zapkart" && (
             <Form.Item name="" label="Agreement">
+             
+
               <Editor
                 placeholder="Write something..."
-                editorHtml={form.getFieldValue('agreement') || ''}
+                editorHtml={form.getFieldValue("agreement") || ""}
                 onChange={(e) => form.setFieldsValue({ agreement: e })}
                 name="agreement"
               />
             </Form.Item>
           )}
-          {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+          {process.env.REACT_APP_SITE_NAME === "zapkart" && (
             <Form.Item name="footer" label="Footer">
               <Editor
                 placeholder="Write something..."
-                editorHtml={form.getFieldValue('footer') || ''}
+                editorHtml={form.getFieldValue("footer") || ""}
                 onChange={(e) => form.setFieldsValue({ footer: e })}
                 name="fcmDescription"
               />
@@ -226,7 +228,6 @@ const GeneralField = ({ setmode, form }) => {
                       )}
                     </Space>
                   ))}
-
                   <Form.Item>
                     <Button
                       type="primary"
@@ -333,12 +334,12 @@ const GeneralField = ({ setmode, form }) => {
         {/* <Form.Item name="keywords" label="Keywords">
             <Input placeholder="Keywords" />
           </Form.Item> */}
-        <Form.Item name="keywords" label="Meta Keywords">
+        <Form.Item name="keywords" label="Maeta Keywords">
           <Select
-            dropdownStyle={{ display: 'none' }}
+            dropdownStyle={{ display: "none" }}
             mode="tags"
             style={{
-              width: '100%'
+              width: "100%",
             }}
             placeholder="Keywords"
           ></Select>

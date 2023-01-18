@@ -81,13 +81,12 @@ const rules = {
       message: 'Required',
     },
   ],
-  emailSubscription: [
+  tdsEnabled: [
     {
       required: true,
-      message: 'Required',
+    message: 'Required',
     }
   ]
-  
 }
 
 
@@ -124,7 +123,6 @@ const handleClick = async () => {
     message.success(`Updated Phone Number to ${data.phone}`)
     form.setFieldsValue({
       phone: data.phone,
-      // emailSubscription:data.emailSubscription ? 'Yes' : 'No'
     })
     setPhoneVerified(true)
     setData({
@@ -205,7 +203,7 @@ const handleDownload = () => {
                 >
                   <Input.Password />
                 </Form.Item>
-                <Form.Item name="phone" label="Phone" rules={rules.phone}>
+                <Form.Item name="phone" label="Phone" rules={rules.pone}>
                   <Input placeholder="Phone" />
                 </Form.Item>
                 {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
@@ -411,16 +409,7 @@ const handleDownload = () => {
 
                
 {/* *********************************EDIT****************************************** */}
-                <Form.Item
-                  name='smsSubscription'
-                  label='SMS Subscription'
-                >
-                  <Select>
-                    {/* <Option value = ''>All</Option> */}
-                    <Option value = {false}>No</Option>
-                    <Option value = {true}>Yes</Option>
-                  </Select>
-                </Form.Item>
+
 
               <Form.Item
                 hasFeedback
@@ -430,19 +419,6 @@ const handleDownload = () => {
               >
                 <Input disabled id="success" />
               </Form.Item>
-
-
-                <Form.Item
-                  name='emailSubscription'
-                  label='Email Subscription'
-                >
-                  <Select>
-                    {/* <Option value = ''>All</Option> */}
-                    <Option value = {false}>No</Option>
-                    <Option value = {true}>Yes</Option>
-                  </Select>
-                </Form.Item>
-
               {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
                 <Form.Item name="pan" label="Pan" rules={rules.pan}>
                   <Input placeholder="Pan" />
@@ -458,6 +434,39 @@ const handleDownload = () => {
                   <Input placeholder="tanNumber" />
                 </Form.Item>
          )}
+         {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+                <Form.Item name="tdsEnabled" label="TDS Enabled">
+                  <Select placeholder="TDS Enabled">
+                  <Option value={true}>Yes</Option>
+                  <Option value={false}>No</Option>
+                </Select>
+                </Form.Item>
+         )}
+         {/* {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+                <Form.Item name="tdsEnabled" label="TDS Enabled">
+                  <Select placeholder="TDS Enabled">
+                  <Option value={true}>Yes</Option>
+                  <Option value={false}>No</Option>
+                </Select>
+                </Form.Item>
+         )} */}
+         {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+                <Form.Item name="smsSubscription" label="SMS Subscription">
+                  <Select placeholder="SMS Subscription">
+                  <Option value={true}>Yes</Option>
+                  <Option value={false}>No</Option>
+                </Select>
+                </Form.Item>
+         )}
+         {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+                <Form.Item name="emailSubscription" label="Email Subscription">
+                  <Select placeholder="Email Subscription">
+                  <Option value={true}>Yes</Option>
+                  <Option value={false}>No</Option>
+                </Select>
+                </Form.Item>
+         )}
+
             </>
 
             {/* <Form.Item name="drugLicense" label="Drug License Number" rules={rules.drugLicense}>

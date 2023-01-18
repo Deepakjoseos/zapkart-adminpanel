@@ -22,8 +22,8 @@ const GeneralField = ({
   getPincode,
   getCity,
 }) => {
-  // console.log('hiiii')
-  // console.log(pincode)
+  console.log('hiiii')
+  console.log(pincode)
   return (
     <Card>
       <Row gutter={16}>
@@ -62,7 +62,7 @@ const GeneralField = ({
         <Col span={12}>
           <Form.Item
             name="phone"
-            label="Phone"
+            label="Phone (10 digits)"
             rules={[
               {
                 required: true,
@@ -95,12 +95,10 @@ const GeneralField = ({
           </Form.Item>
         </Col> */}
       </Row>
-     
+
       <Row gutter={16}>
-      {SITE_NAME === 'zapkart' && (      
         <Col span={8}>
-         
-       
+          {SITE_NAME === 'zapkart' && (
             <Form.Item name="state" label="State">
               <Select
                 showSearch
@@ -122,9 +120,8 @@ const GeneralField = ({
                 ))}
               </Select>
             </Form.Item>
-         
+          )}
         </Col>
-        )}
         <Col span={8}>
           <Form.Item
             name="city"
@@ -227,14 +224,14 @@ const GeneralField = ({
               },
             ]}
           >
-            <Input rows={4} placeholder="Address" />
+            <Input.TextArea rows={4} placeholder="Address" />
           </Form.Item>
         </Col>
       </Row>
       <Row gutter={16}>
         <Col span={24}>
           <Form.Item name="addressLine2" label="Address 2">
-            <Input rows={4} placeholder="Address 2" />
+            <Input.TextArea rows={4} placeholder="Address 2" />
           </Form.Item>
         </Col>
       </Row>

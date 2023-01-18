@@ -17,7 +17,6 @@ import BankAccount from './bankAccount'
 import { useSelector } from 'react-redux'
 import Documents from './documents'
 import PickupLocations from '../VendorForm/pickuplocation'
-import DocumentField from './DocumentField'
 
 // const getAllPickUpLocations = async ()=>{
 //   const data = await shipmentService.getAllPickUpLocations()
@@ -85,6 +84,7 @@ const ProductForm = (props) => {
   const fetchConstants = async () => {
     const data = await constantsService.getConstants()
     if (data) {
+      // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
 
       setStatuses(Object.values(data.USER['STATUS']))
     }
@@ -94,14 +94,14 @@ const ProductForm = (props) => {
     if (data) {
       setTransactions(data)
     }
-    // console.log('trans', data)
+    console.log('trans', data)
   }
   const getWallet = async () => {
     const data = await walletService.getVendorWallet(id)
     if (data) {
       setWallet(data)
     }
-    // console.log('trans', data)
+    console.log('trans', data)
   }
   useEffect(() => {
     getTransactions()
@@ -120,7 +120,7 @@ const ProductForm = (props) => {
     if (data) {
       setDownloadAgreement(data.agreement)
       setSelectedVendorId(data.id)
-      // console.log('datavendorid', data)
+      console.log('datavendorid', data)
       setPickUpLocation(data.pickupLocations)
       let himg = []
       if (data?.displayImage) {
@@ -154,9 +154,12 @@ const ProductForm = (props) => {
         firstName: data.firstName,
         lastName: data.lastName,
         email: data?.email,
+        emailSubscription: data?.emailSubscription,
+        smsSubscription: data?.smsSubscription,
         phone: data?.phone,
         gst: data?.gst,
         tanNumber:data?.tanNumber,
+        tdsEnabled: data?.tdsEnabled,
         pan:data?.pan,
         drugLicense: data?.drugLicense,
         groups: data?.groups.map((cur) => cur.id),
@@ -186,7 +189,6 @@ const ProductForm = (props) => {
       })
       setEmailVerified(data?.emailVerified ? true : false)
       setPhoneVerified(data?.phone ? true : false)
-      setDocumentData(data?.documents)
     } else {
       history.replace('/app/dashboards/users/vendor/vendor-list')
     }
@@ -227,7 +229,7 @@ const ProductForm = (props) => {
     form
       .validateFields()
       .then(async (values) => {
-        // console.log(values, 'values')
+        console.log(values, 'values')
 
         const sendingValues = {
           firstName: values.firstName,
@@ -235,12 +237,12 @@ const ProductForm = (props) => {
           tanNumber: values.tanNumber,
           name:values.name,
           pan: values.pan,
-          gst: values.gst,
-          drugLicense: values.drugLicense,
-          groups: values.groups,
           emailSubscription: values.emailSubscription,
           smsSubscription: values.smsSubscription,
-
+          gst: values.gst,
+          tdsEnabled: values.tdsEnabled,
+          drugLicense: values.drugLicense,
+          groups: values.groups,
           
           address: {
             line1: values['address.line1'],
@@ -296,7 +298,7 @@ const ProductForm = (props) => {
             imageCategory.id
           )
           sendingValues.displayImage = displayImageValue
-          // console.log('upload', sendingValues.displayImage)
+          console.log('upload', sendingValues.displayImage)
         } else {
           delete sendingValues.displayImage
         }
@@ -320,7 +322,7 @@ const ProductForm = (props) => {
             })
           }
 
-          // console.log('upload', logoValue)
+          console.log('upload', logoValue)
         } else {
           delete sendingValues.business.logo
         }
@@ -341,7 +343,7 @@ const ProductForm = (props) => {
         }
         if (mode === EDIT) {
           // Checking if image exists
-          // console.log(sendingValues, 'heyyyy', values)
+          console.log(sendingValues, 'heyyyy', values)
           // if (displayImage.length !== 0 && displayImage !== null) {
           //   const displayImageValue = await singleImageUploader(
           //     displayImage[0].originFileObj,
@@ -364,7 +366,7 @@ const ProductForm = (props) => {
       })
       .catch((info) => {
         setSubmitLoading(false)
-        // console.log('info', info)
+        console.log('info', info)
         message.error('Please enter all required field ')
       })
   }
@@ -455,12 +457,6 @@ const ProductForm = (props) => {
                     <Documents />
                   </TabPane>
                 )}
-                <TabPane tab="Documents" key="5">
-                  <DocumentField 
-                    documentData={documentData}
-                    refreshData = {fetchVendorById}
-                  />
-                </TabPane>
               </>
             )}
           </Tabs>

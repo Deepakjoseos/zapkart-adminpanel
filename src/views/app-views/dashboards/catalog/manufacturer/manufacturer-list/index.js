@@ -257,12 +257,6 @@ const ProductList = () => {
         </Col>
 
         <Col md={6} sm={24} xs={24} lg={6}>
-          <Form.Item name="status" label="Status">
-            <Input placeholder="Status" prefix={<SearchOutlined />} />
-          </Form.Item >
-        </Col>
-
-        <Col md={6} sm={24} xs={24} lg={6}>
           <Form.Item name="orderByPriority" label="OrderByPriority">
             <Select
               className="w-100"
@@ -272,21 +266,6 @@ const ProductList = () => {
               <Option value="">All</Option>
                <Option value={true}>Yes</Option>
                <Option value={false}>No</Option>
-
-            </Select>
-          </Form.Item>
-        </Col>
-
-        <Col md={6} sm={24} xs={24} lg={6}>
-          <Form.Item name="orderByName" label="Order By Name">
-            <Select
-              className="w-100"
-              style={{ minWidth: 180 }}
-              placeholder="Order By Name"
-            >
-              <Option value="">All</Option>
-               <Option value='Asc'>Asc</Option>
-               <Option value='Desc'>Desc</Option>
 
             </Select>
           </Form.Item>
