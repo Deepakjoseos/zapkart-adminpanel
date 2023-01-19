@@ -222,4 +222,17 @@ shipmentService.selectShipmentType = async function (data) {
   }
 }
 
+shipmentService.updateStatus = async function(data) {
+  try{
+    const res = await fetch({
+      url: `${apiRoute}/update/status/admin`,
+      method: 'put',
+      data
+    })
+    return res
+  } catch(err) {
+    console.log(err, "show-err")
+  }
+}
+
 export default shipmentService

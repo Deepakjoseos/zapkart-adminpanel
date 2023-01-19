@@ -12,6 +12,7 @@ import {
   Col,
   Popconfirm,
   Form,
+  message,
 } from 'antd'
 // import { invoiceData } from '../../../pages/invoice/invoiceData'
 import NumberFormat from 'react-number-format'
@@ -25,6 +26,7 @@ import { useReactToPrint } from 'react-to-print'
 // import PrescriptionSelector from './PrescriptionSelector'
 import shipmentService from 'services/shipment'
 import CheckIfDeliverable from '../shipment-list/CheckIfDeliverable'
+import constantsService from 'services/constants'
 
 const ShipmentView = () => {
   const { Option } = Select
@@ -40,6 +42,7 @@ const ShipmentView = () => {
   const [selectedCourierId, setSelectedCourierId] = useState(null)
   const [currentActionButton, setCurrentActionButton] = useState(null)
   const [selectedShipmentType, setSelectedShipmentType] = useState(null)
+  const [status, setStatus] = useState(null)
   //   const [isFormOpen, setIsFormOpen] = useState(false)
   //   const [printing, setPrinting] = useState(false)
   //   const [isPrescriptionModalOpen, setIsPrescriptionModalOpen] = useState(false)
@@ -61,8 +64,26 @@ const ShipmentView = () => {
     // },
   })
 
+  const getStatus = async() =>{
+    const data = await constantsService.getConstants()
+    setStatus(Object.values(data.SHIPMENT['SHIPMENT_STATUS']))
+  }
+
+  const handleStatusChange = async(value, id) => {
+    const data = {
+      shipmentId: id,
+      status: value
+    }
+     const res = await shipmentService.updateStatus(data)
+     if(res) {
+      message.success('Updated Status')
+     } else {
+      message.error('Update failed')
+     }
+     getShipmentById();
+  }
   //   console.log(printing, 'ljkshdl')
-  console.log('shipmentidid', id)
+  // console.log('shipmentidid', id)
 
   const getShipmentById = async () => {
     const shipmentData = await shipmentService.getShipmentById(id)
@@ -75,6 +96,7 @@ const ShipmentView = () => {
 
   useEffect(() => {
     getShipmentById()
+    getStatus();
     // requestPickupOrder()
 
     console.log('shipmntId', id)
@@ -560,14 +582,22 @@ const ShipmentView = () => {
         <span>Shipped By: </span>
         {shipment.shippedBy}
           </div>
+          {shipment.shippedBy === 'Track On' && 
           <div>
-            {/* <h2>Update Status</h2> */}
-            <Form.Item label='Update Status' >
-              <Select  >
-
-              </Select>
-            </Form.Item>
-          </div>
+          {/* <h2>Update Status</h2> */}
+          <Form.Item label='Update Status' >
+            <Select defaultValue={shipment.status} placeholder={shipment.status}
+              onChange={(value) => {
+                // console.log(value,"updated status")
+                handleStatusChange(value, shipment.id)
+              }}
+            >
+            {status?.map((data) => <option key={data} value={data}>{data}</option>)}
+            </Select>
+          </Form.Item>
+        </div>
+          }
+          
         </Flex>
       
         <Row style={{ width: '100%' }}>
