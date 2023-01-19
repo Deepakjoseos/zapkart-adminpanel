@@ -11,6 +11,7 @@ import {
   Row,
   Col,
   Popconfirm,
+  Form,
 } from 'antd'
 // import { invoiceData } from '../../../pages/invoice/invoiceData'
 import NumberFormat from 'react-number-format'
@@ -540,22 +541,35 @@ const ShipmentView = () => {
           )}
         </Flex>
         <br /> <br />
-        <h3>Shipment</h3>
-        {shipment?.items?.map((item, index) => (
-          <>
-            <div>
-              <span>Order:</span>
-              <Link to={`/app/dashboards/orders/order-view/${item.orderId}`}>
-                {item?.orderNo}
-              </Link>
-            </div>
-            <div>Products: {item?.items?.map((cur) => `${cur.name}, `)}</div>
-          </>
-        ))}
+        <Flex style={{gap:'20px'}}>
+          <div style={{width:'100px'}}>
+            <h3>Shipment</h3>
+            {shipment?.items?.map((item, index) => (
+              <>
+                <div>
+                  <span>Order:</span>
+                  <Link to={`/app/dashboards/orders/order-view/${item.orderId}`}>
+                    {item?.orderNo}
+                  </Link>
+                </div>
+                <div>Products: {item?.items?.map((cur) => `${cur.name}, `)}</div>
+              </>
+            ))}
         <span>Status:</span>
         {shipment.status} <br />
         <span>Shipped By: </span>
         {shipment.shippedBy}
+          </div>
+          <div>
+            {/* <h2>Update Status</h2> */}
+            <Form.Item label='Update Status' >
+              <Select  >
+
+              </Select>
+            </Form.Item>
+          </div>
+        </Flex>
+      
         <Row style={{ width: '100%' }}>
           <Col md={12} sm={24} lg={12}>
             {shipment.shiprocket?.awbDetails?.awb_code ? (
