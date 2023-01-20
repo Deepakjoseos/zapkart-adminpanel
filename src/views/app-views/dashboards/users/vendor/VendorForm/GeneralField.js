@@ -595,9 +595,14 @@ useEffect(() => {
       
             <Form.Item name="business.address.state" label="State">
               <Select placeholder="State" 
+                showSearch
+                optionFilterProp="children"
+                filterOption={(input, option) =>
+                  option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                }
                 onChange={(val) => {
                   getCity(`stateName=${val}`)
-                  form.setFieldValue({'business.address.city': null})
+                  form.setFieldsValue({'business.address.city': null,'business.address.zipcode': null })
                 }}
               >
                 {state?.map((data) => <Option key={data.id} value={data.name}>{data.name}</Option>)}
@@ -606,8 +611,15 @@ useEffect(() => {
 
             <Form.Item name="business.address.city" label="City">
               <Select placeholder="City" 
+                showSearch
+                optionFilterProp="children"
+                filterOption={(input, option) =>
+                  option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                }
                 onChange={(val) => {
                   getPincode(`cityName=${val}`)
+                  form.setFieldsValue({'business.address.zipcode': null })
+
                 }}
               >
               {city?.map((data) => <Option key={data.id} value={data.name}>{data.name}</Option>)}
@@ -615,7 +627,14 @@ useEffect(() => {
             </Form.Item>
 
             <Form.Item name="business.address.zipcode" label="Zipcode">
-              <Select placeholder="Zipcode" >
+              <Select 
+                showSearch
+                optionFilterProp="children"
+                filterOption={(input, option) =>
+                  option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                }
+                placeholder="Zipcode" 
+              >
               {pincode?.map((data) => <Option key={data.id} value={data.name}>{data.name}</Option>)} 
               </Select>
             </Form.Item>

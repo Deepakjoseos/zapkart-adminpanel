@@ -43,6 +43,8 @@ const ShipmentView = () => {
   const [currentActionButton, setCurrentActionButton] = useState(null)
   const [selectedShipmentType, setSelectedShipmentType] = useState(null)
   const [status, setStatus] = useState(null)
+  const [openModal, setOpenModal] = useState(false)
+  const [newStatus, setNewStatus] = useState(null)
   //   const [isFormOpen, setIsFormOpen] = useState(false)
   //   const [printing, setPrinting] = useState(false)
   //   const [isPrescriptionModalOpen, setIsPrescriptionModalOpen] = useState(false)
@@ -562,8 +564,35 @@ const ShipmentView = () => {
             )
           )}
         </Flex>
-        <br /> <br />
-        <Flex style={{gap:'20px'}}>
+        <div 
+            // style={{marginTop:'auto'}}
+          >
+            {shipment.shippedBy === 'Track On' && 
+            <div style={{alignRight:'auto'}}>
+              <br />
+              <Button type='primary' onClick={() => {setOpenModal(true)}}>Update Status</Button>
+              <Modal visible={openModal} 
+                onOk={() => {
+                setOpenModal(false)
+                {newStatus && handleStatusChange(newStatus, shipment.id)}
+                 }}
+                 onCancel={() => setOpenModal(false)} title='Track on'>
+                <h2>Update Status</h2><br/>
+                <Form.Item >
+                <Select defaultValue={shipment.status} placeholder={shipment.status}
+                  onChange={(value) => {
+                    setNewStatus(value)
+                  }}
+                >
+                {status?.map((data) => <option key={data} value={data}>{data}</option>)}
+                </Select>
+              </Form.Item>
+              </Modal>
+              <br /> <br />
+            </div>
+            }
+        </div>
+        <Flex style={{}} flexDirection='column'>
           <div style={{width:'100px'}}>
             <h3>Shipment</h3>
             {shipment?.items?.map((item, index) => (
@@ -577,27 +606,13 @@ const ShipmentView = () => {
                 <div>Products: {item?.items?.map((cur) => `${cur.name}, `)}</div>
               </>
             ))}
-        <span>Status:</span>
-        {shipment.status} <br />
-        <span>Shipped By: </span>
-        {shipment.shippedBy}
+            <span>Status:</span>
+            {shipment.status} <br />
+            <span>Shipped By: </span>
+            {shipment.shippedBy}
+            <br />
           </div>
-          {shipment.shippedBy === 'Track On' && 
-          <div>
-          {/* <h2>Update Status</h2> */}
-          <Form.Item label='Update Status' >
-            <Select defaultValue={shipment.status} placeholder={shipment.status}
-              onChange={(value) => {
-                // console.log(value,"updated status")
-                handleStatusChange(value, shipment.id)
-              }}
-            >
-            {status?.map((data) => <option key={data} value={data}>{data}</option>)}
-            </Select>
-          </Form.Item>
-        </div>
-          }
-          
+        
         </Flex>
       
         <Row style={{ width: '100%' }}>
