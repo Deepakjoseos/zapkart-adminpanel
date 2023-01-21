@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Input, Row, Col, Card, Form, Upload, Select, Button} from 'antd'
 import { ImageSvg } from 'assets/svg/icon'
 import CustomIcon from 'components/util-components/CustomIcon'
@@ -9,7 +9,11 @@ import { useState } from 'react';                         //edit
 import { message } from 'antd';                           //edit
 import vendorService from 'services/vendor';              //edit
 import Flex from 'components/shared-components/Flex';     //edit
-import Loading from 'components/shared-components/Loading';
+import Loading from 'components/shared-components/Loading'
+import stateService from 'services/state'
+import cityService from 'services/city'
+import pincodeService from 'services/pincode'
+
 
 
 
@@ -114,6 +118,25 @@ const [isLoading, setIsLoading] =useState(false);
 const [data, setData] = useState({
   phone: ''
 })
+const [state, setState] = useState(null)
+const [city, setCity] = useState(null)
+const [pincode, setPincode] = useState(null)
+
+const getState = async() => {
+  const data = await stateService.getState('countryName=India')
+  console.log(data.data,"state select");
+  setState(data.data)
+}
+
+const getCity = async(query) => {
+  const data = await cityService.getCity(query)
+  setCity(data.data)
+}
+
+const getPincode = async(query) => {
+  const data = await pincodeService.getPincode(query);
+  setPincode(data.data)
+}
 
 const handleClick = async () => {
   setIsLoading(true)
@@ -139,6 +162,10 @@ const handleDownload = () => {
   window.open(downloadAgreement,"_blanc","noopener","noreferrer")
 }
 /* *********************************EDIT****************************************** */
+
+useEffect(() => {
+  getState()
+},[])
 
   return (
   <Row gutter={16}>
@@ -212,8 +239,8 @@ const handleDownload = () => {
                   </Form.Item>
                 )}
                 {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
-                  <Form.Item name="pan" label="Pan" rules={rules.pan}>
-                    <Input placeholder="Pan" />
+                  <Form.Item name="pan" label="PAN" rules={rules.pan}>
+                    <Input placeholder="PAN" />
                   </Form.Item>
                 )}
                 {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
@@ -222,8 +249,8 @@ const handleDownload = () => {
                   </Form.Item>
                 )}
                {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
-                <Form.Item name="tanNumber" label="Tan Number">
-                  <Input placeholder="tanNumber" />
+                <Form.Item name="tanNumber" label="TAN Number">
+                  <Input placeholder="TAN Number" />
                 </Form.Item>
                   )}
               </>
@@ -267,8 +294,8 @@ const handleDownload = () => {
 
             
               {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
-                <Form.Item name="business.name" label="Bussiness Name">
-                  <Input placeholder="Bussiness Name" />
+                <Form.Item name="business.name" label="Business Name">
+                  <Input placeholder="Business Name" />
                 </Form.Item>
               )}
               {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
@@ -286,39 +313,39 @@ const handleDownload = () => {
               )}
               <br />
               {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
-                <h4>Bussiness Address</h4>
+                <h4>Business Address</h4>
               )}
-              {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
-                <Form.Item name="business.address.line1" label="Line1">
-                  <Input placeholder="Line1" />
-                </Form.Item>
-              )}
-              {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
-                <Form.Item name="business.address.city" label="City">
-                  <Input placeholder="City" />
-                </Form.Item>
-              )}
-              {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
-                <Form.Item name="business.address.state" label="State">
-                  <Input placeholder="State" />
-                </Form.Item>
-              )}
-              {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
-                <Form.Item name="business.address.country" label="Country">
-                  <Input placeholder="Country" />
-                </Form.Item>
-              )}
-              {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
-                <Form.Item name="business.address.phone" label="Phone">
-                  <Input placeholder="Phone" />
-                </Form.Item>
-              )}
-              {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
-                <Form.Item name="business.address.zipcode" label="Zipcode">
-                  <Input placeholder="Zipcode" />
-                </Form.Item>
-              )}
-         
+                  {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+                    <Form.Item name="business.address.country" label="Country">
+                      <Input placeholder="Country" />
+                    </Form.Item>
+                  )}
+                  {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+                    <Form.Item name="business.address.state" label="State">
+                      <Input placeholder="State" />
+                    </Form.Item>
+                  )}
+                  {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+                    <Form.Item name="business.address.city" label="City">
+                      <Input placeholder="City" />
+                    </Form.Item>
+                  )}
+                  {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+                    <Form.Item name="business.address.zipcode" label="Zipcode">
+                      <Input placeholder="Zipcode" />
+                    </Form.Item>
+                  )}
+                  {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+                    <Form.Item name="business.address.line1" label="Line1">
+                      <Input placeholder="Line1" />
+                    </Form.Item>
+                  )}
+                  {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+                    <Form.Item name="business.address.phone" label="Phone">
+                      <Input placeholder="Phone" />
+                    </Form.Item>
+                  )}
+            
           </>
         ) : (
           ''
@@ -430,7 +457,7 @@ const handleDownload = () => {
                 </Form.Item>
             )}
            {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
-                <Form.Item name="tanNumber" label="Tan Number">
+                <Form.Item name="tanNumber" label="TAN Number">
                   <Input placeholder="tanNumber" />
                 </Form.Item>
          )}
@@ -508,7 +535,7 @@ const handleDownload = () => {
         </Form.Item> */}
       </Card>
 
-      <Card title="Address">
+      {/* <Card title="Address">
         <Form.Item name="address.line1" label="Line1">
           <Input placeholder="Line 1" />
         </Form.Item>
@@ -532,7 +559,7 @@ const handleDownload = () => {
         <Form.Item name="address.zipcode" label="Zipcode">
           <Input placeholder="Zipcode" />
         </Form.Item>
-      </Card> 
+      </Card>  */}
       {/* 'business.name': data?.business?.name,
         'business.address.line1': data?.business?.address?.line1,
         'business.address.city': data?.business?.address?.city,
@@ -543,8 +570,8 @@ const handleDownload = () => {
 
       {mode === 'EDIT' ? (
         <Card title="Business">
-          <Form.Item name="business.name" label="Bussiness Name">
-            <Input placeholder="Bussiness Name" />
+          <Form.Item name="business.name" label="Business Name">
+            <Input placeholder="Business Name" />
           </Form.Item>
 
           <Card title="Business logo">
@@ -562,35 +589,63 @@ const handleDownload = () => {
         
             <h4>Bussiness Address</h4>
          
-       
+            <Form.Item name="business.address.country" label="Country" >
+              <Select placeholder="India" value='India' disabled/>
+            </Form.Item>
+      
+            <Form.Item name="business.address.state" label="State">
+              <Select placeholder="State" 
+                showSearch
+                optionFilterProp="children"
+                filterOption={(input, option) =>
+                  option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                }
+                onChange={(val) => {
+                  getCity(`stateName=${val}`)
+                  form.setFieldsValue({'business.address.city': null,'business.address.zipcode': null })
+                }}
+              >
+                {state?.map((data) => <Option key={data.id} value={data.name}>{data.name}</Option>)}
+              </Select>
+            </Form.Item>
+
+            <Form.Item name="business.address.city" label="City">
+              <Select placeholder="City" 
+                showSearch
+                optionFilterProp="children"
+                filterOption={(input, option) =>
+                  option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                }
+                onChange={(val) => {
+                  getPincode(`cityName=${val}`)
+                  form.setFieldsValue({'business.address.zipcode': null })
+
+                }}
+              >
+              {city?.map((data) => <Option key={data.id} value={data.name}>{data.name}</Option>)}
+              </Select>
+            </Form.Item>
+
+            <Form.Item name="business.address.zipcode" label="Zipcode">
+              <Select 
+                showSearch
+                optionFilterProp="children"
+                filterOption={(input, option) =>
+                  option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                }
+                placeholder="Zipcode" 
+              >
+              {pincode?.map((data) => <Option key={data.id} value={data.name}>{data.name}</Option>)} 
+              </Select>
+            </Form.Item>
+        
             <Form.Item name="business.address.line1" label="Line1">
               <Input placeholder="Line1" />
             </Form.Item>
-       
 
-            <Form.Item name="business.address.city" label="City">
-              <Input placeholder="City" />
-            </Form.Item>
-        
-      
-            <Form.Item name="business.address.state" label="State">
-              <Input placeholder="State" />
-            </Form.Item>
-        
-            <Form.Item name="business.address.country" label="Country" >
-              
-              <Input placeholder="Country" />
-            </Form.Item>
-       
-        
             <Form.Item name="business.address.phone" label="Phone">
               <Input placeholder="Phone" />
             </Form.Item>
-         
-            <Form.Item name="business.address.zipcode" label="Zipcode">
-              <Input placeholder="Zipcode" />
-            </Form.Item>
-      
         </Card>
       ) : (
         ' '

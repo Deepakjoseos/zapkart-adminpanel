@@ -119,7 +119,7 @@ const[setmode,setMode]=useState('')
 
 
         if (setmode === 'Add') {
-            console.log(sendingValues, "values=====");
+            console.log(sendingValues, "values");
 
           const created = await settingsService.createSettings(sendingValues);
           if (created) {

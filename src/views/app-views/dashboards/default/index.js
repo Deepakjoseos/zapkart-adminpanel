@@ -39,6 +39,8 @@ import customerService from 'services/customer'
 import orderService from 'services/orders'
 import authAdminService from 'services/auth/admin'
 import moment from 'moment'
+import Flex from 'components/shared-components/Flex'
+
 
 const MembersChart = (props) => <ApexChart {...props} />
 
@@ -127,7 +129,7 @@ const tableColumns = [
     ),
   },
   {
-    title: 'User Name',
+    title: 'Customer Name',
     dataIndex: 'userName',
     // sorter: (a, b) => utils.antdTableSorter(a, b, 'totalAmount'),
 
@@ -146,9 +148,30 @@ const tableColumns = [
 
   },
   {
-    title: 'Status',
+    title: 'Order Date',
+    dataIndex: 'createdAt',
+    render: (createdAt) => (
+      <Flex alignItems="center">
+        {moment(new Date(createdAt * 1000)).format('DD-MMM-YYYY hh:mm:a')}
+      </Flex>
+    ),
+    sorter: (a, b) => utils.antdTableSorter(a, b, 'createdAt'),
+  },
+  {
+    title: 'Order Status',
     dataIndex: 'status',
     key: 'status',
+  },
+  {
+    title: 'Payment Status',
+    dataIndex: 'payment',
+    render: (payment, record) => {
+      return <Flex alignItems="centre" >
+        {payment?.status === 'COMPLETED' ? 
+        <Tag style={{backgroundColor:"#87d068",color:"white"}}>COMPLETED</Tag> : 
+        <Tag  style={{backgroundColor:"#f50",color:"white"}}>PENDING</Tag>}
+        </Flex>
+    },
   },
   // {
   //   title: () => <div className="text-right">Status</div>,

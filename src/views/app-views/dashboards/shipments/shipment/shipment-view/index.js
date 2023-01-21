@@ -11,6 +11,8 @@ import {
   Row,
   Col,
   Popconfirm,
+  Form,
+  message,
 } from 'antd'
 // import { invoiceData } from '../../../pages/invoice/invoiceData'
 import NumberFormat from 'react-number-format'
@@ -24,6 +26,7 @@ import { useReactToPrint } from 'react-to-print'
 // import PrescriptionSelector from './PrescriptionSelector'
 import shipmentService from 'services/shipment'
 import CheckIfDeliverable from '../shipment-list/CheckIfDeliverable'
+import constantsService from 'services/constants'
 
 const ShipmentView = () => {
   const { Option } = Select
@@ -39,6 +42,9 @@ const ShipmentView = () => {
   const [selectedCourierId, setSelectedCourierId] = useState(null)
   const [currentActionButton, setCurrentActionButton] = useState(null)
   const [selectedShipmentType, setSelectedShipmentType] = useState(null)
+  const [status, setStatus] = useState(null)
+  const [openModal, setOpenModal] = useState(false)
+  const [newStatus, setNewStatus] = useState(null)
   //   const [isFormOpen, setIsFormOpen] = useState(false)
   //   const [printing, setPrinting] = useState(false)
   //   const [isPrescriptionModalOpen, setIsPrescriptionModalOpen] = useState(false)
@@ -60,8 +66,26 @@ const ShipmentView = () => {
     // },
   })
 
+  const getStatus = async() =>{
+    const data = await constantsService.getConstants()
+    setStatus(Object.values(data.SHIPMENT['SHIPMENT_STATUS']))
+  }
+
+  const handleStatusChange = async(value, id) => {
+    const data = {
+      shipmentId: id,
+      status: value
+    }
+     const res = await shipmentService.updateStatus(data)
+     if(res) {
+      message.success('Updated Status')
+     } else {
+      message.error('Update failed')
+     }
+     getShipmentById();
+  }
   //   console.log(printing, 'ljkshdl')
-  console.log('shipmentidid', id)
+  // console.log('shipmentidid', id)
 
   const getShipmentById = async () => {
     const shipmentData = await shipmentService.getShipmentById(id)
@@ -74,6 +98,7 @@ const ShipmentView = () => {
 
   useEffect(() => {
     getShipmentById()
+    getStatus();
     // requestPickupOrder()
 
     console.log('shipmntId', id)
@@ -539,23 +564,57 @@ const ShipmentView = () => {
             )
           )}
         </Flex>
-        <br /> <br />
-        <h3>Shipment</h3>
-        {shipment?.items?.map((item, index) => (
-          <>
-            <div>
-              <span>Order:</span>
-              <Link to={`/app/dashboards/orders/order-view/${item.orderId}`}>
-                {item?.orderNo}
-              </Link>
+        <div 
+            // style={{marginTop:'auto'}}
+          >
+            {shipment.shippedBy === 'Track On' && 
+            <div style={{alignRight:'auto'}}>
+              <br />
+              <Button type='primary' onClick={() => {setOpenModal(true)}}>Update Status</Button>
+              <Modal visible={openModal} 
+                onOk={() => {
+                setOpenModal(false)
+                {newStatus && handleStatusChange(newStatus, shipment.id)}
+                 }}
+                 onCancel={() => setOpenModal(false)} title='Track on'>
+                <h2>Update Status</h2><br/>
+                <Form.Item >
+                <Select defaultValue={shipment.status} placeholder={shipment.status}
+                  onChange={(value) => {
+                    setNewStatus(value)
+                  }}
+                >
+                {status?.map((data) => <option key={data} value={data}>{data}</option>)}
+                </Select>
+              </Form.Item>
+              </Modal>
+              <br /> <br />
             </div>
-            <div>Products: {item?.items?.map((cur) => `${cur.name}, `)}</div>
-          </>
-        ))}
-        <span>Status:</span>
-        {shipment.status} <br />
-        <span>Shipped By: </span>
-        {shipment.shippedBy}
+            }
+        </div>
+        <Flex style={{}} flexDirection='column'>
+          <div style={{width:'100px'}}>
+            <h3>Shipment</h3>
+            {shipment?.items?.map((item, index) => (
+              <>
+                <div>
+                  <span>Order:</span>
+                  <Link to={`/app/dashboards/orders/order-view/${item.orderId}`}>
+                    {item?.orderNo}
+                  </Link>
+                </div>
+                <div>Products: {item?.items?.map((cur) => `${cur.name}, `)}</div>
+              </>
+            ))}
+            <span>Status:</span>
+            {shipment.status} <br />
+            <span>Shipped By: </span>
+            {shipment.shippedBy}
+            <br />
+          </div>
+        
+        </Flex>
+      
         <Row style={{ width: '100%' }}>
           <Col md={12} sm={24} lg={12}>
             {shipment.shiprocket?.awbDetails?.awb_code ? (
