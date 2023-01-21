@@ -66,10 +66,16 @@ const rules = {
   tdsPercentage: [
     {
       required: true,
-      message: "Required",
-    },
- 
+      message: 'Required'
+    }
   ],
+
+  vendorDeliveryCharges: [
+    {
+      required: true,
+      message: 'Required'
+    }
+  ]
 };
 
 const GeneralField = ({ setmode, form }) => {
@@ -145,64 +151,70 @@ const GeneralField = ({ setmode, form }) => {
               />
             </Form.Item>
           )}
-  {process.env.REACT_APP_SITE_NAME === "zapkart" && (
+          {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+            <Form.Item
+              name="tdsPercentage"
+              label="TDS Percentage"
+              rules={rules.tdsPercentage}
+            >
+              <Input placeholder="TDS Percentage" type="number" />
+            </Form.Item>
+          )}
           <Form.Item
-            name="tdsPercentage"
-            label="TDS Percentage"
-            rules={rules.tdsPercentage}
+            name="vendorDeliveryCharges"
+            label="Vendor Delivery Charges"
+            rules={rules.vendorDeliveryCharges}
           >
-            <Input placeholder="TDS Percentage" type="number" />
+            <Input placeholder="Vendor Delivery Charge" type="text" />
           </Form.Item>
-  )}
-          {/* </div> */}
         </>
-        <div>
-          <p>Delivery Charges</p>
-          <Form.List name="deliveryCharges">
+      </Card>
+      <Card title="Delivery Charges">
+        <Card title="Cash On Delivery">
+          <Form.List name="codDeliveryCharges">
             {(fields, { add, remove }) => {
-              console.log(fields, "show-filelds");
+              console.log(fields, 'show-filelds');
               return (
                 <>
                   {fields.map((field) => (
                     <Space
                       key={field.key}
-                      style={{ display: "flex", width: "100%" }}
+                      style={{ display: 'flex', width: '100%' }}
                       align="baseline"
                     >
                       <Form.Item
                         {...field}
                         label="Start Amount"
-                        rules={[{ required: true, message: "required" }]}
-                        name={[field.name, "startAmount"]}
-                        fieldKey={[field.fieldKey, "startAmount"]}
+                        rules={[{ required: true, message: 'required' }]}
+                        name={[field.name, 'startAmount']}
+                        fieldKey={[field.fieldKey, 'startAmount']}
                       >
                         <InputNumber
                           placeholder="Start Amount"
-                          style={{ width: "100%" }}
+                          style={{ width: '100%' }}
                         />
                       </Form.Item>
                       <Form.Item
                         label="end Amount"
                         {...field}
-                        rules={[{ required: true, message: "required" }]}
-                        name={[field.name, "endAmount"]}
-                        fieldKey={[field.fieldKey, "quantity"]}
+                        name={[field.name, 'endAmount']}
+                        fieldKey={[field.fieldKey, 'quantity']}
                       >
                         <InputNumber
                           placeholder="End Amount"
-                          style={{ width: "100%" }}
+                          style={{ width: '100%' }}
                         />
                       </Form.Item>
                       <Form.Item
                         label="Charge"
                         {...field}
-                        rules={[{ required: true, message: "required" }]}
-                        name={[field.name, "charge"]}
-                        fieldKey={[field.fieldKey, "charge"]}
+                        rules={[{ required: true, message: 'required' }]}
+                        name={[field.name, 'charge']}
+                        fieldKey={[field.fieldKey, 'charge']}
                       >
                         <InputNumber
                           placeholder="Charge"
-                          style={{ width: "100%" }}
+                          style={{ width: '100%' }}
                         />
                       </Form.Item>
                       {fields.length > 1 && (
@@ -225,14 +237,92 @@ const GeneralField = ({ setmode, form }) => {
                       }}
                       icon={<PlusOutlined />}
                     >
-                      Add Delivery charges
+                      Add Cash on Delivery charges
                     </Button>
                   </Form.Item>
                 </>
               );
             }}
           </Form.List>
-        </div>
+        </Card>
+
+        <Card title="Online">
+          <Form.List name="onlineDeliveryCharges">
+            {(fields, { add, remove }) => {
+              console.log(fields, 'show-filelds');
+              return (
+                <>
+                  {fields.map((field) => (
+                    <Space
+                      key={field.key}
+                      style={{ display: 'flex', width: '100%' }}
+                      align="baseline"
+                    >
+                      <Form.Item
+                        {...field}
+                        label="Start Amount"
+                        rules={[{ required: true, message: 'required' }]}
+                        name={[field.name, 'startAmount']}
+                        fieldKey={[field.fieldKey, 'startAmount']}
+                      >
+                        <InputNumber
+                          placeholder="Start Amount"
+                          style={{ width: '100%' }}
+                        />
+                      </Form.Item>
+                      <Form.Item
+                        label="end Amount"
+                        {...field}
+                        // rules={[{ required: true, message: 'required' }]}
+                        name={[field.name, 'endAmount']}
+                        fieldKey={[field.fieldKey, 'quantity']}
+                      >
+                        <InputNumber
+                          placeholder="End Amount"
+                          style={{ width: '100%' }}
+                        />
+                      </Form.Item>
+                      <Form.Item
+                        label="Charge"
+                        {...field}
+                        rules={[{ required: true, message: 'required' }]}
+                        name={[field.name, 'charge']}
+                        fieldKey={[field.fieldKey, 'charge']}
+                      >
+                        <InputNumber
+                          placeholder="Charge"
+                          style={{ width: '100%' }}
+                        />
+                      </Form.Item>
+                      {fields.length > 1 && (
+                        <MinusCircleOutlined
+                          onClick={() => {
+                            // onAttributeChange()
+                            remove(field.name);
+                            // checkPrescriptionRequired()
+                          }}
+                        />
+                      )}
+                    </Space>
+                  ))}
+
+                  <Form.Item>
+                    <Button
+                      type="primary"
+                      onClick={() => {
+                        add();
+                        // checkPrescriptionRequired()
+                      }}
+                      icon={<PlusOutlined />}
+                    >
+                      Add Online Delivery charges
+                    </Button>
+                  </Form.Item>
+                </>
+              );
+            }}
+          </Form.List>
+        </Card>
       </Card>
       <Card title="SEO">
         <Form.Item name="metaTitle" label="Meta Title">

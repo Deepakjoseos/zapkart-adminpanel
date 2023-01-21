@@ -28,32 +28,42 @@ const[setmode,setMode]=useState('')
         // const isEmpty = Object.keys(data).length === 0;
        
     
-          setMode('Edit')
+          setMode(EDIT)
 
-          form.setFieldsValue({
-            name: data.name,
-            address: data.address,
-            email: data.email,
-            phone: data.phone,
-            facebookUrl: data.facebookUrl,
-            instagramUrl: data.instagramUrl,
-            twitterUrl: data.twitterUrl,
-            vendorCommission:data.vendorCommission,
-            deliveryCharges: data.deliveryCharges,
-            metaTitle: data.metaTitle,
-            metaDescription: data.metaDescription,
-            keywords: data.keywords,
-            whatsappNo:data.whatsappNo,
-            razorPayPayoutAccountNumber:data.razorPayPayoutAccountNumber,
-            agreement:data.agreement,
-            footer:data.footer
-          })
-        
-        setSettings(data)
-        console.log(data, 'settings')
-      }else {
-        setMode('Add')
+        const codDeliveryCharges =
+          data.deliveryCharges.find((charge) => charge.paymentType === 'Cod')
+            ?.values || [];
 
+        const onlineDeliveryCharges =
+          data.deliveryCharges.find((charge) => charge.paymentType === 'Online')
+            ?.values || [];
+
+        form.setFieldsValue({
+          name: data.name,
+          address: data.address,
+          email: data.email,
+          phone: data.phone,
+          facebookUrl: data.facebookUrl,
+          instagramUrl: data.instagramUrl,
+          twitterUrl: data.twitterUrl,
+          vendorCommission: data.vendorCommission,
+          codDeliveryCharges: codDeliveryCharges,
+          onlineDeliveryCharges: onlineDeliveryCharges,
+          metaTitle: data.metaTitle,
+          metaDescription: data.metaDescription,
+          keywords: data.keywords,
+          whatsappNo: data.whatsappNo,
+          razorPayPayoutAccountNumber: data.razorPayPayoutAccountNumber,
+          agreement: data.agreement,
+          footer: data.footer,
+          tdsPercentage: data.tdsPercentage,
+          vendorDeliveryCharges: data.vendorDeliveryCharges,
+        });
+
+        setSettings(data);
+        console.log(data, 'settings-settings');
+      } else {
+        setMode(ADD);
       }
     }
   
@@ -72,6 +82,17 @@ const[setmode,setMode]=useState('')
         //   endAmount:values?.endAmount,
         //   charge:values?.charge
         // }
+
+        const codDeliveryCharges = {
+          paymentType: 'Cod',
+          values: values?.codDeliveryCharges || []
+        };
+
+        const onlineDeliveryCharges = {
+          paymentType: 'Online',
+          values: values?.onlineDeliveryCharges || []
+        };
+        
         const sendingValues =
         {
           name: values?.name,
@@ -84,13 +105,15 @@ const[setmode,setMode]=useState('')
           facebookUrl: values?.facebookUrl,
           instagramUrl: values?.instagramUrl,
           twitterUrl: values?.twitterUrl,
-          vendorCommission:values?.vendorCommission,
-          deliveryCharges: values?.deliveryCharges,
-          whatsappNo:values?.whatsappNo,
-          razorPayPayoutAccountNumber:values?.razorPayPayoutAccountNumber,
-          agreement:values?.agreement,
-          footer:values?.footer
-        }
+          vendorCommission: values?.vendorCommission,
+          deliveryCharges: [codDeliveryCharges, onlineDeliveryCharges],
+          whatsappNo: values?.whatsappNo,
+          razorPayPayoutAccountNumber: values?.razorPayPayoutAccountNumber,
+          agreement: values?.agreement,
+          footer: values?.footer,
+          tdsPercentage: values?.tdsPercentage,
+          vendorDeliveryCharges: values?.vendorDeliveryCharges
+        };
 
 
 

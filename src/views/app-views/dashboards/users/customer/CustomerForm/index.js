@@ -68,7 +68,7 @@ const ProductForm = (props) => {
     if (data) {
       // console.log( Object.values(data.ORDER['ORDER_STATUS']), 'constanttyys')
 
-      setStatuses(Object.values(data.GENERAL['FORM_STATUS']))
+      setStatuses(Object.values(data.USER['STATUS']))
     }
   }
   useEffect(() => {
@@ -206,7 +206,7 @@ const ProductForm = (props) => {
         name="advanced_search"
         className="ant-advanced-search-form"
         initialValues={{
-          status: 'Hold',
+          status: 'Blocked',
         }}
       >
         <PageHeaderAlt className="border-bottom" overlap>

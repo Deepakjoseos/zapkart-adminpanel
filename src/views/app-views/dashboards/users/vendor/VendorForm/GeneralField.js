@@ -89,6 +89,7 @@ const rules = {
   ]
 }
 
+
 const SITE_NAME = process.env.REACT_APP_SITE_NAME
 
 const GeneralField = ({
@@ -102,7 +103,8 @@ const GeneralField = ({
   propsLogo,
   userGroups,
   id,                                       // edit
-  setPhoneVerified                          // edit
+  setPhoneVerified,                          // edit
+  downloadAgreement
 }) => {
   
 /* *********************************EDIT****************************************** */
@@ -133,10 +135,23 @@ const handleClick = async () => {
   setUpdatePhone(false);
 }
 
+const handleDownload = () => {
+  window.open(downloadAgreement,"_blanc","noopener","noreferrer")
+}
 /* *********************************EDIT****************************************** */
 
   return (
   <Row gutter={16}>
+    {downloadAgreement && 
+    <Col xs={24} sm={24} md={17}>
+      <div style={{display:'flex', flexDirection:'row-reverse',paddingBottom:'10px'}}>
+      <Button
+      type='primary'
+        onClick={handleDownload}
+      >Download Agreement</Button>
+      </div>
+    </Col>
+    }
     <Col xs={24} sm={24} md={17}>
       <Card title="Basic Info">
         {mode === 'ADD' ? (
@@ -160,12 +175,10 @@ const handleClick = async () => {
             </Form.Item>
           )}
             {SITE_NAME === 'zapkart' && (
- <Form.Item name="firstName" label="Display Name">
- <Input placeholder="First Name" />
-</Form.Item>
-
-
-                )}
+              <Form.Item name="firstName" label="Display Name">
+                <Input placeholder="First Name" />
+              </Form.Item>
+            )}
 
            
               <>
@@ -198,16 +211,16 @@ const handleClick = async () => {
                     <Input placeholder="Gst" />
                   </Form.Item>
                 )}
-           {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
-                <Form.Item name="pan" label="Pan" rules={rules.pan}>
-                  <Input placeholder="Pan" />
-                </Form.Item>
-                     )}
- {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
-                <Form.Item name="drugLicense" label="Drug License">
-                  <Input placeholder="drugLicense" />
-                </Form.Item>
-                     )}
+                {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+                  <Form.Item name="pan" label="Pan" rules={rules.pan}>
+                    <Input placeholder="Pan" />
+                  </Form.Item>
+                )}
+                {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
+                  <Form.Item name="drugLicense" label="Drug License">
+                    <Input placeholder="drugLicense" />
+                  </Form.Item>
+                )}
                {process.env.REACT_APP_SITE_NAME === 'zapkart' && (
                 <Form.Item name="tanNumber" label="Tan Number">
                   <Input placeholder="tanNumber" />
@@ -318,6 +331,16 @@ const handleClick = async () => {
             </Form.Item>
             <Form.Item name="lastName" label="Last Name">
               <Input placeholder="Last Name" />
+            </Form.Item>
+
+            <Form.Item name="status" label="Status" rules={rules.status}>
+              <Select placeholder="Status">
+                {form_statuses.map((item) => (
+                  <Option key={item.id} value={item}>
+                    {item}
+                  </Option>
+                ))}
+              </Select>
             </Form.Item>
 
             <>
